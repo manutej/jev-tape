@@ -1,0 +1,16 @@
+{
+  "name": "jev-tape",
+  "version": "0.1.3",
+  "private": true,
+  "type": "module",
+  "description": "Durable execution: TypeSafe qualifies, Temporal records. Run locally. Key stays in .env.",
+  "scripts": {
+    "test": "node --experimental-strip-types --test src/*.test.ts src/temporal/*.test.ts",
+    "check": "node scripts/check.mjs",
+    "live": "node --experimental-strip-types scripts/live-run.ts",
+    "smoke": "node --experimental-strip-types scripts/smoke-key.ts",
+    "qualify": "node --experimental-strip-types scripts/qualify-surface.ts",
+    "serve": "node scripts/serve.mjs",
+    "temporal": "node scripts/temporal-status.mjs"
+  }
+}

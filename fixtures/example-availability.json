@@ -1,0 +1,9 @@
+{
+  "surface": "gmail",
+  "timestamp": "2026-09-21T12:38:49-07:00",
+  "from": "you@example.com",
+  "to": ["coordinator@example.com"],
+  "subject": "Re: Availability Oct 2nd",
+  "body": "I can make Oct 2 from 9:00-10:00 CT for the dry run. Please include me on the invite.",
+  "audience_guess": "reviewer"
+}
