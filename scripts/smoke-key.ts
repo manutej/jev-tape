@@ -1,13 +1,8 @@
 #!/usr/bin/env node
-/**
- * Prove TYPESAFE_API_KEY works. Pin jev-1.13.0.
- * GET /v1/models then one POST. No Gmail send. No GitHub push.
- */
 const key = process.env.TYPESAFE_API_KEY;
 if (!key) {
   console.error("TYPESAFE_API_KEY is not set.");
   console.error("Create at https://console.typesafe.ai/keys");
-  console.error("Then: cp .env.example .env && set -a && source .env && set +a");
   process.exit(1);
 }
 
