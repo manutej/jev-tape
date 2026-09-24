@@ -1,0 +1,25 @@
+# jev-tape — index for models
+
+Repo: https://github.com/manutej/jev-tape
+Pin: jev-1.13.0
+Do not request or echo TYPESAFE_API_KEY.
+Do not send Gmail. Do not push or merge.
+
+Read first:
+- README.md
+- VISIBLE.md
+- spec/SPEC-v1-TAPE.md
+- spec/SPEC-v1-SPEED.md
+- spec/TEMPORAL.md
+- spec/KEY-SAFETY.md
+- spec/SURFACES-GMAIL-GITHUB.md
+- wiki/pages/home.md
+- wiki/pages/three-planes.md
+- wiki/pages/apply-last-loop.md
+- wiki/pages/ormus-jev.md
+- wiki/pages/surfaces-gmail-github.md
+- docs/LOCAL-GROK.md
+
+Skip:
+- archive/
+- .env (must not exist in git)
