@@ -2,24 +2,19 @@
 
 Repo: https://github.com/manutej/jev-tape
 Pin: jev-1.13.0
+Harness: Grok Build reads AGENTS.md first.
 Do not request or echo TYPESAFE_API_KEY.
-Do not send Gmail. Do not push or merge.
+Do not send Gmail. Do not push or merge unless the user said so and C10 fired.
 
 Read first:
-- README.md
-- VISIBLE.md
-- spec/SPEC-v1-TAPE.md
-- spec/SPEC-v1-SPEED.md
-- spec/TEMPORAL.md
-- spec/KEY-SAFETY.md
-- spec/SURFACES-GMAIL-GITHUB.md
-- wiki/pages/home.md
-- wiki/pages/three-planes.md
-- wiki/pages/apply-last-loop.md
-- wiki/pages/ormus-jev.md
-- wiki/pages/surfaces-gmail-github.md
-- docs/LOCAL-GROK.md
+1. AGENTS.md
+2. grok/SKILL.md
+3. README.md
+4. VISIBLE.md
+5. spec/SPEC-v1-TAPE.md
+6. spec/SPEC-v1-SPEED.md
+7. spec/TEMPORAL.md
+8. wiki/pages/home.md
 
-Skip:
-- archive/
-- .env (must not exist in git)
+Skip: archive/, .env, rendered HTML.
+If a path above is missing after git pull, the clone is behind. Do not reconstruct v1 from HTML.
