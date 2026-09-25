@@ -6,20 +6,25 @@
  * CreateHabit is SPEC'd in SPEC-v0-Block-C.md but DEFERRED in command.rs.
  */
 
+import { C10_ACTIONS } from "../.jev/jev-core.ts";
+
 export type Clarification = "ToNextAction" | "ToProject" | "ToSomeday" | "ToWaiting";
 
-export type CommandName =
-  | "Capture"
-  | "Clarify"
-  | "Complete"
-  | "StallProject"
-  | "SetNext"
-  | "StartWaiting"
-  | "ResolveWaiting"
-  | "SnoozeSomeday"
-  | "MintInstance"
-  | "Trash"
-  | "CreateHabit";
+export const COMMAND_NAMES = [
+  "Capture",
+  "Clarify",
+  "Complete",
+  "StallProject",
+  "SetNext",
+  "StartWaiting",
+  "ResolveWaiting",
+  "SnoozeSomeday",
+  "MintInstance",
+  "Trash",
+  "CreateHabit",
+] as const;
+
+export type CommandName = (typeof COMMAND_NAMES)[number];
 
 export interface Command {
   name: CommandName;
@@ -68,4 +73,10 @@ export function assertLegalCommand(cmd: Command): string | null {
   return null;
 }
 
-export const HUMAN_GATED_COMMANDS = new Set<CommandName>(["Complete", "Trash", "ResolveWaiting"]);
+/**
+ * C10 (.jev/contracts.json human_gate) restricted to domain Commands: Complete, Trash, ResolveWaiting.
+ * The rest of the C10 list (send, merge-to-default) are surface writes, not Commands.
+ */
+export const HUMAN_GATED_COMMANDS = new Set<CommandName>(
+  COMMAND_NAMES.filter((n) => (C10_ACTIONS as readonly string[]).includes(n)),
+);

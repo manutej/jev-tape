@@ -2,8 +2,12 @@
 /**
  * Qualify a Gmail or GitHub fixture. Never send. Never push.
  *   npm run qualify -- fixtures/example-availability.json
+ * Jev answers factual questions; the gate verdict is computed in code (src/surface-gate.ts).
  */
 import { readFileSync } from "node:fs";
+import { systemOne, TypesafeError } from "../src/typesafe/client.ts";
+import { TYPESAFE_PINNED_MODEL } from "../src/typesafe/contract.ts";
+import { questionsFor, surfaceGate, surfaceOf, SURFACE_THETA } from "../src/surface-gate.ts";
 
 const key = process.env.TYPESAFE_API_KEY;
 if (!key) {
@@ -18,64 +22,25 @@ if (!path) {
 }
 
 const raw = JSON.parse(readFileSync(path, "utf8"));
-const surface = String(raw.surface ?? "unknown");
-const questions =
-  surface === "github"
-    ? {
-        effect: {
-          type: "choice",
-          instructions: "What write is this?",
-          criteria: {
-            none: "Read or local commit only",
-            push_branch: "Push a non-default branch",
-            merge_default: "Merge or push the default branch",
-          },
-        },
-        agent_authored: {
-          type: "noul",
-          instructions: "Was this primarily authored by an agent?",
-        },
-        allow_now: {
-          type: "choice",
-          instructions: "May a harness execute this write now?",
-          criteria: { GREEN: "Safe to apply after compose", AMBER: "Park for a human", RED: "Refuse" },
-        },
-      }
-    : {
-        audience: {
-          type: "choice",
-          instructions: "Who is the real audience?",
-          criteria: {
-            self: "Note to self",
-            reviewer: "Known teammate or coordinator",
-            client: "Buyer, student cohort, or external client",
-            vendor: "Vendor or billing",
-            unknown: "Cannot tell",
-          },
-        },
-        money_or_rate: {
-          type: "noul",
-          instructions: "Does the body discuss rates, invoices, or payment?",
-        },
-        next_write: {
-          type: "choice",
-          instructions: "What is the next write?",
-          criteria: { none: "No write", draft: "Save a draft", send: "Send mail now" },
-        },
-      };
+const surface = surfaceOf(raw);
 
-const res = await fetch("https://api.typesafe.ai/v1/systemone", {
-  method: "POST",
-  headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
-  body: JSON.stringify({ model: "jev-1.13.0", state: JSON.stringify(raw), questions }),
-});
-const text = await res.text();
-if (!res.ok) {
-  console.error(`TypeSafe ${res.status}: ${text.slice(0, 300)}`);
-  process.exit(res.status === 401 ? 1 : 2);
+let json;
+try {
+  json = await systemOne({
+    model: TYPESAFE_PINNED_MODEL,
+    state: JSON.stringify(raw),
+    questions: questionsFor(surface),
+  });
+} catch (e) {
+  const err = e as TypesafeError;
+  console.error(`TypeSafe ${err.status}: ${err.message.slice(0, 300)}`);
+  process.exit(err.status === 401 ? 1 : 2);
 }
-const json = JSON.parse(text);
 console.log(`model=${json.model}`);
 console.log(JSON.stringify(json.answers, null, 2));
 if (json.usage) console.log(`usage in=${json.usage.input_tokens} out=${json.usage.output_tokens}`);
+
+const verdict = surfaceGate(surface, json.answers);
+console.log(`gate=${verdict.state} action=${verdict.action ?? "none"} human=${verdict.human} apply=${verdict.apply} θ=${SURFACE_THETA.value} (${SURFACE_THETA.source})`);
+for (const r of verdict.reasons) console.log(`  - ${r}`);
 console.log("qualify: ok (no send, no push)");

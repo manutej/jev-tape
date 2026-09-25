@@ -1,61 +1,46 @@
-import {
-  TYPESAFE_ENDPOINT,
-  TYPESAFE_PINNED_MODEL,
-  validateRequest,
-  type SystemOneRequest,
-  type SystemOneResponse,
-} from "./contract.ts";
+/**
+ * Thin wrapper over the one TypeSafe client, `.jev/jev-core.ts` `systemOne`.
+ * jev-core owns the pin, the fail-closed key rule and the response-model check.
+ * This file only keeps the tape's TypesafeError shape (status + nonRetryable).
+ */
+import { JevError, systemOne as coreSystemOne, type CallOptions } from "../../.jev/jev-core.ts";
+import type { SystemOneRequest, SystemOneResponse } from "./contract.ts";
 
 export class TypesafeError extends Error {
   status: number;
   nonRetryable: boolean;
-  constructor(message: string, status: number, nonRetryable: boolean) {
+  code: string;
+  constructor(message: string, status: number, nonRetryable: boolean, code = "http") {
     super(message);
     this.name = "TypesafeError";
     this.status = status;
     this.nonRetryable = nonRetryable;
+    this.code = code;
+  }
+}
+
+function toTypesafeError(e: JevError): TypesafeError {
+  switch (e.code) {
+    case "no-key":
+      return new TypesafeError(e.message, 401, true, e.code);
+    case "unpinned":
+    case "invalid-request":
+    case "wrong-model":
+      return new TypesafeError(e.message, 422, true, e.code);
+    case "bad-response":
+      return new TypesafeError(e.message, e.status || 502, true, e.code);
+    default:
+      return new TypesafeError(e.message, e.status, !e.retryable, e.code);
   }
 }
 
 export async function systemOne(
   req: SystemOneRequest,
-  opts: { apiKey?: string; signal?: AbortSignal } = {},
+  opts: { apiKey?: string; signal?: AbortSignal; fetch?: CallOptions["fetch"] } = {},
 ): Promise<SystemOneResponse> {
-  const apiKey = opts.apiKey ?? process.env.TYPESAFE_API_KEY;
-  if (!apiKey) {
-    throw new TypesafeError(
-      "TYPESAFE_API_KEY is not set. No local fake.",
-      401,
-      true,
-    );
+  try {
+    return (await coreSystemOne(req, opts)) as SystemOneResponse;
+  } catch (e) {
+    throw e instanceof JevError ? toTypesafeError(e) : e;
   }
-  const bad = validateRequest(req);
-  if (bad) throw new TypesafeError(bad.message, 422, true);
-
-  const res = await fetch(TYPESAFE_ENDPOINT, {
-    method: "POST",
-    signal: opts.signal,
-    headers: {
-      authorization: `Bearer ${apiKey}`,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(req),
-  });
-
-  const text = await res.text();
-  if (res.status === 401 || res.status === 422) {
-    throw new TypesafeError(`TypeSafe ${res.status}: ${text.slice(0, 400)}`, res.status, true);
-  }
-  if (!res.ok) {
-    throw new TypesafeError(`TypeSafe ${res.status}: ${text.slice(0, 400)}`, res.status, false);
-  }
-  const body = JSON.parse(text) as SystemOneResponse;
-  if (body.model && body.model !== TYPESAFE_PINNED_MODEL) {
-    throw new TypesafeError(
-      `response.model must be ${TYPESAFE_PINNED_MODEL}, got ${body.model}`,
-      422,
-      true,
-    );
-  }
-  return body;
 }

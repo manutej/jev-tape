@@ -1,7 +1,9 @@
-/** TypeSafe System One wire contract. Pure codec. No fetch, no keys, no IO. */
-export const TYPESAFE_PINNED_MODEL = "jev-1.13.0" as const;
+/** TypeSafe System One wire contract. Pure codec. No fetch, no keys, no IO. Pin and endpoint come from .jev/contracts.json. */
+import { ENDPOINT, PIN } from "../../.jev/jev-core.ts";
+
+export const TYPESAFE_PINNED_MODEL = PIN;
 export type TypesafePinnedModel = typeof TYPESAFE_PINNED_MODEL;
-export const TYPESAFE_ENDPOINT = "https://api.typesafe.ai/v1/systemone" as const;
+export const TYPESAFE_ENDPOINT = ENDPOINT;
 
 export type JsonText = string | Record<string, unknown> | unknown[];
 export type Primitive = "noul" | "choice" | "score";
