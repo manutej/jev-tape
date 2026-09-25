@@ -33,7 +33,7 @@ echo "key loaded: ${#TYPESAFE_API_KEY} chars"   # prints length only
 
 Do **not** put the key in this README, any committed file, Vercel HTML, a Grok chat, or a browser CORS proxy.
 
-If the key is missing, `npm run live` and `npm run smoke` exit 1. They will not invent a verdict.
+If the key is missing, `npm run smoke` and `npm run qualify` exit 1. They will not invent a verdict.
 
 ## Run locally (Node 22+)
 
@@ -44,11 +44,10 @@ cp .env.example .env          # then edit
 set -a && source .env && set +a
 
 npm run smoke                 # GET /v1/models + one pinned POST
-npm test                      # twins, no TypeSafe needed
-npm run live -- "I can make Oct 2 from 9:00-10:00 CT"
+npm test                      # codec, client, gate tests; no TypeSafe needed
 ```
 
-`smoke` and `live` call TypeSafe. They do **not** send Gmail and do **not** push GitHub.
+`smoke` and `qualify` call TypeSafe. They do **not** send Gmail and do **not** push GitHub.
 
 ## Run with local Grok + MCP (pull mail, do not send)
 
@@ -58,7 +57,7 @@ Local Grok can see your connected Gmail / GitHub MCP. This repo does not embed t
 2. Search sent mail or list commits (read tools only).
 3. Write a fixture under `fixtures/` (see `fixtures/example-availability.json`).
 4. `npm run qualify -- fixtures/example-availability.json`
-5. Read printed `model` + answers. The script will not send.
+5. Read printed `model`, answers and the gate (computed in code, θ smoke-only, so it never applies). The script will not send.
 
 Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFETY.md`](spec/KEY-SAFETY.md).
 
@@ -81,10 +80,10 @@ Not a fourth product. Not Cloud Event History.
 ## Commands
 
 ```
-npm test          # engine + twins — no key
-npm run check     # FIRE still unrepresentable
-npm run temporal  # scripts match spec/TEMPORAL.md
+npm test          # codec, client, gate — no key
 npm run smoke     # key required — pin check
-npm run live      # key required — one Capture
-npm run qualify   # key required — fixture JSON in, verdict out
+npm run qualify   # key required — fixture JSON in, answers + code gate out
+node .jev/check.mjs --tests "npm test"   # what CI runs
 ```
+
+Contract: `.jev/README.md`. Not built yet: engine, Temporal files, `npm run live` (see AGENTS.md).

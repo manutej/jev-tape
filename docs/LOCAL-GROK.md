@@ -30,7 +30,9 @@ If `src/` or `scripts/` are missing after `git pull`, tell Grok Build to pull or
 | --- | --- |
 | RED | stop |
 | AMBER | park |
-| GREEN + C10-shaped (client, money, default-branch merge) | park anyway |
-| GREEN + short teammate reply | you may send by hand; the script will not |
+| GREEN + C10 action (Complete, Trash, ResolveWaiting, send, merge-to-default) | park for a named human, whatever the audience |
+| GREEN + draft | save the draft; the script will not send |
+
+The verdict is computed in code (`src/surface-gate.ts`, jev-core `gate()`), not chosen by Jev. Its θ is smoke-only, so it never applies a write. Contract: `.jev/README.md`.
 
 TypeSafe answers questions. MCP executes tools. Do not fuse them in one turn.

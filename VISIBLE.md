@@ -41,14 +41,17 @@ This repo is the source of record. Read **in this order**. Ignore `archive/`.
 - `wiki/pages/harness-vs-process.md`
 - `wiki/pages/surfaces-gmail-github.md`
 
-Sibling wiki pages that repeat a hub live in `archive/wiki-duplicates/`.
+`wiki/pages/` holds 43 files. Sibling pages that repeat a hub are still there; `archive/wiki-duplicates/` was never committed.
 
 ## 4. Code the model can treat as the engine
 
-- `src/typesafe/` — pin, compile, compose, client
-- `src/engine.ts` — in-process unit, apply last
-- `src/temporal/` — wrappers + activities
-- `scripts/smoke-key.ts` / `live-run.ts` / `qualify-surface.ts`
+- `.jev/` — jev-core: client, `gate()`, C10 (contract: `.jev/README.md`)
+- `src/typesafe/` — wire types + thin client wrapper over jev-core
+- `src/domain.ts` — Command codec
+- `src/surface-gate.ts` — Gmail / GitHub questions, gate computed in code
+- `scripts/smoke-key.ts` / `qualify-surface.ts`
+
+Not built yet: `src/engine.ts`, `src/temporal/`, `scripts/live-run.ts` (see AGENTS.md).
 
 ## 5. Not visible (on purpose)
 

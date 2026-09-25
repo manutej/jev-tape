@@ -7,6 +7,7 @@ Do not request or echo TYPESAFE_API_KEY.
 Do not send Gmail. Do not push or merge unless the user said so and C10 fired.
 
 Read first:
+0. .jev/README.md (contract)
 1. AGENTS.md
 2. grok/SKILL.md
 3. README.md
@@ -17,4 +18,4 @@ Read first:
 8. wiki/pages/home.md
 
 Skip: archive/, .env, rendered HTML.
-If a path above is missing after git pull, the clone is behind. Do not reconstruct v1 from HTML.
+Engine, Temporal and live-run files named in specs were never committed; AGENTS.md lists them under "Not built yet". Do not reconstruct v1 from HTML.
