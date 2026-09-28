@@ -1,0 +1,456 @@
+<title>Jev × Vibium Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Ormus Fusion chrome: midnight lacquer ground, one gold voice, serif display over engineering mono.
+     Layout: a lab log. One column of reading width, wide tables in their own scroll boxes, one gold per surface. */
+  :root {
+    --ormus-midnight: #14213d;
+    --ormus-deep: #0e1830;
+    --ormus-gold: #d29e3d;
+    --ormus-gold-bright: #e0b258;
+    --ormus-ink: #eceae3;
+    --ormus-ink-muted: #a5b0c4;
+    --ormus-muted: #6d7891;
+    --ormus-hairline: rgba(236, 234, 227, 0.12);
+    --ormus-on-gold: #1a1407;
+    --ormus-code-bg: #0b1226;
+    --ormus-danger: #d44f4f;
+    --ormus-bg-elevated: rgba(255, 255, 255, 0.015);
+    --ormus-bg-muted: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.05);
+    --card-hairline-gold: rgba(210, 158, 61, 0.7);
+    --ghost-border: rgba(236, 234, 227, 0.25);
+    --canvas-edge-default: rgba(236, 234, 227, 0.08);
+    --canvas-edge-gold: rgba(210, 158, 61, 0.3);
+    --print-gold: #8a6519;
+    --ormus-font-display: 'Cormorant Garamond', Georgia, serif;
+    --ormus-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --ormus-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    --ormus-ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+    --ormus-radius: 3px;
+    --card-padding: 1.5rem;
+    --measure: 68ch;
+    color-scheme: dark;
+  }
+  html { background: var(--ormus-deep); }
+  body {
+    margin: 0;
+    background: var(--ormus-deep);
+    color: var(--ormus-ink);
+    font-family: var(--ormus-font-sans);
+    font-size: 1rem;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Surface: the fixed lacquer canvas and gold bloom, drawn in CSS from the tokens. */
+  .surface-firm { position: relative; isolation: isolate; min-height: 100%; }
+  .surface-firm::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(90% 60% at 85% -5%, rgba(210, 158, 61, 0.10), transparent 55%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 7px),
+      linear-gradient(180deg, var(--ormus-midnight) 0%, var(--ormus-deep) 70%);
+  }
+  .surface-firm::after {
+    content: ''; position: fixed; inset: -6vh -3vw; z-index: -1; pointer-events: none;
+    width: 2px; height: 2px; border-radius: 50%;
+    box-shadow: 78vw 2vh 0 0 rgba(210,158,61,.28), 64vw 69vh 0 0 rgba(210,158,61,.28), 92vw 82vh 0 0 rgba(210,158,61,.28), 36vw 17vh 0 0 rgba(210,158,61,.28), 8vw 85vh 0 0 rgba(210,158,61,.28), 85vw 93vh 0 0 rgba(210,158,61,.28), 16vw 72vh 0 0 rgba(210,158,61,.28), 24vw 46vh 0 0 rgba(210,158,61,.28), 31vw 76vh 0 0 rgba(210,158,61,.28), 95vw 11vh 0 0 rgba(210,158,61,.28), 11vw 16vh 0 0 rgba(210,158,61,.28), 79vw 68vh 0 0 rgba(210,158,61,.28), 32vw 38vh 0 0 rgba(210,158,61,.28), 64vw 24vh 0 0 rgba(210,158,61,.28), 54vw 81vh 0 0 rgba(210,158,61,.28), 20vw 20vh 0 0 rgba(210,158,61,.28), 58vw 39vh 0 0 rgba(210,158,61,.28), 72vw 14vh 0 0 rgba(210,158,61,.28), 46vw 92vh 0 0 rgba(210,158,61,.28), 75vw 37vh 0 .5px rgba(210,158,61,.45), 5vw 50vh 0 .5px rgba(210,158,61,.45), 54vw 34vh 0 .5px rgba(210,158,61,.45), 29vw 71vh 0 .5px rgba(210,158,61,.45), 82vw 42vh 0 .5px rgba(210,158,61,.45), 94vw 1vh 0 .5px rgba(210,158,61,.45), 42vw 60vh 0 .5px rgba(210,158,61,.45), 88vw 66vh 0 .5px rgba(210,158,61,.45);
+    animation: ormus-gold-dust-drift 60s ease-in-out infinite;
+  }
+  @keyframes ormus-gold-dust-drift {
+    0% { transform: translate3d(0,0,0); opacity: .7 } 50% { transform: translate3d(2.4vw,-7vh,0); opacity: .75 } 100% { transform: translate3d(0,0,0); opacity: .7 }
+  }
+  @media (prefers-reduced-motion: reduce) { .surface-firm::after { animation: none } }
+
+  .page { max-width: 62rem; margin: 0 auto; padding-block: 3rem 5rem; padding-inline: clamp(16px, 4vw, 40px); }
+  h1, h2, h3 { font-family: var(--ormus-font-display); font-weight: 400; color: var(--ormus-ink); text-wrap: balance; margin: 0; }
+  h1 { font-weight: 300; letter-spacing: -0.01em; font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.1; max-width: 20ch; }
+  h2 { font-size: 2rem; line-height: 1.2; letter-spacing: -0.025em; margin-block: 0 1rem; }
+  h3 { font-size: 1.5rem; line-height: 1.3; margin-block: .25rem .5rem; }
+  p { margin: 0; max-width: var(--measure); }
+  p + p { margin-top: .9rem; }
+  a { color: var(--ormus-gold); text-decoration: none; border-bottom: 1px solid rgba(210,158,61,.35); }
+  a:hover, a:focus-visible { color: var(--ormus-gold-bright); border-bottom-color: var(--ormus-gold-bright); outline: none; }
+  :focus-visible { outline: 1px solid var(--ormus-gold); outline-offset: 3px; }
+  code, .mono { font-family: var(--ormus-font-mono); font-size: .85em; }
+  code { background: var(--ormus-code-bg); border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); padding: .05em .4em; color: var(--ormus-ink); white-space: nowrap; }
+  pre { background: var(--ormus-code-bg); border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); padding: 1rem 1.25rem; overflow-x: auto; font-family: var(--ormus-font-mono); font-size: .82rem; line-height: 1.6; color: var(--ormus-ink); margin: 0; }
+  pre code { background: none; border: 0; padding: 0; white-space: pre; }
+
+  .mono-label { font-family: var(--ormus-font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); }
+  .mono-label::before { content: '/ '; }
+  .mono-label--gold { color: var(--ormus-gold); }
+
+  header.masthead { display: grid; gap: 1.25rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--ormus-hairline); }
+  .masthead .lede { font-family: var(--ormus-font-display); font-size: 1.45rem; line-height: 1.45; color: var(--ormus-ink-muted); max-width: 40ch; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
+
+  section { padding-block: 3rem; border-bottom: 1px solid var(--ormus-hairline); }
+  section:last-of-type { border-bottom: 0; }
+  .section-head { display: grid; gap: .5rem; margin-bottom: 1.5rem; }
+
+  .headline { display: grid; gap: 1.5rem; }
+  .headline .claim { font-family: var(--ormus-font-display); font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.35; font-weight: 400; max-width: 34ch; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1rem; }
+  .fusion-card { background: var(--ormus-bg-elevated); border: 1px solid var(--card-border); border-top-color: var(--card-hairline-gold); border-radius: var(--ormus-radius); padding: var(--card-padding); transition: transform .2s var(--ormus-ease-reveal), border-color .2s ease; min-width: 0; }
+  .fusion-card:hover { transform: translateY(-2px); border-color: rgba(210,158,61,.6); border-top-color: var(--card-hairline-gold); }
+  .tile .num { font-family: var(--ormus-font-display); font-weight: 300; font-size: 3rem; line-height: 1; margin-block: .5rem .5rem; font-variant-numeric: tabular-nums; }
+  .tile .num small { font-size: 1.25rem; color: var(--ormus-ink-muted); margin-left: .15em; }
+  .tile p { color: var(--ormus-ink-muted); font-size: .9rem; line-height: 1.6; }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1.25rem; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; counter-reset: step; }
+  .steps .fusion-card p { color: var(--ormus-ink-muted); font-size: .92rem; line-height: 1.65; }
+
+  figure { margin: 0; display: grid; gap: .75rem; }
+  figure .fig-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1.5rem; align-items: baseline; }
+  figure .fig-head h3 { margin: 0; }
+  figure .note { color: var(--ormus-ink-muted); font-size: .85rem; }
+  figure svg { width: 100%; height: auto; display: block; max-width: 100%; font-family: var(--ormus-font-sans); }
+  .chart-wrap { overflow-x: auto; }
+  .chart-wrap svg { min-width: 520px; }
+  .ax { stroke: var(--ormus-hairline); stroke-width: 1; }
+  .track { stroke: var(--canvas-edge-default); stroke-width: 1; }
+  .tick { fill: var(--ormus-ink-muted); font-size: 11px; font-family: var(--ormus-font-mono); }
+  .rowlab { fill: var(--ormus-ink); font-size: 13px; }
+  .rowsub { fill: var(--ormus-ink-muted); font-size: 11px; font-family: var(--ormus-font-mono); }
+  .val { fill: var(--ormus-ink); font-size: 12px; font-family: var(--ormus-font-mono); font-weight: 500; }
+  .m-gold { fill: var(--ormus-gold); }
+  .m-ink { fill: var(--ormus-ink); }
+  .m-muted { fill: var(--ormus-ink-muted); }
+  .ring { stroke: var(--ormus-deep); stroke-width: 2; }
+  .hit { fill: transparent; }
+  .hit:hover + .mark, .hit:focus + .mark { fill: var(--ormus-gold-bright); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; line-height: 1.5; min-width: 40rem; }
+  th, td { text-align: left; vertical-align: top; padding: .7rem .9rem; border-bottom: 1px solid var(--ormus-hairline); }
+  th { font-family: var(--ormus-font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); font-weight: 400; background: var(--ormus-bg-muted); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.lead { color: var(--ormus-gold); }
+  tbody tr:hover td { background: var(--ormus-bg-muted); }
+
+  .files { display: grid; gap: 1.5rem; }
+  .files ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+  .files li { display: grid; grid-template-columns: minmax(0, 1fr); gap: .1rem .75rem; font-size: .9rem; padding: .5rem 0; border-bottom: 1px solid var(--ormus-hairline); }
+  .files li:last-child { border-bottom: 0; }
+  .files li code { white-space: normal; overflow-wrap: anywhere; }
+  .files li span { color: var(--ormus-ink-muted); font-size: .85rem; line-height: 1.5; }
+  @media (min-width: 720px) { .files li { grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); } }
+
+  ul.plain { margin: 0; padding-left: 1.2rem; max-width: var(--measure); }
+  ul.plain li { margin-bottom: .5rem; }
+  ol.next { margin: 0; padding-left: 1.4rem; max-width: var(--measure); }
+  ol.next li { margin-bottom: .6rem; }
+  ol.next li::marker { font-family: var(--ormus-font-mono); color: var(--ormus-gold); font-size: .8rem; }
+
+  .fusion-btn { display: inline-flex; align-items: center; justify-content: center; padding: .5rem 1rem; font-weight: 500; font-size: 1rem; border-radius: var(--ormus-radius); transition: color .15s ease, border-color .15s ease, opacity .15s ease; cursor: pointer; text-decoration: none; border-bottom: 0; }
+  .fusion-btn--primary { background: var(--ormus-gold); color: var(--ormus-on-gold); border: 1px solid var(--ormus-gold); }
+  .fusion-btn--primary:hover { opacity: .9; color: var(--ormus-on-gold); }
+  .fusion-btn--ghost { border: 1px solid var(--ghost-border); color: var(--ormus-ink); background: transparent; }
+  .fusion-btn--ghost:hover { border-color: var(--ormus-gold); color: var(--ormus-gold); }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+
+  footer { padding-top: 2.5rem; display: grid; gap: .5rem; color: var(--ormus-ink-muted); font-size: .85rem; }
+  footer .rule { width: 3rem; height: 1px; background: var(--ormus-gold); margin-bottom: .75rem; }
+
+  @media print {
+    .surface-firm::before, .surface-firm::after { display: none !important; }
+    html, body, .surface-firm { background: white !important; color: #111 !important; }
+    :root { --ormus-ink: #111; --ormus-ink-muted: #444; --ormus-gold: var(--print-gold); --ormus-gold-bright: var(--print-gold); --ormus-hairline: rgba(0,0,0,.15); --ormus-bg-elevated: transparent; --ormus-bg-muted: transparent; --ormus-code-bg: #f4f4f4; --ormus-deep: white; --card-border: rgba(0,0,0,.15); }
+    .fusion-btn { display: none; }
+  }
+</style>
+
+<div class="surface-firm">
+<main class="page">
+
+  <header class="masthead">
+    <div class="meta-row">
+      <span class="mono-label mono-label--gold">Handoff for the Vibium team</span>
+      <span class="mono-label">2026-09-28</span>
+      <span class="mono-label">jev-1.13.0 · vibium 26.8.21</span>
+    </div>
+    <h1>A typed judge in front of the browser</h1>
+    <p class="lede">Jev answers the two questions a browser loop asks most, in a quarter of a second, without a model turn. Vibium does the acting. This is what was built, what was measured, and what we propose to change in Vibium.</p>
+  </header>
+
+  <section id="headline">
+    <div class="headline">
+      <span class="mono-label">Executive summary</span>
+      <p class="claim">On literal browser decisions, Jev is 164× faster than the model loop and was wrong zero times in 79 decided verdicts. The rest escalate to the model or a person by design.</p>
+      <div class="tiles">
+        <article class="fusion-card tile">
+          <span class="mono-label">Per decision</span>
+          <div class="num">248<small>ms</small></div>
+          <p>Median Jev answer on eight real pages. The same claim through <code>vibium check</code> took 41.0 s.</p>
+        </article>
+        <article class="fusion-card tile">
+          <span class="mono-label">Wrong verdicts</span>
+          <div class="num">0<small>of 79</small></div>
+          <p>Bench 6 of 6 and corpus 73 of 73 decided right. Three escalated instead of guessing.</p>
+        </article>
+        <article class="fusion-card tile">
+          <span class="mono-label">Whole login</span>
+          <div class="num">5.0<small>s</small></div>
+          <p>Gate plus verify with Jev, against 32.8 s for the model-only loop on the same fixture site.</p>
+        </article>
+        <article class="fusion-card tile">
+          <span class="mono-label">Cost per call</span>
+          <div class="num">&lt;0.1<small>¢</small></div>
+          <p>All lab runs on 2026-09-28 together cost about two tenths of a cent. No GPU, no tool loop.</p>
+        </article>
+      </div>
+      <p>The pattern: code classifies each Vibium verb, Jev answers one gate question before a commit verb (may this click run?) and one verify question after the page settles (did the page do what the step said?), a tape replays answers it has seen, and anything that touches money, sending, or deletion parks for a person before any call is made. The model stays in the loop for planning unknown pages and for the claims Jev escalates.</p>
+    </div>
+  </section>
+
+  <section id="numbers">
+    <div class="section-head">
+      <span class="mono-label">Measurements</span>
+      <h2>Same page, same claim, three judges</h2>
+      <p>Eight public pages, one claim each, six true and two false. Every judge saw the same settled page. Jev read the page text and element map; the model ran its tool loop; the screenshot proxy read one frame.</p>
+    </div>
+    <div class="grid-2">
+      <figure class="fusion-card">
+        <div class="fig-head"><h3>Time per decision</h3><span class="note">median, log scale</span></div>
+        <div class="chart-wrap">
+        <svg viewBox="0 0 640 160" role="img" aria-label="Dot plot on a log scale. Jev 248 milliseconds, Sonnet screenshot proxy 2.8 seconds, vibium check 41 seconds.">
+          <line class="track" x1="180" y1="44" x2="620" y2="44"/>
+          <line class="track" x1="180" y1="82" x2="620" y2="82"/>
+          <line class="track" x1="180" y1="120" x2="620" y2="120"/>
+          <line class="ax" x1="180" y1="138" x2="620" y2="138"/>
+          <text class="tick" x="180" y="154" text-anchor="middle">100 ms</text>
+          <text class="tick" x="326.7" y="154" text-anchor="middle">1 s</text>
+          <text class="tick" x="473.3" y="154" text-anchor="middle">10 s</text>
+          <text class="tick" x="620" y="154" text-anchor="end">100 s</text>
+          <line class="ax" x1="326.7" y1="134" x2="326.7" y2="138"/><line class="ax" x1="473.3" y1="134" x2="473.3" y2="138"/>
+
+          <text class="rowlab" x="0" y="41">Jev, typed judge</text>
+          <text class="rowsub" x="0" y="56">jev-1.13.0</text>
+          <circle class="hit" cx="238" cy="44" r="14"><title>Jev: 248 ms median, 219 to 309 ms</title></circle>
+          <circle class="mark m-gold ring" cx="238" cy="44" r="7"/>
+          <text class="val" x="252" y="48">248 ms</text>
+
+          <text class="rowlab" x="0" y="79">Sonnet, screenshot</text>
+          <text class="rowsub" x="0" y="94">computer-use proxy, blind</text>
+          <circle class="hit" cx="392" cy="82" r="14"><title>Sonnet screenshot proxy: 2.8 s read-and-decide, 9.2 s per agent</title></circle>
+          <circle class="mark m-ink ring" cx="392" cy="82" r="7"/>
+          <text class="val" x="406" y="86">2.8 s</text>
+
+          <text class="rowlab" x="0" y="117">vibium check</text>
+          <text class="rowsub" x="0" y="132">grok-4.6 tool loop</text>
+          <circle class="hit" cx="563" cy="120" r="14"><title>vibium check: 41.0 s median, 15.8 to 141.7 s</title></circle>
+          <circle class="mark m-muted ring" cx="563" cy="120" r="7"/>
+          <text class="val" x="577" y="124">41 s</text>
+        </svg>
+        </div>
+        <figcaption class="note">Jev 11× faster than the screenshot proxy's own read, 164× faster than the tool loop. n = 8.</figcaption>
+      </figure>
+
+      <figure class="fusion-card">
+        <div class="fig-head"><h3>The same login, three ways</h3><span class="note">seconds, local fixture site</span></div>
+        <div class="chart-wrap">
+        <svg viewBox="0 0 640 160" role="img" aria-label="Bar chart. Jev plus policy 5.0 seconds, Sonnet pixel operator 14.2 seconds, model only 32.8 seconds.">
+          <line class="ax" x1="180" y1="138" x2="620" y2="138"/>
+          <text class="tick" x="180" y="154" text-anchor="middle">0</text>
+          <text class="tick" x="305.7" y="154" text-anchor="middle">10 s</text>
+          <text class="tick" x="431.4" y="154" text-anchor="middle">20 s</text>
+          <text class="tick" x="557.1" y="154" text-anchor="middle">30 s</text>
+          <line class="ax" x1="305.7" y1="134" x2="305.7" y2="138"/><line class="ax" x1="431.4" y1="134" x2="431.4" y2="138"/><line class="ax" x1="557.1" y1="134" x2="557.1" y2="138"/>
+
+          <text class="rowlab" x="0" y="41">Jev + operator policy</text>
+          <text class="rowsub" x="0" y="56">scripted verbs, gate, verify</text>
+          <rect class="mark m-gold" x="180" y="35" width="62.9" height="18" rx="0"/>
+          <text class="val" x="249" y="48">5.0 s</text>
+
+          <text class="rowlab" x="0" y="79">Sonnet pixel operator</text>
+          <text class="rowsub" x="0" y="94">screenshots, clicks, keys</text>
+          <rect class="mark m-ink" x="180" y="73" width="178.5" height="18"/>
+          <text class="val" x="365" y="86">14.2 s</text>
+
+          <text class="rowlab" x="0" y="117">Model only</text>
+          <text class="rowsub" x="0" y="132">vibium run + check</text>
+          <rect class="mark m-muted" x="180" y="111" width="412.3" height="18"/>
+          <text class="val" x="598" y="124" text-anchor="start">32.8 s</text>
+        </svg>
+        </div>
+        <figcaption class="note">All three passed. Page load is 0.6 to 0.7 s of each. Jev does not plan; the other two do.</figcaption>
+      </figure>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1.5rem">
+      <table>
+        <thead><tr><th>Experiment</th><th>n</th><th>Result</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td>Bench: same claim, same page, Jev vs <code>check</code></td><td class="num">8 pages</td><td>Jev 248 ms vs 41.0 s (164×). Jev 6 decided, 6 right, 2 escalates. <code>check</code> 7 of 8, 142 s on its miss.</td><td class="mono">JEV-works kit/results/browser-bench-check-vs-jev-2026-09-28.json</td></tr>
+          <tr><td>Corpus: 3 parallel Vibium sessions, each calling Jev</td><td class="num">80 rows, 88 s</td><td>74 settled. 73 decided, 73 right, 0 wrong, 1 escalate. Kit verdict on <code>outcome</code>: JEV-SAFE, 98.6% vs 50% baseline, p = 2.9e-11.</td><td class="mono">JEV-works kit/results/browser-step-verify-corpus-2026-09-28.json</td></tr>
+          <tr><td>Login, three ways</td><td class="num">1 flow ×3</td><td>Jev + policy 5.0 s; pixel operator 14.2 s; model only 32.8 s. Gate escalate handed to <code>check</code> timed out at 180 s, so model fallback is verify-only.</td><td class="mono">jev-tape spec/SURFACES-VIBIUM.md §8c, §8c′</td></tr>
+          <tr><td>Real sites, no person and no model in the loop</td><td class="num">3 steps</td><td>Hacker News click auto and verified; Wikipedia search auto; GitHub verify contradicted at 0.64 and was right (the fill never stuck).</td><td class="mono">jev-tape spec/SURFACES-VIBIUM.md §8d</td></tr>
+          <tr><td>Element pick, one choice over 80 map lines</td><td class="num">3 goals</td><td>Search box 0.99 in 304 ms; PR tab 1.00; impossible goal answered <code>none</code> at 0.90.</td><td class="mono">jev-tape spec/SURFACES-VIBIUM.md §8d</td></tr>
+          <tr><td>Cross-check vs computer-use style proxy, blind</td><td class="num">8 pages + 1 login</td><td>Screenshot judge 7 of 8 in 2.8 s; its miss was a Cloudflare wall where the image shows no npm page. Claude computer use itself was not available; a Sonnet proxy stood in.</td><td class="mono">jev-tape docs/COMPUTER-USE-CROSSCHECK.md</td></tr>
+          <tr><td>Gate question quality, label-free</td><td class="num">43 targets</td><td><code>mutatesWorld</code>, <code>blastRadius</code>, <code>reversible</code> JEV-SAFE. <code>spendsOrSends</code> MARGINAL: needs rewording.</td><td class="mono">JEV-works kit/results/browser-action-gate-action-gate-2026-09-28.json</td></tr>
+          <tr><td>Calibration on the corpus</td><td class="num">74 rows</td><td>Brier 0.006 on <code>outcome</code>. Recording smoke found one wrong catalog label (the "PDF" served as text/plain).</td><td class="mono">jev-tape scripts/calibrate.ts</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="section-head">
+      <span class="mono-label">How it works</span>
+      <h2>Two questions, one tape, four rails</h2>
+      <p>The loop wraps <code>vibium --json</code>. Nothing inside Vibium knows Jev exists yet.</p>
+    </div>
+    <div class="steps">
+      <article class="fusion-card">
+        <span class="mono-label mono-label--gold">Classify</span>
+        <h3>Verb classes in code</h3>
+        <p>Reads (<code>map</code>, <code>text</code>, <code>url</code>) and tab edits (<code>fill</code>) never call Jev. Only commit verbs (<code>click</code>, <code>press Enter</code>, <code>upload</code>) reach the gate. A full login costs two calls, not five.</p>
+      </article>
+      <article class="fusion-card">
+        <span class="mono-label">Gate</span>
+        <h3>May this run now?</h3>
+        <p>One call with the page snapshot and the target: <code>mutatesWorld</code>, <code>reversible</code>, <code>spendsOrSends</code>, <code>blastRadius</code>. Peaked answers apply or refuse; mid-band answers escalate to policy or a person.</p>
+      </article>
+      <article class="fusion-card">
+        <span class="mono-label">Verify</span>
+        <h3>Did the page do it?</h3>
+        <p>One call after <code>wait load</code>: <code>outcome</code> (verified, contradicted, unsupported), <code>errorShown</code>, <code>blocked</code>. Entropy above 0.6 escalates to <code>vibium check</code> with the same claim.</p>
+      </article>
+      <article class="fusion-card">
+        <span class="mono-label">Tape</span>
+        <h3>Answers replay for free</h3>
+        <p>Every answer is keyed by a hash of state and questions. A replayed flow makes zero calls. The recording zip from <code>record stop</code> is the proof and the calibration input.</p>
+      </article>
+    </div>
+    <p style="margin-top:1.5rem">The rails do not move: Jev never counts, compares, or decides a retry (code does); a Jev refusal is final; pay, send, and delete targets park for a person before any call; and no threshold moves because a result disappointed. Fallback order is Jev, then the model for verify only, then a person.</p>
+  </section>
+
+  <section id="bridges">
+    <div class="section-head">
+      <span class="mono-label">Proposal</span>
+      <h2>Seven bridges into Vibium, two shipped</h2>
+      <p>Ordered from what exists today to what needs Go changes upstream. The one that changes the cost of <code>vibium run</code> is number six.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Bridge</th><th>Where</th><th>Vibium changes</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>CLI wrapper</td><td>jev-tape <code>src/vibium/</code></td><td>none</td><td class="lead">shipped, measured</td></tr>
+          <tr><td class="num">2</td><td>Skill</td><td>fork branch <code>feat/jev-typed-gate</code>: <code>skills/jev/SKILL.md</code></td><td>docs only</td><td class="lead">written, local</td></tr>
+          <tr><td class="num">3</td><td>Recording reader</td><td>jev-tape reads <code>record stop</code> zips; Haiku labels the last frame</td><td>none</td><td>designed, smoke-tested</td></tr>
+          <tr><td class="num">4</td><td>MCP tools</td><td><code>jev_gate</code>, <code>jev_verify</code>, <code>jev_pick</code> over stdio, beside <code>vibium mcp</code></td><td>none</td><td>proposed</td></tr>
+          <tr><td class="num">5</td><td>Playbook gate</td><td><code>run inspect|walk</code> packs → Jev → <code>report linear</code></td><td>none</td><td>proposed, waits on upstream branches</td></tr>
+          <tr><td class="num">6</td><td>Loop hooks</td><td><code>clicker/internal/verifier/loop.go</code>: <code>--gate CMD</code>, <code>--verify CMD</code></td><td>Go, PR-sized</td><td>the PR to write together</td></tr>
+          <tr><td class="num">7</td><td>Native provider</td><td><code>VIBIUM_AI_PROVIDER=typesafe</code> for literal claims in <code>check</code></td><td>Go, larger</td><td>after 3 and 6 have numbers</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:1.5rem"><strong>What we ask of the Vibium team.</strong> Review bridge 6: two optional hooks in the verifier loop, one before every mutating tool call expecting <code>auto | park | refuse</code>, one after each step expecting <code>true | false | escalate</code>. jev-tape provides both commands. The model keeps planning; Jev gates every action it takes, and the loop's 24-action, 3-minute budget stops burning on forks a typed judge settles. Bridge 2 is a docs-only PR that can land first.</p>
+  </section>
+
+  <section id="claims">
+    <div class="section-head">
+      <span class="mono-label">Claims</span>
+      <h2>What this shows, and what it does not</h2>
+    </div>
+    <div class="grid-2">
+      <div>
+        <h3>Shown</h3>
+        <ul class="plain">
+          <li>On literal claims about a settled page, a typed judge over text is one to two orders of magnitude faster than any model in the loop, and at least as accurate on this sample.</li>
+          <li>The loop shape holds: at most two calls per applied step, zero on replay, twin-tested against a fake binary.</li>
+          <li>Every relational judgement in a browser step has a named code replacement; Jev only answers what is visible on one page.</li>
+          <li>A typed verify caught a silently failed action on GitHub in 332 ms. Both model runs on that page passed it.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Not shown</h3>
+        <ul class="plain">
+          <li>Accuracy beyond in-sample claims: the claims were written with the pages known, thresholds are hand-set, and there is no fit/test split. The corpus of 140 rows across 18 file kinds is built and not yet run at scale.</li>
+          <li>Anything about Claude computer use as a product. The proxy had no desktop and one frame at a time.</li>
+          <li>That <code>auto</code> is safe for routine commits without an operator policy. The gate escalated on the login submit both times, correctly, and a person composed.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="files">
+    <div class="section-head">
+      <span class="mono-label">File index</span>
+      <h2>Where everything is</h2>
+      <p>Two repositories on branch <code>claude/nice-fermat-ky9qtz</code>, plus one local branch on the Vibium fork. Nothing has been pushed to HermeticOrmus/vibium.</p>
+    </div>
+    <div class="files">
+      <div>
+        <h3>manutej/jev-tape <span class="mono-label">runtime · a60f2bb, contains main</span></h3>
+        <ul>
+          <li><code>docs/HANDOFF-VIBIUM-TEAM.md</code><span>This brief as Markdown, with the same file index.</span></li>
+          <li><code>docs/HANDOFF-2026-09-28.md</code><span>Session state, measurements, next steps in order, rails.</span></li>
+          <li><code>spec/SURFACES-VIBIUM.md</code><span>The design and every measurement: §1 to §9, results in §8a to §8e.</span></li>
+          <li><code>docs/COMPUTER-USE-CROSSCHECK.md</code><span>Blind screenshot judge and pixel operator beside Jev and <code>check</code>.</span></li>
+          <li><code>docs/VIBIUM-BRIDGES.md</code><span>The seven bridges, with cost and what each buys.</span></li>
+          <li><code>docs/PARALLEL-SPEND.md</code><span>Ten-agent corpus design with recordings and Haiku ground truth.</span></li>
+          <li><code>docs/LOCAL-DEMO.md</code><span>Run it from a Mac: keys, binary, fixture site, demo script.</span></li>
+          <li><code>src/vibium/{cli,decide,pack,tape,step,pick}.ts</code><span>The loop: CLI shim, decision semantics, pack loader, tape, step router, element pick. 13 twins in <code>vibium.test.ts</code>.</span></li>
+          <li><code>packs/browser.action-gate.json</code>, <code>packs/browser.step-verify.json</code><span>The questions Jev is asked, with compose rules and <code>notForJev</code> lines.</span></li>
+          <li><code>scripts/vibium-step.ts</code>, <code>vibium-bench.ts</code>, <code>vibium-pick.ts</code>, <code>vibium-corpus.ts</code>, <code>calibrate.ts</code><span><code>npm run vibium | bench | pick | corpus | calibrate</code>.</span></li>
+          <li><code>scripts/demo.sh</code>, <code>scripts/fixture-site.mjs</code><span><code>npm run demo:vibium</code>; the local login/secure/checkout site on port 8787.</span></li>
+          <li><code>scripts/workflow-parallel-corpus.js</code><span>Ten Sonnet drivers, ten Haiku labellers reading a blinded manifest.</span></li>
+          <li><code>fixtures/vibium/catalog-pages.json</code>, <code>catalog-100.json</code><span>80 rows measured; 140 rows across 18 kinds, ready.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>manutej/JEV-works <span class="mono-label">lab · 136ffc4</span></h3>
+        <ul>
+          <li><code>kit/modules/contexts/browser.action-gate.json</code>, <code>browser.step-verify.json</code><span>Canonical question contexts, lint-clean under M1 to M7.</span></li>
+          <li><code>kit/results/browser-bench-check-vs-jev-2026-09-28.json</code><span>Eight-page bench, per row.</span></li>
+          <li><code>kit/results/browser-step-verify-corpus-2026-09-28.json</code><span>Corpus verdicts, McNemar, coverage.</span></li>
+          <li><code>kit/results/browser-crosscheck-computer-use-proxy-2026-09-28.json</code><span>Blind and non-blind proxy runs with the key.</span></li>
+          <li><code>kit/results/browser-action-gate-action-gate-2026-09-28.json</code>, <code>browser-step-verify-{step,login}-verify-2026-09-28.json</code><span>Label-free question quality.</span></li>
+          <li><code>kit/modules/items/browser-*.items.json</code><span>Gate targets, verify pairs, login pairs, the 74-row corpus items.</span></li>
+          <li><code>handoffs/vibium-browser.md</code><span>Lab handoff: what is claimed and the next keyed run.</span></li>
+          <li><code>handoffs/vibium/interview-login-verify.md</code>, <code>toq-login-verify.yaml</code>, <code>interview-use-cases.md</code><span>How a common task becomes a pack, and the open use-case interview.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>manutej/vibium <span class="mono-label">fork · local branch feat/jev-typed-gate, not pushed</span></h3>
+        <ul>
+          <li><code>skills/jev/SKILL.md</code>, <code>docs/how-to-guides/jev.md</code><span>The docs-only PR, to push after the Mac test.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="section-head">
+      <span class="mono-label">Next</span>
+      <h2>In order</h2>
+    </div>
+    <ol class="next">
+      <li>Answer the five starred questions in <code>interview-use-cases.md</code>, reorder the 140-row catalog, and launch the ten-agent run with recordings. Calibrate against the Haiku labels.</li>
+      <li>Reword <code>spendsOrSends</code>; make <code>loginFormGone</code> read <code>labelsRemoved</code> only; give the operator policy a rule for routine commits on allowlisted hosts.</li>
+      <li>Test from the Mac, push <code>feat/jev-typed-gate</code> to the fork, open the docs-only PR to HermeticOrmus.</li>
+      <li>Write bridge 6 with the Vibium team: two hooks in the verifier loop.</li>
+      <li>Repeat the cross-check with real Claude computer use from the desktop app, same eight pages, same blind protocol.</li>
+    </ol>
+    <div class="actions">
+      <a class="fusion-btn fusion-btn--primary" href="https://github.com/manutej/jev-tape/tree/claude/nice-fermat-ky9qtz">See the runtime</a>
+      <a class="fusion-btn fusion-btn--ghost" href="https://github.com/manutej/JEV-works/tree/claude/nice-fermat-ky9qtz">See the lab results</a>
+      <a class="fusion-btn fusion-btn--ghost" href="https://claude.ai/artifact/5Pqep6QZpPmnSNtPkgdToh">Leadership brief on the logic</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="rule"></div>
+    <span class="mono-label">Every number carries n, baseline, and whether thresholds were fitted</span>
+    <span>Jev is TypeSafe System One, model pin jev-1.13.0. Vibium binary 26.8.21 built from HermeticOrmus/vibium at feat/linear-tasks. Model runs on xai grok-4.6. All measurements 2026-09-28.</span>
+  </footer>
+
+</main>
+</div>
