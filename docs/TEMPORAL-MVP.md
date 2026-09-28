@@ -44,6 +44,10 @@ One page, no build step (`harness/index.html`), fed by `scripts/harness.ts` over
   time in ms per POST and the source. AMBER rows grow compose / escalate / refuse buttons that send the `humanVerdict` Signal.
   Path-0 rows (illegal commands) are predicted with the same `localGate` code the workflow runs and show 0 POSTs.
 - **Judge latency**: POST count, p50, p95, path-0 count, applied, residual.
+- **Layers on the Items table**: chips (All, Needs me, RED, AMBER, GREEN, Running, Money, Work, Noise), group by
+  lane / light / status / category / sender / date, sort by arrival / judge ms / severity / date / sender / category,
+  and a free-text filter over text, subject, sender and category. Group headers carry counts and average ms per POST.
+  The view is remembered per browser. "Needs me" = parked items plus judge-RED items (path-0 RED is code, not you).
 - **Step feed** and **Tape**, newest first, plus deep links into the Temporal UI per workflow.
 
 Run the demo pack, type one Capture line, start a Waiting or Habit workflow.

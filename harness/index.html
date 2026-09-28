@@ -81,6 +81,14 @@
   .kv { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; font-size: 12px; font-family: var(--mono); }
   .kv div:nth-child(odd) { color: var(--muted); }
   .empty { color: var(--muted); font-size: 12px; padding: 14px 0; text-align: center; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 10px; }
+  .toolbar select { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; font: 12px var(--sans); }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { padding: 3px 9px; font-size: 11px; border-radius: 999px; }
+  .chip.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+  tr.grp td { background: var(--panel-2); font-family: var(--mono); font-size: 12px; }
+  tr.grp .agg { color: var(--muted); margin-left: 10px; }
+  .sub { color: var(--muted); font-size: 11px; display: block; margin-top: 1px; }
 </style>
 </head>
 <body>
@@ -136,7 +144,23 @@
   </section>
 
   <section class="panel">
-    <h2>Items <span class="hint">one row per command · two gates · park buttons appear on AMBER</span></h2>
+    <h2>Items <span class="hint" id="items-count"></span></h2>
+    <div class="toolbar">
+      <div class="chips" id="layers">
+        <button class="chip on" data-layer="all">All</button>
+        <button class="chip" data-layer="needs-me">Needs me</button>
+        <button class="chip" data-layer="red">RED</button>
+        <button class="chip" data-layer="amber">AMBER</button>
+        <button class="chip" data-layer="green">GREEN</button>
+        <button class="chip" data-layer="running">Running</button>
+        <button class="chip" data-layer="money">Money</button>
+        <button class="chip" data-layer="work">Work</button>
+        <button class="chip" data-layer="noise">Noise</button>
+      </div>
+      <label class="hint">group <select id="group"><option value="lane">lane</option><option value="light">light</option><option value="status">status</option><option value="category">category</option><option value="from">sender</option><option value="date">date</option><option value="none">none</option></select></label>
+      <label class="hint">sort <select id="sort"><option value="arrival">arrival</option><option value="ms">judge ms ↓</option><option value="severity">severity</option><option value="date">date ↓</option><option value="from">sender</option><option value="category">category</option></select></label>
+      <input type="text" id="filter" placeholder="filter text, subject, sender, category…" style="max-width:300px">
+    </div>
     <table>
       <thead><tr><th>#</th><th>command</th><th>payload</th><th>task gate</th><th>output gate</th><th>judge ms</th><th>source</th><th>status</th><th>C10 / notes</th></tr></thead>
       <tbody id="items"><tr><td colspan="9" class="empty">Nothing running. Press “Run demo pack”.</td></tr></tbody>
@@ -197,25 +221,85 @@ function renderStats() {
 }
 const light = (l, waiting) => l ? `<span class="light ${l}">${l}</span>` : waiting ? `<span class="light wait">…</span>` : `<span class="light">—</span>`;
 function payloadText(cmd) { if (!cmd) return ""; const p = cmd.payload || {}; return p.text ?? p.itemKey ?? p.name ?? p.display_name ?? p.habitId ?? JSON.stringify(p); }
-function renderItems() {
-  const tb = $("#items"); const rows = [];
-  let shown = 0; const MAX_ROWS = 1200;
+const LIGHT_ORDER = { RED: 0, AMBER: 1, GREEN: 2 };
+const NOISE = new Set(["newsletter", "notification"]);
+const view = { layer: "all", group: "lane", sort: "arrival", filter: "" };
+try { Object.assign(view, JSON.parse(localStorage.getItem("jev-view") || "{}")); } catch {}
+function saveView() { try { localStorage.setItem("jev-view", JSON.stringify(view)); } catch {} }
+
+function flatten() {
+  const out = [];
   for (const [id, w] of [...wfs.entries()].reverse()) {
-    if (shown > MAX_ROWS) { rows.push(`<tr class="wf-head"><td colspan="9">… ${wfs.size} workflows in state; older ones not drawn</td></tr>`); break; }
-    rows.push(`<tr class="wf-head"><td colspan="9">${w.kind} · <a href="${w.link}" target="_blank">${id}</a>${w.status ? ` · run ${w.status.run} · cursor ${w.status.cursor}/${w.status.total}` : ""}${w.done ? " · done" : ""}</td></tr>`);
-    const keys = [...w.items.keys()].sort((a, b) => { const na = +a.split(":").pop(), nb = +b.split(":").pop(); return (isNaN(na) || isNaN(nb)) ? a.localeCompare(b) : na - nb; });
-    for (const key of keys) {
-      const it = w.items.get(key); const idx = key.slice(id.length + 1); const cmd = w.commands[+idx];
-      const cmdName = cmd?.name ?? it.command ?? idx;
-      const parked = it.status === "parked";
-      const act = parked ? `<button class="sm compose" onclick="verdict('${id}','${key}','compose')">compose</button> <button class="sm escalate" onclick="verdict('${id}','${key}','escalate')">escalate</button> <button class="sm refuse" onclick="verdict('${id}','${key}','refuse')">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("");
-      if (it.status === "recorded") { rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td></tr>`); continue; }
-      shown++;
-      rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${cmdName}</td><td>${payloadText(cmd)}</td><td>${light(it.task, it.status === "running")}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td></tr>`);
+    for (const [key, it] of w.items) {
+      const idx = key.slice(id.length + 1); const n = +idx; const cmd = w.commands[n];
+      const p = cmd?.payload || {};
+      out.push({ id, w, key, it, idx, n: isNaN(n) ? 1e9 : n, cmd, name: cmd?.name ?? it.command ?? it.recorded ?? idx, text: payloadText(cmd), from: String(p.from ?? ""), category: String(p.category ?? (it.recorded ? "timer" : "")), date: String(p.date ?? ""), subject: String(p.subject ?? ""), light: it.status === "residual" ? "RED" : it.status === "parked" ? "AMBER" : it.status === "applied" || it.status === "recorded" ? "GREEN" : "", ms: it.ms.reduce((a, b) => a + b, 0) });
     }
   }
-  tb.innerHTML = rows.join("") || `<tr><td colspan="9" class="empty">Nothing running. Press “Run demo pack”.</td></tr>`;
+  return out;
 }
+const LAYERS = {
+  all: () => true,
+  "needs-me": (r) => r.it.status === "parked" || (r.light === "RED" && !r.it.path0),
+  red: (r) => r.light === "RED", amber: (r) => r.light === "AMBER" || r.it.task === "AMBER" || r.it.output === "AMBER", green: (r) => r.light === "GREEN",
+  running: (r) => r.it.status === "running",
+  money: (r) => r.category === "money" || /invoice|payment|rate|reimburs|bank|paid|refund/i.test(r.text + r.subject),
+  work: (r) => r.category === "work" || r.category === "admin",
+  noise: (r) => NOISE.has(r.category),
+};
+const SORTS = {
+  arrival: (a, b) => 0,
+  ms: (a, b) => b.ms - a.ms,
+  severity: (a, b) => (LIGHT_ORDER[a.light] ?? 3) - (LIGHT_ORDER[b.light] ?? 3) || b.ms - a.ms,
+  date: (a, b) => b.date.localeCompare(a.date),
+  from: (a, b) => a.from.localeCompare(b.from) || a.n - b.n,
+  category: (a, b) => a.category.localeCompare(b.category) || a.n - b.n,
+};
+const GROUPS = {
+  lane: (r) => r.id, light: (r) => r.light || "pending", status: (r) => r.it.status, category: (r) => r.category || "—", from: (r) => r.from || "—", date: (r) => r.date || "—", none: () => "",
+};
+function groupLabel(r, key) {
+  if (view.group !== "lane") return key;
+  const w = r.w;
+  return `${w.kind} · <a href="${w.link}" target="_blank">${r.id}</a>${w.status ? ` · run ${w.status.run} · cursor ${w.status.cursor}/${w.status.total}` : ""}${w.done ? " · done" : ""}`;
+}
+function renderItems() {
+  const tb = $("#items"); const rows = [];
+  let all = flatten();
+  const total = all.length;
+  const q = view.filter.trim().toLowerCase();
+  all = all.filter(LAYERS[view.layer] || LAYERS.all);
+  if (q) all = all.filter((r) => (r.text + " " + r.subject + " " + r.from + " " + r.category + " " + r.name).toLowerCase().includes(q));
+  if (view.sort !== "arrival") all = [...all].sort(SORTS[view.sort]);
+  $("#items-count").textContent = `${all.length} of ${total} · ${view.layer} · group ${view.group} · sort ${view.sort}`;
+  const groups = new Map();
+  for (const r of all) { const k = GROUPS[view.group](r); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
+  let shown = 0; const MAX_ROWS = 1200;
+  for (const [k, rs] of groups) {
+    if (shown > MAX_ROWS) { rows.push(`<tr class="grp"><td colspan="9">… ${all.length - shown} more rows not drawn; narrow the filter</td></tr>`); break; }
+    if (view.group !== "none") {
+      const agg = { applied: 0, residual: 0, parked: 0, running: 0, ms: 0, judged: 0 };
+      for (const r of rs) { agg[r.it.status] = (agg[r.it.status] || 0) + 1; if (r.it.ms.length) { agg.ms += r.ms; agg.judged += r.it.ms.length; } }
+      rows.push(`<tr class="grp"><td colspan="9">${groupLabel(rs[0], k)}<span class="agg">${rs.length} items · <span class="GREEN">${agg.applied || 0} applied</span> · <span class="RED">${agg.residual || 0} residual</span> · <span class="AMBER">${agg.parked || 0} parked</span>${agg.running ? ` · ${agg.running} running` : ""}${agg.judged ? ` · avg ${Math.round(agg.ms / agg.judged)} ms/POST` : ""}</span></td></tr>`);
+    }
+    for (const r of rs) {
+      const { it, idx, id, key } = r;
+      shown++;
+      const meta = [r.from, r.category, r.date].filter(Boolean).join(" · ");
+      if (it.status === "recorded") { rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td></tr>`); continue; }
+      const parked = it.status === "parked";
+      const act = parked ? `<button class="sm compose" onclick="verdict('${id}','${key}','compose')">compose</button> <button class="sm escalate" onclick="verdict('${id}','${key}','escalate')">escalate</button> <button class="sm refuse" onclick="verdict('${id}','${key}','refuse')">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("");
+      rows.push(`<tr><td class="mono" title="${key}">${view.group === "lane" ? idx : id.replace("jev-worklist-", "") + ":" + idx}</td><td class="mono">${r.name}</td><td>${r.text}${meta ? `<span class="sub">${meta}</span>` : ""}</td><td>${light(it.task, it.status === "running")}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td></tr>`);
+    }
+  }
+  tb.innerHTML = rows.join("") || `<tr><td colspan="9" class="empty">${total ? "No items match this layer / filter." : "Nothing running. Press “Run pack”."}</td></tr>`;
+}
+// toolbar wiring
+$("#group").value = view.group; $("#sort").value = view.sort; $("#filter").value = view.filter;
+document.querySelectorAll("#layers .chip").forEach((c) => { c.classList.toggle("on", c.dataset.layer === view.layer); c.onclick = () => { view.layer = c.dataset.layer; document.querySelectorAll("#layers .chip").forEach((x) => x.classList.toggle("on", x === c)); saveView(); renderItems(); }; });
+$("#group").onchange = (e) => { view.group = e.target.value; saveView(); renderItems(); };
+$("#sort").onchange = (e) => { view.sort = e.target.value; saveView(); renderItems(); };
+let filterT; $("#filter").oninput = (e) => { view.filter = e.target.value; clearTimeout(filterT); filterT = setTimeout(() => { saveView(); renderItems(); }, 120); };
 function feed(html) { const d = document.createElement("div"); d.innerHTML = html; $("#feed").prepend(d); if ($("#feed").children.length > 400) $("#feed").lastChild.remove(); }
 const hhmm = (iso) => (iso || "").slice(11, 23);
 
