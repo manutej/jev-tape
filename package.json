@@ -15,6 +15,7 @@
     "vibium": "node --experimental-strip-types scripts/vibium-step.ts",
     "bench": "node --experimental-strip-types scripts/vibium-bench.ts",
     "pick": "node --experimental-strip-types scripts/vibium-pick.ts",
-    "demo": "bash scripts/demo.sh"
+    "demo": "bash scripts/demo.sh",
+    "corpus": "node --experimental-strip-types scripts/vibium-corpus.ts"
   }
 }
