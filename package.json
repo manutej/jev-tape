@@ -12,6 +12,7 @@
     "qualify": "node --experimental-strip-types scripts/qualify-surface.ts",
     "serve": "node scripts/serve.mjs",
     "temporal": "node scripts/temporal-status.mjs",
-    "vibium": "node --experimental-strip-types scripts/vibium-step.ts"
+    "vibium": "node --experimental-strip-types scripts/vibium-step.ts",
+    "bench": "node --experimental-strip-types scripts/vibium-bench.ts"
   }
 }
