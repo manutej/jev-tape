@@ -148,7 +148,7 @@
   .diagram .box--model { stroke: var(--ormus-ink); }
   .diagram .box--tape { stroke: var(--ormus-gold); stroke-dasharray: 4 3; }
   .diagram text { fill: var(--ormus-ink); }
-  .diagram .t-mute { fill: var(--ormus-ink-muted); font-size: 11px; }
+  .diagram .t-mute { fill: var(--ormus-ink-muted); font-size: 10.5px; }
   .diagram .t-gold { fill: var(--ormus-gold); }
   .diagram .t-bold { font-weight: 600; }
   .diagram .fl { stroke: var(--ormus-ink-muted); fill: none; stroke-width: 1.2; }
@@ -401,24 +401,24 @@
         <text class="t-mute" x="435" y="122" text-anchor="middle">host allowlist · @ref still in map</text>
         <text class="t-mute" x="435" y="138" text-anchor="middle">park keyword · redact typed values</text>
         <path class="fl fl--person" d="M370 148 L370 458 L520 458" marker-end="url(#ar)"/>
-        <text class="t-mute" x="378" y="300">pay / send / delete</text>
-        <text class="t-mute" x="378" y="314">→ no call, park for a person</text>
+        <text class="t-mute" x="378" y="330">pay / send / delete</text>
+        <text class="t-mute" x="378" y="344">→ no call, park for a person</text>
         <path class="fl fl--jev" d="M470 148 L470 200" marker-end="url(#arj)"/>
-        <rect class="box box--jev" x="400" y="202" width="150" height="74" rx="3"/>
+        <rect class="box box--jev" x="380" y="202" width="190" height="74" rx="3"/>
         <text class="t-gold t-bold" x="475" y="221" text-anchor="middle">gate call</text>
         <text class="t-mute" x="475" y="238" text-anchor="middle">mutatesWorld · reversible</text>
         <text class="t-mute" x="475" y="253" text-anchor="middle">spendsOrSends · blastRadius</text>
-        <text class="t-mute" x="475" y="268" text-anchor="middle">state: url, title, action, target, text</text>
-        <line class="fl fl--jev" x1="550" y1="239" x2="578" y2="239" marker-end="url(#arj)"/>
-        <rect class="box box--jev" x="580" y="212" width="86" height="54" rx="3"/>
-        <text x="623" y="235" text-anchor="middle">rules</text><text class="t-mute" x="623" y="251" text-anchor="middle">in JSON</text>
-        <path class="fl fl--jev" d="M655 212 L655 114" marker-end="url(#arj)"/>
-        <text class="t-gold" x="600" y="170">auto</text>
-        <line class="fl" x1="666" y1="252" x2="698" y2="252" marker-end="url(#ar)"/>
-        <text x="722" y="256">refuse ✕ final</text>
-        <path class="fl fl--person" d="M623 266 L623 434" marker-end="url(#ar)"/>
-        <text class="t-mute" x="615" y="372" text-anchor="end">escalate → policy</text>
-        <text class="t-mute" x="615" y="386" text-anchor="end">or a person, not the model</text>
+        <text class="t-mute" x="475" y="268" text-anchor="middle">state: page snapshot + target</text>
+        <line class="fl fl--jev" x1="570" y1="239" x2="598" y2="239" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="600" y="212" width="86" height="54" rx="3"/>
+        <text x="643" y="235" text-anchor="middle">rules</text><text class="t-mute" x="643" y="251" text-anchor="middle">in JSON</text>
+        <path class="fl fl--jev" d="M672 212 L672 114" marker-end="url(#arj)"/>
+        <text class="t-gold" x="678" y="170">auto</text>
+        <path class="fl" d="M622 266 L622 292" marker-end="url(#ar)"/>
+        <text x="614" y="306" text-anchor="end">refuse ✕ final</text>
+        <path class="fl fl--person" d="M660 266 L660 434" marker-end="url(#ar)"/>
+        <text class="t-mute" x="652" y="372" text-anchor="end">escalate → policy</text>
+        <text class="t-mute" x="652" y="386" text-anchor="end">or a person, not the model</text>
         <rect class="box box--person" x="520" y="436" width="150" height="46" rx="3"/>
         <text x="595" y="455" text-anchor="middle">operator policy</text><text class="t-mute" x="595" y="471" text-anchor="middle">compose · escalate · refuse</text>
         <path class="fl fl--person" d="M670 448 L712 448 L712 114" marker-end="url(#ar)"/>
@@ -428,15 +428,15 @@
         <line class="fl" x1="738" y1="86" x2="776" y2="86" marker-end="url(#ar)"/>
         <rect class="box" x="778" y="60" width="190" height="52" rx="3"/>
         <text class="t-mute" x="873" y="78" text-anchor="middle">settle: wait load · snapshot</text>
-        <text class="t-mute" x="873" y="93" text-anchor="middle">labelDiff(before, after) · urlChanged</text>
+        <text class="t-mute" x="873" y="93" text-anchor="middle">labelDiff · urlChanged</text>
         <text class="t-mute" x="873" y="106" text-anchor="middle" font-size="10">only when the step has an expectation</text>
         <path class="fl fl--jev" d="M873 112 L873 200" marker-end="url(#arj)"/>
-        <rect class="box box--jev" x="790" y="202" width="166" height="74" rx="3"/>
+        <rect class="box box--jev" x="778" y="202" width="192" height="74" rx="3"/>
         <text class="t-gold t-bold" x="873" y="221" text-anchor="middle">verify call</text>
         <text class="t-mute" x="873" y="238" text-anchor="middle">outcome · errorShown · blocked</text>
         <text class="t-mute" x="873" y="253" text-anchor="middle">or login-verify: 4 questions</text>
-        <text class="t-mute" x="873" y="268" text-anchor="middle">state: claim, urls, text, labels ±</text>
-        <line class="fl fl--jev" x1="956" y1="239" x2="984" y2="239" marker-end="url(#arj)"/>
+        <text class="t-mute" x="873" y="268" text-anchor="middle">state: claim + page, labels ±</text>
+        <line class="fl fl--jev" x1="970" y1="239" x2="984" y2="239" marker-end="url(#arj)"/>
         <rect class="box box--jev" x="986" y="212" width="86" height="54" rx="3"/>
         <text x="1029" y="235" text-anchor="middle">rules</text><text class="t-mute" x="1029" y="251" text-anchor="middle">entropy first</text>
         <line class="fl fl--jev" x1="1072" y1="228" x2="1108" y2="228" marker-end="url(#arj)"/>
