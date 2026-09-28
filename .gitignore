@@ -12,5 +12,11 @@ coverage/
 .vite/
 dist/
 
+# answer tapes (page text)
+runs/
+
+# vibium recordings (zips with screenshots)
+recordings/
+
 # local tape + dev server db
 .jev-tape/

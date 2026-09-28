@@ -1,0 +1,8 @@
+{
+  "url": "https://shop.example/checkout",
+  "title": "Checkout",
+  "text": "Checkout\nOrder summary\n1 × Battery Pack  89.99\nCoupon code\nApply coupon\nPlace order\nBy placing your order you agree to the terms.",
+  "map": "@e1 [button] \"Apply coupon\"\n@e2 [button type=\"submit\"] \"Place order\"\n@e3 [a] \"Terms\"",
+  "takenAt": "2026-09-28T00:00:00.000Z",
+  "note": "Hand-written shape for the C10 twin. Not a recording."
+}

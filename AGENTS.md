@@ -14,6 +14,9 @@ Missing key = fail closed. Do not invent a GREEN.
 | `spec/SPEC-v1-SPEED.md` | FAST vs TAPE |
 | `spec/TEMPORAL.md` | Scripts must match this file |
 | `spec/SURFACES-GMAIL-GITHUB.md` | Gmail / GitHub cut |
+| `spec/SURFACES-VIBIUM.md` | Browser cut: Vibium verbs → paths, two packs, ≤ 2 POSTs per step |
+| `packs/` | Question packs in JEV-works Context format. Canonical copies + lint live in JEV-works |
+| `src/vibium/` | Browser twin: cli shim, decide, pack, tape, step |
 | `wiki/pages/` | 43 pages. Start at `wiki/pages/home.md` |
 | `src/` | In-process twins. Apply last |
 | `scripts/` | npm test, smoke, live, qualify |
@@ -31,5 +34,5 @@ Replay does not call TypeSafe again.
 
 ## Tools
 
-Allowed: Gmail search, GitHub list/get/search, `npm test`, `npm run smoke`, `npm run qualify`.
+Allowed: Gmail search, GitHub list/get/search, `npm test`, `npm run smoke`, `npm run qualify`, `npm run vibium` on an allowlisted host (commit verbs are gated; C10 targets park).
 Forbidden unless the user explicitly says push or send and C10 has a human verdict: send mail, push, merge.

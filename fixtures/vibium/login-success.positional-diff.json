@@ -1,0 +1,1 @@
+{"ok":true,"result":"- @e1 [input type=\"text\"] name=\"username\"\n- @e2 [input type=\"password\"] name=\"password\"\n- @e3 [button type=\"submit\"] \"Login\"\n- @e4 [a] \"Elemental Selenium\"\n+ @e1 [a] \"×\"\n+ @e2 [a] \"Logout\"\n+ @e3 [a] \"Elemental Selenium\""}

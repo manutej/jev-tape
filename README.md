@@ -60,7 +60,7 @@ Local Grok can see your connected Gmail / GitHub MCP. This repo does not embed t
 4. `npm run qualify -- fixtures/example-availability.json`
 5. Read printed `model` + answers. The script will not send.
 
-Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFETY.md`](spec/KEY-SAFETY.md).
+Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFETY.md`](spec/KEY-SAFETY.md). Browser demo from your terminal: [`docs/LOCAL-DEMO.md`](docs/LOCAL-DEMO.md).
 
 | Allowed MCP | Forbidden until you explicitly flip a local flag |
 | --- | --- |
@@ -75,6 +75,7 @@ Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFE
 | TypeSafe `jev-1.13.0` | Hosted judge. Answers only |
 | This repo | Two gates, in-process twin, and four Temporal workflows on queue `jev-tape` |
 | Your Gmail / GitHub MCP | Read surfaces. Writes stay parked |
+| Vibium (browser) | Sensor + actuator. `map` / `text` / `url` in, verbs out. Commit verbs gated, steps verified. `spec/SURFACES-VIBIUM.md` |
 
 Not a fourth product. Not Cloud Event History.
 
@@ -104,4 +105,5 @@ npm run replay    # replay proof
 npm run smoke     # key required — pin check
 npm run live      # key required — one Capture through the twin
 npm run qualify   # key required — fixture JSON in, verdict out
+npm run vibium    # key required — one typed browser flow: gate the click, verify the page, ≤ 2 POSTs
 ```

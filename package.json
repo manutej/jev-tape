@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Durable execution: TypeSafe qualifies, Temporal records. Run locally. Key stays in .env.",
   "scripts": {
-    "test": "node --experimental-strip-types --test src/*.test.ts src/temporal/*.test.ts",
+    "test": "node --experimental-strip-types --test src/*.test.ts src/temporal/*.test.ts src/vibium/*.test.ts",
     "typecheck": "tsc --noEmit",
     "check": "node scripts/check.mjs",
     "temporal": "node scripts/temporal-status.mjs",
@@ -21,7 +21,13 @@
     "harness": "node --experimental-strip-types scripts/harness.ts",
     "pack:scan": "node scripts/pack-scan.mjs",
     "ingest": "node --experimental-strip-types scripts/ingest.ts",
-    "mcp:fake": "node --experimental-strip-types scripts/mcp-fake-gmail.ts"
+    "mcp:fake": "node --experimental-strip-types scripts/mcp-fake-gmail.ts",
+    "vibium": "node --experimental-strip-types scripts/vibium-step.ts",
+    "demo:vibium": "bash scripts/demo.sh",
+    "bench": "node --experimental-strip-types scripts/vibium-bench.ts",
+    "pick": "node --experimental-strip-types scripts/vibium-pick.ts",
+    "corpus": "node --experimental-strip-types scripts/vibium-corpus.ts",
+    "calibrate": "node --experimental-strip-types scripts/calibrate.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.1",
