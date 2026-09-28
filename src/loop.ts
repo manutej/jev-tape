@@ -38,6 +38,9 @@ export interface Verdict {
   usage?: { input_tokens: number; output_tokens: number };
   /** Wall time of the judge call, ms. This is the number to watch. */
   ms?: number;
+  /** Which question pack answered. Verdicts from different packs are not comparable. */
+  pack?: string;
+  oc?: OC;
 }
 
 export interface Proposal {
@@ -48,84 +51,27 @@ export interface Proposal {
 
 // ---------------------------------------------------------------- questions
 
-const LIGHT_CRITERIA = {
-  GREEN: "Safe to apply after compose",
-  AMBER: "Park for a human",
-  RED: "Refuse",
-} as const;
+import { OUTPUT_TREE, PACK_VERSION, TASK_TREE, outputQuestions, taskQuestions } from "./typesafe/pack.ts";
+export { PACK_VERSION };
 
-/** qualifyTask pack. One POST, several questions. The operad names them; nothing here rewrites prompts. */
+/** qualifyTask pack: the v2 tree plus its collapsed root, one POST. spec/QUESTIONS-TASK-v2.md is the source. */
 export function taskRequest(cmd: Command): SystemOneRequest {
-  return {
-    model: TYPESAFE_PINNED_MODEL,
-    state: JSON.stringify({ gate: "task", command: cmd }),
-    questions: {
-      single_intent: {
-        type: "noul",
-        instructions: "Does this command express exactly one intent for exactly one item?",
-        criteria: {
-          true: "One command, one item, one thing to do with it.",
-          false: "Several items, several intents, or a request that is really a project.",
-        },
-      },
-      harness_can_branch: {
-        type: "noul",
-        instructions: "Can a harness decide this without a human, from the payload alone?",
-        criteria: {
-          true: "The payload carries what the command needs; no judgment about people, money, or deadlines is required.",
-          false: "Deciding needs context that is not in the payload, or a human's preference.",
-        },
-      },
-      reversibility: {
-        type: "choice",
-        instructions: "If this command is applied and turns out to be wrong, what does undoing it cost?",
-        criteria: {
-          free: "A later command fully undoes it at no cost.",
-          cheap: "Undo is possible but someone will notice.",
-          irreversible: "Cannot be undone: a message went out, a record was destroyed, or a person was told.",
-        },
-      },
-      allow_now: {
-        type: "choice",
-        instructions: "May a harness run this command now?",
-        criteria: LIGHT_CRITERIA,
-      },
-    },
-  };
+  return { model: TYPESAFE_PINNED_MODEL, state: JSON.stringify({ gate: "task", pack: PACK_VERSION, command: cmd }), questions: taskQuestions() };
 }
 
-/** qualifyOutput pack. The proposal exists only in memory here. Nothing has been written yet. */
+/** qualifyOutput pack. The proposal exists only in memory here. Nothing has been written. */
 export function outputRequest(cmd: Command, proposal: Proposal): SystemOneRequest {
   return {
     model: TYPESAFE_PINNED_MODEL,
-    state: JSON.stringify({ gate: "output", command: cmd, proposal: proposal.event }),
-    questions: {
-      matches_intent: {
-        type: "noul",
-        instructions: "Does the proposed event do what the command asked, and nothing more?",
-        criteria: {
-          true: "Same item, same intent, no extra fields invented.",
-          false: "Drifts from the command, adds fields, or touches another item.",
-        },
-      },
-      no_side_effect: {
-        type: "noul",
-        instructions: "Is the proposed event free of side effects outside the JEV domain?",
-        criteria: {
-          true: "It changes JEV state only.",
-          false: "It would send mail, push code, charge money, or notify a person.",
-        },
-      },
-      allow_apply: {
-        type: "choice",
-        instructions: "May the harness apply this event now?",
-        criteria: LIGHT_CRITERIA,
-      },
-    },
+    state: JSON.stringify({ gate: "output", pack: PACK_VERSION, command: cmd, proposal: proposal.event }),
+    questions: outputQuestions(),
   };
 }
 
 // ---------------------------------------------------------------- compose
+
+const LIGHTS: Light[] = ["GREEN", "AMBER", "RED"];
+const worse = (a: Light, b: Light): Light => (LIGHTS.indexOf(a) >= LIGHTS.indexOf(b) ? a : b);
 
 function noul(answers: Record<string, TypesafeAnswer>, id: string): number | undefined {
   const a = answers[id];
@@ -135,6 +81,8 @@ function choice(answers: Record<string, TypesafeAnswer>, id: string): ChoiceAnsw
   const a = answers[id];
   return a && a.type === "choice" ? (a as ChoiceAnswer) : undefined;
 }
+const maxOf = (...xs: (number | undefined)[]) => Math.max(0, ...xs.filter((x): x is number => x !== undefined));
+const has = (...xs: (number | undefined)[]) => xs.some((x) => x !== undefined);
 
 /** Local, code-only gate. Runs before any judge and cannot be overridden by one. */
 export function localGate(cmd: Command): { light: Light; reasons: string[] } {
@@ -144,69 +92,122 @@ export function localGate(cmd: Command): { light: Light; reasons: string[] } {
   return { light: "GREEN", reasons: [] };
 }
 
+/** Operadic-consistency record: the collapsed root vs the light composed from the tree. */
+export interface OC {
+  consistent: boolean;
+  collapsed: Light | "none";
+  composed: Light;
+  /** Children that drove the composed light. Empty when composed GREEN. */
+  kernel: string[];
+  /** Per-parent composed values (Q1..Q6 / Q7..Q9) for the projection and the harness layers. */
+  values: Record<string, number | string>;
+}
+
+/** Dual axes on a collapsed Light choice. θ gates P(GREEN); top_prob_floor gates peakedness. */
+function collapsedLight(judged: ChoiceAnswer | undefined, reasons: string[]): Light | "none" {
+  if (!judged) return "none";
+  let light: Light = LIGHTS.includes(judged.choice as Light) ? (judged.choice as Light) : "RED";
+  reasons.push(`collapsed: judge said ${judged.choice} (conf ${judged.confidence.toFixed(2)})`);
+  const pGreen = judged.probabilities?.GREEN ?? 0;
+  const top = Math.max(...Object.values(judged.probabilities ?? { x: 0 }));
+  if (light === "GREEN" && pGreen < THETA) { light = "AMBER"; reasons.push(`θ: P(GREEN)=${pGreen.toFixed(2)} < ${THETA}`); }
+  if (light === "GREEN" && top < TOP_PROB_FLOOR) { light = "AMBER"; reasons.push(`top_prob_floor: peak ${top.toFixed(2)} < ${TOP_PROB_FLOOR}`); }
+  return light;
+}
+
+/** Task tree compose, exactly as spec/QUESTIONS-TASK-v2.md states it. Returns the composed light and the kernel. */
+export function composeTaskTree(a: Record<string, TypesafeAnswer>): { light: Light; kernel: string[]; values: OC["values"]; reasons: string[] } {
+  const reasons: string[] = [];
+  const kernel: string[] = [];
+  const values: OC["values"] = {};
+  let light: Light = "GREEN";
+  const amber = (why: string, ...ids: string[]) => { light = worse(light, "AMBER"); kernel.push(...ids); reasons.push(why); };
+  const red = (why: string, ...ids: string[]) => { light = "RED"; kernel.push(...ids); reasons.push(why); };
+
+  // Q1 single intent = min(1 − Q1.1, 1 − Q1.2); Q1.3 does not lower it.
+  const q1 = has(noul(a, "Q1_1"), noul(a, "Q1_2")) ? Math.min(1 - (noul(a, "Q1_1") ?? 0), 1 - (noul(a, "Q1_2") ?? 0)) : noul(a, "Q1");
+  if (q1 !== undefined) { values.Q1 = q1; if (q1 < 0.5) amber(`Q1 single_intent ${q1.toFixed(2)} < 0.5`, "Q1"); }
+
+  // Q2 can_branch = 1 − max(Q2.1, Q2.2, Q2.3); mid-band demotes.
+  const q2 = has(noul(a, "Q2_1"), noul(a, "Q2_2"), noul(a, "Q2_3")) ? 1 - maxOf(noul(a, "Q2_1"), noul(a, "Q2_2"), noul(a, "Q2_3")) : noul(a, "Q2");
+  if (q2 !== undefined) {
+    values.Q2 = q2;
+    if (isMidBandNoul(q2)) amber(`Q2 harness_can_branch mid-band ${q2.toFixed(2)}`, "Q2");
+    else if (q2 < 0.5) amber(`Q2 harness_can_branch ${q2.toFixed(2)} < 0.5`, "Q2");
+  }
+
+  // Q3 reversibility: irreversible if any leaf ≥ 0.5, else free; compared with the collapsed Q3 key.
+  const q3leaf = has(noul(a, "Q3_1"), noul(a, "Q3_2"), noul(a, "Q3_3")) ? (maxOf(noul(a, "Q3_1"), noul(a, "Q3_2"), noul(a, "Q3_3")) >= 0.5 ? "irreversible" : "free") : undefined;
+  const q3 = q3leaf ?? choice(a, "Q3")?.choice;
+  if (q3 !== undefined) {
+    values.Q3 = q3;
+    const c = choice(a, "Q3")?.choice;
+    if (q3leaf && c && c !== q3leaf) reasons.push(`Q3 leaves say ${q3leaf}, collapsed says ${c}`);
+    if (q3 === "irreversible" || c === "irreversible") amber("Q3 irreversible", "Q3");
+  }
+
+  // Q4 outside = max of leaves; ≥ 0.6 means a person must see it.
+  const q4 = has(noul(a, "Q4_1"), noul(a, "Q4_2"), noul(a, "Q4_3"), noul(a, "Q4_4")) ? maxOf(noul(a, "Q4_1"), noul(a, "Q4_2"), noul(a, "Q4_3"), noul(a, "Q4_4")) : noul(a, "Q4");
+  if (q4 !== undefined) { values.Q4 = q4; if (q4 >= 0.6) amber(`Q4 asks for an outside action ${q4.toFixed(2)}`, "Q4"); }
+
+  // Q5 risk: RED on phishing; AMBER on urgency or money/legal/employment/health; known person doubles urgency pull.
+  const q51 = noul(a, "Q5_1"), q52 = noul(a, "Q5_2"), q53 = noul(a, "Q5_3"), q54 = noul(a, "Q5_4");
+  const urgency = q51 !== undefined ? Math.min(1, q51 * ((q54 ?? 0) >= 0.5 ? 2 : 1)) : undefined;
+  let q5: Light | undefined;
+  if (has(q51, q52, q53)) {
+    q5 = (q52 ?? 0) >= 0.6 ? "RED" : (urgency ?? 0) >= 0.6 || (q53 ?? 0) >= 0.6 ? "AMBER" : "GREEN";
+  } else {
+    const c = choice(a, "Q5")?.choice;
+    q5 = c && LIGHTS.includes(c as Light) ? (c as Light) : undefined;
+  }
+  if (q5) {
+    values.Q5 = q5;
+    if (q5 === "RED") red(`Q5 phishing/scam ${(q52 ?? 0).toFixed(2)}`, "Q5_2");
+    else if (q5 === "AMBER") amber(`Q5 ${(urgency ?? 0) >= 0.6 ? "urgent" : "money/legal/employment/health"}`, (urgency ?? 0) >= 0.6 ? "Q5_1" : "Q5_3");
+  }
+  const q6 = choice(a, "Q6")?.choice;
+  if (q6) values.Q6 = q6;
+  return { light, kernel, values, reasons };
+}
+
+/** Output tree compose, as spec/QUESTIONS-OUTPUT-v2.md states it. */
+export function composeOutputTree(a: Record<string, TypesafeAnswer>): { light: Light; kernel: string[]; values: OC["values"]; reasons: string[] } {
+  const reasons: string[] = [];
+  const kernel: string[] = [];
+  const values: OC["values"] = {};
+  let light: Light = "GREEN";
+  const q7 = noul(a, "Q7"), q8 = noul(a, "Q8"), q9 = noul(a, "Q9");
+  if (q7 !== undefined) { values.Q7 = q7; if (q7 < 0.5) { light = "RED"; kernel.push("Q7"); reasons.push(`Q7 matches_intent ${q7.toFixed(2)} < 0.5`); } }
+  if (q8 !== undefined) { values.Q8 = q8; if (q8 >= 0.5) { light = worse(light, "AMBER"); kernel.push("Q8"); reasons.push(`Q8 invented field ${q8.toFixed(2)}`); } }
+  if (q9 !== undefined) { values.Q9 = q9; if (q9 < 0.5) { light = worse(light, "AMBER"); kernel.push("Q9"); reasons.push(`Q9 side effect ${(1 - q9).toFixed(2)}`); } }
+  return { light, kernel, values, reasons };
+}
+
 /**
- * composeAnswers is code. TypeSafe returns an answer map; this turns it into a light.
- * Judge Choice cannot override a local RED. Mid-band noul on harness_can_branch demotes GREEN to AMBER.
+ * composeAnswers is code. The tree composes to a light; the collapsed root gives a second light from the same POST.
+ * Agreement is recorded. Disagreement is a FINDING on the verdict (never silent) and the verdict takes the more
+ * conservative light. Judge Choice cannot override a local RED; a local AMBER (C10) is a floor.
  */
 export function composeAnswers(
   gate: Gate,
   answers: Record<string, TypesafeAnswer>,
   local: { light: Light; reasons: string[] },
-): { light: Light; reasons: string[] } {
+): { light: Light; reasons: string[]; oc: OC } {
   const reasons = [...local.reasons];
-  if (local.light === "RED") return { light: "RED", reasons };
+  const tree = gate === "task" ? composeTaskTree(answers) : composeOutputTree(answers);
+  const collapsed = collapsedLight(choice(answers, gate === "task" ? "allow_now" : "allow_apply"), reasons);
+  reasons.push(...tree.reasons);
+  const oc: OC = { consistent: collapsed === "none" ? false : collapsed === tree.light, collapsed, composed: tree.light, kernel: tree.kernel, values: tree.values };
 
-  const lightId = gate === "task" ? "allow_now" : "allow_apply";
-  const judged = choice(answers, lightId);
-  if (!judged) return { light: "RED", reasons: [...reasons, `${lightId}: judge gave no answer`] };
+  if (local.light === "RED") return { light: "RED", reasons, oc };
+  if (collapsed === "none" && Object.keys(answers).length === 0) return { light: "RED", reasons: [...reasons, "judge gave no answers"], oc };
 
-  let light: Light = judged.choice === "GREEN" || judged.choice === "AMBER" || judged.choice === "RED" ? judged.choice : "RED";
-  reasons.push(`${lightId}: judge said ${judged.choice} (conf ${judged.confidence.toFixed(2)})`);
-
-  // Dual axes. θ gates P(GREEN); top_prob_floor gates how peaked the pack is.
-  const pGreen = judged.probabilities?.GREEN ?? 0;
-  const top = Math.max(...Object.values(judged.probabilities ?? { x: 0 }));
-  if (light === "GREEN" && pGreen < THETA) {
-    light = "AMBER";
-    reasons.push(`θ: P(GREEN)=${pGreen.toFixed(2)} < ${THETA}`);
+  let light: Light = collapsed === "none" ? tree.light : worse(collapsed, tree.light);
+  if (collapsed !== "none") {
+    reasons.push(oc.consistent ? `oc: consistent (${tree.light})` : `oc: FINDING collapsed ${collapsed} vs composed ${tree.light} → ${light}${tree.kernel.length ? ` (kernel ${[...new Set(tree.kernel)].join(", ")})` : ""}`);
   }
-  if (light === "GREEN" && top < TOP_PROB_FLOOR) {
-    light = "AMBER";
-    reasons.push(`top_prob_floor: peak ${top.toFixed(2)} < ${TOP_PROB_FLOOR}`);
-  }
-
-  if (gate === "task") {
-    const branch = noul(answers, "harness_can_branch");
-    if (branch !== undefined && isMidBandNoul(branch) && light === "GREEN") {
-      light = "AMBER";
-      reasons.push(`harness_can_branch: mid-band ${branch.toFixed(2)}`);
-    }
-    const single = noul(answers, "single_intent");
-    if (single !== undefined && single < 0.5) {
-      light = light === "RED" ? "RED" : "AMBER";
-      reasons.push(`single_intent: ${single.toFixed(2)} < 0.5`);
-    }
-    const rev = choice(answers, "reversibility");
-    if (rev?.choice === "irreversible" && light === "GREEN") {
-      light = "AMBER";
-      reasons.push("reversibility: irreversible needs a human");
-    }
-  } else {
-    const match = noul(answers, "matches_intent");
-    if (match !== undefined && match < 0.5) {
-      light = "RED";
-      reasons.push(`matches_intent: ${match.toFixed(2)} < 0.5`);
-    }
-    const clean = noul(answers, "no_side_effect");
-    if (clean !== undefined && clean < 0.5 && light !== "RED") {
-      light = "AMBER";
-      reasons.push(`no_side_effect: ${clean.toFixed(2)} < 0.5`);
-    }
-  }
-
-  // A local AMBER (C10) is a floor: the judge can lower it to RED, never raise it to GREEN.
   if (local.light === "AMBER" && light === "GREEN") light = "AMBER";
-  return { light, reasons };
+  return { light, reasons, oc };
 }
 
 // ---------------------------------------------------------------- propose

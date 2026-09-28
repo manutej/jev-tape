@@ -56,6 +56,7 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
   td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  td:nth-child(4), td:nth-child(5), td:nth-child(6), td:nth-child(8) { white-space: nowrap; }
   td.mono, .mono { font-family: var(--mono); font-size: 12px; }
   tr.wf-head td { background: var(--panel-2); font-family: var(--mono); font-size: 12px; color: var(--muted); }
   .light { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; padding: 2px 8px; border-radius: 999px; font: 700 11px var(--mono); letter-spacing: .04em; border: 1px solid var(--line); color: var(--muted); }
@@ -69,7 +70,7 @@
   .ms { font-family: var(--mono); font-size: 12px; } .ms b { color: var(--amber); }
   .src { font-family: var(--mono); font-size: 11px; color: var(--muted); } .src.live { color: var(--green); } .src.stub { color: var(--amber); }
   /* feed */
-  .feed { font-family: var(--mono); font-size: 12px; max-height: 420px; overflow: auto; display: flex; flex-direction: column-reverse; gap: 2px; }
+  .feed { font-family: var(--mono); font-size: 12px; max-height: 420px; overflow: auto; display: block; }
   .feed div { padding: 3px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .feed .t { color: var(--muted); margin-right: 8px; }
   .feed .k { color: var(--blue); margin-right: 8px; }
@@ -89,6 +90,11 @@
   tr.grp td { background: var(--panel-2); font-family: var(--mono); font-size: 12px; }
   tr.grp .agg { color: var(--muted); margin-left: 10px; }
   .sub { color: var(--muted); font-size: 11px; display: block; margin-top: 1px; }
+  .oc { display: inline-block; margin-left: 6px; font: 700 10px var(--mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); vertical-align: middle; }
+  .oc.bad { color: var(--violet); border-color: color-mix(in srgb, var(--violet) 55%, transparent); background: color-mix(in srgb, var(--violet) 14%, transparent); }
+  #items tr { will-change: transform; }
+  tr.grp.flash td { animation: flash .9s ease-out; }
+  @keyframes flash { 0% { background: color-mix(in srgb, var(--blue) 35%, var(--panel-2)); } 100% { background: var(--panel-2); } }
 </style>
 </head>
 <body>
@@ -156,6 +162,7 @@
         <button class="chip" data-layer="money">Money</button>
         <button class="chip" data-layer="work">Work</button>
         <button class="chip" data-layer="noise">Noise</button>
+        <button class="chip" data-layer="oc">OC findings</button>
       </div>
       <label class="hint">group <select id="group"><option value="lane">lane</option><option value="light">light</option><option value="status">status</option><option value="category">category</option><option value="from">sender</option><option value="date">date</option><option value="none">none</option></select></label>
       <label class="hint">sort <select id="sort"><option value="arrival">arrival</option><option value="ms">judge ms ↓</option><option value="severity">severity</option><option value="date">date ↓</option><option value="from">sender</option><option value="category">category</option></select></label>
@@ -246,6 +253,7 @@ const LAYERS = {
   money: (r) => r.category === "money" || /invoice|payment|rate|reimburs|bank|paid|refund/i.test(r.text + r.subject),
   work: (r) => r.category === "work" || r.category === "admin",
   noise: (r) => NOISE.has(r.category),
+  oc: (r) => !!(r.it.oc && Object.values(r.it.oc).some((v) => v !== "ok")),
 };
 const SORTS = {
   arrival: (a, b) => 0,
@@ -263,6 +271,7 @@ function groupLabel(r, key) {
   const w = r.w;
   return `${w.kind} · <a href="${w.link}" target="_blank">${r.id}</a>${w.status ? ` · run ${w.status.run} · cursor ${w.status.cursor}/${w.status.total}` : ""}${w.done ? " · done" : ""}`;
 }
+let animateNext = false;
 function renderItems() {
   const tb = $("#items"); const rows = [];
   let all = flatten();
@@ -276,30 +285,76 @@ function renderItems() {
   for (const r of all) { const k = GROUPS[view.group](r); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
   let shown = 0; const MAX_ROWS = 1200;
   for (const [k, rs] of groups) {
-    if (shown > MAX_ROWS) { rows.push(`<tr class="grp"><td colspan="9">… ${all.length - shown} more rows not drawn; narrow the filter</td></tr>`); break; }
+    if (shown > MAX_ROWS) { rows.push({ key: "grp:more", cls: "grp", html: `<td colspan="9">… ${all.length - shown} more rows not drawn; narrow the filter</td>` }); break; }
     if (view.group !== "none") {
       const agg = { applied: 0, residual: 0, parked: 0, running: 0, ms: 0, judged: 0 };
       for (const r of rs) { agg[r.it.status] = (agg[r.it.status] || 0) + 1; if (r.it.ms.length) { agg.ms += r.ms; agg.judged += r.it.ms.length; } }
-      rows.push(`<tr class="grp"><td colspan="9">${groupLabel(rs[0], k)}<span class="agg">${rs.length} items · <span class="GREEN">${agg.applied || 0} applied</span> · <span class="RED">${agg.residual || 0} residual</span> · <span class="AMBER">${agg.parked || 0} parked</span>${agg.running ? ` · ${agg.running} running` : ""}${agg.judged ? ` · avg ${Math.round(agg.ms / agg.judged)} ms/POST` : ""}</span></td></tr>`);
+      rows.push({ key: "grp:" + k, cls: "grp", html: `<td colspan="9">${groupLabel(rs[0], k)}<span class="agg">${rs.length} items · <span class="GREEN">${agg.applied || 0} applied</span> · <span class="RED">${agg.residual || 0} residual</span> · <span class="AMBER">${agg.parked || 0} parked</span>${agg.running ? ` · ${agg.running} running` : ""}${agg.judged ? ` · avg ${Math.round(agg.ms / agg.judged)} ms/POST` : ""}</span></td>` });
     }
     for (const r of rs) {
       const { it, idx, id, key } = r;
       shown++;
       const meta = [r.from, r.category, r.date].filter(Boolean).join(" · ");
-      if (it.status === "recorded") { rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td></tr>`); continue; }
+      if (it.status === "recorded") { rows.push({ key, cls: "", html: `<td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td>` }); continue; }
       const parked = it.status === "parked";
       const act = parked ? `<button class="sm compose" onclick="verdict('${id}','${key}','compose')">compose</button> <button class="sm escalate" onclick="verdict('${id}','${key}','escalate')">escalate</button> <button class="sm refuse" onclick="verdict('${id}','${key}','refuse')">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("");
-      rows.push(`<tr><td class="mono" title="${key}">${view.group === "lane" ? idx : id.replace("jev-worklist-", "") + ":" + idx}</td><td class="mono">${r.name}</td><td>${r.text}${meta ? `<span class="sub">${meta}</span>` : ""}</td><td>${light(it.task, it.status === "running")}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td></tr>`);
+      const ocTask = it.oc?.qualifyTask, ocOut = it.oc?.qualifyOutput;
+      const ocTag = (v) => v === undefined ? "" : v === "ok" ? `<span class="oc" title="composed and collapsed agree">oc</span>` : `<span class="oc bad" title="${v.replace(/"/g, "'")}">oc!</span>`;
+      const kind = it.kind ? `<span class="sub">judge: ${it.kind}${meta ? " · " : ""}${meta}</span>` : meta ? `<span class="sub">${meta}</span>` : "";
+      rows.push({ key, cls: "", html: `<td class="mono" title="${key}">${view.group === "lane" ? idx : id.replace("jev-worklist-", "") + ":" + idx}</td><td class="mono">${r.name}</td><td>${r.text}${kind}</td><td>${light(it.task, it.status === "running")}${ocTag(ocTask)}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}${ocTag(ocOut)}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td>` });
     }
   }
-  tb.innerHTML = rows.join("") || `<tr><td colspan="9" class="empty">${total ? "No items match this layer / filter." : "Nothing running. Press “Run pack”."}</td></tr>`;
+  if (!rows.length) { tb.innerHTML = `<tr><td colspan="9" class="empty">${total ? "No items match this layer / filter." : "Nothing running. Press “Run pack”."}</td></tr>`; return; }
+  applyRows(tb, rows, animateNext);
+  animateNext = false;
+}
+
+// Keyed rows + FLIP: rows keep their DOM identity across regroup/sort, so they can slide to their new place.
+const rowEls = new Map();
+function applyRows(tb, plan, animate) {
+  const before = new Map();
+  if (animate) for (const [k, el] of rowEls) if (el.isConnected) before.set(k, el.getBoundingClientRect().top);
+  const wanted = new Set(plan.map((r) => r.key));
+  for (const [k, el] of rowEls) if (!wanted.has(k)) { el.remove(); rowEls.delete(k); }
+  for (const e of [...tb.children]) if (!e.dataset.key) e.remove();
+  const fresh = [];
+  let cursor = tb.firstChild;
+  for (const r of plan) {
+    let el = rowEls.get(r.key);
+    if (!el) { el = document.createElement("tr"); el.dataset.key = r.key; rowEls.set(r.key, el); fresh.push(el); }
+    if (el.className !== r.cls) el.className = r.cls;
+    if (el.dataset.sig !== r.html) { el.innerHTML = r.html; el.dataset.sig = r.html; if (animate && r.cls === "grp") el.classList.add("flash"); }
+    if (el !== cursor) tb.insertBefore(el, cursor); else cursor = cursor.nextSibling;
+  }
+  if (!animate) return;
+  const rowsNow = [...tb.children];
+  const n = Math.min(rowsNow.length, 500);
+  for (let i = 0; i < n; i++) {
+    const el = rowsNow[i]; const k = el.dataset.key; const y0 = before.get(k);
+    const y1 = el.getBoundingClientRect().top;
+    const delay = Math.min(i * 3, 240);
+    if (y0 !== undefined && Math.abs(y0 - y1) > 1) {
+      el.animate([{ transform: `translateY(${y0 - y1}px)` }, { transform: "translateY(0)" }], { duration: 520, delay, easing: "cubic-bezier(.2,.8,.2,1)", fill: "backwards" });
+    } else if (fresh.includes(el)) {
+      el.animate([{ opacity: 0, transform: "translateX(-12px)" }, { opacity: 1, transform: "translateX(0)" }], { duration: 360, delay, easing: "ease-out", fill: "backwards" });
+    }
+  }
+  setTimeout(() => rowsNow.forEach((el) => el.classList.remove("flash")), 1000);
 }
 // toolbar wiring
 $("#group").value = view.group; $("#sort").value = view.sort; $("#filter").value = view.filter;
-document.querySelectorAll("#layers .chip").forEach((c) => { c.classList.toggle("on", c.dataset.layer === view.layer); c.onclick = () => { view.layer = c.dataset.layer; document.querySelectorAll("#layers .chip").forEach((x) => x.classList.toggle("on", x === c)); saveView(); renderItems(); }; });
-$("#group").onchange = (e) => { view.group = e.target.value; saveView(); renderItems(); };
-$("#sort").onchange = (e) => { view.sort = e.target.value; saveView(); renderItems(); };
-let filterT; $("#filter").oninput = (e) => { view.filter = e.target.value; clearTimeout(filterT); filterT = setTimeout(() => { saveView(); renderItems(); }, 120); };
+document.querySelectorAll("#layers .chip").forEach((c) => { c.classList.toggle("on", c.dataset.layer === view.layer); c.onclick = () => { view.layer = c.dataset.layer; document.querySelectorAll("#layers .chip").forEach((x) => x.classList.toggle("on", x === c)); saveView(); animateNext = true; renderItems(); }; });
+$("#group").onchange = (e) => { view.group = e.target.value; saveView(); animateNext = true; renderItems(); };
+$("#sort").onchange = (e) => { view.sort = e.target.value; saveView(); animateNext = true; renderItems(); };
+let filterT; $("#filter").oninput = (e) => { view.filter = e.target.value; clearTimeout(filterT); filterT = setTimeout(() => { saveView(); animateNext = true; renderItems(); }, 120); };
+// Keyboard: 1-9 pick a layer, g cycles group, s cycles sort — handy while presenting.
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input, textarea, select")) return;
+  const chips = [...document.querySelectorAll("#layers .chip")];
+  if (/^[1-9]$/.test(e.key) && chips[+e.key - 1]) chips[+e.key - 1].click();
+  if (e.key === "g") { const o = $("#group"); o.selectedIndex = (o.selectedIndex + 1) % o.options.length; o.dispatchEvent(new Event("change")); }
+  if (e.key === "s") { const o = $("#sort"); o.selectedIndex = (o.selectedIndex + 1) % o.options.length; o.dispatchEvent(new Event("change")); }
+});
 function feed(html) { const d = document.createElement("div"); d.innerHTML = html; $("#feed").prepend(d); if ($("#feed").children.length > 400) $("#feed").lastChild.remove(); }
 const hhmm = (iso) => (iso || "").slice(11, 23);
 
@@ -315,6 +370,10 @@ function onMsg(m) {
         loopCounts.assertLegalCommand = m.kind === "qualifyTask" ? (loopCounts.assertLegalCommand || 0) + 1 : loopCounts.assertLegalCommand;
         loopCounts.gate = (loopCounts.gate || 0) + 1; if (m.kind === "qualifyOutput") loopCounts.propose = (loopCounts.propose || 0) + 1;
         it[m.kind === "qualifyTask" ? "task" : "output"] = m.light; it.source = m.source;
+        const ocLine = (m.reasons || []).find((r) => r.startsWith("oc:"));
+        if (ocLine) { it.oc = it.oc || {}; it.oc[m.kind] = ocLine.startsWith("oc: FINDING") ? ocLine.replace("oc: FINDING ", "") : "ok"; }
+        if (m.oc?.values?.Q6) it.kind = m.oc.values.Q6;
+        if (m.oc) { it.oc = it.oc || {}; it.oc[m.kind] = m.oc.consistent ? "ok" : `collapsed ${m.oc.collapsed} vs composed ${m.oc.composed}${m.oc.kernel?.length ? ` (kernel ${[...new Set(m.oc.kernel)].join(", ")})` : ""}`; }
         if (typeof m.ms === "number") { it.ms.push(m.ms); lat.push(m.ms); posts++; }
         if (m.light === "RED") it.status = "residual"; else if (m.light === "AMBER") { it.status = "parked"; loopCounts["humanVerdict?"] = (loopCounts["humanVerdict?"] || 0) + (m.kind === "qualifyOutput" ? 1 : 0); }
         else if (m.kind === "qualifyOutput" && it.task !== "AMBER") it.status = "running";

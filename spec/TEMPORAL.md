@@ -14,7 +14,8 @@ Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe o
 
 | File | Role |
 | --- | --- |
-| `src/loop.ts` | Pure loop: question packs, composeAnswers, propose. No IO. |
+| `src/typesafe/pack.ts` | The v2 question trees as code. Source: `spec/QUESTIONS-TASK-v2.md`, `spec/QUESTIONS-OUTPUT-v2.md`. |
+| `src/loop.ts` | Pure loop: tree compose + OC check, propose. No IO. |
 | `src/item.ts` | runItem over injected ports. Twin and Workflow share it. |
 | `src/judge.ts` | live (key) / stub (opt-in) / fail closed. |
 | `src/engine.ts` | Unit twin. This is what runs without a server. |
@@ -37,7 +38,7 @@ Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe o
 
 Workflows: JevCorrectnessWorkflow, WaitingWorkflow, HabitWorkflow, SomedayReviewWorkflow.
 Signals: humanVerdict {compose\|escalate\|refuse}.
-Pin: jev-1.13.0.
+Pin: jev-1.13.0. Pack: v2.0 (24 task + 4 output questions, one POST each). Every verdict carries `pack` and `oc`.
 
 ## Retry
 

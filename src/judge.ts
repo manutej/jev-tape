@@ -62,24 +62,35 @@ export function stubJudge(): Judge {
       const text = String(state.command.payload.text ?? state.command.payload.note ?? "").toLowerCase();
       const irreversible = ["Complete", "Trash", "ResolveWaiting"].includes(state.command.name);
       const answers: Record<string, TypesafeAnswer> = {};
-      const LIGHTS = ["GREEN", "AMBER", "RED"];
+      // Cues in a Capture text steer the stub: "?" → judgment call (Q2_3 mid-band), "[red]" → phishing (Q5_2).
+      const ask = text.includes("?"), phish = text.includes("[red]");
+      const money = /invoice|payment|rate|reimburs|bank|paid|refund|\$/.test(text);
+      const requestReply = /reply|confirm|rsvp|respond|sign-off|review/.test(text);
+      const newsletter = /newsletter|digest|promo|marketing|roundup|brief/.test(text);
+      const known = /victoria|rap|james|jocelyn|jacob|ana|shivani|diana/.test(text);
+      const light = phish ? "RED" : irreversible || money || requestReply ? "AMBER" : "GREEN";
+      const P: Record<string, number> = {
+        Q1: 0.93, Q1_1: text.includes(" and then ") ? 0.8 : 0.05, Q1_2: 0.05, Q1_3: newsletter ? 0.8 : 0.2,
+        Q2: ask ? 0.5 : 0.9, Q2_1: 0.1, Q2_2: 0.1, Q2_3: ask ? 0.5 : 0.05,
+        Q3_1: 0.05, Q3_2: irreversible ? 0.7 : 0.05, Q3_3: irreversible ? 0.9 : 0.05,
+        Q4: requestReply || money ? 0.8 : 0.1, Q4_1: requestReply ? 0.8 : 0.1, Q4_2: money ? 0.8 : 0.05, Q4_3: /password|login|sign-in|otp|code/.test(text) ? 0.8 : 0.05, Q4_4: /deck|slides|document|attach/.test(text) ? 0.7 : 0.1,
+        Q5_1: /today|tomorrow|urgent|asap|within/.test(text) ? 0.7 : 0.1, Q5_2: phish ? 0.9 : 0.03, Q5_3: money ? 0.7 : 0.1, Q5_4: known ? 0.9 : 0.2,
+        Q7: 0.95, Q8: 0.05, Q9: text.includes("send ") ? 0.2 : 0.96,
+      };
+      const K: Record<string, string> = {
+        allow_now: light, allow_apply: irreversible ? "AMBER" : "GREEN",
+        Q3: irreversible ? "irreversible" : "free",
+        Q5: phish ? "RED" : money ? "AMBER" : "GREEN",
+        Q6: newsletter ? "noise" : requestReply ? "action" : /waiting|follow up|following up/.test(text) ? "waiting" : "reference",
+        reversibility: irreversible ? "irreversible" : "free",
+      };
       for (const [id, q] of Object.entries(req.questions)) {
-        if (q.type === "noul") {
-          if (id === "single_intent") answers[id] = noul(text.includes(" and then ") ? 0.2 : 0.93);
-          else if (id === "harness_can_branch") answers[id] = noul(text.includes("?") ? 0.5 : 0.9);
-          else if (id === "matches_intent") answers[id] = noul(0.95);
-          else if (id === "no_side_effect") answers[id] = noul(text.includes("send ") ? 0.2 : 0.96);
-          else answers[id] = noul(0.5);
-        } else if (q.type === "choice") {
+        if (q.type === "noul") answers[id] = noul(P[id] ?? 0.1);
+        else if (q.type === "choice") {
           const opts = Object.keys(q.criteria);
-          if (id === "reversibility") answers[id] = choice(irreversible ? "irreversible" : "free", opts);
-          else if (id === "allow_now" || id === "allow_apply") {
-            const light = text.includes("[red]") ? "RED" : irreversible ? "AMBER" : "GREEN";
-            answers[id] = choice(light, LIGHTS, light === "GREEN" ? 0.9 : 0.8);
-          } else answers[id] = choice(opts[0]!, opts);
-        } else {
-          answers[id] = { type: "score", score: 1, legend: {}, probabilities: {}, confidence: 0.5 };
-        }
+          const pick = K[id] && opts.includes(K[id]!) ? K[id]! : opts[0]!;
+          answers[id] = choice(pick, opts, pick === "GREEN" ? 0.9 : 0.8);
+        } else answers[id] = { type: "score", score: 1, legend: {}, probabilities: {}, confidence: 0.5 };
       }
       return { model: TYPESAFE_PINNED_MODEL, answers, usage: { input_tokens: 0, output_tokens: 0 }, source: "stub" };
     },

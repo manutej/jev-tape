@@ -4,7 +4,7 @@
  */
 import type { Command } from "./domain.ts";
 import type { Judge } from "./judge.ts";
-import { composeAnswers, localGate, outputRequest, taskRequest, type HumanVerdict, type ItemOutcome, type Proposal, type Verdict } from "./loop.ts";
+import { PACK_VERSION, composeAnswers, localGate, outputRequest, taskRequest, type HumanVerdict, type ItemOutcome, type Proposal, type Verdict } from "./loop.ts";
 import { runItem, type Ports } from "./item.ts";
 
 export interface TapeEntry {
@@ -48,7 +48,7 @@ export async function qualifyTaskWith(judge: Judge, cmd: Command): Promise<Verdi
   const res = await judge.ask(taskRequest(cmd));
   const ms = Math.round(performance.now() - t0);
   const composed = composeAnswers("task", res.answers, local);
-  return { gate: "task", ...composed, source: res.source, model: res.model, answers: res.answers, usage: res.usage, ms };
+  return { gate: "task", ...composed, source: res.source, model: res.model, answers: res.answers, usage: res.usage, ms, pack: PACK_VERSION };
 }
 
 export async function qualifyOutputWith(judge: Judge, cmd: Command, proposal: Proposal): Promise<Verdict> {
@@ -57,7 +57,7 @@ export async function qualifyOutputWith(judge: Judge, cmd: Command, proposal: Pr
   const res = await judge.ask(outputRequest(cmd, proposal));
   const ms = Math.round(performance.now() - t0);
   const composed = composeAnswers("output", res.answers, local);
-  return { gate: "output", ...composed, source: res.source, model: res.model, answers: res.answers, usage: res.usage, ms };
+  return { gate: "output", ...composed, source: res.source, model: res.model, answers: res.answers, usage: res.usage, ms, pack: PACK_VERSION };
 }
 
 export function enginePorts(deps: EngineDeps): Ports {

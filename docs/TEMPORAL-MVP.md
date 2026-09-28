@@ -48,6 +48,8 @@ One page, no build step (`harness/index.html`), fed by `scripts/harness.ts` over
   lane / light / status / category / sender / date, sort by arrival / judge ms / severity / date / sender / category,
   and a free-text filter over text, subject, sender and category. Group headers carry counts and average ms per POST.
   The view is remembered per browser. "Needs me" = parked items plus judge-RED items (path-0 RED is code, not you).
+  Changing layer, group or sort animates: rows keep their identity and slide to their new place, new rows fade in,
+  group headers flash. Keys while presenting: 1–9 pick a layer, g cycles group, s cycles sort.
 - **Step feed** and **Tape**, newest first, plus deep links into the Temporal UI per workflow.
 
 Run the demo pack, type one Capture line, start a Waiting or Habit workflow.
@@ -63,6 +65,19 @@ phone numbers and codes out of the text: the payload is the state the judge sees
 - *park timeout* auto-escalates an AMBER item after N seconds so a 500-item run never stalls on a human. Set 0 to make
   parks wait forever (the durable default). Everything the page shows comes from the
 Activities' step observer and the workflow's `status` query; nothing is invented client-side.
+
+## The questions (pack v2.0)
+
+The packs are trees, not lists. `spec/QUESTIONS-TASK-v2.md` (24 questions) and `spec/QUESTIONS-OUTPUT-v2.md`
+(4 questions) are the instruments; both pass the operadic-interview linter. `src/typesafe/pack.ts` encodes them;
+`src/loop.ts` composes leaves → parents → light exactly as the spec states the rules.
+
+The collapsed root (`allow_now` / `allow_apply`) is asked in the same POST as its decomposition. `composeAnswers`
+compares the light composed from the tree with the collapsed one: agreement is recorded; disagreement is an
+**OC finding** on the verdict (never silent) with the kernel (the children that drove the composed light), and the
+verdict takes the more conservative light. The harness marks such rows `oc!` and has an "OC findings" layer.
+
+Judge-derived item kind (Q6: action / waiting / reference / someday / noise) rides on the verdict for the layers.
 
 ## Loop, as code
 

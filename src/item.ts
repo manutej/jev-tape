@@ -53,7 +53,7 @@ export async function runItem(cmd: Command, key: string, ports: Ports): Promise<
   } catch (err) {
     task = failedVerdict("task", err);
   }
-  step({ kind: "qualifyTask", light: task.light, reasons: task.reasons, source: task.source, ms: task.ms, detail: { model: task.model } });
+  step({ kind: "qualifyTask", light: task.light, reasons: task.reasons, source: task.source, ms: task.ms, detail: { model: task.model, pack: task.pack, oc: task.oc } });
   if (decide(task.light) === "residual") {
     step({ kind: "residual", light: "RED", reasons: ["task gate RED"], source: task.source });
     return done("residual", "RED");
@@ -70,7 +70,7 @@ export async function runItem(cmd: Command, key: string, ports: Ports): Promise<
   } catch (err) {
     output = failedVerdict("output", err);
   }
-  step({ kind: "qualifyOutput", light: output.light, reasons: output.reasons, source: output.source, ms: output.ms, detail: { model: output.model } });
+  step({ kind: "qualifyOutput", light: output.light, reasons: output.reasons, source: output.source, ms: output.ms, detail: { model: output.model, pack: output.pack, oc: output.oc } });
   if (decide(output.light) === "residual") {
     step({ kind: "residual", light: "RED", reasons: ["output gate RED"], source: output.source });
     return done("residual", "RED");

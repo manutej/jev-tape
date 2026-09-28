@@ -70,6 +70,8 @@ export interface StepEvent {
   event?: string;
   duplicate?: boolean;
   attempt: number;
+  pack?: string;
+  oc?: Verdict["oc"];
 }
 
 export interface ActivityDeps {
@@ -111,7 +113,7 @@ export function createActivities(deps: ActivityDeps) {
       Context.current().heartbeat("qualifyTask");
       try {
         const v = await qualifyTaskWith(deps.judge, cmd);
-        observe({ key, kind: "qualifyTask", command: cmd.name, light: v.light, reasons: v.reasons, source: v.source, model: v.model, ms: v.ms });
+        observe({ key, kind: "qualifyTask", command: cmd.name, light: v.light, reasons: v.reasons, source: v.source, model: v.model, ms: v.ms, pack: v.pack, oc: v.oc });
         return v;
       } catch (err) {
         observe({ key, kind: "qualifyTask", command: cmd.name, light: "RED", reasons: [String((err as Error).message).slice(0, 200)], source: "none" });
@@ -123,7 +125,7 @@ export function createActivities(deps: ActivityDeps) {
       Context.current().heartbeat("qualifyOutput");
       try {
         const v = await qualifyOutputWith(deps.judge, cmd, proposal);
-        observe({ key: proposal.idempotencyKey, kind: "qualifyOutput", command: cmd.name, light: v.light, reasons: v.reasons, source: v.source, model: v.model, ms: v.ms, event: proposal.event.name });
+        observe({ key: proposal.idempotencyKey, kind: "qualifyOutput", command: cmd.name, light: v.light, reasons: v.reasons, source: v.source, model: v.model, ms: v.ms, event: proposal.event.name, pack: v.pack, oc: v.oc });
         return v;
       } catch (err) {
         observe({ key: proposal.idempotencyKey, kind: "qualifyOutput", command: cmd.name, light: "RED", reasons: [String((err as Error).message).slice(0, 200)], source: "none" });
