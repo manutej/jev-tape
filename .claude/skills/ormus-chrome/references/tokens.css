@@ -1,0 +1,65 @@
+/* Ormus brand: tokens.css
+   The framework-agnostic source of truth for Ormus colors, type, motion and shape.
+   Any app (static HTML, Next.js, Nuxt, Vite) consumes THESE variables and maps them
+   to its own var names. tokens.json carries the same values for canvas, WebGL,
+   Python and slide tools; test/tokens.test.mjs keeps the two in step.
+
+   v0.2.0, the fusion language (midnight lacquer, gold, Cormorant display).
+   Home: github.com/Ormus-Solutions/ormus-brand. Change it here first, then
+   re-vendor into @ormus/design (ormus-platform) and the ormus.solutions site.
+   The old obsidian palette survives only as aliases mapped to fusion values. */
+
+:root {
+  /* Raw palette */
+  --ormus-midnight:    #14213d;  /* surface background */
+  --ormus-deep:        #0e1830;  /* page ground, panels that must be opaque */
+  --ormus-gold:        #d29e3d;  /* the only voice raised */
+  --ormus-gold-bright: #e0b258;  /* hover/active gold */
+  --ormus-ink:         #eceae3;  /* primary text */
+  --ormus-ink-muted:   #a5b0c4;  /* secondary text */
+  --ormus-hairline:    rgba(236, 234, 227, 0.12);  /* borders */
+  --ormus-on-gold:     #1a1407;  /* text on gold fills */
+  --ormus-code-bg:     #0b1226;  /* code panels */
+  --ormus-danger:      #d44f4f;  /* errors only */
+
+  /* Semantic roles: what most apps actually bind to */
+  --ormus-bg:          var(--ormus-midnight);
+  --ormus-bg-deep:     var(--ormus-deep);
+  --ormus-bg-elevated: rgba(255, 255, 255, 0.015);
+  --ormus-bg-muted:    rgba(255, 255, 255, 0.04);
+  --ormus-fg:          var(--ormus-ink);
+  --ormus-accent:      var(--ormus-gold);
+  --ormus-border:      var(--ormus-hairline);
+
+  /* Type: serif display over humanist sans, mono for micro-labels */
+  --ormus-font-display: 'Cormorant Garamond', Georgia, serif;
+  --ormus-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --ormus-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Motion + material */
+  --ormus-ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);  /* expo-out, the fusion curve */
+  --ormus-radius: 3px;                                  /* the only corner radius */
+
+  /* Legacy support colors: engine compatibility only, NOT brand */
+  --ormus-copper: #C87A3B;
+  --ormus-teal:   #2ecc71;
+
+  /* Legacy aliases (pre-fusion names), mapped onto fusion values so old
+     consumers migrate by re-vendoring, not by rewriting. */
+  --ormus-obsidian:  var(--ormus-deep);
+  --ormus-surface:   var(--ormus-bg-elevated);
+  --ormus-surface-2: var(--ormus-bg-muted);
+  --ormus-parchment: var(--ormus-ink);
+  --ormus-secondary: var(--ormus-ink-muted);
+  --ormus-muted:     #6d7891;
+
+  /* Short aliases consumed by the dojo's engine layer (ormus.css) */
+  --obsidian:  var(--ormus-deep);
+  --surface:   var(--ormus-bg-elevated);
+  --surface-2: var(--ormus-bg-muted);
+  --gold:      var(--ormus-gold);
+  --copper:    var(--ormus-copper);
+  --teal:      var(--ormus-teal);
+  --parchment: var(--ormus-ink);
+}
+

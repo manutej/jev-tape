@@ -36,3 +36,7 @@ Replay does not call TypeSafe again.
 
 Allowed: Gmail search, GitHub list/get/search, `npm test`, `npm run smoke`, `npm run qualify`, `npm run vibium` on an allowlisted host (commit verbs are gated; C10 targets park).
 Forbidden unless the user explicitly says push or send and C10 has a human verdict: send mail, push, merge.
+
+## Presenting HTML
+
+Pages under `docs/` may be plain, or wear the Ormus design chrome via the repo skill `.claude/skills/ormus-chrome/` (tokens, component layer, brand rules, page template, chart rules). It is one option, chosen when a page is for the firm, leadership, a client or a partner team; `docs/vibium-team-brief.html` is the worked example. To use it from any project, copy the skill folder to `~/.claude/skills/ormus-chrome/`.
