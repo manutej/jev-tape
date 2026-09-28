@@ -37,6 +37,7 @@ This repo is the source of record. Read **in this order**. Ignore `archive/`.
 - `wiki/pages/operad-questions.md`
 - `wiki/pages/ormus-jev.md`
 - `wiki/pages/three-lanes.md`
+- `wiki/pages/decision-calibration.md`
 - `wiki/pages/speed-path.md`
 - `wiki/pages/harness-vs-process.md`
 - `wiki/pages/surfaces-gmail-github.md`

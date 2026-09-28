@@ -51,6 +51,11 @@ export interface SystemOneResponse {
   usage: { input_tokens: number; output_tokens: number };
 }
 
+/**
+ * Hand-set mid band. It labels a noul AMBER; it never licenses a GREEN write on its own.
+ * A cut that lets code apply is fitted and bounded (JEV-works kit/threshold.ts, gate G8; jev-elder
+ * fusion/DECISION-CALIBRATION.md). wiki/pages/decision-calibration.md.
+ */
 export const NOUL_MID_LOW = 0.4;
 export const NOUL_MID_HIGH = 0.6;
 export const SCORE_LEVEL_MIN = 2;

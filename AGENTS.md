@@ -14,7 +14,7 @@ Missing key = fail closed. Do not invent a GREEN.
 | `spec/SPEC-v1-SPEED.md` | FAST vs TAPE |
 | `spec/TEMPORAL.md` | Scripts must match this file |
 | `spec/SURFACES-GMAIL-GITHUB.md` | Gmail / GitHub cut |
-| `wiki/pages/` | 43 pages. Start at `wiki/pages/home.md` |
+| `wiki/pages/` | 44 pages. Start at `wiki/pages/home.md` |
 | `src/` | In-process twins. Apply last |
 | `scripts/` | npm test, smoke, live, qualify |
 | `grok/SKILL.md` | Same rules, shorter |
