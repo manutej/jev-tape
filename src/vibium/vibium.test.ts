@@ -212,6 +212,47 @@ test("an escalate parks unless a person says compose; a refusal is never overrid
   assert.equal(s.seen.length, 0);
 });
 
+test("LLM fallback: consulted on a Jev escalate, never on a Jev refusal or a C10 park; a person comes after it", async () => {
+  const mid = { mutatesWorld: noul(0.8), reversible: noul(0.4), spendsOrSends: noul(0.3), blastRadius: { type: "score" as const, score: 0.2, legend: {}, probabilities: {}, confidence: 0.8 } };
+  const bad = { ...mid, spendsOrSends: noul(0.99), reversible: noul(0.01) };
+  const unsure = { signedInSignsShown: noul(0.5), loginFormGone: noul(0.5), credentialErrorShown: noul(0.5), interstitial: choice("none", { none: 0.6, captcha: 0.4 }) };
+  const calls: string[] = [];
+  const llm = (verdict: true | false | "escalate") => async ({ kind }: { kind: string }) => { calls.push(kind); return { verdict, ms: 1234 }; };
+  // gate escalate → LLM says true → acts; verify escalate → LLM says true → verified
+  let fb = fakeBrowser(["login-page", "login-success"]);
+  let r = await step({ verb: "click", args: ["@e3"], expect: "signed in" }, ctxFor(fb, scripted([mid, unsure]).judge, { verifyModule: "login-verify", llmFallback: llm(true) }));
+  assert.equal(r.route, "auto-llm");
+  assert.equal(r.acted, true);
+  assert.equal(r.verify?.decided.verdict, true);
+  assert.deepEqual(calls, ["gate", "verify"]);
+  assert.equal(r.llm?.length, 2);
+  assert.equal(r.ms.gate >= 1234, true);
+  // LLM says false on the gate → refuse, no act
+  calls.length = 0;
+  fb = fakeBrowser(["login-page"]);
+  r = await step({ verb: "click", args: ["@e3"] }, ctxFor(fb, scripted([mid]).judge, { llmFallback: llm(false), humanVerdict: () => "compose" }));
+  assert.equal(r.route, "refuse");
+  assert.equal(r.acted, false);
+  // LLM unsure → the person is asked next
+  calls.length = 0;
+  fb = fakeBrowser(["login-page", "login-page"]);
+  let asked = false;
+  r = await step({ verb: "click", args: ["@e3"] }, ctxFor(fb, scripted([mid]).judge, { llmFallback: llm("escalate"), humanVerdict: () => { asked = true; return "compose"; } }));
+  assert.equal(asked, true);
+  assert.equal(r.route, "human-compose");
+  // Jev refusal: the LLM is never consulted
+  calls.length = 0;
+  fb = fakeBrowser(["login-page"]);
+  r = await step({ verb: "click", args: ["@e3"] }, ctxFor(fb, scripted([bad]).judge, { llmFallback: llm(true) }));
+  assert.equal(r.route, "refuse");
+  assert.deepEqual(calls, []);
+  // C10 park: the LLM is never consulted either
+  fb = fakeBrowser(["checkout"]);
+  r = await step({ verb: "click", args: ["@e2"] }, ctxFor(fb, scripted([]).judge, { llmFallback: llm(true) }));
+  assert.equal(r.route, "human");
+  assert.deepEqual(calls, []);
+});
+
 test("host policy refuses navigation and commits off the allowlist without a POST", async () => {
   const fb = fakeBrowser(["login-page"]);
   const { judge, seen } = scripted([]);

@@ -18,6 +18,9 @@
  *   --replay                answer only from the tape; never calls TypeSafe
  *   --approve-escalate      you, the operator, answer "compose" to an escalate or a C10 park (the model's
  *                           answers are printed first); without it a parked step stays parked
+ *   --llm-fallback          when Jev escalates, ask vibium check (the text model) before any person;
+ *                           --provider / --model pass through (default xai / grok-4.6)
+ *   --screenshots DIR       vibium screenshot after every step, DIR/<n>-<verb>.png
  *   --corpus PATH           append every snapshot as a state for JEV-works measure-confidence
  *   --headless --session S --bin PATH --stop
  *
@@ -91,6 +94,28 @@ const vopts = { bin: opt("--bin"), session: opt("--session"), headless: flag("--
 const corpusPath = opt("--corpus");
 const corpus: unknown[] = corpusPath && existsSync(corpusPath) ? (JSON.parse(readFileSync(corpusPath, "utf8")) as unknown[]) : [];
 
+const provider = opt("--provider") ?? "xai";
+const model = opt("--model") ?? "grok-4.6";
+const llmFallback = flag("--llm-fallback")
+  ? async ({ kind, claim }: { kind: "gate" | "verify"; claim: string }) => {
+      const t = performance.now();
+      try {
+        const r = await vibium<{ status: string; summary?: string }>(["check", "--provider", provider, "--model", model, "--reasoning-effort", "", claim], { ...vopts, timeoutMs: 300_000 });
+        const verdict = r.status === "passed" ? true : r.status === "failed" ? false : ("escalate" as const);
+        const out = { verdict, ms: Math.round(performance.now() - t), summary: r.summary?.slice(0, 200) };
+        console.log(JSON.stringify({ llmFallback: kind, ...out }));
+        return out;
+      } catch (e) {
+        const out = { verdict: "escalate" as const, ms: Math.round(performance.now() - t), summary: `error: ${String((e as Error).message).slice(0, 160)}` };
+        console.log(JSON.stringify({ llmFallback: kind, ...out }));
+        return out;
+      }
+    }
+  : undefined;
+const shotDir = opt("--screenshots");
+if (shotDir) mkdirSync(shotDir, { recursive: true });
+let shotN = 0;
+
 let last: StepResult | undefined;
 const t0 = performance.now();
 const tLaunch = performance.now();
@@ -105,6 +130,7 @@ try {
       verifyPack,
       verifyModule: opt("--verify-module") ?? "step-verify",
       policy: { allowHosts: opts("--allow-host") },
+      llmFallback,
       humanVerdict: flag("--approve-escalate")
         ? ({ route, target, answers }) => {
             console.log(JSON.stringify({ humanVerdict: "compose", on: route, target, answers }));
@@ -118,14 +144,19 @@ try {
       gate: last.gate?.decided.verdict,
       verify: last.verify?.decided.verdict,
       judgeCalls: last.judgeCalls,
+      llm: last.llm?.map((l) => ({ kind: l.kind, verdict: l.verdict, ms: l.ms })),
       ms: last.ms,
     };
     console.log(JSON.stringify(line));
+    if (shotDir) {
+      const file = `${shotDir}/${String(++shotN).padStart(2, "0")}-${a.verb}.png`;
+      await vibium(["screenshot", "-o", file], vopts).catch(() => undefined);
+    }
     if (corpusPath) {
       if (last.before) corpus.push({ ...last.before, action: line.action, phase: "before" });
       if (last.after) corpus.push({ ...last.after, action: line.action, phase: "after", claim: a.expect });
     }
-    if (!["auto", "human-compose", "nav", "tab-edit", "read"].includes(last.route)) break;
+    if (!["auto", "auto-llm", "human-compose", "nav", "tab-edit", "read"].includes(last.route)) break;
   }
 } finally {
   if (corpusPath) writeFileSync(corpusPath, `${JSON.stringify(corpus, null, 2)}\n`);
@@ -138,5 +169,5 @@ console.log(JSON.stringify(summary));
 if (last?.gate) console.log("gate answers:", JSON.stringify(last.gate.answers));
 if (last?.verify) console.log("verify answers:", JSON.stringify(last.verify.answers));
 
-const finalVerdict = last?.verify?.decided.verdict ?? (["auto", "human-compose", "nav", "tab-edit"].includes(last?.route ?? "") ? true : undefined);
+const finalVerdict = last?.verify?.decided.verdict ?? (["auto", "auto-llm", "human-compose", "nav", "tab-edit"].includes(last?.route ?? "") ? true : undefined);
 process.exit(finalVerdict === true ? 0 : 2);

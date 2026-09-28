@@ -15,7 +15,7 @@
  * Acceptance (SPEC-v1-SPEED): an applied step makes ≤ 2 POSTs; replay makes 0; read-only turns make 0.
  */
 import { excerpt, hostOf, labelDiff, resolveRef, snapshot, vibium, type LabelDiff, type Snapshot, type VibiumOpts } from "./cli.ts";
-import { decide, type Decided } from "./decide.ts";
+import { decide, type Decided, type Verdict } from "./decide.ts";
 import { buildRequest, moduleOf, type Pack } from "./pack.ts";
 import type { Judge } from "./tape.ts";
 import type { TypesafeAnswer } from "../typesafe/contract.ts";
@@ -110,9 +110,21 @@ export interface StepContext {
    * answers are passed so the person sees what the model said; the person, not the model, decides.
    */
   humanVerdict?: (info: { route: "human" | "escalate"; target: string; answers?: Record<string, TypesafeAnswer> }) => Promise<HumanVerdict> | HumanVerdict;
+  /**
+   * The text model, tried when Jev escalates and before a person is asked. `gate` receives a safety
+   * claim about the target; `verify` receives the step's own expectation. Never consulted after a Jev
+   * refusal, and never for a C10 park: those are the person's. Typically `vibium check`.
+   */
+  llmFallback?: (info: { kind: "gate" | "verify"; claim: string; target?: string }) => Promise<LlmVerdict>;
 }
 
-export type Route = "read" | "tab-edit" | "nav" | "human" | "human-compose" | "refused-host" | "auto" | "refuse" | "escalate";
+export interface LlmVerdict {
+  verdict: Verdict;
+  ms: number;
+  summary?: string;
+}
+
+export type Route = "read" | "tab-edit" | "nav" | "human" | "human-compose" | "refused-host" | "auto" | "auto-llm" | "refuse" | "escalate";
 
 export interface JudgedStage {
   decided: Decided;
@@ -131,6 +143,8 @@ export interface StepResult {
   gate?: JudgedStage;
   diff?: LabelDiff;
   verify?: JudgedStage;
+  /** Model fallbacks that ran this step, with what they cost. */
+  llm?: Array<{ kind: "gate" | "verify"; verdict: Verdict; ms: number; summary?: string }>;
   /** POSTs this step *asked for*; the tape may have answered some from record (see JudgeStats). */
   judgeCalls: number;
   ms: { snapshot: number; gate: number; act: number; verify: number; total: number };
@@ -255,9 +269,21 @@ export async function step(action: Action, ctx: StepContext): Promise<StepResult
         textExcerpt: excerpt(before.text, policy.textExcerptChars),
       });
       ms.gate = result.gate.ms;
-      const v = result.gate.decided.verdict;
+      let v = result.gate.decided.verdict;
       result.route = v === true ? "auto" : v === false ? "refuse" : "escalate";
       if (v === false) return finish(); // a refusal is never overridden here
+      if (v === "escalate" && ctx.llmFallback) {
+        const claim = `Clicking or activating ${target} on this page would not spend money, send data to anyone outside this site, or make a change that cannot be undone. Inspect only; do not click, type, or change anything.`;
+        const llm = await ctx.llmFallback({ kind: "gate", claim, target });
+        (result.llm ??= []).push({ kind: "gate", ...llm });
+        ms.gate += llm.ms;
+        v = llm.verdict;
+        if (v === true) result.route = "auto-llm";
+        else if (v === false) {
+          result.route = "refuse";
+          return finish();
+        }
+      }
       if (v === "escalate" && !(await askHuman("escalate", result.gate.answers))) return finish();
       await act();
     }
@@ -287,6 +313,11 @@ export async function step(action: Action, ctx: StepContext): Promise<StepResult
     labelsAdded: result.diff.added,
     labelsRemoved: result.diff.removed,
   });
+  if (result.verify.decided.verdict === "escalate" && ctx.llmFallback) {
+    const llm = await ctx.llmFallback({ kind: "verify", claim: action.expect });
+    (result.llm ??= []).push({ kind: "verify", ...llm });
+    result.verify = { ...result.verify, decided: { verdict: llm.verdict, rule: "default" } };
+  }
   ms.verify = Math.round(performance.now() - tv);
   return finish();
 }

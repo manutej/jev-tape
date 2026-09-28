@@ -102,6 +102,29 @@ Reading the escalate: a sign-in submit does change server state, so 0.79 on `mut
 
 Two environment facts learned the hard way, both handled in code now: the egress proxy here gives up on an upstream after 30 s and hands Chrome a document whose whole text is "upstream request failed"; the public demo host sleeps and cold-starts in ~30 s. `settleNav()` waits for load, treats an empty map on a near-empty document as a failed navigation, reloads once, then fails closed. `scripts/fixture-site.mjs` serves the same three pages locally so a live run does not depend on a sleeping host.
 
+## 8b. Same claim, same page: Jev POST vs `vibium check` (2026-09-28)
+
+`npm run bench`. Eight real public pages, opened once each in one Vibium session; the same claim asked of Jev (`step-verify`, one POST) and then of Vibium's own model loop (`check`, xai/grok-4.6). Raw: JEV-works `kit/results/browser-bench-check-vs-jev-2026-09-28.json`.
+
+| page | claim | expected | Jev | `check` | ratio |
+| --- | --- | --- | --- | --- | --- |
+| npmjs.com/package/react | npm page for react | passed | **escalate** 309 ms (`blocked` fired: Cloudflare bot wall) | failed, 141.7 s | 459× |
+| rfc-editor.org rfc2324 | about RFC 2324 | passed | passed 248 ms | passed 25.2 s | 102× |
+| wikipedia Common_Lisp | the Common Lisp article | passed | passed 250 ms | passed 41.0 s | 164× |
+| MDN flexbox guide | documents flexbox | passed | passed 277 ms | passed 17.4 s | 63× |
+| wikipedia Ada_Lovelace | says she invented JavaScript | failed | **escalate** 241 ms (unsupported, not contradicted) | failed 53.3 s | 221× |
+| github torvalds/linux | the repo page | passed | passed 219 ms | passed 15.8 s | 72× |
+| wikipedia Python | says Torvalds created it | failed | failed 246 ms | failed 45.8 s | 186× |
+| news.ycombinator.com | front page lists stories | passed | passed 236 ms | passed 18.2 s | 77× |
+
+Medians: Jev **248 ms**, `check` **41.0 s**, ratio **164×**. Jev decided 6 of 8 and matched the expectation on all 6; the other 2 escalated, which is the safe verdict and what the model fallback (§3a) is for. `check` matched 7 of 8 and took 142 s on the one it missed. Two of the Jev POSTs were larger than the login ones (~1,900 input tokens: page text excerpt plus up to 60 map labels) and still sat at 220–310 ms.
+
+What this does and does not show. It shows the per-decision cost gap on literal claims about one page. It does not show accuracy at scale (n=8, hand-set thresholds, no fit/test split: G4 and G8 would refuse a headline). The npm row is the interesting one: `blocked` is a code-shaped question, and Jev raised it in 309 ms where the model loop spent 142 s investigating a bot wall.
+
+## 3a. Fallback order
+
+Jev first. On `escalate`, the text model (`llmFallback`, typically `vibium check`) with the same claim; for a gate, a safety claim with an instruction to inspect only. On the model's own escalate, a person (`humanVerdict`). Never the model after a Jev refusal, and never the model for a C10 park: those belong to the person. `--llm-fallback` on the runner wires it to `vibium check`.
+
 ## 9. Next cuts, in order
 
 1. First keyed run; record the gate's score indexing and the real p50 per POST in this file.
