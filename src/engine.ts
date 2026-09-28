@@ -4,7 +4,7 @@
  */
 import type { Command } from "./domain.ts";
 import type { Judge } from "./judge.ts";
-import { PACK_VERSION, composeAnswers, localGate, outputRequest, taskRequest, type HumanVerdict, type ItemOutcome, type Proposal, type Verdict } from "./loop.ts";
+import { PACK_VERSION, composeAnswers, itemRequest, localGate, outputRequest, taskRequest, type HumanVerdict, type ItemOutcome, type Proposal, type Verdict } from "./loop.ts";
 import { runItem, type Ports } from "./item.ts";
 
 export interface TapeEntry {
@@ -42,6 +42,8 @@ export interface EngineDeps {
   /** How the twin answers a C10 park. Default: escalate (fail closed). */
   human?: (cmd: Command, proposal: Proposal, verdict: Verdict) => Promise<HumanVerdict>;
   now?: () => string;
+  /** "one": both gates in one POST (default). "two": qualifyTask then qualifyOutput, two POSTs. */
+  gates?: "one" | "two";
 }
 
 export async function qualifyTaskWith(judge: Judge, cmd: Command): Promise<Verdict> {
@@ -62,9 +64,25 @@ export async function qualifyOutputWith(judge: Judge, cmd: Command, proposal: Pr
   return { gate: "output", ...composed, source: res.source, model: res.model, answers: res.answers, usage: res.usage, ms, pack: PACK_VERSION };
 }
 
+/** Both gates from one POST. The output verdict reports 0 ms: it rode in the task gate's request. */
+export async function qualifyItemWith(judge: Judge, cmd: Command, proposal: Proposal): Promise<{ task: Verdict; output: Verdict }> {
+  const local = localGate(cmd);
+  const t0 = performance.now();
+  const res = await judge.ask(itemRequest(cmd, proposal));
+  const ms = Math.round(performance.now() - t0);
+  const task = composeAnswers("task", res.answers, local);
+  const output = composeAnswers("output", res.answers, local);
+  const base = { source: res.source, model: res.model, answers: res.answers, usage: res.usage, pack: PACK_VERSION };
+  return {
+    task: { gate: "task", ...task, ...base, ms },
+    output: { gate: "output", ...output, ...base, ms: 0, reasons: ["same POST as the task gate", ...output.reasons] },
+  };
+}
+
 export function enginePorts(deps: EngineDeps): Ports {
   const now = deps.now ?? (() => new Date().toISOString());
   return {
+    ...(deps.gates === "two" ? {} : { qualifyItem: (cmd: Command, _key: string, proposal: Proposal) => qualifyItemWith(deps.judge, cmd, proposal) }),
     qualifyTask: (cmd) => qualifyTaskWith(deps.judge, cmd),
     qualifyOutput: (cmd, proposal) => qualifyOutputWith(deps.judge, cmd, proposal),
     applyCommand: (cmd, proposal) =>

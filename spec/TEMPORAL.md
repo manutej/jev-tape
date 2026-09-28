@@ -8,6 +8,10 @@ Apply last. TASK_QUEUE is `jev-tape`.
 
 `assertLegalCommand → qualifyTask → gate → propose → qualifyOutput → gate → applyCommand`
 
+Both gates are answered by ONE POST per item (`qualifyItem`: 24 + 4 questions about the command and the proposed event;
+propose is pure, so the proposal exists before the task gate without any write). The two gate decisions are still composed
+in that order in code. `gates: "two"` on the workflow input restores two POSTs.
+
 Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe on replay; starting a Cloud worker from `npm run live`; a stub verdict without `source: "stub"` on the step.
 
 ## Files
@@ -24,7 +28,7 @@ Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe o
 | `src/someday.ts` | SomedayReview twin. |
 | `src/habit.ts` | Habit twin. CreateHabit illegal. |
 | `src/temporal/workflows.ts` | Same names and branches. |
-| `src/temporal/activities.ts` | qualifyTask, qualifyOutput, applyCommand, typesafeJudge, recordEvent, pullSurface, seenThreadIds. |
+| `src/temporal/activities.ts` | qualifyItem (default), qualifyTask, qualifyOutput, applyCommand, typesafeJudge, recordEvent, pullSurface, seenThreadIds. |
 | `src/surfaces/mcp.ts` | jev as an MCP client (stdio or HTTP). Worker only. |
 | `src/surfaces/codec.ts` | connector result → Capture commands, in code. Gmail first. |
 | `src/surfaces/scrub.ts` | addresses, phones, codes, URLs out before anything is judge state. |

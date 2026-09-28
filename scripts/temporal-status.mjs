@@ -17,7 +17,7 @@ if (!/defineSignal[^\n]*"humanVerdict"/.test(wf)) fails.push("signal humanVerdic
 if (!/TASK_QUEUE = "jev-tape"/.test(wf)) fails.push("TASK_QUEUE must be jev-tape");
 if (!/TYPESAFE_PINNED_MODEL = "jev-1\.13\.0"/.test(read("src/typesafe/contract.ts"))) fails.push("pin must be jev-1.13.0");
 const acts = existsSync(new URL("src/temporal/activities.ts", root)) ? read("src/temporal/activities.ts") : "";
-for (const a of ["qualifyTask", "qualifyOutput", "applyCommand", "typesafeJudge"]) if (!new RegExp(`async ${a}\\(`).test(acts)) fails.push(`activity missing: ${a}`);
+for (const a of ["qualifyItem", "qualifyTask", "qualifyOutput", "applyCommand", "typesafeJudge"]) if (!new RegExp(`async ${a}\\(`).test(acts)) fails.push(`activity missing: ${a}`);
 const pkg = JSON.parse(read("package.json"));
 for (const s of ["test", "smoke", "live", "qualify"]) if (!pkg.scripts[s]) fails.push(`npm script missing: ${s}`);
 

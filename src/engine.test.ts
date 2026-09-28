@@ -3,16 +3,25 @@ import assert from "node:assert/strict";
 import { memoryTape, startEngine } from "./engine.ts";
 import { countingJudge, selectJudge, stubJudge } from "./judge.ts";
 
-test("Capture: two gates, apply last, exactly one tape row, ≤ 2 judge calls", async () => {
+test("Capture: two gates from ONE POST, apply last, exactly one tape row", async () => {
   const judge = countingJudge(stubJudge());
   const tape = memoryTape();
   const r = await startEngine([{ name: "Capture", payload: { text: "Book dentist" } }], { judge, tape });
   const o = r.outcomes[0]!;
   assert.equal(o.status, "applied");
   assert.deepEqual(o.steps.map((s) => s.kind), ["assertLegalCommand", "qualifyTask", "propose", "qualifyOutput", "applyCommand"]);
-  assert.equal(judge.calls, 2);
+  assert.equal(judge.calls, 1, "one POST per item");
   assert.equal((await tape.entries()).length, 1);
   assert.equal(o.steps[1]!.source, "stub");
+  assert.equal(o.steps[1]!.detail?.posts, 1);
+});
+
+test("gates: 'two' keeps the two-POST path, same steps, same outcome", async () => {
+  const judge = countingJudge(stubJudge());
+  const r = await startEngine([{ name: "Capture", payload: { text: "Book dentist" } }], { judge, tape: memoryTape(), gates: "two" });
+  assert.equal(r.outcomes[0]!.status, "applied");
+  assert.equal(judge.calls, 2);
+  assert.deepEqual(r.outcomes[0]!.steps.map((s) => s.kind), ["assertLegalCommand", "qualifyTask", "propose", "qualifyOutput", "applyCommand"]);
 });
 
 test("path 0: illegal command is residual with 0 judge calls", async () => {
@@ -22,7 +31,7 @@ test("path 0: illegal command is residual with 0 judge calls", async () => {
   assert.equal(judge.calls, 0);
 });
 
-test("judge RED at task gate → residual, no propose, 1 judge call, nothing applied", async () => {
+test("judge RED at task gate → residual, no propose step, 1 judge call, nothing applied", async () => {
   const judge = countingJudge(stubJudge());
   const tape = memoryTape();
   const r = await startEngine([{ name: "Capture", payload: { text: "[red] wire money" } }], { judge, tape });

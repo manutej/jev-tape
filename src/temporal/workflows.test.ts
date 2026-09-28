@@ -73,8 +73,8 @@ test("JevCorrectnessWorkflow: 10 items → ContinueAsNew, C10 signal, path-0 res
   const tape = await fileTape(tapePath).entries();
   assert.equal(tape.length, 9);
   assert.equal(new Set(tape.map((t) => t.key)).size, 9, "no duplicate applies");
-  // 9 items reached the judge, two gates each; CreateHabit never did.
-  assert.equal(judge.calls, 18);
+  // 9 items reached the judge, one POST each (both gates); CreateHabit never did.
+  assert.equal(judge.calls, 9);
 
   // Replay proof: every run of the chain replays from Event History with no activities and no judge.
   const runs: string[] = [];

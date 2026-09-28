@@ -60,8 +60,9 @@ export interface WorklistStatus {
 
 // ---------------------------------------------------------------- shared ports
 
-function makePorts(verdicts: Map<string, HumanVerdict>, parked: Set<string>, parkTimeoutMs?: number): Ports {
+function makePorts(verdicts: Map<string, HumanVerdict>, parked: Set<string>, parkTimeoutMs?: number, gates: "one" | "two" = "one"): Ports {
   return {
+    ...(gates === "two" ? {} : { qualifyItem: (cmd: Command, key: string, proposal: Parameters<Activities["qualifyItem"]>[2]) => acts.qualifyItem(cmd, key, proposal) }),
     qualifyTask: (cmd, key) => acts.qualifyTask(cmd, key),
     qualifyOutput: (cmd, proposal) => acts.qualifyOutput(cmd, proposal),
     applyCommand: (cmd, proposal) => acts.applyCommand(cmd, proposal),
@@ -88,16 +89,20 @@ export interface WorklistInput {
   residual?: string[];
   /** Human verdicts already received, carried across ContinueAsNew so a signal is never lost. */
   verdicts?: Record<string, HumanVerdict>;
-  /** Outcomes of earlier runs, carried so the final result holds every item's steps. */
-  outcomes?: ItemOutcome[];
+  /** Never carried across ContinueAsNew: outcomes are O(n) and would breach the 2 MB blob limit on a long lane.
+   *  The tape and the step stream are the record; the result holds the last run's outcomes only. */
+  outcomes?: never;
   /** How long a C10 park waits before escalating. Omit for a durable, unbounded wait. */
   parkTimeoutMs?: number;
+  /** "one" (default): both gates from one POST per item. "two": qualifyTask then qualifyOutput. */
+  gates?: "one" | "two";
   run?: number;
 }
 
 export interface WorklistResult {
   applied: string[];
   residual: string[];
+  /** Outcomes of the final run only (see WorklistInput.outcomes). */
   outcomes: ItemOutcome[];
   runs: number;
 }
@@ -108,7 +113,7 @@ export async function JevCorrectnessWorkflow(input: WorklistInput): Promise<Work
   const parked = new Set<string>();
   const applied = [...(input.applied ?? [])];
   const residual = [...(input.residual ?? [])];
-  const outcomes: ItemOutcome[] = [...(input.outcomes ?? [])];
+  const outcomes: ItemOutcome[] = [];
   let cursor = input.cursor ?? 0;
   const run = input.run ?? 1;
 
@@ -117,7 +122,7 @@ export async function JevCorrectnessWorkflow(input: WorklistInput): Promise<Work
   });
   setHandler(statusQuery, () => ({ cursor, total: input.commands.length, applied, residual, parked: [...parked], run }));
 
-  const ports = makePorts(verdicts, parked, input.parkTimeoutMs);
+  const ports = makePorts(verdicts, parked, input.parkTimeoutMs, input.gates);
   const end = Math.min(input.commands.length, cursor + CONTINUE_AS_NEW_EVERY);
 
   // The batch runs concurrently: items are disjoint (parallel associativity), so a park never blocks its
@@ -138,7 +143,6 @@ export async function JevCorrectnessWorkflow(input: WorklistInput): Promise<Work
       applied,
       residual,
       verdicts: Object.fromEntries(verdicts),
-      outcomes,
       run: run + 1,
     });
   }

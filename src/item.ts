@@ -19,6 +19,8 @@ import {
 } from "./loop.ts";
 
 export interface Ports {
+  /** Preferred: both gates from one POST. When absent, qualifyTask then qualifyOutput (two POSTs). */
+  qualifyItem?(cmd: Command, key: string, proposal: Proposal): Promise<{ task: Verdict; output: Verdict }>;
   qualifyTask(cmd: Command, key: string): Promise<Verdict>;
   qualifyOutput(cmd: Command, proposal: Proposal): Promise<Verdict>;
   applyCommand(cmd: Command, proposal: Proposal): Promise<{ applied: boolean; duplicate: boolean }>;
@@ -46,29 +48,39 @@ export async function runItem(cmd: Command, key: string, ports: Ports): Promise<
     return done("residual", "RED");
   }
 
-  // Gate 1
+  // Propose in memory. Pure and deterministic, so it may be computed before the task gate; nothing is written.
+  const proposal = propose(cmd, key);
+
+  // Gate 1 (and, on the one-POST path, the answers for gate 2 in the same request)
   let task: Verdict;
+  let both: { task: Verdict; output: Verdict } | undefined;
   try {
-    task = await ports.qualifyTask(cmd, key);
+    if (ports.qualifyItem) {
+      both = await ports.qualifyItem(cmd, key, proposal);
+      task = both.task;
+    } else {
+      task = await ports.qualifyTask(cmd, key);
+    }
   } catch (err) {
     task = failedVerdict("task", err);
   }
-  step({ kind: "qualifyTask", light: task.light, reasons: task.reasons, source: task.source, ms: task.ms, detail: { model: task.model, pack: task.pack, oc: task.oc } });
+  step({ kind: "qualifyTask", light: task.light, reasons: task.reasons, source: task.source, ms: task.ms, detail: { model: task.model, pack: task.pack, oc: task.oc, posts: both ? 1 : undefined } });
   if (decide(task.light) === "residual") {
     step({ kind: "residual", light: "RED", reasons: ["task gate RED"], source: task.source });
     return done("residual", "RED");
   }
-
-  // Propose in memory. Nothing written.
-  const proposal = propose(cmd, key);
   step({ kind: "propose", source: "code", detail: { event: proposal.event.name } });
 
   // Gate 2
   let output: Verdict;
-  try {
-    output = await ports.qualifyOutput(cmd, proposal);
-  } catch (err) {
-    output = failedVerdict("output", err);
+  if (both) {
+    output = both.output;
+  } else {
+    try {
+      output = await ports.qualifyOutput(cmd, proposal);
+    } catch (err) {
+      output = failedVerdict("output", err);
+    }
   }
   step({ kind: "qualifyOutput", light: output.light, reasons: output.reasons, source: output.source, ms: output.ms, detail: { model: output.model, pack: output.pack, oc: output.oc } });
   if (decide(output.light) === "residual") {

@@ -59,6 +59,19 @@ export function taskRequest(cmd: Command): SystemOneRequest {
   return { model: TYPESAFE_PINNED_MODEL, state: JSON.stringify({ gate: "task", pack: PACK_VERSION, command: cmd }), questions: taskQuestions() };
 }
 
+/**
+ * One POST for both gates: 24 task questions + 4 output questions about one state (command + proposed event).
+ * propose is pure, so the proposal can be computed before the task gate without writing anything. The two gate
+ * decisions are still composed in order (task, then output) from this one answer map. ≤ 1 POST per item.
+ */
+export function itemRequest(cmd: Command, proposal: Proposal): SystemOneRequest {
+  return {
+    model: TYPESAFE_PINNED_MODEL,
+    state: JSON.stringify({ gate: "item", pack: PACK_VERSION, command: cmd, proposal: proposal.event }),
+    questions: { ...taskQuestions(), ...outputQuestions() },
+  };
+}
+
 /** qualifyOutput pack. The proposal exists only in memory here. Nothing has been written. */
 export function outputRequest(cmd: Command, proposal: Proposal): SystemOneRequest {
   return {

@@ -76,13 +76,13 @@ test("SurfaceIngestWorkflow: 2 pages → 7 captures in 2 lanes; a second ingest 
       const tape = await fileTape(tapePath).entries();
       assert.equal(tape.length, 7);
       assert.equal(new Set(tape.map((t) => (t.payload as any).threadId)).size, 7);
-      assert.equal(judge.calls, 14);
+      assert.equal(judge.calls, 7);
 
       const h2 = await env.client.workflow.start(SurfaceIngestWorkflow, { taskQueue, workflowId: `test-ingest2-${Date.now()}`, args: [{ surface: "gmail", query: "in:inbox", pageSize: 5, laneSize: 4 }] });
       const second = await h2.result();
       assert.equal(second.deduped, 7); assert.equal(second.started, 0); assert.equal(second.lanes.length, 0);
       assert.equal((await fileTape(tapePath).entries()).length, 7, "nothing written twice");
-      assert.equal(judge.calls, 14, "no judge calls for already-seen threads");
+      assert.equal(judge.calls, 7, "no judge calls for already-seen threads");
     });
   } finally {
     await disposeActivities(activities);

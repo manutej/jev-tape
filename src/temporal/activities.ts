@@ -8,7 +8,7 @@ import { ApplicationFailure, Context } from "@temporalio/activity";
 import { appendFile, mkdir, open, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import type { Command } from "../domain.ts";
-import { qualifyOutputWith, qualifyTaskWith, type Tape, type TapeEntry } from "../engine.ts";
+import { qualifyItemWith, qualifyOutputWith, qualifyTaskWith, type Tape, type TapeEntry } from "../engine.ts";
 import type { Judge } from "../judge.ts";
 import type { Proposal, Verdict } from "../loop.ts";
 export { NON_RETRYABLE } from "../loop.ts";
@@ -167,6 +167,20 @@ export function createActivities(deps: ActivityDeps) {
       try {
         return await deps.judge.ask(req);
       } catch (err) {
+        toFailure(err);
+      }
+    },
+
+    /** Both gates, one POST. Two step events are observed so the tape and the harness keep their two-gate shape. */
+    async qualifyItem(cmd: Command, key: string, proposal: Proposal): Promise<{ task: Verdict; output: Verdict }> {
+      Context.current().heartbeat("qualifyItem");
+      try {
+        const v = await qualifyItemWith(deps.judge, cmd, proposal);
+        observe({ key, kind: "qualifyTask", command: cmd.name, light: v.task.light, reasons: v.task.reasons, source: v.task.source, model: v.task.model, ms: v.task.ms, pack: v.task.pack, oc: v.task.oc });
+        observe({ key, kind: "qualifyOutput", command: cmd.name, light: v.output.light, reasons: v.output.reasons, source: v.output.source, model: v.output.model, ms: 0, event: proposal.event.name, pack: v.output.pack, oc: v.output.oc });
+        return v;
+      } catch (err) {
+        observe({ key, kind: "qualifyTask", command: cmd.name, light: "RED", reasons: [String((err as Error).message).slice(0, 200)], source: "none" });
         toFailure(err);
       }
     },

@@ -72,7 +72,9 @@ The packs are trees, not lists. `spec/QUESTIONS-TASK-v2.md` (24 questions) and `
 (4 questions) are the instruments; both pass the operadic-interview linter. `src/typesafe/pack.ts` encodes them;
 `src/loop.ts` composes leaves → parents → light exactly as the spec states the rules.
 
-The collapsed root (`allow_now` / `allow_apply`) is asked in the same POST as its decomposition. `composeAnswers`
+Both gates are answered by one POST per item (`qualifyItem`): propose is pure, so the proposed event exists before the
+task gate, and the 24 + 4 questions ride together. The gate decisions are still composed in order. `gates: "two"` on a
+worklist input restores two POSTs. The collapsed root (`allow_now` / `allow_apply`) is asked in the same POST as its decomposition. `composeAnswers`
 compares the light composed from the tree with the collapsed one: agreement is recorded; disagreement is an
 **OC finding** on the verdict (never silent) with the kernel (the children that drove the composed light), and the
 verdict takes the more conservative light. The harness marks such rows `oc!` and has an "OC findings" layer.

@@ -22,6 +22,7 @@ const item = read("src/item.ts");
 const applyIdx = item.indexOf("ports.applyCommand(");
 const outIdx = item.indexOf("ports.qualifyOutput(");
 must(applyIdx > outIdx && outIdx > 0, "apply must come after qualifyOutput (apply last)");
+must(applyIdx > item.indexOf("ports.qualifyItem("), "apply must come after qualifyItem (apply last)");
 must(!/scoreFill/.test(read("src/loop.ts")), "scoreFill as a gate is unrepresentable");
 const pkg = JSON.parse(read("package.json"));
 must(!("worker:cloud" in pkg.scripts), "no cloud worker script from npm run live");

@@ -203,7 +203,8 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
         for (let i = 0, lane = 0; i < commands.length; i += laneSize, lane++) {
           const slice = commands.slice(i, i + laneSize);
           const workflowId = laneSize < commands.length ? `jev-worklist-${stamp}-L${String(lane).padStart(2, "0")}` : `jev-worklist-${stamp}`;
-          const handle = await client.workflow.start(JevCorrectnessWorkflow, { taskQueue, workflowId, args: [{ commands: slice, parkTimeoutMs }] });
+          const gates = body.gates === "two" ? "two" : undefined;
+          const handle = await client.workflow.start(JevCorrectnessWorkflow, { taskQueue, workflowId, args: [{ commands: slice, parkTimeoutMs, gates }] });
           track(handle, "JevCorrectnessWorkflow", slice);
           workflowIds.push(workflowId);
         }

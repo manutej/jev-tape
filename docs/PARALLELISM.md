@@ -20,10 +20,12 @@ Baseline numbers come from the code as of commit 6203c4b.
 |---|---|---|---|---|
 | F1 | `fileTape.append` re-read the whole tape per apply: O(n) per apply, O(n²) per run | 1,500 appends: 2.9 s, 0.8 → 2.9 ms per append as the file grew | Key index + incremental tail scan by byte offset (a retry landing on another worker still sees other processes' writes) | 0.5 s, flat 0.3 ms per append |
 | F2 | Harness polled a `status` query per lane every 500 ms: N lanes × 2 workflow tasks/s competing with real work | 400 items, dashboard open vs closed: 17.7 s vs 12.0 s after other fixes | Poll every 2 s, only while a browser is connected; lanes that finished stop polling | Dashboard costs ~30%, down from a suspected 3x on the 1,044 run |
-| F3 | Two sequential POSTs per item although `propose` is pure | 2 × judge round trip per item on the critical path | **Not applied: spec decision.** Options: one POST for both trees; two parallel activities; keep sequential | pending |
+| F3 | Two sequential POSTs per item although `propose` is pure | 2 × judge round trip per item on the critical path | **Decided: one POST per item** (`qualifyItem`, 28 questions; gates composed in order in code; `gates: "two"` keeps the old path) | warm server, alternating runs: two POSTs 11.3 s / 11.7 s, one POST 9.6 s / 9.6 s (15% with a 0 ms judge; plus one full judge round trip per item live) |
 | F4 | 20 activity slots per worker capped concurrent POSTs at 20 | with 8 lanes × 8 concurrent items = 64 in flight, slots were the ceiling | Default 50 (`JEV_MAX_ACTIVITIES`); scale further by adding workers | — |
 | F5 | `seenThreadIds` re-read the tape per ingested page | O(n) per page | Same index as F1 serves it | O(ids) |
 | **F6** | **Sequential fold inside a lane: a park blocked its neighbours; one POST in flight per lane** | 400 items / 8 lanes: 634 ms per item per lane; with 5 s parks, 2,400 ms | **Batch of 8 runs concurrently inside the workflow (`Promise.all`). Items are disjoint, so parallel composition is legal; outcomes fold back in index order** | **240 ms per item per lane; 31.7 s → 12.0 s (2.6x)** |
+
+| F7 | `JevCorrectnessWorkflow` carried every outcome across ContinueAsNew: O(n) blob per run | dev server warned at 730 KB on a 400-item lane; Temporal refuses blobs over 2 MB, so a lane past ~1,000 items would fail | Carry only keys and verdicts; outcomes are per run; the tape and the step stream are the record | bounded carry |
 
 Single lane of 400 items after F6: 60 s, 150 ms per item, i.e. within-lane concurrency alone gives 8 in flight; lanes multiply it.
 
@@ -43,6 +45,7 @@ queue     = every worker polls jev-tape; slots = JEV_MAX_ACTIVITIES ← Temporal
 ```
 
 Concurrent POSTs in flight = lanes × 8, capped by slots × workers, backed off by TypeSafe 429/529 retry policy.
+One POST per item carries all 28 questions; the two gate decisions are composed from it in order.
 A park holds one slot's worth of nothing: a waiting condition, no activity.
 
 ## Replay note
