@@ -199,7 +199,9 @@ const light = (l, waiting) => l ? `<span class="light ${l}">${l}</span>` : waiti
 function payloadText(cmd) { if (!cmd) return ""; const p = cmd.payload || {}; return p.text ?? p.itemKey ?? p.name ?? p.display_name ?? p.habitId ?? JSON.stringify(p); }
 function renderItems() {
   const tb = $("#items"); const rows = [];
+  let shown = 0; const MAX_ROWS = 1200;
   for (const [id, w] of [...wfs.entries()].reverse()) {
+    if (shown > MAX_ROWS) { rows.push(`<tr class="wf-head"><td colspan="9">… ${wfs.size} workflows in state; older ones not drawn</td></tr>`); break; }
     rows.push(`<tr class="wf-head"><td colspan="9">${w.kind} · <a href="${w.link}" target="_blank">${id}</a>${w.status ? ` · run ${w.status.run} · cursor ${w.status.cursor}/${w.status.total}` : ""}${w.done ? " · done" : ""}</td></tr>`);
     const keys = [...w.items.keys()].sort((a, b) => { const na = +a.split(":").pop(), nb = +b.split(":").pop(); return (isNaN(na) || isNaN(nb)) ? a.localeCompare(b) : na - nb; });
     for (const key of keys) {
@@ -208,6 +210,7 @@ function renderItems() {
       const parked = it.status === "parked";
       const act = parked ? `<button class="sm compose" onclick="verdict('${id}','${key}','compose')">compose</button> <button class="sm escalate" onclick="verdict('${id}','${key}','escalate')">escalate</button> <button class="sm refuse" onclick="verdict('${id}','${key}','refuse')">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("");
       if (it.status === "recorded") { rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td></tr>`); continue; }
+      shown++;
       rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${cmdName}</td><td>${payloadText(cmd)}</td><td>${light(it.task, it.status === "running")}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td></tr>`);
     }
   }
@@ -245,7 +248,13 @@ function onMsg(m) {
     case "error": feed(`<span class="RED">${m.message}</span>`); break;
     case "hello": break;
   }
-  renderLoop(); renderItems(); renderStats();
+  scheduleRender();
+}
+let renderQueued = false;
+function scheduleRender() {
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(() => { renderQueued = false; renderLoop(); renderItems(); renderStats(); });
 }
 
 async function api(path, body) { const r = await fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body || {}) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; }
