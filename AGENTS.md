@@ -27,6 +27,7 @@ If a file named above is missing from a clone, the clone is behind. Do not recon
 `assertLegalCommand → qualifyTask → gate → propose in memory → qualifyOutput → gate → applyCommand`
 
 C10 parks Complete, Trash, ResolveWaiting, send, and merge-to-default even on GREEN.
+A GREEN that lets code apply comes from a frozen, fitted cut (`frozen.json` from JEV-works `kit/gate/pipeline-cli.ts`), never from the hand-set 0.4/0.6 band. How that works, with diagrams: jev-elder `fusion/README.md`.
 Replay does not call TypeSafe again.
 
 ## Tools
