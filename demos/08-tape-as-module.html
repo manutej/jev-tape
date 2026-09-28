@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tape as Module — jev demo 08</title>
+<meta name="description" content="jev-tape's own source drawn as a wiring pack: six units, their ports, their edges. Glue the client to the contract and watch the pushout; no judge is needed, no κ fires.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  .stage .cap{padding:10px 14px 12px;font-size:13px;color:var(--dim);border-top:1px solid var(--rule);min-height:64px;line-height:1.45}
+  .stage .cap b{color:var(--bone);font-weight:500}
+  .stage .cap code{color:var(--bone);font-size:12px}
+  .stage svg .unit{cursor:pointer;transition:opacity .25s}
+  .stage svg .edge{transition:opacity .25s,stroke-width .25s}
+  .stage svg.focus .unit,.stage svg.focus .edge,.stage svg.focus .ghost{opacity:.22}
+  .stage svg.focus .unit.lit,.stage svg.focus .edge.lit,.stage svg.focus .ghost.lit{opacity:1}
+  .stage svg .edge.lit{stroke-width:2.2}
+  .stage svg .pl{transition:opacity .25s}
+  .paper-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+  .paper-head .seg button{min-width:88px}
+  .paper-wrap{grid-column:1/-1}
+  .breakeven{font-size:14px;color:var(--dim);margin:10px 0 0;font-family:var(--display);font-style:italic;font-size:17px;line-height:1.35}
+  .breakeven b{color:var(--bone);font-weight:400}
+  .breakeven small{display:block;font-family:var(--sans);font-style:normal;font-size:12px;color:var(--dim);margin-top:4px}
+  .seam{margin-top:14px;border:1px solid var(--rule);border-left:3px solid var(--c-action);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--dim)}
+  .seam b{color:var(--bone);font-weight:500}
+  .seam code{color:var(--c-action)}
+  .stage .pack{max-height:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 08 of 10 · tape as module</div>
+      <h1>The tape is itself a module of systems.</h1>
+      <p class="lede">Run the wiring extractor over jev-tape's own source and you get <b>six units</b>, <b>35 ports</b>, <b>six edges</b>. The same pack format the experiments used for Fineract describes the tool that gates them: explicit <b>380</b> tokens, factored <b>280</b>, real counts. One <code>src</code> unit fetches and reads the key. Nothing in the workflow imports it. That seam is the three planes, drawn.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> says a large codebase is a module of systems: units known only through interfaces, glued by typed interaction patterns. <em>jev-tape</em> is a codebase. So it has a wiring pack, and the pack shows where the judge is allowed to live.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="jev-tape as a wiring pack">
+    <div class="controls">
+      <h3>Glue two units</h3>
+      <p>Hover or tap a unit to light its ports and edges. Then glue <code>typesafe.client</code> to <code>typesafe.contract</code>: the five symbols the client imports are identified with the five ports the contract exports, and the two boxes become one. This is code. No question is asked.</p>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Glue client to contract</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="counters">
+        <div class="counter"><div class="v" id="cUnits">6</div><div class="l">units</div></div>
+        <div class="counter"><div class="v" id="cPorts">35</div><div class="l">ports (exports)</div></div>
+        <div class="counter"><div class="v" id="cEdges">6</div><div class="l">edges (imports)</div></div>
+        <div class="counter zero"><div class="v" id="cPosts">0</div><div class="l">POSTs · path 0</div></div>
+      </div>
+
+      <div class="seam" id="seam">
+        <b>The seam.</b> <code>typesafe.client</code> is the only <code>src</code> unit that calls <code>fetch</code> and reads the key. Call it <b>the Activity</b>. The workflow isolate never imports it: Operad names questions, TypeSafe answers them, Temporal remembers the answer. The two scripts also fetch, but they are run by hand, outside the isolate.
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Six jev-tape units drawn as boxes with ports and edges">
+      <div class="cap" id="cap"></div>
+    </div>
+
+    <div class="paper-wrap">
+      <div class="paper-head">
+        <div class="seg" id="seg" role="group" aria-label="Serialisation">
+          <button data-v="explicit" aria-pressed="true">explicit</button>
+          <button data-v="factored" aria-pressed="false">factored</button>
+        </div>
+        <div class="counters" style="margin:0;flex:1;max-width:420px">
+          <div class="counter"><div class="v" id="cExp">380</div><div class="l">explicit · cl100k tokens</div></div>
+          <div class="counter hot"><div class="v" id="cFac">280</div><div class="l">factored · cl100k tokens</div></div>
+        </div>
+      </div>
+      <div class="pack" id="pack"></div>
+      <p class="breakeven" id="breakeven"></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>Every cell on this tape is <code>kind: code</code>. Extracting ports is a regex. Gluing two units along their shared symbols is a union of two tables with five identifications. Checking κ is a lookup: does any identified symbol carry two different signatures? None does, so κ stays silent. Three deterministic steps, zero POSTs, path 0.</p>
+        <p>The pack has a seam. Four units never fetch: <code>domain</code>, <code>colors</code>, <code>typesafe.contract</code>, and the workflow that would import them. One unit does: <code>typesafe.client</code>. It is the Activity, and the tape at the bottom of every demo is the record of its results. A workflow that imported the client would put the judge in replayable code, and a RED could come back GREEN on replay. The extractor makes that import visible as an edge, so its absence is checkable.</p>
+        <p>Switch the paper between explicit and factored. Both re-expand to the same edge list; the factored one is 100 tokens shorter because six rows share one motif. The break-even line under the paper is the E2 rule applied to these six units.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>This extractor is regex-level.</b> It sees <code>export</code> statements and named imports, nothing else: no re-exports, no dynamic imports, no types used without import. That is the same deliberate subset E2 used. Six units is a toy. The token counts are real counts of a toy.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin, and this page never even asks it.</b> The point of a path-0 page is that nothing here needs a judge: the questions are answered by lookup. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 08 · <a href="index.html">all ten demos</a> · built from <code>manutej/jev-tape</code> src and scripts, using the wiring-pack format of <code>manutej/wiring-and-the-whole</code> experiments/e2-tokens.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/jevPack.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, esc, svg, provenanceTable, topbar, segControl, tick} = JEV;
+  const P = JEV.data.jevPack;
+  topbar(document.getElementById('topbar'), {title:'08 · Tape as module'});
+  const tape = new Tape({title:'Module tape'});
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+
+  /* ---------- derived, from the data ---------- */
+  const U = Object.fromEntries(P.units.map(u=>[u.unit,u]));
+  const nPorts = P.units.reduce((s,u)=>s+u.ports.length,0);
+  const nEdges = P.units.reduce((s,u)=>s+u.imports.length,0);
+  document.getElementById('cUnits').textContent=P.units.length;
+  document.getElementById('cPorts').textContent=nPorts;
+  document.getElementById('cEdges').textContent=nEdges;
+  document.getElementById('cExp').textContent=P.tokens.explicit;
+  document.getElementById('cFac').textContent=P.tokens.factored;
+  const family = u => (u==='domain'||u==='colors')?'var(--c-entity)':u==='typesafe.contract'?'var(--c-concept)':u==='typesafe.client'?'var(--c-action)':'var(--c-evidence)';
+  // resolve an import target the same way build-data.mjs writes the edge: ./contract.ts → contract
+  const target = from => from.replace(/^\.\//,'').replace(/\.ts$/,'').replace(/^\.\.\/typesafe\//,'typesafe.');
+  const unitByTarget = t => P.units.find(u=>u.unit===t||u.unit==='typesafe.'+t);
+
+  /* ---------- stage ---------- */
+  const W=800,H=500, stage=document.getElementById('stage'), cap=document.getElementById('cap');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Six units of jev-tape drawn as boxes. Ports are tabs on the left edge. Edges are curves from an importing unit to the port it imports.'});
+  stage.insertBefore(root, cap);
+  root.appendChild(svg('text',{x:22,y:24,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['jev-tape as a wiring pack · six units · tabs are exported ports · curves are imports']));
+
+  const layout={
+    'domain':            {x:60, y:52, w:200,h:96},
+    'colors':            {x:300,y:52, w:140,h:70},
+    'typesafe.client':   {x:60, y:190,w:200,h:96},
+    'typesafe.contract': {x:480,y:158,w:280,h:216},
+    'qualify-surface':   {x:60, y:342,w:200,h:74},
+    'smoke-key':         {x:300,y:342,w:140,h:74},
+  };
+  const TAB={w:12,h:6,gap:9};
+  const tabPos=(name,i)=>{const L=layout[name];return {x:L.x-TAB.w+3,y:L.y+12+i*TAB.gap};};
+  const edgesG=svg('g',{}); const unitsG=svg('g',{}); const ghostG=svg('g',{class:'ghost'}); const junctionG=svg('g',{});
+  root.append(edgesG, ghostG, unitsG, junctionG);
+
+  // external box for node:fs (an import target outside the pack)
+  const ext={x:480,y:410,w:170,h:56};
+  ghostG.append(
+    svg('rect',{x:ext.x,y:ext.y,width:ext.w,height:ext.h,rx:8,fill:'none',stroke:'var(--rule)','stroke-dasharray':'4 4'}),
+    svg('rect',{x:ext.x-TAB.w+3,y:ext.y+12,width:TAB.w,height:TAB.h,rx:1.5,fill:'var(--dim)'}),
+    svg('text',{x:ext.x+12,y:ext.y+22,'font-size':'12',class:'mono',fill:'var(--dim)'},['node:fs']),
+    svg('text',{x:ext.x+12,y:ext.y+40,'font-size':'10',fill:'var(--dim)'},['outside the pack · readFileSync'])
+  );
+
+  const unitEls={}, portEls={}, edgeEls=[];
+  for(const u of P.units){
+    const L=layout[u.unit]; const col=family(u.unit);
+    const g=svg('g',{class:'unit','data-unit':u.unit,tabindex:'0',role:'button','aria-label':`${u.unit}: ${u.ports.length} ports, ${u.imports.length} edges`});
+    g.appendChild(svg('rect',{x:L.x,y:L.y,width:L.w,height:L.h,rx:8,fill:'var(--desk-2)',stroke:'var(--rule)'}));
+    g.appendChild(svg('rect',{x:L.x,y:L.y,width:5,height:L.h,fill:col,opacity:.85}));
+    g.appendChild(svg('text',{x:L.x+16,y:L.y+22,'font-size':'13',class:'mono',fill:'var(--bone)'},[u.unit]));
+    g.appendChild(svg('text',{x:L.x+16,y:L.y+40,'font-size':'10',fill:'var(--dim)'},[`${u.rel} · ${u.lines} lines · ${u.tokens} tok`]));
+    g.appendChild(svg('text',{x:L.x+16,y:L.y+56,'font-size':'10',fill:'var(--dim)'},[`${u.ports.length} ports · ${u.imports.length} edges`]));
+    if(u.fetches||u.envKey){
+      const isScript=u.rel.startsWith('scripts/');
+      g.appendChild(svg('text',{x:L.x+16,y:L.y+L.h-10,'font-size':'10',class:'mono',fill:'var(--c-action)'},[isScript?'fetch · env key · script, by hand':'fetch · env key · the Activity']));
+    }
+    portEls[u.unit]=[];
+    u.ports.forEach((p,i)=>{const t=tabPos(u.unit,i);
+      const r=svg('rect',{x:t.x,y:t.y,width:TAB.w,height:TAB.h,rx:1.5,fill:col,opacity:.75}); r.appendChild(svg('title',{},[`${u.unit}#${p}`]));
+      g.appendChild(r); portEls[u.unit].push(r);});
+    unitsG.appendChild(g); unitEls[u.unit]=g;
+  }
+  // labels for the ports that something imports (inside the exporting box, next to the tab)
+  const importedLabels=[];
+  for(const u of P.units) for(const im of u.imports){
+    const tu=unitByTarget(target(im.from)); if(!tu) continue;
+    const i=tu.ports.indexOf(im.sym); if(i<0) continue;
+    const t=tabPos(tu.unit,i);
+    const tx=svg('text',{x:layout[tu.unit].x+12,y:t.y+6,'font-size':'10',class:'mono pl',fill:'var(--dim)','data-of':tu.unit},[im.sym]);
+    unitEls[tu.unit].appendChild(tx); importedLabels.push(tx);
+  }
+  // edges
+  const curve=(x1,y1,x2,y2)=>`M${x1},${y1} C${x1+70},${y1} ${x2-60},${y2} ${x2},${y2}`;
+  for(const u of P.units) for(const im of u.imports){
+    const L=layout[u.unit]; const tu=unitByTarget(target(im.from));
+    let x2,y2,to;
+    if(tu){const i=tu.ports.indexOf(im.sym); const t=tabPos(tu.unit,i); x2=t.x; y2=t.y+TAB.h/2; to=tu.unit;}
+    else {x2=ext.x-TAB.w+3; y2=ext.y+12+TAB.h/2; to='node:fs';}
+    const k=u.imports.indexOf(im), n=u.imports.length; const y1=L.y+L.h/2+(k-(n-1)/2)*7;
+    const p=svg('path',{d:curve(L.x+L.w,y1,x2,y2),fill:'none',stroke:family(u.unit),'stroke-width':1.4,opacity:.8,class:'edge','data-from':u.unit,'data-to':to});
+    p.appendChild(svg('title',{},[`edge ${u.unit} -> ${to}#${im.sym}`]));
+    edgesG.appendChild(p); edgeEls.push(p);
+  }
+
+  /* ---------- hover / tap: light one unit ---------- */
+  let glued=false, pinned=null;
+  const describe=(u)=>{
+    const ports=u.ports.length?u.ports.map(p=>`<code>${esc(p)}</code>`).join(', '):'<i>none exported</i>';
+    const edges=u.imports.length?u.imports.map(i=>`<code>${esc(target(i.from))}#${esc(i.sym)}</code>`).join(', '):'<i>imports nothing</i>';
+    const seam=(u.fetches||u.envKey)?` · <b style="color:var(--c-action)">fetches and reads the key</b>`:' · no fetch, no key';
+    return `<b>${esc(u.unit)}</b> <span style="color:var(--dim)">${esc(u.rel)}</span>${seam}<br>ports: ${ports}<br>edges: ${edges}`;
+  };
+  const idle=()=>{cap.innerHTML=glued
+    ? `<b>typesafe.client ⊔ typesafe.contract</b> is one box now. Identified along the junction: ${U['typesafe.client'].imports.map(i=>`<code>${esc(i.sym)}</code>`).join(', ')}. κ silent: no identified symbol carries two signatures, and no export name appears in both units.`
+    : 'Hover or tap a unit. Its tabs are the symbols it exports; the curves leaving it are the symbols it imports.';};
+  function focus(name){
+    root.classList.toggle('focus',!!name);
+    for(const [k,g] of Object.entries(unitEls)) g.classList.toggle('lit',!!name&&(k===name||edgeEls.some(e=>e.dataset.from===name&&e.dataset.to===k)||edgeEls.some(e=>e.dataset.to===name&&e.dataset.from===k)));
+    for(const e of edgeEls) e.classList.toggle('lit',!!name&&(e.dataset.from===name||e.dataset.to===name));
+    ghostG.classList.toggle('lit',!!name&&edgeEls.some(e=>e.dataset.from===name&&e.dataset.to==='node:fs'));
+    for(const t of importedLabels) t.setAttribute('fill',(name&&(t.dataset.of===name||edgeEls.some(e=>e.dataset.from===name&&e.dataset.to===t.dataset.of)))?'var(--bone)':'var(--dim)');
+    if(name) cap.innerHTML=describe(U[name]); else idle();
+  }
+  for(const [k,g] of Object.entries(unitEls)){
+    g.addEventListener('pointerenter',()=>{if(!pinned)focus(k);});
+    g.addEventListener('pointerleave',()=>{if(!pinned)focus(null);});
+    g.addEventListener('click',()=>{pinned=pinned===k?null:k;focus(pinned);});
+    g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();pinned=pinned===k?null:k;focus(pinned);}});
+    g.addEventListener('focus',()=>{if(!pinned)focus(k);}); g.addEventListener('blur',()=>{if(!pinned)focus(null);});
+  }
+  idle();
+
+  /* ---------- the pushout, as code ---------- */
+  function pushout(a,b){
+    // identify each of a's imports from b with b's export of the same name; κ fires if one symbol has two signatures
+    const ident=a.imports.filter(i=>unitByTarget(target(i.from))===b).map(i=>i.sym);
+    const collisions=a.ports.filter(p=>b.ports.includes(p));           // one name exported by both: two signatures for one symbol
+    const missing=ident.filter(s=>!b.ports.includes(s));               // imported but not exported: dangling edge
+    return {ident,collisions,missing,ports:[...a.ports,...b.ports]};
+  }
+  const tr=(el,ms=650)=>{el.style.transition=`transform ${ms}ms cubic-bezier(.2,.8,.2,1)`;};
+  let running=false;
+  async function run(){
+    if(running||glued) return; running=true; document.getElementById('run').disabled=true; pinned=null; focus(null);
+    const A=U['typesafe.client'], B=U['typesafe.contract'], LA=layout['typesafe.client'], LB=layout['typesafe.contract'];
+    tape.record({kind:'code',label:'extract ports',verdict:`${P.units.length} units · ${nPorts} ports`,detail:'regex over export + named import; path 0'});
+    root.classList.add('focus'); unitEls['typesafe.client'].classList.add('lit'); unitEls['typesafe.contract'].classList.add('lit');
+    for(const e of edgeEls) e.classList.toggle('lit',e.dataset.from==='typesafe.client');
+    cap.innerHTML='<b>Gluing.</b> The client slides to the contract along its five imports. Each curve shrinks to a junction point.';
+    await wait(450);
+    const po=pushout(A,B);
+    // slide: client moves so its right edge meets the contract's tab column, centred on the contract
+    const dx=(LB.x-TAB.w+3)-(LA.x+LA.w), dy=(LB.y+LB.h/2)-(LA.y+LA.h/2);
+    const g=unitEls['typesafe.client']; tr(g,700); g.style.transform=`translate(${dx}px,${dy}px)`;
+    for(const e of edgeEls) if(e.dataset.from==='typesafe.client'){e.style.transition='opacity .6s';e.style.opacity='0';}
+    await wait(720);
+    // the composite
+    const cx=LB.x-TAB.w+3-LA.w, cy=Math.min(LA.y+dy,LB.y)-14, cw=LA.w+TAB.w-3+LB.w+14, ch=Math.max(LA.h,LB.h)+28;
+    const box=svg('rect',{x:cx-6,y:cy,width:cw,height:ch,rx:12,fill:'none',stroke:'var(--c-concept)','stroke-width':1.5,'stroke-dasharray':'5 4',opacity:0});
+    const lab=svg('text',{x:cx,y:cy-6,'font-size':'13',class:'mono',fill:'var(--c-concept)',opacity:0},['typesafe.client ⊔ typesafe.contract']);
+    junctionG.append(box,lab);
+    // junction ticks on the five identified tabs
+    po.ident.forEach(sym=>{const i=B.ports.indexOf(sym); const t=tabPos('typesafe.contract',i);
+      const r=portEls['typesafe.contract'][i]; r.setAttribute('fill','var(--c-action)'); r.setAttribute('opacity','1');
+      const dot=svg('circle',{cx:t.x+TAB.w/2,cy:t.y+TAB.h/2,r:0,fill:'var(--bone)'}); junctionG.appendChild(dot);
+      dot.style.transition='r .3s'; requestAnimationFrame(()=>dot.setAttribute('r',3.5));
+    });
+    box.style.transition='opacity .4s'; lab.style.transition='opacity .4s'; requestAnimationFrame(()=>{box.style.opacity='1';lab.style.opacity='1';});
+    tape.record({kind:'code',label:'pushout client ⊔ contract',verdict:`${po.ident.length} symbols identified`,detail:po.ident.join(', ')});
+    await wait(420);
+    const kappa=po.collisions.length||po.missing.length;
+    tape.record({kind:'code',label:'κ check',verdict:kappa?`κ fires: ${po.collisions.concat(po.missing).join(', ')}`:'silent · 0 collisions',detail:'does any identified symbol carry two signatures? does any edge dangle?'});
+    glued=true; running=false; idle();
+    focusAfterGlue();
+  }
+  function focusAfterGlue(){ root.classList.remove('focus'); for(const g of Object.values(unitEls)) g.classList.remove('lit'); for(const e of edgeEls) e.classList.remove('lit'); }
+  function unglue(){
+    const g=unitEls['typesafe.client']; tr(g,450); g.style.transform='';
+    for(const e of edgeEls){e.style.opacity='';}
+    junctionG.innerHTML='';
+    U['typesafe.contract'].ports.forEach((p,i)=>{const r=portEls['typesafe.contract'][i]; r.setAttribute('fill',family('typesafe.contract')); r.setAttribute('opacity','.75');});
+    glued=false; pinned=null; document.getElementById('run').disabled=false; focusAfterGlue(); idle();
+  }
+  document.getElementById('run').addEventListener('click',run);
+  document.getElementById('reset').addEventListener('click',()=>{tape.clear();unglue();});
+
+  /* ---------- the paper: explicit vs factored ---------- */
+  const pack=document.getElementById('pack');
+  function renderPack(which){
+    const text=which==='explicit'?P.explicit:P.factored;
+    pack.innerHTML=text.split('\n').map(l=>{
+      if(/^motif /.test(l)||/^\s+(unit|foreach)/.test(l)) return `<span class="hl">${esc(l)}</span>`;
+      if(/^edge |edges=\[[^\]]/.test(l)&&!/edges=\[\]/.test(l)) return `<span>${esc(l)}</span>`;
+      if(l==='') return '';
+      return `<span class="${/^unit /.test(l)?'':'dimline'}">${esc(l)}</span>`;
+    }).join('\n');
+  }
+  segControl(document.getElementById('seg'),v=>renderPack(v));
+  renderPack('explicit');
+
+  // break-even, E2 rule: n* = F / (e − m). F = motif header (estimate), e and m = per-unit averages of the real totals.
+  const motifHeader=P.factored.split('\n').filter(l=>/^motif |^\s+(unit|foreach)/.test(l)).join('\n');
+  const F=Math.round(motifHeader.length/3.6);
+  const n=P.units.length, e=P.tokens.explicit/n, m=(P.tokens.factored-F)/n;
+  const nStar=Math.ceil(F/(e-m));
+  document.getElementById('breakeven').innerHTML=`One motif, six rows: the legend pays for itself after <b>n* = ${nStar}</b> instances, and this pack has <b>${n}</b>.<small>n* = ⌈F / (e − m)⌉ with F ≈ ${F} tok (the four motif lines, chars/3.6, an estimate), e = ${P.tokens.explicit}/${n} = ${e.toFixed(1)} tok per unit explicit, m = (${P.tokens.factored} − ${F})/${n} = ${m.toFixed(1)} tok per unit factored. The totals ${P.tokens.explicit} and ${P.tokens.factored} are real cl100k counts.</small>`;
+
+  provenanceTable(document.getElementById('prov'),[
+    {n:`${P.units.length} units · ${nPorts} ports · ${nEdges} edges`,f:'demos/build-data.mjs over jev-tape/src/*.ts and scripts/*.ts → jevPack.units',note:'regex: export const|function|class|type|interface, and named imports'},
+    {n:`explicit ${P.tokens.explicit} · factored ${P.tokens.factored} tokens`,f:'demos/build-data.mjs → jevPack.tokens',note:`tokenizer ${JEV.data.meta.tokenizer}; the 100-token gap is the two counters`},
+    {n:`F ≈ ${F} tok · n* = ${nStar}`,f:'wiring-and-the-whole/experiments/e2-tokens/E2-RESULTS.md → n* = F/(e−m)',note:'F is an estimate (chars/3.6); e and m are averages of the real totals'},
+    {n:'lines and tokens per unit (72 · 9 · 86 · 62 · 82 · 29)',f:'jevPack.units[].lines, .tokens',note:'shown under each box'},
+    {n:'fetch · env key on typesafe.client, qualify-surface, smoke-key',f:'jev-tape/src/typesafe/client.ts · scripts/qualify-surface.ts · scripts/smoke-key.ts',note:'regex fetch( and TYPESAFE_API_KEY over the source; the key itself is never read by this page'},
+    {n:'five identified symbols · κ silent',f:'computed live from jevPack.units[typesafe.client].imports vs [typesafe.contract].ports',note:'κ rule as in wiring-and-the-whole/witness/run_witness.py step 9: two signatures for one symbol'},
+    {n:'Operad names questions. TypeSafe answers them. Temporal remembers.',f:'jev-tape/wiki/pages/three-planes.md',note:'the seam drawn on the stage'},
+    {n:'path 0: code, no TypeSafe, no Temporal',f:'jev-tape/spec/SPEC-v1-SPEED.md',note:'why the POST counter is zero'},
+  ]);
+})();
+</script>
+</body>
+</html>

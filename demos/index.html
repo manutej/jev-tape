@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>jev demos — the tape meets the wiring</title>
+<meta name="description" content="Ten interactive demos at the seam of jev-tape (typed questions, code gates, a recorded tape) and wiring-and-the-whole (wiring packs, pushouts, four experiments).">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  body{padding-bottom:40px}
+  .hero{padding-bottom:16px}
+  .hero h1{max-width:14ch}
+  .seam{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;margin:28px 0 8px}
+  .seam .side{background:var(--desk-2);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--dim)}
+  .seam .side b{display:block;font-family:var(--display);font-size:20px;color:var(--bone);font-weight:400;margin-bottom:4px}
+  .seam .mid{font-family:var(--display);font-style:italic;font-size:22px;color:var(--amber)}
+  @media(max-width:760px){.seam{grid-template-columns:1fr}.seam .mid{text-align:center}}
+  .rules{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--dim);margin:14px 0 26px}
+  .rules span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:8px;vertical-align:middle}
+  .thumb svg{display:block}
+  .functor{width:100%;border-collapse:collapse;font-size:13.5px}
+  .functor th,.functor td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+  .functor th{color:var(--bone);font-weight:500}
+  .functor td:first-child{font-family:var(--display);font-style:italic;color:var(--dim);white-space:nowrap}
+  .functor code{color:var(--bone)}
+  .functor .p{font-family:var(--mono);font-size:12px;color:var(--amber)}
+  .scroller{overflow:auto}
+  .meta-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px}
+  .meta-links a{display:block;text-decoration:none;border:1px solid var(--rule);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--dim)}
+  .meta-links a b{display:block;color:var(--bone);font-weight:500;margin-bottom:3px}
+  .meta-links a:hover{border-color:#5a6d7e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar"><div class="crumbs"><b>jev demos</b><span>/</span><a href="https://github.com/manutej/jev-tape">jev-tape</a><span>×</span><a href="https://github.com/manutej/wiring-and-the-whole">wiring-and-the-whole</a></div><span class="pin">twin · no TypeSafe call · pin jev-1.13.0</span></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">ten demos · one tape</div>
+      <h1>The tape meets the wiring.</h1>
+      <p class="lede">One repo says a codebase is a <b>module of systems</b>: units known only through their interfaces, glued along shared ports, shipped to a model as a wiring pack. The other says a judged process is <b>typed questions, one answer map per gate, code that routes, and a tape that remembers</b>. Put a pack in the place of a domain command and every construct on one side has a partner on the other. These ten demos are those partners, built from the experiments' own numbers.</p>
+    </div>
+    <aside class="aside"><b>How to read them.</b> Each page is one instrument: controls on the left, a custom drawing on the right, and the tape pinned at the bottom recording what happened. Every number on a page ends in a table that names its file. The judge on every page is a deterministic twin, never a live call.</aside>
+  </header>
+
+  <div class="seam" aria-label="The seam between the two repos">
+    <div class="side"><b>wiring-and-the-whole</b>packs = (seed, marking, motif, deltas) · pushouts with a κ collision check · E1 witness 13/13 · E2 token arithmetic · E3 comprehension · E5 depth 1–10 · claims ladder</div>
+    <div class="mid">⟷ a pack is a write ⟷</div>
+    <div class="side"><b>jev-tape</b>operad names questions · TypeSafe answers once per gate · composeAnswers is code · apply last · four speed paths · three lanes · C10 human gate · replay never asks again</div>
+  </div>
+  <div class="rules"><span>every number traces to a file</span><span>judge is a twin, not a live call</span><span>custom SVG, no libraries</span><span>works from file://</span><span>phone-ready</span></div>
+
+  <section class="grid" id="grid" aria-label="The ten demos"></section>
+
+  <section class="section">
+    <h2>The seam, row by row</h2>
+    <p style="color:var(--dim)">Each demo carries one jev construct to one wiring construct and says which speed path it runs on. The right-hand column is the measured thing the demo shows, not the twin's opinion.</p>
+    <div class="scroller"><table class="functor" id="functor"></table></div>
+  </section>
+
+  <section class="section">
+    <h2>How these were built</h2>
+    <p style="color:var(--dim)">The meta-suite ran in its usual order: a meta-plan with typed work units and parallel lanes, a reusable meta-prompt for “a jev demo”, a composition gate that checks each page against the plan mechanically, and a provenance ledger. The documents are in the repo beside the demos.</p>
+    <div class="meta-links">
+      <a href="META/00_META_PLAN.md"><b>Meta-plan</b>typed work units, lanes, gates, the unknowns ledger</a>
+      <a href="META/01_META_PROMPT.md"><b>Meta-prompt</b>the reusable “build a jev demo” scaffold</a>
+      <a href="META/02_OC_GATE.md"><b>Composition gate</b>the parts of each page must agree with the plan</a>
+      <a href="META/03_PROVENANCE.md"><b>Provenance</b>53 source files with hashes</a>
+      <a href="META/04_LEDGER.md"><b>Ledger</b>what changed and why, in order</a>
+      <a href="README.md"><b>Run locally</b>rebuild the data, take the screenshots</a>
+    </div>
+  </section>
+
+  <footer class="foot">jev demos · built from <code>manutej/wiring-and-the-whole</code> and <code>manutej/jev-tape</code> · no key, no send, no push happened in the making of these pages.</footer>
+</div>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const svg=(t,a={},c=[])=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);for(const x of c)e.appendChild(typeof x==='string'?document.createTextNode(x):x);return e;};
+  const G='var(--green)',A='var(--amber)',R='var(--red)',D='var(--dim)',B='var(--bone)',T='var(--tape)';
+  // ten hand-drawn glyphs, one per demo — the recurring motif is the tape strip along the bottom
+  const tapeStrip=(s)=>{const g=svg('g');g.appendChild(svg('rect',{x:0,y:120,width:300,height:30,fill:T}));for(let i=0;i<22;i++){g.appendChild(svg('circle',{cx:8+i*14,cy:124,r:1.6,fill:'var(--desk)'}));g.appendChild(svg('circle',{cx:8+i*14,cy:146,r:1.6,fill:'var(--desk)'}));}for(let i=0;i<s;i++)g.appendChild(svg('rect',{x:12+i*34,y:130,width:26,height:10,rx:2,fill:i%3===1?A:'var(--tape-2)'}));return g;};
+  const glyphs={
+    1:()=>{const g=svg('g');g.appendChild(svg('rect',{x:16,y:14,width:120,height:96,rx:4,fill:T}));[0,1,2,3,4].forEach(i=>g.appendChild(svg('rect',{x:26,y:26+i*15,width:i>2?98:70,height:5,rx:2,fill:i>2?G:'var(--tape-2)'})));[[160,30,.9],[160,52,1],[160,74,.25],[160,96,.7]].forEach(([x,y,v])=>{g.appendChild(svg('line',{x1:x,x2:x+110,y1:y,y2:y,stroke:'var(--rule)'}));g.appendChild(svg('circle',{cx:x+110*v,cy:y,r:5,fill:v<.5?R:G}));});g.appendChild(tapeStrip(5));return g;},
+    2:()=>{const g=svg('g');const pts=[[60,26],[240,26],[60,100],[240,100]];pts.forEach(([x,y])=>g.appendChild(svg('circle',{cx:x,cy:y,r:9,fill:'var(--desk-3)',stroke:B,'stroke-width':2})));g.appendChild(svg('path',{d:'M69 26H231M60 35V91M240 35V91M69 100H231',stroke:D,'stroke-width':2,fill:'none'}));g.appendChild(svg('text',{x:150,y:69,'font-size':'20','text-anchor':'middle',fill:G,'font-family':'var(--display)','font-style':'italic'},['commutes']));g.appendChild(tapeStrip(6));return g;},
+    3:()=>{const g=svg('g');g.appendChild(svg('rect',{x:20,y:20,width:90,height:80,rx:4,fill:T}));g.appendChild(svg('rect',{x:190,y:20,width:90,height:80,rx:4,fill:T}));g.appendChild(svg('line',{x1:110,x2:190,y1:50,y2:50,stroke:R,'stroke-width':2,'stroke-dasharray':'4 4'}));g.appendChild(svg('line',{x1:110,x2:190,y1:76,y2:76,stroke:G,'stroke-width':2}));g.appendChild(svg('text',{x:150,y:42,'font-size':'22','text-anchor':'middle',fill:R,'font-family':'var(--display)'},['κ']));g.appendChild(svg('text',{x:150,y:110,'font-size':'11','text-anchor':'middle',fill:D,'font-family':'var(--mono)'},['POSTs 0']));g.appendChild(tapeStrip(0));return g;},
+    4:()=>{const g=svg('g');for(let i=0;i<30;i++){const c=i<4?R:i<7?A:G;g.appendChild(svg('rect',{x:16+(i%10)*27,y:18+Math.floor(i/10)*26,width:22,height:18,rx:3,fill:c,opacity:i<7?1:.55}));}g.appendChild(svg('line',{x1:10,x2:290,y1:44,y2:44,stroke:A,'stroke-width':2,'stroke-dasharray':'6 4'}));g.appendChild(tapeStrip(1));return g;},
+    5:()=>{const g=svg('g');g.appendChild(svg('circle',{cx:150,cy:26,r:9,fill:'var(--c-evidence)'}));[[80,'var(--c-entity)'],[150,'var(--c-entity)'],[220,'var(--c-idea)']].forEach(([x,c])=>{g.appendChild(svg('line',{x1:150,y1:35,x2:x,y2:84,stroke:c,'stroke-width':2}));g.appendChild(svg('circle',{cx:x,cy:92,r:8,fill:c}));});g.appendChild(svg('text',{x:260,y:40,'font-size':'13',fill:R,'font-family':'var(--display)','font-style':'italic'},['theater']));g.appendChild(tapeStrip(3));return g;},
+    6:()=>{const g=svg('g');const v=[1,1,1,.83,1,1,.42,.9,.88,.67];const pts=v.map((y,i)=>[24+i*28,100-y*76]);g.appendChild(svg('polyline',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:B,'stroke-width':2}));g.appendChild(svg('line',{x1:16,x2:290,y1:100-.7*76,y2:100-.7*76,stroke:A,'stroke-dasharray':'5 4'}));pts.forEach(([x,y],i)=>g.appendChild(svg('circle',{cx:x,cy:y,r:5,fill:v[i]>=.7?G:v[i]>=.5?A:R})));g.appendChild(tapeStrip(2));return g;},
+    7:()=>{const g=svg('g');g.appendChild(svg('path',{d:'M60 110V14M240 110V14',stroke:D,'stroke-width':3}));[[18,G],[36,G],[54,R],[72,A],[90,G]].forEach(([y,c],i)=>g.appendChild(svg('line',{x1:60,x2:240,y1:y,y2:y,stroke:c,'stroke-width':i===2?2:3,'stroke-dasharray':i===2?'6 4':'none'})));g.appendChild(tapeStrip(4));return g;},
+    8:()=>{const g=svg('g');const bx=[[24,20,'var(--c-entity)'],[120,20,'var(--c-concept)'],[216,20,'var(--c-action)'],[72,70,'var(--c-evidence)'],[168,70,'var(--c-evidence)']];bx.forEach(([x,y,c])=>{g.appendChild(svg('rect',{x,y,width:60,height:34,rx:4,fill:'var(--desk-3)',stroke:c,'stroke-width':2}));g.appendChild(svg('rect',{x:x+50,y:y-3,width:10,height:6,fill:c}));});g.appendChild(svg('path',{d:'M180 37C200 37 210 37 216 37M102 87C110 60 120 40 120 40M198 87C210 60 220 40 220 40',fill:'none',stroke:D,'stroke-width':1.5}));g.appendChild(tapeStrip(2));return g;},
+    9:()=>{const g=svg('g');[[80,'seconds',G],[220,'hours',A]].forEach(([cx,l,c])=>{g.appendChild(svg('circle',{cx,cy:60,r:40,fill:'var(--desk-3)',stroke:'var(--rule)','stroke-width':2}));g.appendChild(svg('line',{x1:cx,y1:60,x2:cx+(c===G?22:-14),y2:60-(c===G?22:30),stroke:c,'stroke-width':3,'stroke-linecap':'round'}));g.appendChild(svg('text',{x:cx,y:114,'font-size':'11','text-anchor':'middle',fill:D,'font-family':'var(--mono)'},[l]));});g.appendChild(tapeStrip(7));return g;},
+    10:()=>{const g=svg('g');for(let i=0;i<13;i++){const a=-Math.PI/2+i*2*Math.PI/13;g.appendChild(svg('circle',{cx:150+Math.cos(a)*46,cy:62+Math.sin(a)*46,r:6,fill:i<8?G:i===8?R:'var(--desk-3)',stroke:i>8?D:'none'}));}g.appendChild(svg('text',{x:150,y:66,'font-size':'11','text-anchor':'middle',fill:D,'font-family':'var(--mono)'},['13 / 13']));g.appendChild(tapeStrip(8));return g;}
+  };
+  const demos=[
+    {n:1,f:'01-pack-gate.html',t:'The legend was two lines short.',d:'Qualify a wiring pack before a model reads it. Two legend lines decide whether depth 7 collapses.',jev:'decision gate · Path 0 then 1',w:'pack legend, E5 → E5.1',m:'D7 B 0.25 → 0.708 · pooled −10.2 → −3.7 pts'},
+    {n:2,f:'02-apply-last-square.html',t:'A refactor is a square, and the square is the gate.',d:'The migration square as the apply-last loop: qualify the map, propose in memory, qualify the square, apply. Crash, replay, C10.',jev:'apply-last loop · Path 3 · C10',w:'system map + Ex 4.25 (E1 steps 6, 10)',m:'square commutes, ports fixed, swap commutes with refactor'},
+    {n:3,f:'03-kappa-path-zero.html',t:'Two Moneys walk into a pushout. No judge is called.',d:'A deterministic collision check is code. The tape records no judge call; the POST counter stays at zero.',jev:'Path 0 · anti-jobs',w:'pushout + κ (E1 step 9)',m:'κ fires on {long} ≠ {double}'},
+    {n:4,f:'04-rank-wide-read-narrow.html',t:'Thirty handlers, one request, four worth reading.',d:'Score thirty real handlers in one batched request, then send only the deviants to the expensive reader.',jev:'rank wide, read narrow · Path 2',w:'motif + deltas (E3 pack B)',m:'4 deviants of 30 · A 2089 tok vs B 1316'},
+    {n:5,f:'05-theater-detector.html',t:'Four of ten trees could never agree with themselves.',d:'A build-time composition witness rejects decomposition theater before any model call; the survivors pass the consistency gate 6/6.',jev:'bounded fork · Path 0 then 1',w:'operadic interview trees (E5)',m:'10 → 6 compose-valid → 6/6 consistent-and-correct'},
+    {n:6,f:'06-depth-router.html',t:'Low confidence is not ask again. It is amber.',d:'Route ten depth levels through the dual axis: θ on one slider, the probability floor on the other, never the same number.',jev:'dual axis · confidence routing',w:'per-depth accuracy, A vs B (E5.1)',m:'sonnet 1.0 at every depth, both arms'},
+    {n:7,f:'07-claim-verify-lane.html',t:'A claim is a fork with three exits.',d:'The claims ladder through lane 2: each rung against its recorded evidence lands verified, contradicted, or unsupported.',jev:'claim verify (lane 2)',w:'MAY / MAY NOT ladder',m:'10 claims · 4 verified · 4 contradicted · 2 gated'},
+    {n:8,f:'08-tape-as-module.html',t:'The tape is itself a module of systems.',d:'jev-tape’s own source as a wiring pack: six units, their ports, their edges, one gluing, and a real token count both ways.',jev:'three planes · the Activity seam',w:'wiring pack of jev-tape/src',m:'explicit 380 tok vs factored 280 (cl100k)'},
+    {n:9,f:'09-two-clocks.html',t:'One engine, two clocks. The block survives the crash.',d:'Screen untrusted pack lines on the seconds clock, gate the pack on the hours clock, crash, and replay without re-ingesting a block.',jev:'context screen (lane 3) · replay',w:'pack lines (E3 pack B) + planted lines',m:'POSTs unchanged after replay'},
+    {n:10,f:'10-witness-tape.html',t:'Thirteen checks, one crash, zero repeated judgements, and a human at the last rung.',d:'The E1 witness as an event history: each check recorded once, replay reuses, and the claim at the end waits for a human.',jev:'Event History · C10 · Continue-As-New',w:'E1 witness 13/13',m:'13/13 · demonstrated ≠ proved'},
+  ];
+  const grid=document.getElementById('grid');
+  for(const d of demos){
+    const a=document.createElement('a');a.className='card';a.href=d.f;
+    const th=document.createElement('div');th.className='thumb';const s=svg('svg',{viewBox:'0 0 300 150','aria-hidden':'true'});s.appendChild(glyphs[d.n]());th.appendChild(s);
+    a.appendChild(th);
+    a.insertAdjacentHTML('beforeend',`<div class="t"><i>${String(d.n).padStart(2,'0')}</i>${d.t}</div><div class="d">${d.d}</div><div class="meta"><span>${d.jev}</span><span>${d.w}</span></div>`);
+    grid.appendChild(a);
+  }
+  document.getElementById('functor').innerHTML=`<thead><tr><th>demo</th><th>jev construct</th><th>wiring construct</th><th>measured</th></tr></thead><tbody>${demos.map(d=>`<tr><td>${String(d.n).padStart(2,'0')}</td><td><span class="p">${d.jev}</span></td><td>${d.w}</td><td>${d.m}</td></tr>`).join('')}</tbody>`;
+})();
+</script>
+</body>
+</html>

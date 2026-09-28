@@ -1,0 +1,4965 @@
+{
+ "meta": {
+  "built": "2026-09-28T07:00:52.107Z",
+  "tokenizer": "cl100k_base (tiktoken)",
+  "pin": "jev-1.13.0",
+  "queue": "jev-tape",
+  "note": "Twin data. No TypeSafe call was made to build or run these demos."
+ },
+ "provenance": [
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/E2-RESULTS.json",
+   "sha256_16": "7713f4dd8bc47159",
+   "note": "E2 token arithmetic"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_LEGEND.txt",
+   "sha256_16": "fdcf5d2e375e2c39",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S1_A.txt",
+   "sha256_16": "1ad65a53893087c0",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S1_motif.txt",
+   "sha256_16": "67400bf11ad766e6",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S1_row.txt",
+   "sha256_16": "943864040d82e1f5",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S2_A.txt",
+   "sha256_16": "94cbc8895d05f517",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S2_motif.txt",
+   "sha256_16": "bbf49a3b42a34a6e",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S2_row.txt",
+   "sha256_16": "a87a61cf3c8e248e",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S3_A.txt",
+   "sha256_16": "ea68866814ac9b57",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S3_motif.txt",
+   "sha256_16": "568781bc149fd615",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e2-tokens/pack_S3_row.txt",
+   "sha256_16": "d47d3cd658813385",
+   "note": "E2 pack text"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/graph.json",
+   "sha256_16": "f2f9780e293c793b",
+   "note": "30 real @CommandType handlers"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/manifest.json",
+   "sha256_16": "532235658bc8d33a",
+   "note": "E3 freeze + tokens"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/E3-GRADES.json",
+   "sha256_16": "569f2280b69ab58a",
+   "note": "E3 grades"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/packB.txt",
+   "sha256_16": "b30164109f07520d",
+   "note": "E3 factored pack"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/packA.txt",
+   "sha256_16": "0b0e9cccf1f6b4b3",
+   "note": "E3 explicit pack"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/packC.txt",
+   "sha256_16": "f4c058c3475048e6",
+   "note": "E3 interface-only pack"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e3-ablation/questions.json",
+   "sha256_16": "6be76060457c95b5",
+   "note": "E3 questions"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/questions.json",
+   "sha256_16": "d6a0c76197987658",
+   "note": "112 questions, golds, depth, OC trees"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/graph.json",
+   "sha256_16": "e4708cb0aeb68d4d",
+   "note": "40 real units"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/manifest.json",
+   "sha256_16": "d4f9472592b6e7d9",
+   "note": "E5 freeze"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/E5-GRADES.json",
+   "sha256_16": "b6fce383607782b1",
+   "note": "E5 raw grades (v1)"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/E5.1-GRADES.json",
+   "sha256_16": "537d11d80161e2a3",
+   "note": "E5.1 panel-corrected grades"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/packB.v1.txt",
+   "sha256_16": "caee7ae5d9949b9d",
+   "note": "pack B before the legend fix"
+  },
+  {
+   "file": "wiring-and-the-whole/experiments/e5-depth/packB.txt",
+   "sha256_16": "167a12e60550b281",
+   "note": "pack B after the legend fix"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/WITNESS.json",
+   "sha256_16": "e1aa1e9d4c05567b",
+   "note": "E1 13/13"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/accounts/AccountsController.java",
+   "sha256_16": "93ec71ea2aa49da7",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/accounts/AccountsRepository.java",
+   "sha256_16": "250eef28854eec8b",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/accounts/AccountsService.java",
+   "sha256_16": "099ae175325bb818",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/accounts/Money.java",
+   "sha256_16": "06bd2f3ad40b9973",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/loans/LoansController.java",
+   "sha256_16": "9870d749c196dee4",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/loans/LoansRepository.java",
+   "sha256_16": "13242d58a09d9c96",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/loans/LoansService.java",
+   "sha256_16": "aa4d5bd6eccae947",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/loans/Money.java",
+   "sha256_16": "8edb23d96a37a8de",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/report/ReportModule.java",
+   "sha256_16": "596d3be7c3d2d3d5",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/savings/SavingsController.java",
+   "sha256_16": "0584822f7c704de1",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/savings/SavingsRepository.java",
+   "sha256_16": "5fdc0881db140266",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/savings/SavingsService.java",
+   "sha256_16": "b4272ff85e4c1f02",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/shared/AppConfig.java",
+   "sha256_16": "2c52258cfc1e3e2d",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/shared/AuditDto.java",
+   "sha256_16": "4bdaa13debb84b9b",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/shared/EventTopics.java",
+   "sha256_16": "74e0c15009f3362a",
+   "note": "toybank"
+  },
+  {
+   "file": "wiring-and-the-whole/witness/toybank/shared/PageDto.java",
+   "sha256_16": "02ba69a852a54637",
+   "note": "toybank"
+  },
+  {
+   "file": "jev-tape/src/domain.ts",
+   "sha256_16": "bb97d7815456cbb9",
+   "note": "jev-tape source"
+  },
+  {
+   "file": "jev-tape/src/colors.ts",
+   "sha256_16": "32f51e4b11401c98",
+   "note": "jev-tape source"
+  },
+  {
+   "file": "jev-tape/src/typesafe/contract.ts",
+   "sha256_16": "eed5a6019699d629",
+   "note": "jev-tape source"
+  },
+  {
+   "file": "jev-tape/src/typesafe/client.ts",
+   "sha256_16": "be9f9fc375ee176c",
+   "note": "jev-tape source"
+  },
+  {
+   "file": "jev-tape/scripts/qualify-surface.ts",
+   "sha256_16": "0bb04b8d3af8756b",
+   "note": "jev-tape source"
+  },
+  {
+   "file": "jev-tape/scripts/smoke-key.ts",
+   "sha256_16": "7cde6ab82d9b6e07",
+   "note": "jev-tape source"
+  },
+  {
+   "file": "jev-tape/spec/SPEC-v1-TAPE.md",
+   "sha256_16": "b5f8aa7dd4f34aef",
+   "note": "loop + FIRE"
+  },
+  {
+   "file": "jev-tape/spec/SPEC-v1-SPEED.md",
+   "sha256_16": "66b5d6859e3b049c",
+   "note": "four paths"
+  },
+  {
+   "file": "jev-tape/src/typesafe/contract.ts",
+   "sha256_16": "eed5a6019699d629",
+   "note": "wire contract"
+  },
+  {
+   "file": "jev-tape/src/domain.ts",
+   "sha256_16": "bb97d7815456cbb9",
+   "note": "commands"
+  },
+  {
+   "file": "jev-tape/src/colors.ts",
+   "sha256_16": "32f51e4b11401c98",
+   "note": "operad colors"
+  }
+ ],
+ "jev": {
+  "colors": [
+   "entity",
+   "concept",
+   "idea",
+   "evidence",
+   "action"
+  ],
+  "commands": [
+   "Capture",
+   "Clarify",
+   "Complete",
+   "StallProject",
+   "SetNext",
+   "StartWaiting",
+   "ResolveWaiting",
+   "SnoozeSomeday",
+   "MintInstance",
+   "Trash",
+   "CreateHabit"
+  ],
+  "humanGated": [
+   "Complete",
+   "Trash",
+   "ResolveWaiting"
+  ],
+  "loop": "assertLegalCommand → qualifyTask → gate → propose in memory → qualifyOutput → gate → applyCommand",
+  "fire": "No TypeSafe in the Workflow isolate. No apply-then-qualify. No `jev-latest` after thresholds. No key in git, chat, or Vercel client.",
+  "paths": [
+   {
+    "n": 0,
+    "name": "code",
+    "when": "Deterministic. Missing field, illegal command",
+    "typesafe": "no",
+    "temporal": "no"
+   },
+   {
+    "n": 1,
+    "name": "batch judge",
+    "when": "Bounded fork: which tool / may this send",
+    "typesafe": "one POST, many questions",
+    "temporal": "only if a write follows"
+   },
+   {
+    "n": 2,
+    "name": "rank then read",
+    "when": "Many candidates, then an expensive LLM",
+    "typesafe": "shortlist POST recorded",
+    "temporal": "record shortlist before LLM"
+   },
+   {
+    "n": 3,
+    "name": "tape",
+    "when": "Crash, wait, worklist, C10",
+    "typesafe": "reuse recorded answers",
+    "temporal": "Workflow + Signal + Continue-As-New"
+   }
+  ],
+  "contract": {
+   "noulMid": [
+    0.4,
+    0.6
+   ],
+   "scoreLevels": [
+    2,
+    10
+   ],
+   "choiceMin": 2,
+   "endpoint": "https://api.typesafe.ai/v1/systemone"
+  }
+ },
+ "e2": {
+  "results": {
+   "experiment": "E2 token micro-example",
+   "date": "2026-09-16",
+   "tokenizer": "cl100k_base (tiktoken npm, vendored encoder)",
+   "gate_all_sites_byte_identical": true,
+   "legend_tokens": 98,
+   "sites": {
+    "S1": {
+     "family": "ApiResource",
+     "file": "SavingsAccountsApiResource.java",
+     "units_deps": 10,
+     "edges": 11,
+     "gate_byte_identical": true,
+     "e_explicit_tokens": 329,
+     "m_factored_row_tokens": 216,
+     "F_fixed_overhead_tokens": 148,
+     "n_star_breakeven": 2,
+     "n_actual_repo_wide": 169,
+     "verdict": "WIN",
+     "repo_wide_savings_est_tokens": 18949
+    },
+    "S2": {
+     "family": "RepositoryWrapper",
+     "file": "SavingsAccountRepositoryWrapper.java",
+     "units_deps": 2,
+     "edges": 19,
+     "gate_byte_identical": true,
+     "e_explicit_tokens": 326,
+     "m_factored_row_tokens": 209,
+     "F_fixed_overhead_tokens": 150,
+     "n_star_breakeven": 2,
+     "n_actual_repo_wide": 54,
+     "verdict": "WIN",
+     "repo_wide_savings_est_tokens": 6168
+    },
+    "S3": {
+     "family": "CommandHandler",
+     "file": "ActivateSavingsAccountCommandHandler.java",
+     "units_deps": 1,
+     "edges": 1,
+     "gate_byte_identical": true,
+     "e_explicit_tokens": 62,
+     "m_factored_row_tokens": 27,
+     "F_fixed_overhead_tokens": 152,
+     "n_star_breakeven": 5,
+     "n_actual_repo_wide": 514,
+     "verdict": "WIN",
+     "repo_wide_savings_est_tokens": 17838
+    }
+   },
+   "kill_rule": "KILL iff e<=m OR n*>n_actual on ALL sites",
+   "overall": "WIN"
+  },
+  "packs": {
+   "LEGEND": "# WIRING PACK v1 — generator-data form\n# legend: 'motif NAME(slots): template' defines a wiring shape; template lines use $slots.\n# 'inst NAME(fills) [+ delta-lines]' instantiates it: expand template with fills, then apply\n# deltas verbatim. 'deps=' lists field:Type pairs; 'calls=' lists Type#method targets.\n# Expansion of every inst reproduces the explicit form exactly (lossless by construction).\n",
+   "S1_A": "unit SavingsAccountsApiResource\ndep SavingsAccountsApiResource.apiRequestParameterHelper: ApiRequestParameterHelper\ndep SavingsAccountsApiResource.bulkImportWorkbookPopulatorService: BulkImportWorkbookPopulatorService\ndep SavingsAccountsApiResource.bulkImportWorkbookService: BulkImportWorkbookService\ndep SavingsAccountsApiResource.commandsSourceWritePlatformService: PortfolioCommandSourceWritePlatformService\ndep SavingsAccountsApiResource.context: PlatformSecurityContext\ndep SavingsAccountsApiResource.savingsAccountChargeReadPlatformService: SavingsAccountChargeReadPlatformService\ndep SavingsAccountsApiResource.savingsAccountReadPlatformService: SavingsAccountReadPlatformService\ndep SavingsAccountsApiResource.savingsAccountTemplateReadPlatformService: SavingsAccountTemplateReadPlatformService\ndep SavingsAccountsApiResource.sqlValidator: SqlValidator\ndep SavingsAccountsApiResource.toApiJsonSerializer: DefaultToApiJsonSerializer\nedge SavingsAccountsApiResource -> ApiRequestParameterHelper#process\nedge SavingsAccountsApiResource -> BulkImportWorkbookPopulatorService#getTemplate\nedge SavingsAccountsApiResource -> BulkImportWorkbookService#importWorkbook\nedge SavingsAccountsApiResource -> DefaultToApiJsonSerializer#serialize\nedge SavingsAccountsApiResource -> PlatformSecurityContext#authenticatedUser\nedge SavingsAccountsApiResource -> PortfolioCommandSourceWritePlatformService#logCommandSource\nedge SavingsAccountsApiResource -> SavingsAccountReadPlatformService#retrieveAccountIdByExternalId\nedge SavingsAccountsApiResource -> SavingsAccountReadPlatformService#retrieveAll\nedge SavingsAccountsApiResource -> SavingsAccountReadPlatformService#retrieveOne\nedge SavingsAccountsApiResource -> SavingsAccountTemplateReadPlatformService#retrieveTemplate\nedge SavingsAccountsApiResource -> SqlValidator#validate\n",
+   "S1_motif": "motif ApiResource(A, deps, calls):\n  unit $A\n  foreach f:T in $deps -> dep $A.$f: $T\n  foreach T#m in $calls -> edge $A -> $T#$m\n",
+   "S1_row": "inst ApiResource(SavingsAccountsApiResource, deps=[apiRequestParameterHelper:ApiRequestParameterHelper,bulkImportWorkbookPopulatorService:BulkImportWorkbookPopulatorService,bulkImportWorkbookService:BulkImportWorkbookService,commandsSourceWritePlatformService:PortfolioCommandSourceWritePlatformService,context:PlatformSecurityContext,savingsAccountChargeReadPlatformService:SavingsAccountChargeReadPlatformService,savingsAccountReadPlatformService:SavingsAccountReadPlatformService,savingsAccountTemplateReadPlatformService:SavingsAccountTemplateReadPlatformService,sqlValidator:SqlValidator,toApiJsonSerializer:DefaultToApiJsonSerializer], calls=[ApiRequestParameterHelper#process,BulkImportWorkbookPopulatorService#getTemplate,BulkImportWorkbookService#importWorkbook,DefaultToApiJsonSerializer#serialize,PlatformSecurityContext#authenticatedUser,PortfolioCommandSourceWritePlatformService#logCommandSource,SavingsAccountReadPlatformService#retrieveAccountIdByExternalId,SavingsAccountReadPlatformService#retrieveAll,SavingsAccountReadPlatformService#retrieveOne,SavingsAccountTemplateReadPlatformService#retrieveTemplate,SqlValidator#validate])\n",
+   "S2_A": "unit SavingsAccountRepositoryWrapper\ndep SavingsAccountRepositoryWrapper.repository: SavingsAccountRepository\ndep SavingsAccountRepositoryWrapper.savingsAccountTransactionRepository: SavingsAccountTransactionRepository\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#delete\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#doNonClosedSavingAccountsExistForClient\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findAccrualData\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findByClientIdAndGroupId\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findByGroupId\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findById\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findByIdAndDepositAccountType\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findByStatus\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findIdByExternalId\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findNonClosedAccountByAccountNumber\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findOneLocked\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findSavingAccountByClientId\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findSavingAccountByGsimId\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#findSavingAccountByStatus\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#save\nedge SavingsAccountRepositoryWrapper -> SavingsAccountRepository#saveAndFlush\nedge SavingsAccountRepositoryWrapper -> SavingsAccountTransactionRepository#findBySavingsAccount\nedge SavingsAccountRepositoryWrapper -> SavingsAccountTransactionRepository#findTransactionRunningBalanceBeforePivotDate\nedge SavingsAccountRepositoryWrapper -> SavingsAccountTransactionRepository#findTransactionsAfterPivotDate\n",
+   "S2_motif": "motif RepositoryWrapper(W, R, deps, calls):\n  unit $W\n  foreach f:T in $deps -> dep $W.$f: $T\n  foreach T#m in $calls -> edge $W -> $T#$m\n",
+   "S2_row": "inst RepositoryWrapper(SavingsAccountRepositoryWrapper, deps=[repository:SavingsAccountRepository,savingsAccountTransactionRepository:SavingsAccountTransactionRepository], calls=[SavingsAccountRepository#delete,SavingsAccountRepository#doNonClosedSavingAccountsExistForClient,SavingsAccountRepository#findAccrualData,SavingsAccountRepository#findByClientIdAndGroupId,SavingsAccountRepository#findByGroupId,SavingsAccountRepository#findById,SavingsAccountRepository#findByIdAndDepositAccountType,SavingsAccountRepository#findByStatus,SavingsAccountRepository#findIdByExternalId,SavingsAccountRepository#findNonClosedAccountByAccountNumber,SavingsAccountRepository#findOneLocked,SavingsAccountRepository#findSavingAccountByClientId,SavingsAccountRepository#findSavingAccountByGsimId,SavingsAccountRepository#findSavingAccountByStatus,SavingsAccountRepository#save,SavingsAccountRepository#saveAndFlush,SavingsAccountTransactionRepository#findBySavingsAccount,SavingsAccountTransactionRepository#findTransactionRunningBalanceBeforePivotDate,SavingsAccountTransactionRepository#findTransactionsAfterPivotDate])\n",
+   "S3_A": "unit ActivateSavingsAccountCommandHandler\nanno ActivateSavingsAccountCommandHandler @CommandType entity=SAVINGSACCOUNT action=ACTIVATE\ndep ActivateSavingsAccountCommandHandler.writePlatformService: SavingsAccountWritePlatformService\nedge ActivateSavingsAccountCommandHandler -> SavingsAccountWritePlatformService#activate\n",
+   "S3_motif": "motif CommandHandler(H, S, m, entity, action):\n  unit $H\n  anno $H @CommandType entity=$entity action=$action\n  dep $H.writePlatformService: $S\n  edge $H -> $S#$m\n",
+   "S3_row": "inst CommandHandler(ActivateSavingsAccountCommandHandler, SavingsAccountWritePlatformService, activate, SAVINGSACCOUNT, ACTIVATE)\n"
+  },
+  "legendTokens": 98
+ },
+ "e3": {
+  "graph": [
+   {
+    "cls": "AddLoanChargeCommandHandler",
+    "entity": "LOANCHARGE",
+    "action": "CREATE",
+    "deps": {
+     "writePlatformService": "LoanChargeWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanChargeWritePlatformService",
+      "addLoanCharge"
+     ]
+    ]
+   },
+   {
+    "cls": "AttachLoanOriginatorCommandHandler",
+    "entity": "LOAN_ORIGINATOR",
+    "action": "ATTACH",
+    "deps": {
+     "writePlatformService": "LoanOriginatorWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanOriginatorWritePlatformService",
+      "attachOriginatorToLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "BulkUpdateLoanOfficerCommandHandler",
+    "entity": "LOAN",
+    "action": "BULKREASSIGN",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "bulkLoanReassignment"
+     ]
+    ]
+   },
+   {
+    "cls": "CloseLoanCommandHandler",
+    "entity": "LOAN",
+    "action": "CLOSE",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "closeLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "CreateDelinquencyRangeCommandHandler",
+    "entity": "DELINQUENCY_RANGE",
+    "action": "CREATE",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "createDelinquencyRange"
+     ]
+    ]
+   },
+   {
+    "cls": "CreditBalanceRefundCommandHandler",
+    "entity": "LOAN",
+    "action": "CREDITBALANCEREFUND",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanWritePlatformService",
+      "creditBalanceRefund"
+     ]
+    ]
+   },
+   {
+    "cls": "DetachLoanOriginatorCommandHandler",
+    "entity": "LOAN_ORIGINATOR",
+    "action": "DETACH",
+    "deps": {
+     "writePlatformService": "LoanOriginatorWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanOriginatorWritePlatformService",
+      "detachOriginatorFromLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "DisburseLoanCommandHandler",
+    "entity": "LOAN",
+    "action": "DISBURSE",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanWritePlatformService",
+      "disburseLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "DisburseLoanToSavingsCommandHandler",
+    "entity": "LOAN",
+    "action": "DISBURSETOSAVINGS",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "disburseLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "ForeClosureCommandHandler",
+    "entity": "LOAN",
+    "action": "FORECLOSURE",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "forecloseLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "GLIMApplicationRejectionCommandHandler",
+    "entity": "GLIMLOAN",
+    "action": "REJECT",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "rejectGLIMApplicationApproval"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanApplicationModificationCommandHandler",
+    "entity": "LOAN",
+    "action": "UPDATE",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "modifyApplication"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanApplicationSubmittalCommandHandler",
+    "entity": "LOAN",
+    "action": "CREATE",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "submitApplication"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanApplicationWithdrawnByApplicantCommandHandler",
+    "entity": "LOAN",
+    "action": "WITHDRAW",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "applicantWithdrawsFromApplication"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanApprovedAmountModificationCommandHandler",
+    "entity": "LOAN",
+    "action": "UPDATE_APPROVED_AMOUNT",
+    "deps": {
+     "loanApprovedAmountWritePlatformService": "LoanApprovedAmountWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApprovedAmountWritePlatformService",
+      "modifyLoanApprovedAmount"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanGoodwillCreditCommandHandler",
+    "entity": "LOAN",
+    "action": "GOODWILLCREDIT",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanWritePlatformService",
+      "makeLoanRepayment"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanMerchantIssuedRefundCommandHandler",
+    "entity": "LOAN",
+    "action": "MERCHANTISSUEDREFUND",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "makeRefund"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanRefundByCashCommandHandler",
+    "entity": "LOAN",
+    "action": "REFUNDBYCASH",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "makeLoanRefund"
+     ]
+    ]
+   },
+   {
+    "cls": "LoanRepaymentChargebackCommandHandler",
+    "entity": "LOAN",
+    "action": "CHARGEBACK",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "chargebackLoanTransaction"
+     ]
+    ]
+   },
+   {
+    "cls": "MarkLoanAsFraudCommandHandler",
+    "entity": "LOAN",
+    "action": "SETFRAUD",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "markLoanAsFraud"
+     ]
+    ]
+   },
+   {
+    "cls": "PaymentTypeCreateCommandHandler",
+    "entity": null,
+    "action": null,
+    "deps": {
+     "paymentTypeWriteService": "PaymentTypeWriteService"
+    },
+    "edges": [
+     [
+      "PaymentTypeWriteService",
+      "createPaymentType"
+     ]
+    ]
+   },
+   {
+    "cls": "RejectAddtionalSharesCommandHandler",
+    "entity": "SHAREACCOUNT",
+    "action": "REJECTADDITIONALSHARES",
+    "deps": {
+     "shareAccountWritePlatformService": "ShareAccountWritePlatformService"
+    },
+    "edges": [
+     [
+      "ShareAccountWritePlatformService",
+      "rejectAdditionalShares"
+     ]
+    ]
+   },
+   {
+    "cls": "SaveCenterCollectionSheetCommandHandler",
+    "entity": "CENTER",
+    "action": "SAVECOLLECTIONSHEET",
+    "deps": {
+     "writePlatformService": "CollectionSheetWritePlatformService"
+    },
+    "edges": [
+     [
+      "CollectionSheetWritePlatformService",
+      "updateCollectionSheet"
+     ]
+    ]
+   },
+   {
+    "cls": "UpdateChargeDefinitionCommandHandler",
+    "entity": "CHARGE",
+    "action": "UPDATE",
+    "deps": {
+     "clientWritePlatformService": "ChargeWritePlatformService"
+    },
+    "edges": [
+     [
+      "ChargeWritePlatformService",
+      "updateCharge"
+     ]
+    ]
+   },
+   {
+    "cls": "UpdateDelinquencyBucketCommandHandler",
+    "entity": "DELINQUENCY_BUCKET",
+    "action": "UPDATE",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "updateDelinquencyBucket"
+     ]
+    ]
+   },
+   {
+    "cls": "UpdateDelinquencyRangeCommandHandler",
+    "entity": "DELINQUENCY_RANGE",
+    "action": "UPDATE",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "updateDelinquencyRange"
+     ]
+    ]
+   },
+   {
+    "cls": "UpdateInterestPauseCommandHandler",
+    "entity": null,
+    "action": null,
+    "deps": {
+     "interestPauseService": "InterestPauseWritePlatformService"
+    },
+    "edges": [
+     [
+      "InterestPauseWritePlatformService",
+      "updateInterestPause"
+     ]
+    ]
+   },
+   {
+    "cls": "UpdateLoanDelinquencyBucketCommandHandler",
+    "entity": "LOAN",
+    "action": "UPDATEDELINQUENCY",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "applyDelinquencyTagToLoan"
+     ]
+    ]
+   },
+   {
+    "cls": "WithdrawClientTransferCommandHandler",
+    "entity": "CLIENT",
+    "action": "WITHDRAWTRANSFER",
+    "deps": {
+     "writePlatformService": "TransferWritePlatformService"
+    },
+    "edges": [
+     [
+      "TransferWritePlatformService",
+      "withdrawClientTransfer"
+     ]
+    ]
+   },
+   {
+    "cls": "WorkingCapitalLoanRecoveryPaymentCommandHandler",
+    "entity": "CommandWrapperConstants.ENTITY_WORKINGCAPITALLOAN",
+    "action": "CommandWrapperConstants.ACTION_RECOVERYPAYMENT",
+    "deps": {
+     "recoveryPaymentWriteService": "WorkingCapitalLoanRecoveryPaymentWriteService"
+    },
+    "edges": [
+     [
+      "WorkingCapitalLoanRecoveryPaymentWriteService",
+      "recoveryPayment"
+     ]
+    ]
+   }
+  ],
+  "manifest": {
+   "n_handlers": 30,
+   "n_questions": 25,
+   "gate_byte_identical": true,
+   "deviants": [
+    "AddLoanChargeCommandHandler",
+    "CreditBalanceRefundCommandHandler",
+    "DisburseLoanCommandHandler",
+    "LoanGoodwillCreditCommandHandler"
+   ],
+   "sha256": {
+    "packA": "0b0e9cccf1f6b4b3c537fbcffd58a333972ba42bf41f68305fa777255c3848f2",
+    "packB": "b30164109f07520d2e54dd640d68d1ebf41f3cc361e26d37796c1cf78d8baa23",
+    "packC": "f4c058c3475048e6b943556a10b76da6ebe73430b74571eec74baac2682302b8",
+    "questions": "8555c6927225b0c64d9ebe87ebf2d00eb45bb3b8dcb93ca6174dceea48ee974c"
+   },
+   "tokens": {
+    "A": 2089,
+    "B": 1316,
+    "C": 845
+   }
+  },
+  "grades": {
+   "n_questions": 25,
+   "flagged_answerable_without_wiring_q": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    25
+   ],
+   "flagged_qtypes": [
+    "T1-deptype",
+    "T4-count",
+    "T5-delta"
+   ],
+   "wiring_pool_size": 16,
+   "runs": {
+    "A_early_haiku": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 1
+    },
+    "A_early_sonnet": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 0.938
+    },
+    "A_mid_haiku": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 1
+    },
+    "A_mid_sonnet": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 0.938
+    },
+    "B_early_haiku": {
+     "acc_all_25": 1,
+     "acc_wiring_pool_strict": 1,
+     "acc_wiring_pool_lenient": 1
+    },
+    "B_early_sonnet": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 0.938
+    },
+    "B_mid_haiku": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 1
+    },
+    "B_mid_sonnet": {
+     "acc_all_25": 0.96,
+     "acc_wiring_pool_strict": 0.938,
+     "acc_wiring_pool_lenient": 1
+    },
+    "C_early_haiku": {
+     "acc_all_25": 0.36,
+     "acc_wiring_pool_strict": 0,
+     "acc_wiring_pool_lenient": 0
+    },
+    "C_early_sonnet": {
+     "acc_all_25": 0.36,
+     "acc_wiring_pool_strict": 0,
+     "acc_wiring_pool_lenient": 0
+    },
+    "C_mid_haiku": {
+     "acc_all_25": 0.36,
+     "acc_wiring_pool_strict": 0,
+     "acc_wiring_pool_lenient": 0
+    },
+    "C_mid_sonnet": {
+     "acc_all_25": 0.24,
+     "acc_wiring_pool_strict": 0,
+     "acc_wiring_pool_lenient": 0
+    }
+   },
+   "pooled_A_wiring_strict": 0.938,
+   "pooled_A_wiring_lenient": 0.969,
+   "pooled_B_wiring_strict": 0.953,
+   "pooled_B_wiring_lenient": 0.984,
+   "pooled_C_wiring_strict": 0,
+   "pooled_C_wiring_lenient": 0,
+   "A_minus_B_pts_strict": -1.5,
+   "decision_rule": "L2 FAILS as serialized iff B <= A - 5pts pooled on wiring pool",
+   "verdict": "B-PASSES (parity or better)",
+   "per_question_correct_of_4runs": [
+    {
+     "q": 1,
+     "type": "T2-method",
+     "gold": "rejectAdditionalShares",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 2,
+     "type": "T2-method",
+     "gold": "attachOriginatorToLoan",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 3,
+     "type": "T2-method",
+     "gold": "recoveryPayment",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 4,
+     "type": "T2-method",
+     "gold": "submitApplication",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 5,
+     "type": "T2-method",
+     "gold": "handleDataIntegrityIssues",
+     "flagged": false,
+     "A": 0,
+     "B": 1,
+     "C": 0
+    },
+    {
+     "q": 6,
+     "type": "T2-method",
+     "gold": "createPaymentType",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 7,
+     "type": "T2-method",
+     "gold": "closeLoan",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 8,
+     "type": "T2-method",
+     "gold": "modifyApplication",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 9,
+     "type": "T3-route",
+     "gold": "LoanMerchantIssuedRefundCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 10,
+     "type": "T3-route",
+     "gold": "DisburseLoanCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 11,
+     "type": "T3-route",
+     "gold": "LoanRepaymentChargebackCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 12,
+     "type": "T3-route",
+     "gold": "LoanApprovedAmountModificationCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 13,
+     "type": "T3-route",
+     "gold": "UpdateLoanDelinquencyBucketCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 14,
+     "type": "T3-route",
+     "gold": "UpdateDelinquencyBucketCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 15,
+     "type": "T4-count",
+     "gold": "11",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 3
+    },
+    {
+     "q": 16,
+     "type": "T4-count",
+     "gold": "4",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 3
+    },
+    {
+     "q": 17,
+     "type": "T4-count",
+     "gold": "4",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 3
+    },
+    {
+     "q": 18,
+     "type": "T1-deptype",
+     "gold": "LoanWritePlatformService",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 4
+    },
+    {
+     "q": 19,
+     "type": "T1-deptype",
+     "gold": "LoanWritePlatformService",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 4
+    },
+    {
+     "q": 20,
+     "type": "T1-deptype",
+     "gold": "LoanOriginatorWritePlatformService",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 4
+    },
+    {
+     "q": 21,
+     "type": "T1-deptype",
+     "gold": "DelinquencyWritePlatformService",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 4
+    },
+    {
+     "q": 22,
+     "type": "T5-delta",
+     "gold": "AddLoanChargeCommandHandler,CreditBalanceRefundCommandHandler,DisburseLoanCommandHandler,LoanGoodwillCreditCommandHandler",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 4
+    },
+    {
+     "q": 23,
+     "type": "T5-delta",
+     "gold": "AddLoanChargeCommandHandler,CreditBalanceRefundCommandHandler,DisburseLoanCommandHandler,LoanGoodwillCreditCommandHandler",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 24,
+     "type": "T5-delta",
+     "gold": "DataIntegrityErrorHandler#handleDataIntegrityIssues,LoanChargeWritePlatformService#addLoanCharge",
+     "flagged": false,
+     "A": 4,
+     "B": 4,
+     "C": 0
+    },
+    {
+     "q": 25,
+     "type": "T5-delta",
+     "gold": "2",
+     "flagged": true,
+     "A": 4,
+     "B": 4,
+     "C": 4
+    }
+   ]
+  },
+  "packB": "# WIRING PACK v1 - generator-data form\n# 'motif NAME(slots): template' defines a wiring shape; template lines use $slots.\n# 'inst NAME(fills)' instantiates it: expand the template with the fills.\n# A following indented '+ line' is a DELTA: after expansion, add that line verbatim.\n# Expansion of every inst reproduces the explicit form exactly.\n\nmotif CommandHandler(H, S, f, m, entity, action):\n  unit $H\n  anno $H @CommandType entity=$entity action=$action\n  dep $H.$f: $S\n  edge $H -> $S#$m\n\ninst CommandHandler(AddLoanChargeCommandHandler, DataIntegrityErrorHandler, dataIntegrityErrorHandler, handleDataIntegrityIssues, LOANCHARGE, CREATE)\n  + dep AddLoanChargeCommandHandler.writePlatformService: LoanChargeWritePlatformService\n  + edge AddLoanChargeCommandHandler -> LoanChargeWritePlatformService#addLoanCharge\ninst CommandHandler(AttachLoanOriginatorCommandHandler, LoanOriginatorWritePlatformService, writePlatformService, attachOriginatorToLoan, LOAN_ORIGINATOR, ATTACH)\ninst CommandHandler(BulkUpdateLoanOfficerCommandHandler, LoanWritePlatformService, writePlatformService, bulkLoanReassignment, LOAN, BULKREASSIGN)\ninst CommandHandler(CloseLoanCommandHandler, LoanWritePlatformService, writePlatformService, closeLoan, LOAN, CLOSE)\ninst CommandHandler(CreateDelinquencyRangeCommandHandler, DelinquencyWritePlatformService, writePlatformService, createDelinquencyRange, DELINQUENCY_RANGE, CREATE)\ninst CommandHandler(CreditBalanceRefundCommandHandler, DataIntegrityErrorHandler, dataIntegrityErrorHandler, handleDataIntegrityIssues, LOAN, CREDITBALANCEREFUND)\n  + dep CreditBalanceRefundCommandHandler.writePlatformService: LoanWritePlatformService\n  + edge CreditBalanceRefundCommandHandler -> LoanWritePlatformService#creditBalanceRefund\ninst CommandHandler(DetachLoanOriginatorCommandHandler, LoanOriginatorWritePlatformService, writePlatformService, detachOriginatorFromLoan, LOAN_ORIGINATOR, DETACH)\ninst CommandHandler(DisburseLoanCommandHandler, DataIntegrityErrorHandler, dataIntegrityErrorHandler, handleDataIntegrityIssues, LOAN, DISBURSE)\n  + dep DisburseLoanCommandHandler.writePlatformService: LoanWritePlatformService\n  + edge DisburseLoanCommandHandler -> LoanWritePlatformService#disburseLoan\ninst CommandHandler(DisburseLoanToSavingsCommandHandler, LoanWritePlatformService, writePlatformService, disburseLoan, LOAN, DISBURSETOSAVINGS)\ninst CommandHandler(ForeClosureCommandHandler, LoanWritePlatformService, writePlatformService, forecloseLoan, LOAN, FORECLOSURE)\ninst CommandHandler(GLIMApplicationRejectionCommandHandler, LoanApplicationWritePlatformService, writePlatformService, rejectGLIMApplicationApproval, GLIMLOAN, REJECT)\ninst CommandHandler(LoanApplicationModificationCommandHandler, LoanApplicationWritePlatformService, writePlatformService, modifyApplication, LOAN, UPDATE)\ninst CommandHandler(LoanApplicationSubmittalCommandHandler, LoanApplicationWritePlatformService, writePlatformService, submitApplication, LOAN, CREATE)\ninst CommandHandler(LoanApplicationWithdrawnByApplicantCommandHandler, LoanApplicationWritePlatformService, writePlatformService, applicantWithdrawsFromApplication, LOAN, WITHDRAW)\ninst CommandHandler(LoanApprovedAmountModificationCommandHandler, LoanApprovedAmountWritePlatformService, loanApprovedAmountWritePlatformService, modifyLoanApprovedAmount, LOAN, UPDATE_APPROVED_AMOUNT)\ninst CommandHandler(LoanGoodwillCreditCommandHandler, DataIntegrityErrorHandler, dataIntegrityErrorHandler, handleDataIntegrityIssues, LOAN, GOODWILLCREDIT)\n  + dep LoanGoodwillCreditCommandHandler.writePlatformService: LoanWritePlatformService\n  + edge LoanGoodwillCreditCommandHandler -> LoanWritePlatformService#makeLoanRepayment\ninst CommandHandler(LoanMerchantIssuedRefundCommandHandler, LoanWritePlatformService, writePlatformService, makeRefund, LOAN, MERCHANTISSUEDREFUND)\ninst CommandHandler(LoanRefundByCashCommandHandler, LoanWritePlatformService, writePlatformService, makeLoanRefund, LOAN, REFUNDBYCASH)\ninst CommandHandler(LoanRepaymentChargebackCommandHandler, LoanWritePlatformService, writePlatformService, chargebackLoanTransaction, LOAN, CHARGEBACK)\ninst CommandHandler(MarkLoanAsFraudCommandHandler, LoanWritePlatformService, writePlatformService, markLoanAsFraud, LOAN, SETFRAUD)\ninst CommandHandler(PaymentTypeCreateCommandHandler, PaymentTypeWriteService, paymentTypeWriteService, createPaymentType, -, -)\ninst CommandHandler(RejectAddtionalSharesCommandHandler, ShareAccountWritePlatformService, shareAccountWritePlatformService, rejectAdditionalShares, SHAREACCOUNT, REJECTADDITIONALSHARES)\ninst CommandHandler(SaveCenterCollectionSheetCommandHandler, CollectionSheetWritePlatformService, writePlatformService, updateCollectionSheet, CENTER, SAVECOLLECTIONSHEET)\ninst CommandHandler(UpdateChargeDefinitionCommandHandler, ChargeWritePlatformService, clientWritePlatformService, updateCharge, CHARGE, UPDATE)\ninst CommandHandler(UpdateDelinquencyBucketCommandHandler, DelinquencyWritePlatformService, writePlatformService, updateDelinquencyBucket, DELINQUENCY_BUCKET, UPDATE)\ninst CommandHandler(UpdateDelinquencyRangeCommandHandler, DelinquencyWritePlatformService, writePlatformService, updateDelinquencyRange, DELINQUENCY_RANGE, UPDATE)\ninst CommandHandler(UpdateInterestPauseCommandHandler, InterestPauseWritePlatformService, interestPauseService, updateInterestPause, -, -)\ninst CommandHandler(UpdateLoanDelinquencyBucketCommandHandler, DelinquencyWritePlatformService, writePlatformService, applyDelinquencyTagToLoan, LOAN, UPDATEDELINQUENCY)\ninst CommandHandler(WithdrawClientTransferCommandHandler, TransferWritePlatformService, writePlatformService, withdrawClientTransfer, CLIENT, WITHDRAWTRANSFER)\ninst CommandHandler(WorkingCapitalLoanRecoveryPaymentCommandHandler, WorkingCapitalLoanRecoveryPaymentWriteService, recoveryPaymentWriteService, recoveryPayment, CommandWrapperConstants.ENTITY_WORKINGCAPITALLOAN, CommandWrapperConstants.ACTION_RECOVERYPAYMENT)\n",
+  "packA": "unit AddLoanChargeCommandHandler\nanno AddLoanChargeCommandHandler @CommandType entity=LOANCHARGE action=CREATE\ndep AddLoanChargeCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep AddLoanChargeCommandHandler.writePlatformService: LoanChargeWritePlatformService\nedge AddLoanChargeCommandHandler -> DataIntegrityErrorHandler#handleDataIntegrityIssues\nedge AddLoanChargeCommandHandler -> LoanChargeWritePlatformService#addLoanCharge\n\nunit AttachLoanOriginatorCommandHandler\nanno AttachLoanOriginatorCommandHandler @CommandType entity=LOAN_ORIGINATOR action=ATTACH\ndep AttachLoanOriginatorCommandHandler.writePlatformService: LoanOriginatorWritePlatformService\nedge AttachLoanOriginatorCommandHandler -> LoanOriginatorWritePlatformService#attachOriginatorToLoan\n\nunit BulkUpdateLoanOfficerCommandHandler\nanno BulkUpdateLoanOfficerCommandHandler @CommandType entity=LOAN action=BULKREASSIGN\ndep BulkUpdateLoanOfficerCommandHandler.writePlatformService: LoanWritePlatformService\nedge BulkUpdateLoanOfficerCommandHandler -> LoanWritePlatformService#bulkLoanReassignment\n\nunit CloseLoanCommandHandler\nanno CloseLoanCommandHandler @CommandType entity=LOAN action=CLOSE\ndep CloseLoanCommandHandler.writePlatformService: LoanWritePlatformService\nedge CloseLoanCommandHandler -> LoanWritePlatformService#closeLoan\n\nunit CreateDelinquencyRangeCommandHandler\nanno CreateDelinquencyRangeCommandHandler @CommandType entity=DELINQUENCY_RANGE action=CREATE\ndep CreateDelinquencyRangeCommandHandler.writePlatformService: DelinquencyWritePlatformService\nedge CreateDelinquencyRangeCommandHandler -> DelinquencyWritePlatformService#createDelinquencyRange\n\nunit CreditBalanceRefundCommandHandler\nanno CreditBalanceRefundCommandHandler @CommandType entity=LOAN action=CREDITBALANCEREFUND\ndep CreditBalanceRefundCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep CreditBalanceRefundCommandHandler.writePlatformService: LoanWritePlatformService\nedge CreditBalanceRefundCommandHandler -> DataIntegrityErrorHandler#handleDataIntegrityIssues\nedge CreditBalanceRefundCommandHandler -> LoanWritePlatformService#creditBalanceRefund\n\nunit DetachLoanOriginatorCommandHandler\nanno DetachLoanOriginatorCommandHandler @CommandType entity=LOAN_ORIGINATOR action=DETACH\ndep DetachLoanOriginatorCommandHandler.writePlatformService: LoanOriginatorWritePlatformService\nedge DetachLoanOriginatorCommandHandler -> LoanOriginatorWritePlatformService#detachOriginatorFromLoan\n\nunit DisburseLoanCommandHandler\nanno DisburseLoanCommandHandler @CommandType entity=LOAN action=DISBURSE\ndep DisburseLoanCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep DisburseLoanCommandHandler.writePlatformService: LoanWritePlatformService\nedge DisburseLoanCommandHandler -> DataIntegrityErrorHandler#handleDataIntegrityIssues\nedge DisburseLoanCommandHandler -> LoanWritePlatformService#disburseLoan\n\nunit DisburseLoanToSavingsCommandHandler\nanno DisburseLoanToSavingsCommandHandler @CommandType entity=LOAN action=DISBURSETOSAVINGS\ndep DisburseLoanToSavingsCommandHandler.writePlatformService: LoanWritePlatformService\nedge DisburseLoanToSavingsCommandHandler -> LoanWritePlatformService#disburseLoan\n\nunit ForeClosureCommandHandler\nanno ForeClosureCommandHandler @CommandType entity=LOAN action=FORECLOSURE\ndep ForeClosureCommandHandler.writePlatformService: LoanWritePlatformService\nedge ForeClosureCommandHandler -> LoanWritePlatformService#forecloseLoan\n\nunit GLIMApplicationRejectionCommandHandler\nanno GLIMApplicationRejectionCommandHandler @CommandType entity=GLIMLOAN action=REJECT\ndep GLIMApplicationRejectionCommandHandler.writePlatformService: LoanApplicationWritePlatformService\nedge GLIMApplicationRejectionCommandHandler -> LoanApplicationWritePlatformService#rejectGLIMApplicationApproval\n\nunit LoanApplicationModificationCommandHandler\nanno LoanApplicationModificationCommandHandler @CommandType entity=LOAN action=UPDATE\ndep LoanApplicationModificationCommandHandler.writePlatformService: LoanApplicationWritePlatformService\nedge LoanApplicationModificationCommandHandler -> LoanApplicationWritePlatformService#modifyApplication\n\nunit LoanApplicationSubmittalCommandHandler\nanno LoanApplicationSubmittalCommandHandler @CommandType entity=LOAN action=CREATE\ndep LoanApplicationSubmittalCommandHandler.writePlatformService: LoanApplicationWritePlatformService\nedge LoanApplicationSubmittalCommandHandler -> LoanApplicationWritePlatformService#submitApplication\n\nunit LoanApplicationWithdrawnByApplicantCommandHandler\nanno LoanApplicationWithdrawnByApplicantCommandHandler @CommandType entity=LOAN action=WITHDRAW\ndep LoanApplicationWithdrawnByApplicantCommandHandler.writePlatformService: LoanApplicationWritePlatformService\nedge LoanApplicationWithdrawnByApplicantCommandHandler -> LoanApplicationWritePlatformService#applicantWithdrawsFromApplication\n\nunit LoanApprovedAmountModificationCommandHandler\nanno LoanApprovedAmountModificationCommandHandler @CommandType entity=LOAN action=UPDATE_APPROVED_AMOUNT\ndep LoanApprovedAmountModificationCommandHandler.loanApprovedAmountWritePlatformService: LoanApprovedAmountWritePlatformService\nedge LoanApprovedAmountModificationCommandHandler -> LoanApprovedAmountWritePlatformService#modifyLoanApprovedAmount\n\nunit LoanGoodwillCreditCommandHandler\nanno LoanGoodwillCreditCommandHandler @CommandType entity=LOAN action=GOODWILLCREDIT\ndep LoanGoodwillCreditCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep LoanGoodwillCreditCommandHandler.writePlatformService: LoanWritePlatformService\nedge LoanGoodwillCreditCommandHandler -> DataIntegrityErrorHandler#handleDataIntegrityIssues\nedge LoanGoodwillCreditCommandHandler -> LoanWritePlatformService#makeLoanRepayment\n\nunit LoanMerchantIssuedRefundCommandHandler\nanno LoanMerchantIssuedRefundCommandHandler @CommandType entity=LOAN action=MERCHANTISSUEDREFUND\ndep LoanMerchantIssuedRefundCommandHandler.writePlatformService: LoanWritePlatformService\nedge LoanMerchantIssuedRefundCommandHandler -> LoanWritePlatformService#makeRefund\n\nunit LoanRefundByCashCommandHandler\nanno LoanRefundByCashCommandHandler @CommandType entity=LOAN action=REFUNDBYCASH\ndep LoanRefundByCashCommandHandler.writePlatformService: LoanWritePlatformService\nedge LoanRefundByCashCommandHandler -> LoanWritePlatformService#makeLoanRefund\n\nunit LoanRepaymentChargebackCommandHandler\nanno LoanRepaymentChargebackCommandHandler @CommandType entity=LOAN action=CHARGEBACK\ndep LoanRepaymentChargebackCommandHandler.writePlatformService: LoanWritePlatformService\nedge LoanRepaymentChargebackCommandHandler -> LoanWritePlatformService#chargebackLoanTransaction\n\nunit MarkLoanAsFraudCommandHandler\nanno MarkLoanAsFraudCommandHandler @CommandType entity=LOAN action=SETFRAUD\ndep MarkLoanAsFraudCommandHandler.writePlatformService: LoanWritePlatformService\nedge MarkLoanAsFraudCommandHandler -> LoanWritePlatformService#markLoanAsFraud\n\nunit PaymentTypeCreateCommandHandler\ndep PaymentTypeCreateCommandHandler.paymentTypeWriteService: PaymentTypeWriteService\nedge PaymentTypeCreateCommandHandler -> PaymentTypeWriteService#createPaymentType\n\nunit RejectAddtionalSharesCommandHandler\nanno RejectAddtionalSharesCommandHandler @CommandType entity=SHAREACCOUNT action=REJECTADDITIONALSHARES\ndep RejectAddtionalSharesCommandHandler.shareAccountWritePlatformService: ShareAccountWritePlatformService\nedge RejectAddtionalSharesCommandHandler -> ShareAccountWritePlatformService#rejectAdditionalShares\n\nunit SaveCenterCollectionSheetCommandHandler\nanno SaveCenterCollectionSheetCommandHandler @CommandType entity=CENTER action=SAVECOLLECTIONSHEET\ndep SaveCenterCollectionSheetCommandHandler.writePlatformService: CollectionSheetWritePlatformService\nedge SaveCenterCollectionSheetCommandHandler -> CollectionSheetWritePlatformService#updateCollectionSheet\n\nunit UpdateChargeDefinitionCommandHandler\nanno UpdateChargeDefinitionCommandHandler @CommandType entity=CHARGE action=UPDATE\ndep UpdateChargeDefinitionCommandHandler.clientWritePlatformService: ChargeWritePlatformService\nedge UpdateChargeDefinitionCommandHandler -> ChargeWritePlatformService#updateCharge\n\nunit UpdateDelinquencyBucketCommandHandler\nanno UpdateDelinquencyBucketCommandHandler @CommandType entity=DELINQUENCY_BUCKET action=UPDATE\ndep UpdateDelinquencyBucketCommandHandler.writePlatformService: DelinquencyWritePlatformService\nedge UpdateDelinquencyBucketCommandHandler -> DelinquencyWritePlatformService#updateDelinquencyBucket\n\nunit UpdateDelinquencyRangeCommandHandler\nanno UpdateDelinquencyRangeCommandHandler @CommandType entity=DELINQUENCY_RANGE action=UPDATE\ndep UpdateDelinquencyRangeCommandHandler.writePlatformService: DelinquencyWritePlatformService\nedge UpdateDelinquencyRangeCommandHandler -> DelinquencyWritePlatformService#updateDelinquencyRange\n\nunit UpdateInterestPauseCommandHandler\ndep UpdateInterestPauseCommandHandler.interestPauseService: InterestPauseWritePlatformService\nedge UpdateInterestPauseCommandHandler -> InterestPauseWritePlatformService#updateInterestPause\n\nunit UpdateLoanDelinquencyBucketCommandHandler\nanno UpdateLoanDelinquencyBucketCommandHandler @CommandType entity=LOAN action=UPDATEDELINQUENCY\ndep UpdateLoanDelinquencyBucketCommandHandler.writePlatformService: DelinquencyWritePlatformService\nedge UpdateLoanDelinquencyBucketCommandHandler -> DelinquencyWritePlatformService#applyDelinquencyTagToLoan\n\nunit WithdrawClientTransferCommandHandler\nanno WithdrawClientTransferCommandHandler @CommandType entity=CLIENT action=WITHDRAWTRANSFER\ndep WithdrawClientTransferCommandHandler.writePlatformService: TransferWritePlatformService\nedge WithdrawClientTransferCommandHandler -> TransferWritePlatformService#withdrawClientTransfer\n\nunit WorkingCapitalLoanRecoveryPaymentCommandHandler\nanno WorkingCapitalLoanRecoveryPaymentCommandHandler @CommandType entity=CommandWrapperConstants.ENTITY_WORKINGCAPITALLOAN action=CommandWrapperConstants.ACTION_RECOVERYPAYMENT\ndep WorkingCapitalLoanRecoveryPaymentCommandHandler.recoveryPaymentWriteService: WorkingCapitalLoanRecoveryPaymentWriteService\nedge WorkingCapitalLoanRecoveryPaymentCommandHandler -> WorkingCapitalLoanRecoveryPaymentWriteService#recoveryPayment\n",
+  "packC": "unit AddLoanChargeCommandHandler\ndep AddLoanChargeCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep AddLoanChargeCommandHandler.writePlatformService: LoanChargeWritePlatformService\n\nunit AttachLoanOriginatorCommandHandler\ndep AttachLoanOriginatorCommandHandler.writePlatformService: LoanOriginatorWritePlatformService\n\nunit BulkUpdateLoanOfficerCommandHandler\ndep BulkUpdateLoanOfficerCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit CloseLoanCommandHandler\ndep CloseLoanCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit CreateDelinquencyRangeCommandHandler\ndep CreateDelinquencyRangeCommandHandler.writePlatformService: DelinquencyWritePlatformService\n\nunit CreditBalanceRefundCommandHandler\ndep CreditBalanceRefundCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep CreditBalanceRefundCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit DetachLoanOriginatorCommandHandler\ndep DetachLoanOriginatorCommandHandler.writePlatformService: LoanOriginatorWritePlatformService\n\nunit DisburseLoanCommandHandler\ndep DisburseLoanCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep DisburseLoanCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit DisburseLoanToSavingsCommandHandler\ndep DisburseLoanToSavingsCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit ForeClosureCommandHandler\ndep ForeClosureCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit GLIMApplicationRejectionCommandHandler\ndep GLIMApplicationRejectionCommandHandler.writePlatformService: LoanApplicationWritePlatformService\n\nunit LoanApplicationModificationCommandHandler\ndep LoanApplicationModificationCommandHandler.writePlatformService: LoanApplicationWritePlatformService\n\nunit LoanApplicationSubmittalCommandHandler\ndep LoanApplicationSubmittalCommandHandler.writePlatformService: LoanApplicationWritePlatformService\n\nunit LoanApplicationWithdrawnByApplicantCommandHandler\ndep LoanApplicationWithdrawnByApplicantCommandHandler.writePlatformService: LoanApplicationWritePlatformService\n\nunit LoanApprovedAmountModificationCommandHandler\ndep LoanApprovedAmountModificationCommandHandler.loanApprovedAmountWritePlatformService: LoanApprovedAmountWritePlatformService\n\nunit LoanGoodwillCreditCommandHandler\ndep LoanGoodwillCreditCommandHandler.dataIntegrityErrorHandler: DataIntegrityErrorHandler\ndep LoanGoodwillCreditCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit LoanMerchantIssuedRefundCommandHandler\ndep LoanMerchantIssuedRefundCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit LoanRefundByCashCommandHandler\ndep LoanRefundByCashCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit LoanRepaymentChargebackCommandHandler\ndep LoanRepaymentChargebackCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit MarkLoanAsFraudCommandHandler\ndep MarkLoanAsFraudCommandHandler.writePlatformService: LoanWritePlatformService\n\nunit PaymentTypeCreateCommandHandler\ndep PaymentTypeCreateCommandHandler.paymentTypeWriteService: PaymentTypeWriteService\n\nunit RejectAddtionalSharesCommandHandler\ndep RejectAddtionalSharesCommandHandler.shareAccountWritePlatformService: ShareAccountWritePlatformService\n\nunit SaveCenterCollectionSheetCommandHandler\ndep SaveCenterCollectionSheetCommandHandler.writePlatformService: CollectionSheetWritePlatformService\n\nunit UpdateChargeDefinitionCommandHandler\ndep UpdateChargeDefinitionCommandHandler.clientWritePlatformService: ChargeWritePlatformService\n\nunit UpdateDelinquencyBucketCommandHandler\ndep UpdateDelinquencyBucketCommandHandler.writePlatformService: DelinquencyWritePlatformService\n\nunit UpdateDelinquencyRangeCommandHandler\ndep UpdateDelinquencyRangeCommandHandler.writePlatformService: DelinquencyWritePlatformService\n\nunit UpdateInterestPauseCommandHandler\ndep UpdateInterestPauseCommandHandler.interestPauseService: InterestPauseWritePlatformService\n\nunit UpdateLoanDelinquencyBucketCommandHandler\ndep UpdateLoanDelinquencyBucketCommandHandler.writePlatformService: DelinquencyWritePlatformService\n\nunit WithdrawClientTransferCommandHandler\ndep WithdrawClientTransferCommandHandler.writePlatformService: TransferWritePlatformService\n\nunit WorkingCapitalLoanRecoveryPaymentCommandHandler\ndep WorkingCapitalLoanRecoveryPaymentCommandHandler.recoveryPaymentWriteService: WorkingCapitalLoanRecoveryPaymentWriteService\n",
+  "questions": [
+   "Which method does RejectAddtionalSharesCommandHandler invoke on its injected service?",
+   "Which method does AttachLoanOriginatorCommandHandler invoke on its injected service?",
+   "Which method does WorkingCapitalLoanRecoveryPaymentCommandHandler invoke on its injected service?",
+   "Which method does LoanApplicationSubmittalCommandHandler invoke on its injected service?",
+   "Which method does CreditBalanceRefundCommandHandler invoke on its injected service?",
+   "Which method does PaymentTypeCreateCommandHandler invoke on its injected service?",
+   "Which method does CloseLoanCommandHandler invoke on its injected service?",
+   "Which method does LoanApplicationModificationCommandHandler invoke on its injected service?",
+   "Which handler class handles entity=LOAN action=MERCHANTISSUEDREFUND?",
+   "Which handler class handles entity=LOAN action=DISBURSE?",
+   "Which handler class handles entity=LOAN action=CHARGEBACK?",
+   "Which handler class handles entity=LOAN action=UPDATE_APPROVED_AMOUNT?",
+   "Which handler class handles entity=LOAN action=UPDATEDELINQUENCY?",
+   "Which handler class handles entity=DELINQUENCY_BUCKET action=UPDATE?",
+   "How many handlers in the pack call methods on LoanWritePlatformService? Answer with a number.",
+   "How many handlers in the pack call methods on DataIntegrityErrorHandler? Answer with a number.",
+   "How many handlers in the pack call methods on DelinquencyWritePlatformService? Answer with a number.",
+   "What is the type of the service injected into LoanRefundByCashCommandHandler?",
+   "What is the type of the service injected into BulkUpdateLoanOfficerCommandHandler?",
+   "What is the type of the service injected into DetachLoanOriginatorCommandHandler?",
+   "What is the type of the service injected into CreateDelinquencyRangeCommandHandler?",
+   "Which handler classes have MORE than one injected dependency? List class names, comma-separated; answer 'none' if none.",
+   "Which handler classes invoke MORE than one distinct Type#method target? List class names, comma-separated; answer 'none' if none.",
+   "List every Type#method target that AddLoanChargeCommandHandler invokes, comma-separated.",
+   "How many injected dependencies does LoanGoodwillCreditCommandHandler have? Answer with a number."
+  ],
+  "tokens": {
+   "A": 2089,
+   "B": 1316,
+   "C": 845
+  }
+ },
+ "e5": {
+  "manifest": {
+   "n_units": 40,
+   "n_handlers": 30,
+   "n_new_units": 10,
+   "n_questions": 112,
+   "per_depth": {
+    "1": 12,
+    "2": 12,
+    "3": 6,
+    "4": 12,
+    "5": 12,
+    "6": 12,
+    "7": 12,
+    "8": 10,
+    "9": 12,
+    "10": 12
+   },
+   "n_oc_trees": 10,
+   "n_oc_subquestions": 29,
+   "gate_byte_identical": true,
+   "tokens": {
+    "A": 12493,
+    "B": 11787
+   },
+   "sha256": {
+    "packA": "42ae65432f1f007b",
+    "packB": "167a12e60550b281",
+    "questions": "8277b7e5e7c57f2e"
+   }
+  },
+  "raw": {
+   "pooled_per_depth": {
+    "D1": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D2": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D3": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D4": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D5": {
+     "A": 1,
+     "B": 0.542,
+     "B_minus_A_pts": -45.8
+    },
+    "D6": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D7": {
+     "A": 0.708,
+     "B": 0.25,
+     "B_minus_A_pts": -45.8
+    },
+    "D8": {
+     "A": 1,
+     "B": 0.9,
+     "B_minus_A_pts": -10
+    },
+    "D9": {
+     "A": 0.75,
+     "B": 0.875,
+     "B_minus_A_pts": 12.5
+    },
+    "D10": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    }
+   },
+   "pooled_overall": {
+    "A": 0.949,
+    "B": 0.848,
+    "B_minus_A_pts": -10.2
+   },
+   "oc": {
+    "A_haiku": {
+     "trees": 10,
+     "consistent": 7,
+     "P(correct|consistent)": 1,
+     "P(correct|inconsistent)": 0.667,
+     "inconsistent_qs": [
+      89,
+      90,
+      91
+     ]
+    },
+    "A_sonnet": {
+     "trees": 10,
+     "consistent": 6,
+     "P(correct|consistent)": 1,
+     "P(correct|inconsistent)": 0.75,
+     "inconsistent_qs": [
+      89,
+      90,
+      91,
+      101
+     ]
+    },
+    "B_haiku": {
+     "trees": 10,
+     "consistent": 7,
+     "P(correct|consistent)": 0.714,
+     "P(correct|inconsistent)": 1,
+     "inconsistent_qs": [
+      89,
+      90,
+      91
+     ]
+    },
+    "B_sonnet": {
+     "trees": 10,
+     "consistent": 6,
+     "P(correct|consistent)": 1,
+     "P(correct|inconsistent)": 0.75,
+     "inconsistent_qs": [
+      89,
+      90,
+      91,
+      101
+     ]
+    }
+   },
+   "runs": {
+    "A_haiku": {
+     "overall": 0.917,
+     "per_depth": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 0.417,
+      "D8": 1,
+      "D9": 0.75,
+      "D10": 1
+     }
+    },
+    "A_sonnet": {
+     "overall": 0.981,
+     "per_depth": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 1,
+      "D8": 1,
+      "D9": 0.75,
+      "D10": 1
+     }
+    },
+    "B_haiku": {
+     "overall": 0.806,
+     "per_depth": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 0.083,
+      "D6": 1,
+      "D7": 0.25,
+      "D8": 0.9,
+      "D9": 1,
+      "D10": 1
+     }
+    },
+    "B_sonnet": {
+     "overall": 0.889,
+     "per_depth": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 0.25,
+      "D8": 0.9,
+      "D9": 0.75,
+      "D10": 1
+     }
+    }
+   }
+  },
+  "fixed": {
+   "grading": "panel-corrected (dual-key D9, OC valid-trees only, item-recall reported)",
+   "runs": {
+    "A_haiku_v1": {
+     "overall_strict": 0.935,
+     "per_depth_strict": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 0.417,
+      "D8": 1,
+      "D9": 1,
+      "D10": 1
+     },
+     "per_depth_item_recall": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 0.975,
+      "D8": 1,
+      "D9": 1,
+      "D10": 1
+     }
+    },
+    "A_sonnet_v1": {
+     "overall_strict": 1,
+     "per_depth_strict": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 1,
+      "D8": 1,
+      "D9": 1,
+      "D10": 1
+     },
+     "per_depth_item_recall": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 1,
+      "D8": 1,
+      "D9": 1,
+      "D10": 1
+     }
+    },
+    "B_haiku_v2": {
+     "overall_strict": 0.861,
+     "per_depth_strict": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 0.833,
+      "D5": 1,
+      "D6": 1,
+      "D7": 0.417,
+      "D8": 0.9,
+      "D9": 0.875,
+      "D10": 0.667
+     },
+     "per_depth_item_recall": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 0.909,
+      "D5": 1,
+      "D6": 1,
+      "D7": 0.971,
+      "D8": 1,
+      "D9": 0.984,
+      "D10": 0.667
+     }
+    },
+    "B_sonnet_v2": {
+     "overall_strict": 1,
+     "per_depth_strict": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 1,
+      "D8": 1,
+      "D9": 1,
+      "D10": 1
+     },
+     "per_depth_item_recall": {
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "D5": 1,
+      "D6": 1,
+      "D7": 1,
+      "D8": 1,
+      "D9": 1,
+      "D10": 1
+     }
+    }
+   },
+   "pooled_per_depth": {
+    "D1": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D2": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D3": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D4": {
+     "A": 1,
+     "B": 0.917,
+     "B_minus_A_pts": -8.3
+    },
+    "D5": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0
+    },
+    "D6": {
+     "A": 1,
+     "B": 1,
+     "B_minus_A_pts": 0,
+     "flag": "NON-DISCRIMINATING (uniform gold, name-derivable) per QA-2"
+    },
+    "D7": {
+     "A": 0.708,
+     "B": 0.708,
+     "B_minus_A_pts": 0
+    },
+    "D8": {
+     "A": 1,
+     "B": 0.95,
+     "B_minus_A_pts": -5
+    },
+    "D9": {
+     "A": 1,
+     "B": 0.938,
+     "B_minus_A_pts": -6.2
+    },
+    "D10": {
+     "A": 1,
+     "B": 0.833,
+     "B_minus_A_pts": -16.7
+    }
+   },
+   "oc": {
+    "A_haiku_v1": {
+     "valid_trees": 6,
+     "consistent": 6,
+     "consistent_and_correct": 6,
+     "all_subs_correct": 5,
+     "raw": [
+      {
+       "q": 43,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 44,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 45,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 55,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": false
+      },
+      {
+       "q": 56,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 57,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      }
+     ]
+    },
+    "A_sonnet_v1": {
+     "valid_trees": 6,
+     "consistent": 6,
+     "consistent_and_correct": 6,
+     "all_subs_correct": 6,
+     "raw": [
+      {
+       "q": 43,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 44,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 45,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 55,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 56,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 57,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      }
+     ]
+    },
+    "B_haiku_v2": {
+     "valid_trees": 6,
+     "consistent": 6,
+     "consistent_and_correct": 6,
+     "all_subs_correct": 6,
+     "raw": [
+      {
+       "q": 43,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 44,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 45,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 55,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 56,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 57,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      }
+     ]
+    },
+    "B_sonnet_v2": {
+     "valid_trees": 6,
+     "consistent": 6,
+     "consistent_and_correct": 6,
+     "all_subs_correct": 6,
+     "raw": [
+      {
+       "q": 43,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 44,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 45,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 55,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 56,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      },
+      {
+       "q": 57,
+       "consistent": true,
+       "direct_correct": true,
+       "all_subs_correct": true
+      }
+     ]
+    }
+   },
+   "pooled_overall": {
+    "A_v1": 0.968,
+    "B_v2": 0.93,
+    "B_minus_A_pts": -3.7
+   },
+   "panel_predictions": {
+    "QA2#1 sentinel fix -> B D7 >= 0.75": 0.708,
+    "QA2#2 glob gloss -> B_haiku D5 >= 0.83": 1,
+    "QA1 corrected pooled ~ -2pts": -3.7
+   }
+  },
+  "legendV1": [
+   "# WIRING PACK v2 - generator-data form",
+   "# 'motif NAME(slots): template' defines a wiring shape; '$slot' substitutes fills.",
+   "# 'inst NAME(fills)' instantiates the template. An indented '+ line' is a DELTA: add it",
+   "# verbatim after expansion. 'impl I -> C' declares C as the implementation of interface I.",
+   "# Non-motif units appear explicitly (unit/dep/edge lines). Expansion of every inst",
+   "# reproduces the explicit form exactly."
+  ],
+  "legendV2": [
+   "# WIRING PACK v2.1 - generator-data form",
+   "# 'motif NAME(slots): template' defines a wiring shape; '$slot' substitutes fills.",
+   "# 'inst NAME(fills)' instantiates the template. An indented '+ line' is a DELTA: add it",
+   "# verbatim after expansion. 'impl I -> C' declares C as the implementation of interface I.",
+   "# A fill of '-' means the corresponding line is OMITTED from the expansion (e.g. entity=-",
+   "# and action=- mean the unit has NO anno line). Constants.* fills are literal values.",
+   "# Non-motif units appear explicitly (unit/dep/edge lines). Expansion of every inst",
+   "# reproduces the explicit form exactly."
+  ],
+  "legendAdded": [
+   "# WIRING PACK v2.1 - generator-data form",
+   "# A fill of '-' means the corresponding line is OMITTED from the expansion (e.g. entity=-",
+   "# and action=- mean the unit has NO anno line). Constants.* fills are literal values."
+  ],
+  "trees": [
+   {
+    "i": 42,
+    "q": "D5: RejectAddtionalSharesCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+    "gold": "AccountNumberFormatRepositoryWrapper,NoteRepository,ShareAccountRepositoryWrapper,ShareProductRepositoryWrapper",
+    "depth": 5,
+    "subs": [
+     {
+      "q": "OC-a: Which service type does RejectAddtionalSharesCommandHandler invoke?",
+      "gold": "ShareAccountWritePlatformService"
+     },
+     {
+      "q": "OC-b: Which class is declared as the implementation of ShareAccountWritePlatformService?",
+      "gold": "ShareAccountWritePlatformServiceJpaRepositoryImpl"
+     },
+     {
+      "q": "OC-c: List the *Repository* types that ShareAccountWritePlatformServiceJpaRepositoryImpl invokes, comma-separated.",
+      "gold": "AccountNumberFormatRepositoryWrapper,NoteRepository,ShareAccountRepositoryWrapper,ShareProductRepositoryWrapper"
+     }
+    ],
+    "composeValid": true,
+    "ocRawInconsistentIn": []
+   },
+   {
+    "i": 43,
+    "q": "D5: PaymentTypeCreateCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+    "gold": "PaymentTypeRepository",
+    "depth": 5,
+    "subs": [
+     {
+      "q": "OC-a: Which service type does PaymentTypeCreateCommandHandler invoke?",
+      "gold": "PaymentTypeWriteService"
+     },
+     {
+      "q": "OC-b: Which class is declared as the implementation of PaymentTypeWriteService?",
+      "gold": "PaymentTypeWriteServiceImpl"
+     },
+     {
+      "q": "OC-c: List the *Repository* types that PaymentTypeWriteServiceImpl invokes, comma-separated.",
+      "gold": "PaymentTypeRepository"
+     }
+    ],
+    "composeValid": true,
+    "ocRawInconsistentIn": []
+   },
+   {
+    "i": 44,
+    "q": "D5: UpdateDelinquencyBucketCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+    "gold": "DelinquencyBucketMappingsRepository,DelinquencyBucketRepository,DelinquencyMinimumPaymentPeriodAndRuleRepository,DelinquencyRangeRepository,LoanDelinquencyActionRepository,LoanDelinquencyTagHistoryRepository,LoanInstallmentDelinquencyTagRepository,LoanProductRepository,LoanRepositoryWrapper",
+    "depth": 5,
+    "subs": [
+     {
+      "q": "OC-a: Which service type does UpdateDelinquencyBucketCommandHandler invoke?",
+      "gold": "DelinquencyWritePlatformService"
+     },
+     {
+      "q": "OC-b: Which class is declared as the implementation of DelinquencyWritePlatformService?",
+      "gold": "DelinquencyWritePlatformServiceImpl"
+     },
+     {
+      "q": "OC-c: List the *Repository* types that DelinquencyWritePlatformServiceImpl invokes, comma-separated.",
+      "gold": "DelinquencyBucketMappingsRepository,DelinquencyBucketRepository,DelinquencyMinimumPaymentPeriodAndRuleRepository,DelinquencyRangeRepository,LoanDelinquencyActionRepository,LoanDelinquencyTagHistoryRepository,LoanInstallmentDelinquencyTagRepository,LoanProductRepository,LoanRepositoryWrapper"
+     }
+    ],
+    "composeValid": true,
+    "ocRawInconsistentIn": []
+   },
+   {
+    "i": 54,
+    "q": "D6: Starting from LoanApplicationWithdrawnByApplicantCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+    "gold": "LoanRepository",
+    "depth": 6,
+    "subs": [
+     {
+      "q": "OC-a: Which service type does LoanApplicationWithdrawnByApplicantCommandHandler invoke?",
+      "gold": "LoanApplicationWritePlatformService"
+     },
+     {
+      "q": "OC-b: Which class implements LoanApplicationWritePlatformService?",
+      "gold": "LoanApplicationWritePlatformServiceJpaRepositoryImpl"
+     },
+     {
+      "q": "OC-c: Which *RepositoryWrapper* type does LoanApplicationWritePlatformServiceJpaRepositoryImpl invoke?",
+      "gold": "LoanRepositoryWrapper"
+     },
+     {
+      "q": "OC-d: List the *Repository* types LoanRepositoryWrapper invokes, comma-separated.",
+      "gold": "LoanRepository"
+     }
+    ],
+    "composeValid": true,
+    "ocRawInconsistentIn": []
+   },
+   {
+    "i": 55,
+    "q": "D6: Starting from LoanRefundByCashCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+    "gold": "LoanRepository",
+    "depth": 6,
+    "subs": [
+     {
+      "q": "OC-a: Which service type does LoanRefundByCashCommandHandler invoke?",
+      "gold": "LoanWritePlatformService"
+     },
+     {
+      "q": "OC-b: Which class implements LoanWritePlatformService?",
+      "gold": "LoanWritePlatformServiceJpaRepositoryImpl"
+     },
+     {
+      "q": "OC-c: Which *RepositoryWrapper* type does LoanWritePlatformServiceJpaRepositoryImpl invoke?",
+      "gold": "LoanRepositoryWrapper"
+     },
+     {
+      "q": "OC-d: List the *Repository* types LoanRepositoryWrapper invokes, comma-separated.",
+      "gold": "LoanRepository"
+     }
+    ],
+    "composeValid": true,
+    "ocRawInconsistentIn": []
+   },
+   {
+    "i": 56,
+    "q": "D6: Starting from UpdateDelinquencyRangeCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+    "gold": "LoanRepository",
+    "depth": 6,
+    "subs": [
+     {
+      "q": "OC-a: Which service type does UpdateDelinquencyRangeCommandHandler invoke?",
+      "gold": "DelinquencyWritePlatformService"
+     },
+     {
+      "q": "OC-b: Which class implements DelinquencyWritePlatformService?",
+      "gold": "DelinquencyWritePlatformServiceImpl"
+     },
+     {
+      "q": "OC-c: Which *RepositoryWrapper* type does DelinquencyWritePlatformServiceImpl invoke?",
+      "gold": "LoanRepositoryWrapper"
+     },
+     {
+      "q": "OC-d: List the *Repository* types LoanRepositoryWrapper invokes, comma-separated.",
+      "gold": "LoanRepository"
+     }
+    ],
+    "composeValid": true,
+    "ocRawInconsistentIn": []
+   },
+   {
+    "i": 88,
+    "q": "D9: Suppose type LoanChargeWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is LoanChargeWritePlatformService)? List, comma-separated; 'none' if none.",
+    "gold": "none",
+    "depth": 9,
+    "subs": [
+     {
+      "q": "OC-a: Which handler classes invoke LoanChargeWritePlatformService? List, comma-separated.",
+      "gold": "AddLoanChargeCommandHandler"
+     },
+     {
+      "q": "OC-b: Does the implementation of LoanChargeWritePlatformService invoke at least one *Repository* type? yes/no.",
+      "gold": "yes"
+     }
+    ],
+    "composeValid": false,
+    "ocRawInconsistentIn": [
+     "A_haiku",
+     "A_sonnet",
+     "B_haiku",
+     "B_sonnet"
+    ]
+   },
+   {
+    "i": 89,
+    "q": "D9: Suppose type InterestPauseWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is InterestPauseWritePlatformService)? List, comma-separated; 'none' if none.",
+    "gold": "UpdateInterestPauseCommandHandler",
+    "depth": 9,
+    "subs": [
+     {
+      "q": "OC-a: Which handler classes invoke InterestPauseWritePlatformService? List, comma-separated.",
+      "gold": "UpdateInterestPauseCommandHandler"
+     },
+     {
+      "q": "OC-b: Does the implementation of InterestPauseWritePlatformService invoke at least one *Repository* type? yes/no.",
+      "gold": "yes"
+     }
+    ],
+    "composeValid": false,
+    "ocRawInconsistentIn": [
+     "A_haiku",
+     "A_sonnet",
+     "B_haiku",
+     "B_sonnet"
+    ]
+   },
+   {
+    "i": 90,
+    "q": "D9: Suppose type DelinquencyWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is DelinquencyWritePlatformService)? List, comma-separated; 'none' if none.",
+    "gold": "CreateDelinquencyRangeCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler",
+    "depth": 9,
+    "subs": [
+     {
+      "q": "OC-a: Which handler classes invoke DelinquencyWritePlatformService? List, comma-separated.",
+      "gold": "CreateDelinquencyRangeCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler"
+     },
+     {
+      "q": "OC-b: Does the implementation of DelinquencyWritePlatformService invoke at least one *Repository* type? yes/no.",
+      "gold": "yes"
+     }
+    ],
+    "composeValid": false,
+    "ocRawInconsistentIn": [
+     "A_haiku",
+     "A_sonnet",
+     "B_haiku",
+     "B_sonnet"
+    ]
+   },
+   {
+    "i": 100,
+    "q": "D10: Which service types are invoked by at least TWO handlers AND have a declared implementation that invokes at least TWO *Repository* types? List, comma-separated; 'none' if none.",
+    "gold": "DelinquencyWritePlatformService,LoanApplicationWritePlatformService,LoanWritePlatformService",
+    "depth": 10,
+    "subs": [
+     {
+      "q": "OC-a: Which service types are invoked by at least two handler classes? List, comma-separated.",
+      "gold": "DelinquencyWritePlatformService,LoanApplicationWritePlatformService,LoanWritePlatformService"
+     },
+     {
+      "q": "OC-b: Of the service types with declared implementations, which implementations invoke at least two *Repository* types? List the SERVICE type names, comma-separated.",
+      "gold": "ChargeWritePlatformService,DelinquencyWritePlatformService,InterestPauseWritePlatformService,LoanApplicationWritePlatformService,LoanChargeWritePlatformService,LoanWritePlatformService,ShareAccountWritePlatformService"
+     }
+    ],
+    "composeValid": false,
+    "ocRawInconsistentIn": [
+     "A_sonnet",
+     "B_sonnet"
+    ]
+   }
+  ],
+  "graph": [
+   {
+    "cls": "AddLoanChargeCommandHandler",
+    "entity": "LOANCHARGE",
+    "action": "CREATE",
+    "deps": {
+     "writePlatformService": "LoanChargeWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanChargeWritePlatformService",
+      "addLoanCharge"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "AttachLoanOriginatorCommandHandler",
+    "entity": "LOAN_ORIGINATOR",
+    "action": "ATTACH",
+    "deps": {
+     "writePlatformService": "LoanOriginatorWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanOriginatorWritePlatformService",
+      "attachOriginatorToLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "BulkUpdateLoanOfficerCommandHandler",
+    "entity": "LOAN",
+    "action": "BULKREASSIGN",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "bulkLoanReassignment"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "CloseLoanCommandHandler",
+    "entity": "LOAN",
+    "action": "CLOSE",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "closeLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "CreateDelinquencyRangeCommandHandler",
+    "entity": "DELINQUENCY_RANGE",
+    "action": "CREATE",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "createDelinquencyRange"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "CreditBalanceRefundCommandHandler",
+    "entity": "LOAN",
+    "action": "CREDITBALANCEREFUND",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanWritePlatformService",
+      "creditBalanceRefund"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "DetachLoanOriginatorCommandHandler",
+    "entity": "LOAN_ORIGINATOR",
+    "action": "DETACH",
+    "deps": {
+     "writePlatformService": "LoanOriginatorWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanOriginatorWritePlatformService",
+      "detachOriginatorFromLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "DisburseLoanCommandHandler",
+    "entity": "LOAN",
+    "action": "DISBURSE",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanWritePlatformService",
+      "disburseLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "DisburseLoanToSavingsCommandHandler",
+    "entity": "LOAN",
+    "action": "DISBURSETOSAVINGS",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "disburseLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "ForeClosureCommandHandler",
+    "entity": "LOAN",
+    "action": "FORECLOSURE",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "forecloseLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "GLIMApplicationRejectionCommandHandler",
+    "entity": "GLIMLOAN",
+    "action": "REJECT",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "rejectGLIMApplicationApproval"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanApplicationModificationCommandHandler",
+    "entity": "LOAN",
+    "action": "UPDATE",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "modifyApplication"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanApplicationSubmittalCommandHandler",
+    "entity": "LOAN",
+    "action": "CREATE",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "submitApplication"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanApplicationWithdrawnByApplicantCommandHandler",
+    "entity": "LOAN",
+    "action": "WITHDRAW",
+    "deps": {
+     "writePlatformService": "LoanApplicationWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApplicationWritePlatformService",
+      "applicantWithdrawsFromApplication"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanApprovedAmountModificationCommandHandler",
+    "entity": "LOAN",
+    "action": "UPDATE_APPROVED_AMOUNT",
+    "deps": {
+     "loanApprovedAmountWritePlatformService": "LoanApprovedAmountWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanApprovedAmountWritePlatformService",
+      "modifyLoanApprovedAmount"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanGoodwillCreditCommandHandler",
+    "entity": "LOAN",
+    "action": "GOODWILLCREDIT",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService",
+     "dataIntegrityErrorHandler": "DataIntegrityErrorHandler"
+    },
+    "edges": [
+     [
+      "DataIntegrityErrorHandler",
+      "handleDataIntegrityIssues"
+     ],
+     [
+      "LoanWritePlatformService",
+      "makeLoanRepayment"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanMerchantIssuedRefundCommandHandler",
+    "entity": "LOAN",
+    "action": "MERCHANTISSUEDREFUND",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "makeRefund"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanRefundByCashCommandHandler",
+    "entity": "LOAN",
+    "action": "REFUNDBYCASH",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "makeLoanRefund"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "LoanRepaymentChargebackCommandHandler",
+    "entity": "LOAN",
+    "action": "CHARGEBACK",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "chargebackLoanTransaction"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "MarkLoanAsFraudCommandHandler",
+    "entity": "LOAN",
+    "action": "SETFRAUD",
+    "deps": {
+     "writePlatformService": "LoanWritePlatformService"
+    },
+    "edges": [
+     [
+      "LoanWritePlatformService",
+      "markLoanAsFraud"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "PaymentTypeCreateCommandHandler",
+    "entity": null,
+    "action": null,
+    "deps": {
+     "paymentTypeWriteService": "PaymentTypeWriteService"
+    },
+    "edges": [
+     [
+      "PaymentTypeWriteService",
+      "createPaymentType"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "RejectAddtionalSharesCommandHandler",
+    "entity": "SHAREACCOUNT",
+    "action": "REJECTADDITIONALSHARES",
+    "deps": {
+     "shareAccountWritePlatformService": "ShareAccountWritePlatformService"
+    },
+    "edges": [
+     [
+      "ShareAccountWritePlatformService",
+      "rejectAdditionalShares"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "SaveCenterCollectionSheetCommandHandler",
+    "entity": "CENTER",
+    "action": "SAVECOLLECTIONSHEET",
+    "deps": {
+     "writePlatformService": "CollectionSheetWritePlatformService"
+    },
+    "edges": [
+     [
+      "CollectionSheetWritePlatformService",
+      "updateCollectionSheet"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "UpdateChargeDefinitionCommandHandler",
+    "entity": "CHARGE",
+    "action": "UPDATE",
+    "deps": {
+     "clientWritePlatformService": "ChargeWritePlatformService"
+    },
+    "edges": [
+     [
+      "ChargeWritePlatformService",
+      "updateCharge"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "UpdateDelinquencyBucketCommandHandler",
+    "entity": "DELINQUENCY_BUCKET",
+    "action": "UPDATE",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "updateDelinquencyBucket"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "UpdateDelinquencyRangeCommandHandler",
+    "entity": "DELINQUENCY_RANGE",
+    "action": "UPDATE",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "updateDelinquencyRange"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "UpdateInterestPauseCommandHandler",
+    "entity": null,
+    "action": null,
+    "deps": {
+     "interestPauseService": "InterestPauseWritePlatformService"
+    },
+    "edges": [
+     [
+      "InterestPauseWritePlatformService",
+      "updateInterestPause"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "UpdateLoanDelinquencyBucketCommandHandler",
+    "entity": "LOAN",
+    "action": "UPDATEDELINQUENCY",
+    "deps": {
+     "writePlatformService": "DelinquencyWritePlatformService"
+    },
+    "edges": [
+     [
+      "DelinquencyWritePlatformService",
+      "applyDelinquencyTagToLoan"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "WithdrawClientTransferCommandHandler",
+    "entity": "CLIENT",
+    "action": "WITHDRAWTRANSFER",
+    "deps": {
+     "writePlatformService": "TransferWritePlatformService"
+    },
+    "edges": [
+     [
+      "TransferWritePlatformService",
+      "withdrawClientTransfer"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "WorkingCapitalLoanRecoveryPaymentCommandHandler",
+    "entity": "CommandWrapperConstants.ENTITY_WORKINGCAPITALLOAN",
+    "action": "CommandWrapperConstants.ACTION_RECOVERYPAYMENT",
+    "deps": {
+     "recoveryPaymentWriteService": "WorkingCapitalLoanRecoveryPaymentWriteService"
+    },
+    "edges": [
+     [
+      "WorkingCapitalLoanRecoveryPaymentWriteService",
+      "recoveryPayment"
+     ]
+    ],
+    "kind": "handler"
+   },
+   {
+    "cls": "ChargeWritePlatformServiceJpaRepositoryImpl",
+    "deps": {
+     "context": "PlatformSecurityContext",
+     "fromApiJsonDeserializer": "ChargeDefinitionCommandFromApiJsonDeserializer",
+     "chargeRepository": "ChargeRepository",
+     "loanProductRepository": "LoanProductRepository",
+     "jdbcTemplate": "JdbcTemplate",
+     "fineractEntityAccessUtil": "FineractEntityAccessUtil",
+     "glAccountRepository": "GLAccountRepositoryWrapper",
+     "taxGroupRepository": "TaxGroupRepositoryWrapper",
+     "paymentTypeRepository": "PaymentTypeRepository"
+    },
+    "edges": [
+     [
+      "ChargeDefinitionCommandFromApiJsonDeserializer",
+      "validateChargeTimeNCalculationType"
+     ],
+     [
+      "ChargeDefinitionCommandFromApiJsonDeserializer",
+      "validateForCreate"
+     ],
+     [
+      "ChargeDefinitionCommandFromApiJsonDeserializer",
+      "validateForUpdate"
+     ],
+     [
+      "ChargeRepository",
+      "findById"
+     ],
+     [
+      "ChargeRepository",
+      "isAnyWorkingCapitalLoansAssociateWithThisCharge"
+     ],
+     [
+      "ChargeRepository",
+      "save"
+     ],
+     [
+      "ChargeRepository",
+      "saveAndFlush"
+     ],
+     [
+      "FineractEntityAccessUtil",
+      "checkConfigurationAndAddProductResrictionsForUserOffice"
+     ],
+     [
+      "GLAccountRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ],
+     [
+      "JdbcTemplate",
+      "queryForObject"
+     ],
+     [
+      "LoanProductRepository",
+      "retrieveLoanProductsByChargeId"
+     ],
+     [
+      "PaymentTypeRepository",
+      "findById"
+     ],
+     [
+      "PlatformSecurityContext",
+      "authenticatedUser"
+     ],
+     [
+      "TaxGroupRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ]
+    ],
+    "impl_of": "ChargeWritePlatformService",
+    "kind": "unit"
+   },
+   {
+    "cls": "DelinquencyWritePlatformServiceImpl",
+    "deps": {
+     "dataValidatorBucket": "DelinquencyBucketParseAndValidator",
+     "dataValidatorRange": "DelinquencyRangeParseAndValidator",
+     "repositoryRange": "DelinquencyRangeRepository",
+     "repositoryBucket": "DelinquencyBucketRepository",
+     "repositoryBucketMappings": "DelinquencyBucketMappingsRepository",
+     "loanDelinquencyTagRepository": "LoanDelinquencyTagHistoryRepository",
+     "loanRepository": "LoanRepositoryWrapper",
+     "loanProductRepository": "LoanProductRepository",
+     "loanDelinquencyDomainService": "LoanDelinquencyDomainService",
+     "loanInstallmentDelinquencyTagRepository": "LoanInstallmentDelinquencyTagRepository",
+     "delinquencyReadPlatformService": "DelinquencyReadPlatformService",
+     "loanDelinquencyActionRepository": "LoanDelinquencyActionRepository",
+     "delinquencyActionParseAndValidator": "DelinquencyActionParseAndValidator",
+     "delinquencyEffectivePauseHelper": "DelinquencyEffectivePauseHelper",
+     "businessEventNotifierService": "BusinessEventNotifierService",
+     "delinquencyHelper": "DelinquencyWritePlatformServiceHelper",
+     "delinquencyMinimumPaymentPeriodAndRuleRepository": "DelinquencyMinimumPaymentPeriodAndRuleRepository",
+     "delinquencyBucketUsageCheckers": "List"
+    },
+    "edges": [
+     [
+      "BusinessEventNotifierService",
+      "notifyPostBusinessEvent"
+     ],
+     [
+      "DelinquencyActionParseAndValidator",
+      "validateAndParseUpdate"
+     ],
+     [
+      "DelinquencyBucketMappingsRepository",
+      "deleteAll"
+     ],
+     [
+      "DelinquencyBucketMappingsRepository",
+      "findByDelinquencyBucket"
+     ],
+     [
+      "DelinquencyBucketMappingsRepository",
+      "saveAllAndFlush"
+     ],
+     [
+      "DelinquencyBucketParseAndValidator",
+      "validateAndParseUpdate"
+     ],
+     [
+      "DelinquencyBucketRepository",
+      "delete"
+     ],
+     [
+      "DelinquencyBucketRepository",
+      "existsById"
+     ],
+     [
+      "DelinquencyBucketRepository",
+      "findByName"
+     ],
+     [
+      "DelinquencyBucketRepository",
+      "getReferenceById"
+     ],
+     [
+      "DelinquencyBucketRepository",
+      "save"
+     ],
+     [
+      "DelinquencyBucketRepository",
+      "saveAndFlush"
+     ],
+     [
+      "DelinquencyMinimumPaymentPeriodAndRuleRepository",
+      "delete"
+     ],
+     [
+      "DelinquencyMinimumPaymentPeriodAndRuleRepository",
+      "findByBucketId"
+     ],
+     [
+      "DelinquencyMinimumPaymentPeriodAndRuleRepository",
+      "save"
+     ],
+     [
+      "DelinquencyRangeParseAndValidator",
+      "validateAndParseUpdate"
+     ],
+     [
+      "DelinquencyRangeRepository",
+      "delete"
+     ],
+     [
+      "DelinquencyRangeRepository",
+      "findAllById"
+     ],
+     [
+      "DelinquencyRangeRepository",
+      "findByClassification"
+     ],
+     [
+      "DelinquencyRangeRepository",
+      "getReferenceById"
+     ],
+     [
+      "DelinquencyRangeRepository",
+      "saveAndFlush"
+     ],
+     [
+      "DelinquencyReadPlatformService",
+      "retrieveLoanDelinquencyActions"
+     ],
+     [
+      "DelinquencyWritePlatformServiceHelper",
+      "applyDelinquencyForLoan"
+     ],
+     [
+      "DelinquencyWritePlatformServiceHelper",
+      "applyDelinquencyForLoanInstallments"
+     ],
+     [
+      "DelinquencyWritePlatformServiceHelper",
+      "setLoanDelinquencyTag"
+     ],
+     [
+      "DelinquencyWritePlatformServiceHelper",
+      "sortDelinquencyRangesByMinAge"
+     ],
+     [
+      "LoanDelinquencyActionRepository",
+      "saveAndFlush"
+     ],
+     [
+      "LoanDelinquencyDomainService",
+      "getLoanDelinquencyData"
+     ],
+     [
+      "LoanDelinquencyDomainService",
+      "getOverdueCollectionData"
+     ],
+     [
+      "LoanDelinquencyTagHistoryRepository",
+      "countByDelinquencyRange"
+     ],
+     [
+      "LoanDelinquencyTagHistoryRepository",
+      "deleteAll"
+     ],
+     [
+      "LoanDelinquencyTagHistoryRepository",
+      "findByLoan"
+     ],
+     [
+      "LoanInstallmentDelinquencyTagRepository",
+      "deleteAllLoanInstallmentsTags"
+     ],
+     [
+      "LoanProductRepository",
+      "countByDelinquencyBucket"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ]
+    ],
+    "impl_of": "DelinquencyWritePlatformService",
+    "kind": "unit"
+   },
+   {
+    "cls": "InterestPauseWritePlatformServiceImpl",
+    "deps": {
+     "loanTermVariationsRepository": "LoanTermVariationsRepository",
+     "loanRepositoryWrapper": "LoanRepositoryWrapper",
+     "loanAssembler": "LoanAssembler",
+     "businessEventNotifierService": "BusinessEventNotifierService",
+     "loanScheduleService": "LoanScheduleService"
+    },
+    "edges": [
+     [
+      "BusinessEventNotifierService",
+      "notifyPostBusinessEvent"
+     ],
+     [
+      "LoanAssembler",
+      "assembleFrom"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateScheduleWithReprocessingTransactions"
+     ],
+     [
+      "LoanTermVariationsRepository",
+      "delete"
+     ],
+     [
+      "LoanTermVariationsRepository",
+      "save"
+     ],
+     [
+      "LoanTermVariationsRepository",
+      "saveAndFlush"
+     ]
+    ],
+    "impl_of": "InterestPauseWritePlatformService",
+    "kind": "unit"
+   },
+   {
+    "cls": "LoanApplicationWritePlatformServiceJpaRepositoryImpl",
+    "deps": {
+     "context": "PlatformSecurityContext",
+     "loanApplicationTransitionValidator": "LoanApplicationTransitionValidator",
+     "loanApplicationValidator": "LoanApplicationValidator",
+     "loanRepositoryWrapper": "LoanRepositoryWrapper",
+     "noteRepository": "NoteRepository",
+     "loanAssembler": "LoanAssembler",
+     "calendarRepository": "CalendarRepository",
+     "calendarInstanceRepository": "CalendarInstanceRepository",
+     "savingsAccountRepository": "SavingsAccountRepositoryWrapper",
+     "accountAssociationsRepository": "AccountAssociationsRepository",
+     "businessEventNotifierService": "BusinessEventNotifierService",
+     "loanScheduleAssembler": "LoanScheduleAssembler",
+     "loanUtilService": "LoanUtilService",
+     "calendarReadPlatformService": "CalendarReadPlatformService",
+     "entityDatatableChecksWritePlatformService": "EntityDatatableChecksWritePlatformService",
+     "glimRepository": "GLIMAccountInfoRepository",
+     "loanRepository": "LoanRepository",
+     "gsimReadPlatformService": "GSIMReadPlatformService",
+     "loanLifecycleStateMachine": "LoanLifecycleStateMachine",
+     "loanAccrualsProcessingService": "LoanAccrualsProcessingService",
+     "loanDownPaymentTransactionValidator": "LoanDownPaymentTransactionValidator",
+     "loanScheduleService": "LoanScheduleService",
+     "loanOriginatorLinkingService": "LoanOriginatorLinkingService"
+    },
+    "edges": [
+     [
+      "AccountAssociationsRepository",
+      "delete"
+     ],
+     [
+      "AccountAssociationsRepository",
+      "findByLoanIdAndType"
+     ],
+     [
+      "AccountAssociationsRepository",
+      "save"
+     ],
+     [
+      "BusinessEventNotifierService",
+      "notifyPostBusinessEvent"
+     ],
+     [
+      "CalendarInstanceRepository",
+      "delete"
+     ],
+     [
+      "CalendarInstanceRepository",
+      "findByEntityIdAndEntityTypeId"
+     ],
+     [
+      "CalendarInstanceRepository",
+      "save"
+     ],
+     [
+      "CalendarInstanceRepository",
+      "saveAndFlush"
+     ],
+     [
+      "CalendarReadPlatformService",
+      "isCalendarAssociatedWithEntity"
+     ],
+     [
+      "CalendarRepository",
+      "delete"
+     ],
+     [
+      "CalendarRepository",
+      "findById"
+     ],
+     [
+      "CalendarRepository",
+      "save"
+     ],
+     [
+      "EntityDatatableChecksWritePlatformService",
+      "runTheCheckForProduct"
+     ],
+     [
+      "EntityDatatableChecksWritePlatformService",
+      "saveDatatables"
+     ],
+     [
+      "GLIMAccountInfoRepository",
+      "findById"
+     ],
+     [
+      "GLIMAccountInfoRepository",
+      "save"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "reprocessExistingAccruals"
+     ],
+     [
+      "LoanApplicationTransitionValidator",
+      "checkClientOrGroupActive"
+     ],
+     [
+      "LoanApplicationTransitionValidator",
+      "validateApplicantWithdrawal"
+     ],
+     [
+      "LoanApplicationTransitionValidator",
+      "validateRejection"
+     ],
+     [
+      "LoanApplicationValidator",
+      "validateApproval"
+     ],
+     [
+      "LoanApplicationValidator",
+      "validateForCreate"
+     ],
+     [
+      "LoanApplicationValidator",
+      "validateForModify"
+     ],
+     [
+      "LoanApplicationValidator",
+      "validateForUndo"
+     ],
+     [
+      "LoanAssembler",
+      "accountNumberGeneration"
+     ],
+     [
+      "LoanAssembler",
+      "assembleFrom"
+     ],
+     [
+      "LoanAssembler",
+      "updateFrom"
+     ],
+     [
+      "LoanAssembler",
+      "updateLoanApplicationAttributesForRejection"
+     ],
+     [
+      "LoanAssembler",
+      "updateLoanApplicationAttributesForWithdrawal"
+     ],
+     [
+      "LoanDownPaymentTransactionValidator",
+      "validateAccountStatus"
+     ],
+     [
+      "LoanLifecycleStateMachine",
+      "dryTransition"
+     ],
+     [
+      "LoanLifecycleStateMachine",
+      "transition"
+     ],
+     [
+      "LoanOriginatorLinkingService",
+      "processOriginatorsForLoanApplication"
+     ],
+     [
+      "LoanRepository",
+      "findByGlimId"
+     ],
+     [
+      "LoanRepository",
+      "saveAndFlush"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "delete"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "flush"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "saveAndFlush"
+     ],
+     [
+      "LoanScheduleAssembler",
+      "assembleLoanApproval"
+     ],
+     [
+      "LoanScheduleAssembler",
+      "assembleLoanTerms"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateRepaymentSchedule"
+     ],
+     [
+      "LoanUtilService",
+      "buildScheduleGeneratorDTO"
+     ],
+     [
+      "NoteRepository",
+      "deleteAllInBatch"
+     ],
+     [
+      "NoteRepository",
+      "findByLoanId"
+     ],
+     [
+      "NoteRepository",
+      "save"
+     ],
+     [
+      "PlatformSecurityContext",
+      "getAuthenticatedUserIfPresent"
+     ],
+     [
+      "SavingsAccountRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ]
+    ],
+    "impl_of": "LoanApplicationWritePlatformService",
+    "kind": "unit"
+   },
+   {
+    "cls": "LoanChargeWritePlatformServiceImpl",
+    "deps": {
+     "loanChargeApiJsonValidator": "LoanChargeApiJsonValidator",
+     "loanAssembler": "LoanAssembler",
+     "chargeRepository": "ChargeRepositoryWrapper",
+     "businessEventNotifierService": "BusinessEventNotifierService",
+     "loanTransactionRepository": "LoanTransactionRepository",
+     "accountTransfersWritePlatformService": "AccountTransfersWritePlatformService",
+     "loanRepositoryWrapper": "LoanRepositoryWrapper",
+     "loanAccountDomainService": "LoanAccountDomainService",
+     "loanChargeRepository": "LoanChargeRepository",
+     "loanWritePlatformService": "LoanWritePlatformService",
+     "loanUtilService": "LoanUtilService",
+     "loanChargeReadPlatformService": "LoanChargeReadPlatformService",
+     "loanLifecycleStateMachine": "LoanLifecycleStateMachine",
+     "accountAssociationsReadPlatformService": "AccountAssociationsReadPlatformService",
+     "fromApiJsonHelper": "FromJsonHelper",
+     "configurationDomainService": "ConfigurationDomainService",
+     "externalIdFactory": "ExternalIdFactory",
+     "accountTransferDetailRepository": "AccountTransferDetailRepository",
+     "loanChargeAssembler": "LoanChargeAssembler",
+     "paymentDetailWritePlatformService": "PaymentDetailWritePlatformService",
+     "noteRepository": "NoteRepository",
+     "loanAccrualsProcessingService": "LoanAccrualsProcessingService",
+     "loanDownPaymentTransactionValidator": "LoanDownPaymentTransactionValidator",
+     "loanChargeValidator": "LoanChargeValidator",
+     "loanScheduleService": "LoanScheduleService",
+     "reprocessLoanTransactionsService": "ReprocessLoanTransactionsService",
+     "loanAccountService": "LoanAccountService",
+     "loanAdjustmentService": "LoanAdjustmentService",
+     "loanChargeService": "LoanChargeService",
+     "loanJournalEntryPoster": "LoanJournalEntryPoster"
+    },
+    "edges": [
+     [
+      "AccountAssociationsReadPlatformService",
+      "retriveLoanLinkedAssociation"
+     ],
+     [
+      "AccountTransferDetailRepository",
+      "findById"
+     ],
+     [
+      "AccountTransfersWritePlatformService",
+      "transferFunds"
+     ],
+     [
+      "BusinessEventNotifierService",
+      "notifyPostBusinessEvent"
+     ],
+     [
+      "BusinessEventNotifierService",
+      "notifyPreBusinessEvent"
+     ],
+     [
+      "ChargeRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isAllowCashAndNonCashAccrual"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isImmediateChargeAccrualPostMaturityEnabled"
+     ],
+     [
+      "ConfigurationDomainService",
+      "retrieveGraceOnPenaltyPostingPeriod"
+     ],
+     [
+      "ConfigurationDomainService",
+      "retrievePenaltyWaitPeriod"
+     ],
+     [
+      "ExternalIdFactory",
+      "create"
+     ],
+     [
+      "ExternalIdFactory",
+      "createFromCommand"
+     ],
+     [
+      "FromJsonHelper",
+      "extractStringNamed"
+     ],
+     [
+      "FromJsonHelper",
+      "parameterExists"
+     ],
+     [
+      "FromJsonHelper",
+      "parse"
+     ],
+     [
+      "LoanAccountDomainService",
+      "setLoanDelinquencyTag"
+     ],
+     [
+      "LoanAccountDomainService",
+      "updateAndSaveLoanCollateralTransactionsForIndividualAccounts"
+     ],
+     [
+      "LoanAccountService",
+      "saveAndFlushLoanWithDataIntegrityViolationChecks"
+     ],
+     [
+      "LoanAccountService",
+      "saveLoanTransactionWithDataIntegrityViolationChecks"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "processAccrualsOnInterestRecalculation"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "processIncomePostingAndAccruals"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "reprocessExistingAccruals"
+     ],
+     [
+      "LoanAdjustmentService",
+      "adjustLoanTransaction"
+     ],
+     [
+      "LoanAssembler",
+      "assembleFrom"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateAddLoanCharge"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateChargePaymentTransaction"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateInstallmentChargeTransaction"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateLoanChargeAdjustmentRequest"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateLoanChargeRefundTransaction"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateLoanCharges"
+     ],
+     [
+      "LoanChargeApiJsonValidator",
+      "validateUpdateOfLoanCharge"
+     ],
+     [
+      "LoanChargeAssembler",
+      "createNewFromJson"
+     ],
+     [
+      "LoanChargeAssembler",
+      "createNewWithoutLoan"
+     ],
+     [
+      "LoanChargeReadPlatformService",
+      "retrieveOverdueInstallmentChargeFrequencyNumber"
+     ],
+     [
+      "LoanChargeRepository",
+      "findById"
+     ],
+     [
+      "LoanChargeRepository",
+      "findByLoanIdAndFromDueDate"
+     ],
+     [
+      "LoanChargeRepository",
+      "saveAndFlush"
+     ],
+     [
+      "LoanChargeService",
+      "addLoanCharge"
+     ],
+     [
+      "LoanChargeService",
+      "calculateAmountPercentageAppliedTo"
+     ],
+     [
+      "LoanChargeService",
+      "createChargeAppliedTransaction"
+     ],
+     [
+      "LoanChargeService",
+      "handleChargeAppliedTransaction"
+     ],
+     [
+      "LoanChargeService",
+      "removeLoanCharge"
+     ],
+     [
+      "LoanChargeService",
+      "update"
+     ],
+     [
+      "LoanChargeValidator",
+      "validateChargeAdditionForDisbursedLoan"
+     ],
+     [
+      "LoanChargeValidator",
+      "validateChargeHasValidSpecifiedDateIfApplicable"
+     ],
+     [
+      "LoanChargeValidator",
+      "validateLoanChargeIsNotWaived"
+     ],
+     [
+      "LoanChargeValidator",
+      "validateLoanIsNotClosed"
+     ],
+     [
+      "LoanChargeValidator",
+      "validateRepaymentTypeTransactionNotBeforeAChargeRefund"
+     ],
+     [
+      "LoanDownPaymentTransactionValidator",
+      "validateAccountStatus"
+     ],
+     [
+      "LoanJournalEntryPoster",
+      "postJournalEntriesForLoanTransaction"
+     ],
+     [
+      "LoanLifecycleStateMachine",
+      "determineAndTransition"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "save"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "saveAndFlush"
+     ],
+     [
+      "LoanScheduleService",
+      "handleRegenerateRepaymentScheduleWithInterestRecalculation"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateRepaymentSchedule"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateRepaymentScheduleWithInterestRecalculation"
+     ],
+     [
+      "LoanTransactionRepository",
+      "findByIdAndLoanId"
+     ],
+     [
+      "LoanTransactionRepository",
+      "findLastTransactionDateForReprocessing"
+     ],
+     [
+      "LoanTransactionRepository",
+      "saveAndFlush"
+     ],
+     [
+      "LoanUtilService",
+      "buildScheduleGeneratorDTO"
+     ],
+     [
+      "LoanWritePlatformService",
+      "makeLoanRepaymentWithChargeRefundChargeType"
+     ],
+     [
+      "LoanWritePlatformService",
+      "updateOriginalSchedule"
+     ],
+     [
+      "NoteRepository",
+      "save"
+     ],
+     [
+      "PaymentDetailWritePlatformService",
+      "createPaymentDetail"
+     ],
+     [
+      "PaymentDetailWritePlatformService",
+      "persistPaymentDetail"
+     ],
+     [
+      "ReprocessLoanTransactionsService",
+      "processLatestTransaction"
+     ],
+     [
+      "ReprocessLoanTransactionsService",
+      "reprocessTransactions"
+     ]
+    ],
+    "impl_of": "LoanChargeWritePlatformService",
+    "kind": "unit"
+   },
+   {
+    "cls": "LoanRepositoryWrapper",
+    "deps": {
+     "repository": "LoanRepository",
+     "fineractProperties": "FineractProperties"
+    },
+    "edges": [
+     [
+      "FineractProperties",
+      "getQuery"
+     ],
+     [
+      "LoanRepository",
+      "deleteById"
+     ],
+     [
+      "LoanRepository",
+      "doLoanAccountsWithLoansInStatusesExistForClient"
+     ],
+     [
+      "LoanRepository",
+      "doLoanAccountsWithLoansInStatusesExistForProduct"
+     ],
+     [
+      "LoanRepository",
+      "existsByExternalId"
+     ],
+     [
+      "LoanRepository",
+      "existsById"
+     ],
+     [
+      "LoanRepository",
+      "existsLoanByExternalLoanIdAndStatuses"
+     ],
+     [
+      "LoanRepository",
+      "findActiveLoansLoanProductIdsByClient"
+     ],
+     [
+      "LoanRepository",
+      "findActiveLoansLoanProductIdsByGroup"
+     ],
+     [
+      "LoanRepository",
+      "findAllLoanIdsByStatuses"
+     ],
+     [
+      "LoanRepository",
+      "findByClientIdAndGroupId"
+     ],
+     [
+      "LoanRepository",
+      "findByClientIdAndGroupIdAndLoanStatus"
+     ],
+     [
+      "LoanRepository",
+      "findByClientOfficeIdsAndLoanStatus"
+     ],
+     [
+      "LoanRepository",
+      "findByExternalId"
+     ],
+     [
+      "LoanRepository",
+      "findByGroupId"
+     ],
+     [
+      "LoanRepository",
+      "findByGroupOfficeIdsAndLoanStatus"
+     ],
+     [
+      "LoanRepository",
+      "findById"
+     ],
+     [
+      "LoanRepository",
+      "findByIdsAndLoanStatusAndLoanType"
+     ],
+     [
+      "LoanRepository",
+      "findIdByExternalId"
+     ],
+     [
+      "LoanRepository",
+      "findIdsByExternalIds"
+     ],
+     [
+      "LoanRepository",
+      "findLoanByAccountNumberAndStatuses"
+     ],
+     [
+      "LoanRepository",
+      "findLoanByClientAndStatus"
+     ],
+     [
+      "LoanRepository",
+      "findLoanByClientId"
+     ],
+     [
+      "LoanRepository",
+      "findLoanIdByStatus"
+     ],
+     [
+      "LoanRepository",
+      "findLoansForAddAccrual"
+     ],
+     [
+      "LoanRepository",
+      "findLoansForPeriodicAccrual"
+     ],
+     [
+      "LoanRepository",
+      "findMaxTransactionDateOfActiveLoans"
+     ],
+     [
+      "LoanRepository",
+      "flush"
+     ],
+     [
+      "LoanRepository",
+      "getClientLoansToUpdateLoanProductCounter"
+     ],
+     [
+      "LoanRepository",
+      "getClientOrJLGLoansDisbursedAfter"
+     ],
+     [
+      "LoanRepository",
+      "getClientOrJLGLoansToUpdateLoanCounter"
+     ],
+     [
+      "LoanRepository",
+      "getGroupLoansDisbursedAfter"
+     ],
+     [
+      "LoanRepository",
+      "getGroupLoansToUpdateLoanCounter"
+     ],
+     [
+      "LoanRepository",
+      "getGroupLoansToUpdateLoanProductCounter"
+     ],
+     [
+      "LoanRepository",
+      "getLoansDisbursedAfter"
+     ],
+     [
+      "LoanRepository",
+      "getMaxClientOrJLGLoanCounter"
+     ],
+     [
+      "LoanRepository",
+      "getMaxClientOrJLGLoanProductCounter"
+     ],
+     [
+      "LoanRepository",
+      "getMaxGroupLoanCounter"
+     ],
+     [
+      "LoanRepository",
+      "getMaxGroupLoanProductCounter"
+     ],
+     [
+      "LoanRepository",
+      "isEnabledCapitalizedIncome"
+     ],
+     [
+      "LoanRepository",
+      "isLoanInAllowedStatus"
+     ],
+     [
+      "LoanRepository",
+      "save"
+     ],
+     [
+      "LoanRepository",
+      "saveAll"
+     ],
+     [
+      "LoanRepository",
+      "saveAndFlush"
+     ]
+    ],
+    "impl_of": null,
+    "kind": "unit"
+   },
+   {
+    "cls": "LoanWritePlatformServiceJpaRepositoryImpl",
+    "deps": {
+     "context": "PlatformSecurityContext",
+     "loanTransactionValidator": "LoanTransactionValidator",
+     "loanUpdateCommandFromApiJsonDeserializer": "LoanUpdateCommandFromApiJsonDeserializer",
+     "loanRepositoryWrapper": "LoanRepositoryWrapper",
+     "loanAccountDomainService": "LoanAccountDomainService",
+     "noteRepository": "NoteRepository",
+     "loanTransactionRepository": "LoanTransactionRepository",
+     "loanTransactionRelationRepository": "LoanTransactionRelationRepository",
+     "loanAssembler": "LoanAssembler",
+     "calendarInstanceRepository": "CalendarInstanceRepository",
+     "paymentDetailWritePlatformService": "PaymentDetailWritePlatformService",
+     "holidayRepository": "HolidayRepositoryWrapper",
+     "configurationDomainService": "ConfigurationDomainService",
+     "workingDaysRepository": "WorkingDaysRepositoryWrapper",
+     "accountTransfersWritePlatformService": "AccountTransfersWritePlatformService",
+     "accountTransfersReadPlatformService": "AccountTransfersReadPlatformService",
+     "accountAssociationsReadPlatformService": "AccountAssociationsReadPlatformService",
+     "loanReadPlatformService": "LoanReadPlatformService",
+     "fromApiJsonHelper": "FromJsonHelper",
+     "calendarRepository": "CalendarRepository",
+     "loanScheduleHistoryWritePlatformService": "LoanScheduleHistoryWritePlatformService",
+     "loanApplicationValidator": "LoanApplicationValidator",
+     "accountAssociationRepository": "AccountAssociationsRepository",
+     "accountTransferDetailRepository": "AccountTransferDetailRepository",
+     "businessEventNotifierService": "BusinessEventNotifierService",
+     "guarantorDomainService": "GuarantorDomainService",
+     "loanUtilService": "LoanUtilService",
+     "entityDatatableChecksWritePlatformService": "EntityDatatableChecksWritePlatformService",
+     "codeValueRepository": "CodeValueRepositoryWrapper",
+     "cashierTransactionDataValidator": "CashierTransactionDataValidator",
+     "glimRepository": "GLIMAccountInfoRepository",
+     "loanRepository": "LoanRepository",
+     "repaymentWithPostDatedChecksAssembler": "RepaymentWithPostDatedChecksAssembler",
+     "postDatedChecksRepository": "PostDatedChecksRepository",
+     "loanRepaymentScheduleInstallmentRepository": "LoanRepaymentScheduleInstallmentRepository",
+     "loanLifecycleStateMachine": "LoanLifecycleStateMachine",
+     "loanAccountLockService": "AccountLockService",
+     "externalIdFactory": "ExternalIdFactory",
+     "loanAccrualTransactionBusinessEventService": "LoanAccrualTransactionBusinessEventService",
+     "errorHandler": "ErrorHandler",
+     "loanDownPaymentHandlerService": "LoanDownPaymentHandlerService",
+     "loanTransactionAssembler": "LoanTransactionAssembler",
+     "loanAccrualsProcessingService": "LoanAccrualsProcessingService",
+     "loanOfficerValidator": "LoanOfficerValidator",
+     "loanDownPaymentTransactionValidator": "LoanDownPaymentTransactionValidator",
+     "loanDisbursementService": "LoanDisbursementService",
+     "loanScheduleService": "LoanScheduleService",
+     "loanChargeValidator": "LoanChargeValidator",
+     "loanOfficerService": "LoanOfficerService",
+     "reprocessLoanTransactionsService": "ReprocessLoanTransactionsService",
+     "loanAccountService": "LoanAccountService",
+     "journalEntryPoster": "LoanJournalEntryPoster",
+     "loanAdjustmentService": "LoanAdjustmentService",
+     "loanMapper": "LoanMapper",
+     "loanTransactionProcessingService": "LoanTransactionProcessingService",
+     "loanBalanceService": "LoanBalanceService",
+     "loanTransactionService": "LoanTransactionService",
+     "loanOriginatorLinkingService": "LoanOriginatorLinkingService"
+    },
+    "edges": [
+     [
+      "AccountAssociationsReadPlatformService",
+      "retriveLoanLinkedAssociation"
+     ],
+     [
+      "AccountAssociationsRepository",
+      "findByLoanIdAndType"
+     ],
+     [
+      "AccountLockService",
+      "isAnyLoanHardLocked"
+     ],
+     [
+      "AccountTransferDetailRepository",
+      "save"
+     ],
+     [
+      "AccountTransfersReadPlatformService",
+      "isAccountTransfer"
+     ],
+     [
+      "AccountTransfersWritePlatformService",
+      "repayLoanWithTopup"
+     ],
+     [
+      "AccountTransfersWritePlatformService",
+      "reverseAllTransactions"
+     ],
+     [
+      "AccountTransfersWritePlatformService",
+      "transferFunds"
+     ],
+     [
+      "BusinessEventNotifierService",
+      "notifyPostBusinessEvent"
+     ],
+     [
+      "BusinessEventNotifierService",
+      "notifyPreBusinessEvent"
+     ],
+     [
+      "CalendarRepository",
+      "save"
+     ],
+     [
+      "CashierTransactionDataValidator",
+      "validateOnLoanDisbursal"
+     ],
+     [
+      "ConfigurationDomainService",
+      "allowTransactionsOnHolidayEnabled"
+     ],
+     [
+      "ConfigurationDomainService",
+      "allowTransactionsOnNonWorkingDayEnabled"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isAllowCashAndNonCashAccrual"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isExternalIdAutoGenerationEnabled"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isPaymentTypeApplicableForDisbursementCharge"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isRescheduleRepaymentsOnHolidaysEnabled"
+     ],
+     [
+      "ConfigurationDomainService",
+      "isSkippingMeetingOnFirstDayOfMonthEnabled"
+     ],
+     [
+      "ConfigurationDomainService",
+      "retreivePeriodInNumberOfDaysForSkipMeetingDate"
+     ],
+     [
+      "EntityDatatableChecksWritePlatformService",
+      "runTheCheckForProduct"
+     ],
+     [
+      "ExternalIdFactory",
+      "create"
+     ],
+     [
+      "ExternalIdFactory",
+      "createFromCommand"
+     ],
+     [
+      "FromJsonHelper",
+      "extractBigDecimalWithLocaleNamed"
+     ],
+     [
+      "FromJsonHelper",
+      "extractLocalDateNamed"
+     ],
+     [
+      "FromJsonHelper",
+      "extractStringNamed"
+     ],
+     [
+      "FromJsonHelper",
+      "parse"
+     ],
+     [
+      "GLIMAccountInfoRepository",
+      "findById"
+     ],
+     [
+      "GLIMAccountInfoRepository",
+      "save"
+     ],
+     [
+      "GuarantorDomainService",
+      "transferFundsFromGuarantor"
+     ],
+     [
+      "HolidayRepositoryWrapper",
+      "findByOfficeIdAndGreaterThanDate"
+     ],
+     [
+      "LoanAccountDomainService",
+      "createManualInterestRefundWithAmount"
+     ],
+     [
+      "LoanAccountDomainService",
+      "creditBalanceRefund"
+     ],
+     [
+      "LoanAccountDomainService",
+      "disableStandingInstructionsLinkedToClosedLoan"
+     ],
+     [
+      "LoanAccountDomainService",
+      "foreCloseLoan"
+     ],
+     [
+      "LoanAccountDomainService",
+      "makeRefund"
+     ],
+     [
+      "LoanAccountDomainService",
+      "makeRefundForActiveLoan"
+     ],
+     [
+      "LoanAccountDomainService",
+      "makeRepayment"
+     ],
+     [
+      "LoanAccountDomainService",
+      "recalculateAccruals"
+     ],
+     [
+      "LoanAccountDomainService",
+      "setLoanDelinquencyTag"
+     ],
+     [
+      "LoanAccountDomainService",
+      "updateAndSaveLoanCollateralTransactionsForIndividualAccounts"
+     ],
+     [
+      "LoanAccountDomainService",
+      "updateAndSavePostDatedChecksForIndividualAccount"
+     ],
+     [
+      "LoanAccountService",
+      "saveLoanTransactionWithDataIntegrityViolationChecks"
+     ],
+     [
+      "LoanAccrualTransactionBusinessEventService",
+      "raiseBusinessEventForAccrualTransactions"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "processAccrualsOnInterestRecalculation"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "processIncomePostingAndAccruals"
+     ],
+     [
+      "LoanAccrualsProcessingService",
+      "reprocessExistingAccruals"
+     ],
+     [
+      "LoanAdjustmentService",
+      "adjustLoanTransaction"
+     ],
+     [
+      "LoanApplicationValidator",
+      "validateLoanMultiDisbursementDate"
+     ],
+     [
+      "LoanApplicationValidator",
+      "validateTopupLoan"
+     ],
+     [
+      "LoanAssembler",
+      "assembleFrom"
+     ],
+     [
+      "LoanAssembler",
+      "findLoanOfficerByIdIfProvided"
+     ],
+     [
+      "LoanBalanceService",
+      "calculateTotalOverpayment"
+     ],
+     [
+      "LoanBalanceService",
+      "getReceivableInterest"
+     ],
+     [
+      "LoanBalanceService",
+      "isOverPaid"
+     ],
+     [
+      "LoanBalanceService",
+      "refreshSummaryAndBalancesForDisbursedLoan"
+     ],
+     [
+      "LoanBalanceService",
+      "updateLoanOutstandingBalances"
+     ],
+     [
+      "LoanBalanceService",
+      "updateLoanSummaryDerivedFields"
+     ],
+     [
+      "LoanBalanceService",
+      "updateLoanToLastDisbursalState"
+     ],
+     [
+      "LoanChargeValidator",
+      "validateRepaymentTypeTransactionNotBeforeAChargeRefund"
+     ],
+     [
+      "LoanDisbursementService",
+      "adjustDisburseAmount"
+     ],
+     [
+      "LoanDisbursementService",
+      "handleDisbursementTransaction"
+     ],
+     [
+      "LoanDisbursementService",
+      "updateDisbursementDetails"
+     ],
+     [
+      "LoanDownPaymentHandlerService",
+      "handleDownPayment"
+     ],
+     [
+      "LoanDownPaymentHandlerService",
+      "handleRepaymentOrRecoveryOrWaiverTransaction"
+     ],
+     [
+      "LoanDownPaymentTransactionValidator",
+      "validateAccountStatus"
+     ],
+     [
+      "LoanJournalEntryPoster",
+      "postJournalEntriesForLoanTransaction"
+     ],
+     [
+      "LoanLifecycleStateMachine",
+      "determineAndTransition"
+     ],
+     [
+      "LoanLifecycleStateMachine",
+      "dryTransition"
+     ],
+     [
+      "LoanLifecycleStateMachine",
+      "transition"
+     ],
+     [
+      "LoanMapper",
+      "regenerateScheduleModel"
+     ],
+     [
+      "LoanOfficerService",
+      "reassignLoanOfficer"
+     ],
+     [
+      "LoanOfficerValidator",
+      "validateUnassignDate"
+     ],
+     [
+      "LoanOriginatorLinkingService",
+      "processOriginatorsForLoanDisbursement"
+     ],
+     [
+      "LoanReadPlatformService",
+      "retrieveTotalPaidInAdvance"
+     ],
+     [
+      "LoanRepaymentScheduleInstallmentRepository",
+      "saveAll"
+     ],
+     [
+      "LoanRepository",
+      "findByGlimId"
+     ],
+     [
+      "LoanRepository",
+      "save"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "findByIdsAndLoanStatusAndLoanType"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getClientLoansToUpdateLoanProductCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getClientOrJLGLoansToUpdateLoanCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getGroupLoansDisbursedAfter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getGroupLoansToUpdateLoanCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getGroupLoansToUpdateLoanProductCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getMaxClientOrJLGLoanCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getMaxClientOrJLGLoanProductCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getMaxGroupLoanCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "getMaxGroupLoanProductCounter"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "save"
+     ],
+     [
+      "LoanRepositoryWrapper",
+      "saveAndFlush"
+     ],
+     [
+      "LoanScheduleHistoryWritePlatformService",
+      "createAndSaveLoanScheduleArchive"
+     ],
+     [
+      "LoanScheduleService",
+      "recalculateScheduleFromLastTransaction"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateRepaymentSchedule"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateRepaymentScheduleWithInterestRecalculation"
+     ],
+     [
+      "LoanScheduleService",
+      "regenerateScheduleWithReprocessingTransactions"
+     ],
+     [
+      "LoanTransactionAssembler",
+      "assembleTransactionAndCalculateChanges"
+     ],
+     [
+      "LoanTransactionProcessingService",
+      "canProcessLatestTransactionOnly"
+     ],
+     [
+      "LoanTransactionProcessingService",
+      "processLatestTransaction"
+     ],
+     [
+      "LoanTransactionRelationRepository",
+      "save"
+     ],
+     [
+      "LoanTransactionRepository",
+      "findByIdAndLoanId"
+     ],
+     [
+      "LoanTransactionRepository",
+      "findNonReversedMonetaryTransactionsByLoan"
+     ],
+     [
+      "LoanTransactionRepository",
+      "isChronologicallyLatest"
+     ],
+     [
+      "LoanTransactionRepository",
+      "saveAndFlush"
+     ],
+     [
+      "LoanTransactionService",
+      "isChronologicallyLatestRepaymentOrWaiver"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateActivityNotBeforeClientOrGroupTransferDate"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateActivityNotBeforeLastTransactionDate"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateChargeOffTransaction"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateChargebackTransaction"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateDisbursement"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateForBulkLoanReassignment"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateIfTransactionIsChargeback"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateLoanForeclosure"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateLoanRescheduleDate"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateLoanTransactionInterestPaymentWaiver"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateLoanTransactionInterestPaymentWaiverAfterRecalculation"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateManualInterestRefundTransaction"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateMarkAsFraudLoan"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateNewRefundTransaction"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateNewRepaymentTransaction"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateRefund"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateRepaymentDateIsOnHoliday"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateRepaymentDateIsOnNonWorkingDay"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateTransaction"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateTransactionWithNoAmount"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateUndoChargeOff"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateUpdateDisbursementDateAndAmount"
+     ],
+     [
+      "LoanTransactionValidator",
+      "validateUpdateOfLoanOfficer"
+     ],
+     [
+      "LoanUpdateCommandFromApiJsonDeserializer",
+      "commandFromApiJson"
+     ],
+     [
+      "LoanUtilService",
+      "buildScheduleGeneratorDTO"
+     ],
+     [
+      "LoanUtilService",
+      "isLoanRepaymentsSyncWithMeeting"
+     ],
+     [
+      "LoanUtilService",
+      "validateRepaymentTransactionType"
+     ],
+     [
+      "NoteRepository",
+      "save"
+     ],
+     [
+      "PaymentDetailWritePlatformService",
+      "createAndPersistPaymentDetail"
+     ],
+     [
+      "PaymentDetailWritePlatformService",
+      "createPaymentDetail"
+     ],
+     [
+      "PaymentDetailWritePlatformService",
+      "persistPaymentDetail"
+     ],
+     [
+      "PlatformSecurityContext",
+      "getAuthenticatedUserIfPresent"
+     ],
+     [
+      "PostDatedChecksRepository",
+      "saveAll"
+     ],
+     [
+      "RepaymentWithPostDatedChecksAssembler",
+      "fromParsedJson"
+     ],
+     [
+      "ReprocessLoanTransactionsService",
+      "processLatestTransaction"
+     ],
+     [
+      "ReprocessLoanTransactionsService",
+      "reprocessTransactions"
+     ],
+     [
+      "WorkingDaysRepositoryWrapper",
+      "findOne"
+     ]
+    ],
+    "impl_of": "LoanWritePlatformService",
+    "kind": "unit"
+   },
+   {
+    "cls": "PaymentTypeWriteServiceImpl",
+    "deps": {
+     "repository": "PaymentTypeRepository",
+     "createRequestMapper": "PaymentTypeCreateRequestMapper"
+    },
+    "edges": [
+     [
+      "PaymentTypeCreateRequestMapper",
+      "map"
+     ],
+     [
+      "PaymentTypeRepository",
+      "delete"
+     ],
+     [
+      "PaymentTypeRepository",
+      "findById"
+     ],
+     [
+      "PaymentTypeRepository",
+      "flush"
+     ],
+     [
+      "PaymentTypeRepository",
+      "saveAndFlush"
+     ]
+    ],
+    "impl_of": "PaymentTypeWriteService",
+    "kind": "unit"
+   },
+   {
+    "cls": "SavingsAccountRepositoryWrapper",
+    "deps": {
+     "repository": "SavingsAccountRepository",
+     "savingsAccountTransactionRepository": "SavingsAccountTransactionRepository"
+    },
+    "edges": [
+     [
+      "SavingsAccountRepository",
+      "delete"
+     ],
+     [
+      "SavingsAccountRepository",
+      "doNonClosedSavingAccountsExistForClient"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findAccrualData"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findByClientIdAndGroupId"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findByGroupId"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findById"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findByIdAndDepositAccountType"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findByStatus"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findIdByExternalId"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findNonClosedAccountByAccountNumber"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findOneLocked"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findSavingAccountByClientId"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findSavingAccountByGsimId"
+     ],
+     [
+      "SavingsAccountRepository",
+      "findSavingAccountByStatus"
+     ],
+     [
+      "SavingsAccountRepository",
+      "save"
+     ],
+     [
+      "SavingsAccountRepository",
+      "saveAndFlush"
+     ],
+     [
+      "SavingsAccountTransactionRepository",
+      "findBySavingsAccount"
+     ],
+     [
+      "SavingsAccountTransactionRepository",
+      "findTransactionRunningBalanceBeforePivotDate"
+     ],
+     [
+      "SavingsAccountTransactionRepository",
+      "findTransactionsAfterPivotDate"
+     ]
+    ],
+    "impl_of": null,
+    "kind": "unit"
+   },
+   {
+    "cls": "ShareAccountWritePlatformServiceJpaRepositoryImpl",
+    "deps": {
+     "accountDataSerializer": "ShareAccountDataSerializer",
+     "shareAccountRepository": "ShareAccountRepositoryWrapper",
+     "shareProductRepository": "ShareProductRepositoryWrapper",
+     "accountNumberGenerator": "AccountNumberGenerator",
+     "accountNumberFormatRepository": "AccountNumberFormatRepositoryWrapper",
+     "journalEntryWritePlatformService": "JournalEntryWritePlatformService",
+     "noteRepository": "NoteRepository",
+     "businessEventNotifierService": "BusinessEventNotifierService"
+    },
+    "edges": [
+     [
+      "AccountNumberFormatRepositoryWrapper",
+      "findByAccountType"
+     ],
+     [
+      "AccountNumberGenerator",
+      "generate"
+     ],
+     [
+      "BusinessEventNotifierService",
+      "notifyPostBusinessEvent"
+     ],
+     [
+      "JournalEntryWritePlatformService",
+      "createJournalEntriesForShares"
+     ],
+     [
+      "JournalEntryWritePlatformService",
+      "revertShareAccountJournalEntries"
+     ],
+     [
+      "NoteRepository",
+      "save"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndActivate"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndApplyAddtionalShares"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndApprove"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndApproveAddtionalShares"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndClose"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndCreate"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndRedeemShares"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndReject"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndRejectAddtionalShares"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndUndoApprove"
+     ],
+     [
+      "ShareAccountDataSerializer",
+      "validateAndUpdate"
+     ],
+     [
+      "ShareAccountRepositoryWrapper",
+      "findOneWithNotFoundDetection"
+     ],
+     [
+      "ShareAccountRepositoryWrapper",
+      "save"
+     ],
+     [
+      "ShareAccountRepositoryWrapper",
+      "saveAndFlush"
+     ],
+     [
+      "ShareProductRepositoryWrapper",
+      "save"
+     ],
+     [
+      "ShareProductRepositoryWrapper",
+      "saveAndFlush"
+     ]
+    ],
+    "impl_of": "ShareAccountWritePlatformService",
+    "kind": "unit"
+   }
+  ],
+  "questions": [
+   "D1: Which method does UpdateLoanDelinquencyBucketCommandHandler invoke on DelinquencyWritePlatformService?",
+   "D1: Which method does LoanApprovedAmountModificationCommandHandler invoke on LoanApprovedAmountWritePlatformService?",
+   "D1: Which method does LoanGoodwillCreditCommandHandler invoke on DataIntegrityErrorHandler?",
+   "D1: Which method does LoanRepaymentChargebackCommandHandler invoke on LoanWritePlatformService?",
+   "D1: Which method does WithdrawClientTransferCommandHandler invoke on TransferWritePlatformService?",
+   "D1: Which method does RejectAddtionalSharesCommandHandler invoke on ShareAccountWritePlatformService?",
+   "D1: Which method does DisburseLoanCommandHandler invoke on DataIntegrityErrorHandler?",
+   "D1: Which method does UpdateInterestPauseCommandHandler invoke on InterestPauseWritePlatformService?",
+   "D1: Which method does DetachLoanOriginatorCommandHandler invoke on LoanOriginatorWritePlatformService?",
+   "D1: Which method does LoanMerchantIssuedRefundCommandHandler invoke on LoanWritePlatformService?",
+   "D1: Which method does SaveCenterCollectionSheetCommandHandler invoke on CollectionSheetWritePlatformService?",
+   "D1: Which method does ForeClosureCommandHandler invoke on LoanWritePlatformService?",
+   "D2: Which handler class handles entity=SHAREACCOUNT action=REJECTADDITIONALSHARES?",
+   "D2: Which handler class handles entity=LOAN_ORIGINATOR action=DETACH?",
+   "D2: Which handler class handles entity=LOAN action=UPDATE?",
+   "D2: Which handler class handles entity=LOAN action=FORECLOSURE?",
+   "D2: Which handler class handles entity=LOAN action=WITHDRAW?",
+   "D2: Which handler class handles entity=CommandWrapperConstants.ENTITY_WORKINGCAPITALLOAN action=CommandWrapperConstants.ACTION_RECOVERYPAYMENT?",
+   "D2: Which handler class handles entity=LOAN action=UPDATE_APPROVED_AMOUNT?",
+   "D2: Which handler class handles entity=LOAN action=CREATE?",
+   "D2: Which handler class handles entity=DELINQUENCY_BUCKET action=UPDATE?",
+   "D2: Which handler class handles entity=LOAN action=DISBURSE?",
+   "D2: Which handler class handles entity=LOAN_ORIGINATOR action=ATTACH?",
+   "D2: Which handler class handles entity=LOAN action=MERCHANTISSUEDREFUND?",
+   "D3: List every Type#method target that CreditBalanceRefundCommandHandler invokes, comma-separated.",
+   "D3: List every Type#method target that DisburseLoanCommandHandler invokes, comma-separated.",
+   "D3: List every Type#method target that LoanGoodwillCreditCommandHandler invokes, comma-separated.",
+   "D3: List every Type#method target that InterestPauseWritePlatformServiceImpl invokes, comma-separated.",
+   "D3: List every Type#method target that PaymentTypeWriteServiceImpl invokes, comma-separated.",
+   "D3: List every Type#method target that AddLoanChargeCommandHandler invokes, comma-separated.",
+   "D4: Which handler classes invoke methods on LoanWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on DataIntegrityErrorHandler? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on DelinquencyWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on LoanApplicationWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on LoanOriginatorWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on LoanChargeWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on LoanApprovedAmountWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on PaymentTypeWriteService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on ShareAccountWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on CollectionSheetWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on ChargeWritePlatformService? List class names, comma-separated.",
+   "D4: Which handler classes invoke methods on InterestPauseWritePlatformService? List class names, comma-separated.",
+   "D5: RejectAddtionalSharesCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: PaymentTypeCreateCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: UpdateDelinquencyBucketCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: UpdateLoanDelinquencyBucketCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: LoanApplicationWithdrawnByApplicantCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: GLIMApplicationRejectionCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: UpdateDelinquencyRangeCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: UpdateInterestPauseCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: LoanApplicationModificationCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: LoanApplicationSubmittalCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: UpdateChargeDefinitionCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D5: CreateDelinquencyRangeCommandHandler delegates to a service; via that service's declared implementation, list the *Repository* types the implementation invokes, comma-separated. (*Repository* = type name CONTAINS 'Repository', which INCLUDES *RepositoryWrapper types.)",
+   "D6: Starting from LoanApplicationWithdrawnByApplicantCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from LoanRefundByCashCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from UpdateDelinquencyRangeCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from CreateDelinquencyRangeCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from UpdateDelinquencyBucketCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from LoanApplicationModificationCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from ForeClosureCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from UpdateInterestPauseCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from MarkLoanAsFraudCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from CloseLoanCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from DisburseLoanToSavingsCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D6: Starting from LoanRepaymentChargebackCommandHandler, follow: its service, that service's implementation, the *RepositoryWrapper* the implementation invokes. List the *Repository* types that wrapper invokes, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as LoanApprovedAmountModificationCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding LoanApprovedAmountModificationCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as CreditBalanceRefundCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding CreditBalanceRefundCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as AttachLoanOriginatorCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding AttachLoanOriginatorCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as AddLoanChargeCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding AddLoanChargeCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as PaymentTypeCreateCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding PaymentTypeCreateCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as DisburseLoanCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding DisburseLoanCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as UpdateInterestPauseCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding UpdateInterestPauseCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as LoanMerchantIssuedRefundCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding LoanMerchantIssuedRefundCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as WorkingCapitalLoanRecoveryPaymentCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding WorkingCapitalLoanRecoveryPaymentCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as UpdateDelinquencyBucketCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding UpdateDelinquencyBucketCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as LoanRepaymentChargebackCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding LoanRepaymentChargebackCommandHandler, comma-separated.",
+   "D7: Which handler classes have exactly the same wiring shape as MarkLoanAsFraudCommandHandler (same number of deps, same number of call targets, annotation present or absent alike)? List class names excluding MarkLoanAsFraudCommandHandler, comma-separated.",
+   "D8: Which handler classes deviate from the one-dep/one-call convention? List, comma-separated.",
+   "D8: Which handler classes carry NO @CommandType annotation? List, comma-separated; 'none' if none.",
+   "D8: How many injected dependencies does AddLoanChargeCommandHandler have? Answer with a number.",
+   "D8: How many distinct Type#method targets does AddLoanChargeCommandHandler invoke? Answer with a number.",
+   "D8: How many injected dependencies does CreditBalanceRefundCommandHandler have? Answer with a number.",
+   "D8: How many distinct Type#method targets does CreditBalanceRefundCommandHandler invoke? Answer with a number.",
+   "D8: How many injected dependencies does DisburseLoanCommandHandler have? Answer with a number.",
+   "D8: How many distinct Type#method targets does DisburseLoanCommandHandler invoke? Answer with a number.",
+   "D8: How many injected dependencies does LoanGoodwillCreditCommandHandler have? Answer with a number.",
+   "D8: How many distinct Type#method targets does LoanGoodwillCreditCommandHandler invoke? Answer with a number.",
+   "D9: Suppose type LoanChargeWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is LoanChargeWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type InterestPauseWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is InterestPauseWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type DelinquencyWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is DelinquencyWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type LoanApplicationWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is LoanApplicationWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type LoanWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is LoanWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type ChargeWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is ChargeWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type PaymentTypeWriteService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is PaymentTypeWriteService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type ShareAccountWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is ShareAccountWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type LoanChargeWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is LoanChargeWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type InterestPauseWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is InterestPauseWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type DelinquencyWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is DelinquencyWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D9: Suppose type LoanApplicationWritePlatformService is removed from the system. Which handler classes lose their delegation path to any *Repository* type (their primary service is LoanApplicationWritePlatformService)? List, comma-separated; 'none' if none.",
+   "D10: Which service types are invoked by at least TWO handlers AND have a declared implementation that invokes at least TWO *Repository* types? List, comma-separated; 'none' if none.",
+   "D10: Consider the units glued along ChargeWritePlatformService: list every method name that handlers invoke on ChargeWritePlatformService (the shared junction ports), comma-separated; 'none' if none.",
+   "D10: Consider the units glued along DelinquencyWritePlatformService: list every method name that handlers invoke on DelinquencyWritePlatformService (the shared junction ports), comma-separated; 'none' if none.",
+   "D10: Consider the units glued along InterestPauseWritePlatformService: list every method name that handlers invoke on InterestPauseWritePlatformService (the shared junction ports), comma-separated; 'none' if none.",
+   "D10: Consider the units glued along LoanApplicationWritePlatformService: list every method name that handlers invoke on LoanApplicationWritePlatformService (the shared junction ports), comma-separated; 'none' if none.",
+   "D10: Consider the units glued along LoanChargeWritePlatformService: list every method name that handlers invoke on LoanChargeWritePlatformService (the shared junction ports), comma-separated; 'none' if none.",
+   "D10: Consider the units glued along LoanWritePlatformService: list every method name that handlers invoke on LoanWritePlatformService (the shared junction ports), comma-separated; 'none' if none.",
+   "D10: List the distinct TYPES (not methods) that CreditBalanceRefundCommandHandler invokes, comma-separated.",
+   "D10: List the distinct TYPES (not methods) that DisburseLoanCommandHandler invokes, comma-separated.",
+   "D10: List the distinct TYPES (not methods) that LoanGoodwillCreditCommandHandler invokes, comma-separated.",
+   "D10: List the distinct TYPES (not methods) that InterestPauseWritePlatformServiceImpl invokes, comma-separated.",
+   "D10: List the distinct TYPES (not methods) that PaymentTypeWriteServiceImpl invokes, comma-separated."
+  ],
+  "gold": [
+   "applyDelinquencyTagToLoan",
+   "modifyLoanApprovedAmount",
+   "handleDataIntegrityIssues",
+   "chargebackLoanTransaction",
+   "withdrawClientTransfer",
+   "rejectAdditionalShares",
+   "handleDataIntegrityIssues",
+   "updateInterestPause",
+   "detachOriginatorFromLoan",
+   "makeRefund",
+   "updateCollectionSheet",
+   "forecloseLoan",
+   "RejectAddtionalSharesCommandHandler",
+   "DetachLoanOriginatorCommandHandler",
+   "LoanApplicationModificationCommandHandler",
+   "ForeClosureCommandHandler",
+   "LoanApplicationWithdrawnByApplicantCommandHandler",
+   "WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "LoanApprovedAmountModificationCommandHandler",
+   "LoanApplicationSubmittalCommandHandler",
+   "UpdateDelinquencyBucketCommandHandler",
+   "DisburseLoanCommandHandler",
+   "AttachLoanOriginatorCommandHandler",
+   "LoanMerchantIssuedRefundCommandHandler",
+   "DataIntegrityErrorHandler#handleDataIntegrityIssues,LoanWritePlatformService#creditBalanceRefund",
+   "DataIntegrityErrorHandler#handleDataIntegrityIssues,LoanWritePlatformService#disburseLoan",
+   "DataIntegrityErrorHandler#handleDataIntegrityIssues,LoanWritePlatformService#makeLoanRepayment",
+   "BusinessEventNotifierService#notifyPostBusinessEvent,LoanAssembler#assembleFrom,LoanRepositoryWrapper#findOneWithNotFoundDetection,LoanScheduleService#regenerateScheduleWithReprocessingTransactions,LoanTermVariationsRepository#delete,LoanTermVariationsRepository#save,LoanTermVariationsRepository#saveAndFlush",
+   "PaymentTypeCreateRequestMapper#map,PaymentTypeRepository#delete,PaymentTypeRepository#findById,PaymentTypeRepository#flush,PaymentTypeRepository#saveAndFlush",
+   "DataIntegrityErrorHandler#handleDataIntegrityIssues,LoanChargeWritePlatformService#addLoanCharge",
+   "BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreditBalanceRefundCommandHandler,DisburseLoanCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,LoanGoodwillCreditCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler",
+   "AddLoanChargeCommandHandler,CreditBalanceRefundCommandHandler,DisburseLoanCommandHandler,LoanGoodwillCreditCommandHandler",
+   "CreateDelinquencyRangeCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler",
+   "GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler",
+   "AttachLoanOriginatorCommandHandler,DetachLoanOriginatorCommandHandler",
+   "AddLoanChargeCommandHandler",
+   "LoanApprovedAmountModificationCommandHandler",
+   "PaymentTypeCreateCommandHandler",
+   "RejectAddtionalSharesCommandHandler",
+   "SaveCenterCollectionSheetCommandHandler",
+   "UpdateChargeDefinitionCommandHandler",
+   "UpdateInterestPauseCommandHandler",
+   "AccountNumberFormatRepositoryWrapper,NoteRepository,ShareAccountRepositoryWrapper,ShareProductRepositoryWrapper",
+   "PaymentTypeRepository",
+   "DelinquencyBucketMappingsRepository,DelinquencyBucketRepository,DelinquencyMinimumPaymentPeriodAndRuleRepository,DelinquencyRangeRepository,LoanDelinquencyActionRepository,LoanDelinquencyTagHistoryRepository,LoanInstallmentDelinquencyTagRepository,LoanProductRepository,LoanRepositoryWrapper",
+   "DelinquencyBucketMappingsRepository,DelinquencyBucketRepository,DelinquencyMinimumPaymentPeriodAndRuleRepository,DelinquencyRangeRepository,LoanDelinquencyActionRepository,LoanDelinquencyTagHistoryRepository,LoanInstallmentDelinquencyTagRepository,LoanProductRepository,LoanRepositoryWrapper",
+   "AccountAssociationsRepository,CalendarInstanceRepository,CalendarRepository,GLIMAccountInfoRepository,LoanRepository,LoanRepositoryWrapper,NoteRepository,SavingsAccountRepositoryWrapper",
+   "AccountAssociationsRepository,CalendarInstanceRepository,CalendarRepository,GLIMAccountInfoRepository,LoanRepository,LoanRepositoryWrapper,NoteRepository,SavingsAccountRepositoryWrapper",
+   "DelinquencyBucketMappingsRepository,DelinquencyBucketRepository,DelinquencyMinimumPaymentPeriodAndRuleRepository,DelinquencyRangeRepository,LoanDelinquencyActionRepository,LoanDelinquencyTagHistoryRepository,LoanInstallmentDelinquencyTagRepository,LoanProductRepository,LoanRepositoryWrapper",
+   "LoanRepositoryWrapper,LoanTermVariationsRepository",
+   "AccountAssociationsRepository,CalendarInstanceRepository,CalendarRepository,GLIMAccountInfoRepository,LoanRepository,LoanRepositoryWrapper,NoteRepository,SavingsAccountRepositoryWrapper",
+   "AccountAssociationsRepository,CalendarInstanceRepository,CalendarRepository,GLIMAccountInfoRepository,LoanRepository,LoanRepositoryWrapper,NoteRepository,SavingsAccountRepositoryWrapper",
+   "ChargeRepository,GLAccountRepositoryWrapper,LoanProductRepository,PaymentTypeRepository,TaxGroupRepositoryWrapper",
+   "DelinquencyBucketMappingsRepository,DelinquencyBucketRepository,DelinquencyMinimumPaymentPeriodAndRuleRepository,DelinquencyRangeRepository,LoanDelinquencyActionRepository,LoanDelinquencyTagHistoryRepository,LoanInstallmentDelinquencyTagRepository,LoanProductRepository,LoanRepositoryWrapper",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "LoanRepository",
+   "AttachLoanOriginatorCommandHandler,BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler,WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "AddLoanChargeCommandHandler,DisburseLoanCommandHandler,LoanGoodwillCreditCommandHandler",
+   "BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanApprovedAmountModificationCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler,WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "CreditBalanceRefundCommandHandler,DisburseLoanCommandHandler,LoanGoodwillCreditCommandHandler",
+   "UpdateInterestPauseCommandHandler",
+   "AddLoanChargeCommandHandler,CreditBalanceRefundCommandHandler,LoanGoodwillCreditCommandHandler",
+   "PaymentTypeCreateCommandHandler",
+   "AttachLoanOriginatorCommandHandler,BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanApprovedAmountModificationCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler,WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "AttachLoanOriginatorCommandHandler,BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanApprovedAmountModificationCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler",
+   "AttachLoanOriginatorCommandHandler,BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanApprovedAmountModificationCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler,WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "AttachLoanOriginatorCommandHandler,BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanApprovedAmountModificationCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,MarkLoanAsFraudCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler,WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "AttachLoanOriginatorCommandHandler,BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,CreateDelinquencyRangeCommandHandler,DetachLoanOriginatorCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler,LoanApprovedAmountModificationCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,RejectAddtionalSharesCommandHandler,SaveCenterCollectionSheetCommandHandler,UpdateChargeDefinitionCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler,WithdrawClientTransferCommandHandler,WorkingCapitalLoanRecoveryPaymentCommandHandler",
+   "AddLoanChargeCommandHandler,CreditBalanceRefundCommandHandler,DisburseLoanCommandHandler,LoanGoodwillCreditCommandHandler",
+   "PaymentTypeCreateCommandHandler,UpdateInterestPauseCommandHandler",
+   "2",
+   "2",
+   "2",
+   "2",
+   "2",
+   "2",
+   "2",
+   "2",
+   "none",
+   "UpdateInterestPauseCommandHandler",
+   "CreateDelinquencyRangeCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler",
+   "GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler",
+   "BulkUpdateLoanOfficerCommandHandler,CloseLoanCommandHandler,DisburseLoanToSavingsCommandHandler,ForeClosureCommandHandler,LoanMerchantIssuedRefundCommandHandler,LoanRefundByCashCommandHandler,LoanRepaymentChargebackCommandHandler,MarkLoanAsFraudCommandHandler",
+   "UpdateChargeDefinitionCommandHandler",
+   "PaymentTypeCreateCommandHandler",
+   "RejectAddtionalSharesCommandHandler",
+   "none",
+   "UpdateInterestPauseCommandHandler",
+   "CreateDelinquencyRangeCommandHandler,UpdateDelinquencyBucketCommandHandler,UpdateDelinquencyRangeCommandHandler,UpdateLoanDelinquencyBucketCommandHandler",
+   "GLIMApplicationRejectionCommandHandler,LoanApplicationModificationCommandHandler,LoanApplicationSubmittalCommandHandler,LoanApplicationWithdrawnByApplicantCommandHandler",
+   "DelinquencyWritePlatformService,LoanApplicationWritePlatformService,LoanWritePlatformService",
+   "updateCharge",
+   "applyDelinquencyTagToLoan,createDelinquencyRange,updateDelinquencyBucket,updateDelinquencyRange",
+   "updateInterestPause",
+   "applicantWithdrawsFromApplication,modifyApplication,rejectGLIMApplicationApproval,submitApplication",
+   "addLoanCharge",
+   "bulkLoanReassignment,chargebackLoanTransaction,closeLoan,creditBalanceRefund,disburseLoan,forecloseLoan,makeLoanRefund,makeLoanRepayment,makeRefund,markLoanAsFraud",
+   "DataIntegrityErrorHandler,LoanWritePlatformService",
+   "DataIntegrityErrorHandler,LoanWritePlatformService",
+   "DataIntegrityErrorHandler,LoanWritePlatformService",
+   "BusinessEventNotifierService,LoanAssembler,LoanRepositoryWrapper,LoanScheduleService,LoanTermVariationsRepository",
+   "PaymentTypeCreateRequestMapper,PaymentTypeRepository"
+  ],
+  "depth": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   4,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   9,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10
+  ]
+ },
+ "e1": {
+  "witness": {
+   "code_c": "C0 SymTab (skeleton of Code_X, FOUNDATION.md); pushout=amalgamation, kappa=lint",
+   "checks": {
+    "step4_pushout_commutes": true,
+    "step4_universal_property_bounded": true,
+    "step5_fresh_names_inside_C": true,
+    "step5_no_false_kappa": true,
+    "step6_system_map_square": true,
+    "step7_automorphism_composite_iso": true,
+    "step8_invariant_constant_on_orbit": true,
+    "step9_kappa_fires_on_collision": true,
+    "step10_associativity_canonical_iso": true,
+    "step10_monoidal_unit_disjoint_union": true,
+    "step10_ex425_squares_compose": true,
+    "step8a_system_maps_preserve_invariant": true,
+    "step6_ports_preserved": true
+   },
+   "witnesses": {
+    "step5": {
+     "|Z|": 7,
+     "log_symbols_kept_distinct": [
+      "loans.LoansService#log",
+      "loans.LoansRepository#log"
+     ],
+     "cocones_tested": 6
+    },
+    "step6": {
+     "renamed": [
+      "loans.LoansService#log"
+     ]
+    },
+    "step7": {
+     "phi_size": 9,
+     "composite_size": 18,
+     "construct_then_verify": true
+    },
+    "step8": {
+     "B_accounts_edges": 8,
+     "B_savings_edges": 8,
+     "equal_after_transport": true,
+     "sample": [
+      [
+       "accounts.AccountsController#get",
+       "accounts.AccountsService#fetchOne"
+      ],
+      [
+       "accounts.AccountsController#get",
+       "accounts.AccountsService#fetchPage"
+      ],
+      [
+       "accounts.AccountsController#list",
+       "accounts.AccountsService#fetchOne"
+      ],
+      [
+       "accounts.AccountsController#list",
+       "accounts.AccountsService#fetchPage"
+      ]
+     ]
+    },
+    "step9": {
+     "kappa": [
+      {
+       "identified": [
+        "L:accounts.Money#amountCents",
+        "R:loans.Money#amount"
+       ],
+       "signatures": [
+        "('field', 'double')",
+        "('field', 'long')"
+       ]
+      }
+     ],
+     "silent_merge_would_have": "one Money symbol with contradictory signatures {long}!={double} — corrupted context"
+    },
+    "step10_assoc": {
+     "|(A+B)+C|": 10,
+     "|A+(B+C)|": 10,
+     "identical_canonical_form": true
+    },
+    "step10_ex425": {
+     "lift_nontrivial_on": 2,
+     "lift_is_morphism": true,
+     "accounts_ports_fixed": true,
+     "naturality_lift_sigma_commute": true,
+     "note": "refactor renames accounts.AccountsService#log (+phi-transport on savings); swap commutes with refactor"
+    }
+   },
+   "notes": [
+    "toybank generated: 16 files",
+    "extracted 16 objects; total symbols 37"
+   ],
+   "all_pass": true
+  },
+  "toybank": {
+   "accounts/AccountsController.java": "public class AccountsController {\n  public Page list(int p) { return svc.fetchPage(p); }\n  public Dto get(long id) { return svc.fetchOne(id); }\n  void log(String m) { audit.log(m); }\n  // refs: accounts.AccountsService#fetchPage accounts.AccountsService#fetchOne shared.AuditDto#log shared.PageDto#of\n}\n",
+   "accounts/AccountsRepository.java": "public class AccountsRepository {\n  public Page findPage(int p) { return null; }\n  public Dto findOne(long id) { return null; }\n  void log(String m) { }\n  // refs: shared.PageDto#of\n}\n",
+   "accounts/AccountsService.java": "public class AccountsService {\n  public Page fetchPage(int p) { return repo.findPage(p); }\n  public Dto fetchOne(long id) { return repo.findOne(id); }\n  void log(String m) { }\n  // refs: accounts.AccountsRepository#findPage accounts.AccountsRepository#findOne shared.EventTopics#EVT\n}\n",
+   "accounts/Money.java": "public class Money {\n  public long amountCents;\n  public String currency;\n}\n",
+   "loans/LoansController.java": "public class LoansController {\n  public Page list(int p) { return svc.fetchPage(p); }\n  public Dto get(long id) { return svc.fetchOne(id); }\n  void log(String m) { audit.log(m); }\n  // refs: loans.LoansService#fetchPage loans.LoansService#fetchOne shared.AuditDto#log shared.PageDto#of\n}\n",
+   "loans/LoansRepository.java": "public class LoansRepository {\n  public Page findPage(int p) { return null; }\n  public Dto findOne(long id) { return null; }\n  void log(String m) { }\n  // refs: shared.PageDto#of\n}\n",
+   "loans/LoansService.java": "public class LoansService {\n  public Page fetchPage(int p) { return repo.findPage(p); }\n  public Dto fetchOne(long id) { return repo.findOne(id); }\n  public Dto refinance(long id) { return repo.findOne(id); }\n  void log(String m) { }\n  // refs: loans.LoansRepository#findPage loans.LoansRepository#findOne shared.EventTopics#EVT\n}\n",
+   "loans/Money.java": "public class Money {\n  public double amount;\n  public String currencyCode;\n}\n",
+   "report/ReportModule.java": "public class ReportModule {\n  public String render() { return null; }\n  // refs: accounts.Money#amountCents loans.Money#amount\n}\n",
+   "savings/SavingsController.java": "public class SavingsController {\n  public Page list(int p) { return svc.fetchPage(p); }\n  public Dto get(long id) { return svc.fetchOne(id); }\n  void log(String m) { audit.log(m); }\n  // refs: savings.SavingsService#fetchPage savings.SavingsService#fetchOne shared.AuditDto#log shared.PageDto#of\n}\n",
+   "savings/SavingsRepository.java": "public class SavingsRepository {\n  public Page findPage(int p) { return null; }\n  public Dto findOne(long id) { return null; }\n  void log(String m) { }\n  // refs: shared.PageDto#of\n}\n",
+   "savings/SavingsService.java": "public class SavingsService {\n  public Page fetchPage(int p) { return repo.findPage(p); }\n  public Dto fetchOne(long id) { return repo.findOne(id); }\n  void log(String m) { }\n  // refs: savings.SavingsRepository#findPage savings.SavingsRepository#findOne shared.EventTopics#EVT\n}\n",
+   "shared/AppConfig.java": "public class AppConfig {\n  public String env = \"prod\";\n}\n",
+   "shared/AuditDto.java": "public class AuditDto {\n  public void log(String m) { }\n}\n",
+   "shared/EventTopics.java": "public class EventTopics {\n  public String EVT = \"evt\";\n}\n",
+   "shared/PageDto.java": "public class PageDto {\n  public Page of(java.util.List l) { return null; }\n}\n"
+  }
+ },
+ "jevPack": {
+  "units": [
+   {
+    "rel": "src/domain.ts",
+    "unit": "domain",
+    "lines": 72,
+    "ports": [
+     "Clarification",
+     "CommandName",
+     "Command",
+     "DomainEventName",
+     "DomainEvent",
+     "completeAllowed",
+     "assertLegalCommand",
+     "HUMAN_GATED_COMMANDS"
+    ],
+    "imports": [],
+    "fetches": false,
+    "envKey": false,
+    "tokens": 521
+   },
+   {
+    "rel": "src/colors.ts",
+    "unit": "colors",
+    "lines": 9,
+    "ports": [
+     "COLORS",
+     "Color",
+     "isColor"
+    ],
+    "imports": [],
+    "fetches": false,
+    "envKey": false,
+    "tokens": 84
+   },
+   {
+    "rel": "src/typesafe/contract.ts",
+    "unit": "typesafe.contract",
+    "lines": 86,
+    "ports": [
+     "TYPESAFE_PINNED_MODEL",
+     "TypesafePinnedModel",
+     "TYPESAFE_ENDPOINT",
+     "JsonText",
+     "Primitive",
+     "NoulQuestion",
+     "ChoiceQuestion",
+     "ScoreQuestion",
+     "TypesafeQuestion",
+     "SystemOneRequest",
+     "NoulAnswer",
+     "ChoiceAnswer",
+     "ScoreAnswer",
+     "TypesafeAnswer",
+     "SystemOneResponse",
+     "NOUL_MID_LOW",
+     "NOUL_MID_HIGH",
+     "SCORE_LEVEL_MIN",
+     "SCORE_LEVEL_MAX",
+     "isMidBandNoul",
+     "ContractError",
+     "validateRequest"
+    ],
+    "imports": [],
+    "fetches": false,
+    "envKey": false,
+    "tokens": 731
+   },
+   {
+    "rel": "src/typesafe/client.ts",
+    "unit": "typesafe.client",
+    "lines": 62,
+    "ports": [
+     "TypesafeError",
+     "systemOne"
+    ],
+    "imports": [
+     {
+      "sym": "TYPESAFE_ENDPOINT",
+      "from": "./contract.ts"
+     },
+     {
+      "sym": "TYPESAFE_PINNED_MODEL",
+      "from": "./contract.ts"
+     },
+     {
+      "sym": "validateRequest",
+      "from": "./contract.ts"
+     },
+     {
+      "sym": "SystemOneRequest",
+      "from": "./contract.ts"
+     },
+     {
+      "sym": "SystemOneResponse",
+      "from": "./contract.ts"
+     }
+    ],
+    "fetches": true,
+    "envKey": true,
+    "tokens": 441
+   },
+   {
+    "rel": "scripts/qualify-surface.ts",
+    "unit": "qualify-surface",
+    "lines": 82,
+    "ports": [],
+    "imports": [
+     {
+      "sym": "readFileSync",
+      "from": "node:fs"
+     }
+    ],
+    "fetches": true,
+    "envKey": true,
+    "tokens": 647
+   },
+   {
+    "rel": "scripts/smoke-key.ts",
+    "unit": "smoke-key",
+    "lines": 29,
+    "ports": [],
+    "imports": [],
+    "fetches": true,
+    "envKey": true,
+    "tokens": 318
+   }
+  ],
+  "explicit": "unit domain\nport domain#Clarification\nport domain#CommandName\nport domain#Command\nport domain#DomainEventName\nport domain#DomainEvent\nport domain#completeAllowed\nport domain#assertLegalCommand\nport domain#HUMAN_GATED_COMMANDS\n\nunit colors\nport colors#COLORS\nport colors#Color\nport colors#isColor\n\nunit typesafe.contract\nport typesafe.contract#TYPESAFE_PINNED_MODEL\nport typesafe.contract#TypesafePinnedModel\nport typesafe.contract#TYPESAFE_ENDPOINT\nport typesafe.contract#JsonText\nport typesafe.contract#Primitive\nport typesafe.contract#NoulQuestion\nport typesafe.contract#ChoiceQuestion\nport typesafe.contract#ScoreQuestion\nport typesafe.contract#TypesafeQuestion\nport typesafe.contract#SystemOneRequest\nport typesafe.contract#NoulAnswer\nport typesafe.contract#ChoiceAnswer\nport typesafe.contract#ScoreAnswer\nport typesafe.contract#TypesafeAnswer\nport typesafe.contract#SystemOneResponse\nport typesafe.contract#NOUL_MID_LOW\nport typesafe.contract#NOUL_MID_HIGH\nport typesafe.contract#SCORE_LEVEL_MIN\nport typesafe.contract#SCORE_LEVEL_MAX\nport typesafe.contract#isMidBandNoul\nport typesafe.contract#ContractError\nport typesafe.contract#validateRequest\n\nunit typesafe.client\nport typesafe.client#TypesafeError\nport typesafe.client#systemOne\nedge typesafe.client -> contract#TYPESAFE_ENDPOINT\nedge typesafe.client -> contract#TYPESAFE_PINNED_MODEL\nedge typesafe.client -> contract#validateRequest\nedge typesafe.client -> contract#SystemOneRequest\nedge typesafe.client -> contract#SystemOneResponse\n\nunit qualify-surface\nedge qualify-surface -> node:fs#readFileSync\n\nunit smoke-key",
+  "factored": "motif TsUnit(U, ports, edges):\n  unit $U\n  foreach p in $ports -> port $U#$p\n  foreach T#s in $edges -> edge $U -> $T#$s\ninst TsUnit(domain, ports=[Clarification,CommandName,Command,DomainEventName,DomainEvent,completeAllowed,assertLegalCommand,HUMAN_GATED_COMMANDS], edges=[])\ninst TsUnit(colors, ports=[COLORS,Color,isColor], edges=[])\ninst TsUnit(typesafe.contract, ports=[TYPESAFE_PINNED_MODEL,TypesafePinnedModel,TYPESAFE_ENDPOINT,JsonText,Primitive,NoulQuestion,ChoiceQuestion,ScoreQuestion,TypesafeQuestion,SystemOneRequest,NoulAnswer,ChoiceAnswer,ScoreAnswer,TypesafeAnswer,SystemOneResponse,NOUL_MID_LOW,NOUL_MID_HIGH,SCORE_LEVEL_MIN,SCORE_LEVEL_MAX,isMidBandNoul,ContractError,validateRequest], edges=[])\ninst TsUnit(typesafe.client, ports=[TypesafeError,systemOne], edges=[contract#TYPESAFE_ENDPOINT,contract#TYPESAFE_PINNED_MODEL,contract#validateRequest,contract#SystemOneRequest,contract#SystemOneResponse])\ninst TsUnit(qualify-surface, ports=[], edges=[node:fs#readFileSync])\ninst TsUnit(smoke-key, ports=[], edges=[])",
+  "tokens": {
+   "explicit": 380,
+   "factored": 280
+  }
+ }
+}

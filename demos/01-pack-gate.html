@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pack Gate — jev demo 01</title>
+<meta name="description" content="Qualify a wiring pack before a model reads it. Two legend lines decide whether depth 7 collapses. One batched judge call, recorded on the tape.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  .legend-lines{background:var(--tape);color:var(--ink);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:12.5px;line-height:1.55;border-top:6px solid var(--tape-2)}
+  .legend-lines .ln{display:block;white-space:pre-wrap;padding:1px 4px;border-radius:3px}
+  .legend-lines .ln.added{background:rgba(61,220,132,.28);outline:1px solid var(--green-ink)}
+  .legend-lines .ln.missing{color:var(--ink-2);text-decoration:line-through;opacity:.55}
+  .verdict-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:14px 0 4px;min-height:44px}
+  .reasons{font-size:13px;color:var(--dim);margin:0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .path-ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+  .path-ladder div{border:1px solid var(--rule);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dim);text-align:center}
+  .path-ladder div b{display:block;font-family:var(--mono);font-size:13px;color:var(--bone);font-weight:500}
+  .path-ladder div.used{border-color:var(--amber);color:var(--bone)}
+  .path-ladder div.used b{color:var(--amber)}
+  @media(max-width:520px){.path-ladder{grid-template-columns:1fr 1fr}}
+  .qtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;grid-column:1/-1;table-layout:fixed}
+  .qtable td{word-break:break-word}
+  .qtable td:first-child{width:30%}
+  .qtable td:last-child{width:26%}
+  .qtable td{padding:6px 8px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+  .qtable td:first-child{font-family:var(--mono);color:var(--dim)}
+  .qtable .ans{font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 01 of 10 · pack gate</div>
+      <h1>The legend was two lines short.</h1>
+      <p class="lede">In the depth experiment, arm B fell to <b>0.25</b> at depth 7 while arm A held <b>0.71</b>. The pack was lossless for its builder and unreadable for its reader: nobody had written down what <b><code>-</code></b> meant. Two legend lines later, the arms matched exactly. This demo puts that check where it belongs, <b>before</b> the model reads the pack, as one batched judge call recorded on the tape.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> ships wiring packs. <em>jev-tape</em> gates writes with typed questions. A pack shipped to a model is a write. So it gets a gate.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Pack gate instrument">
+    <div class="controls">
+      <h3>Qualify pack B</h3>
+      <p>The state is the pack legend. Three questions share that snapshot, so they travel in one request. Code runs first; the judge only sees packs that re-expand.</p>
+
+      <label class="toggle"><input type="checkbox" id="tSentinel"> <span>Legend defines the <code>-</code> sentinel</span></label>
+      <label class="toggle"><input type="checkbox" id="tGlob"> <span>Legend defines the <code>*Repository*</code> glob</span></label>
+      <label class="toggle"><input type="checkbox" id="tCorrupt"> <span>Corrupt one <code>inst</code> row (re-expansion breaks)</span></label>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Run the gate</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="verdict-row"><span class="lamp OFF" id="lamp">OFF</span><span id="stamp"></span></div>
+      <ul class="reasons" id="reasons"><li>No run yet.</li></ul>
+
+      <div class="path-ladder" id="ladder">
+        <div data-p="0"><b>path 0</b>code</div>
+        <div data-p="1"><b>path 1</b>one POST</div>
+        <div data-p="2"><b>path 2</b>rank, read</div>
+        <div data-p="3"><b>path 3</b>tape</div>
+      </div>
+
+    </div>
+
+    <div class="stage" id="stage" aria-label="Pack legend and per-depth accuracy"></div>
+    <table class="qtable" id="qtable" aria-label="Questions and twin answers"></table>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>The re-expansion check is deterministic, so it is code: no judge, no record. If it fails, the run is a local RED and the judge is never asked. A Choice from the judge cannot override a local RED.</p>
+        <p>When re-expansion passes, one request carries every question about the legend. The answer map comes back once and is written to Event History once. Replay reuses it. The pack ships only after the gate is GREEN, which is the apply-last rule with a pack in the place of a domain command.</p>
+        <p>Flip the two legend lines and watch the right-hand chart: it switches between the raw run and the rerun after the fix. Those are measured numbers, not the twin's opinion. The twin only decides whether the legend is complete; the chart shows what an incomplete legend cost.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>A GREEN gate is not comprehension.</b> The gate checks that the legend defines what the pack uses. It says nothing about whether a weak model can enumerate a twenty-name list at depth 7, where both arms fell equally. Consistency of spec is necessary, not sufficient.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> Answers are computed from the toggles, deterministically, with the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 01 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> experiments/e5-depth and <code>manutej/jev-tape</code> spec.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e5.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, twin, compose, esc, setLamp, stamp, svg, provenanceTable, topbar} = JEV;
+  const E5 = JEV.data.e5;
+  topbar(document.getElementById('topbar'), {title:'01 · Pack gate'});
+  const tape = new Tape({title:'Pack gate tape'});
+
+  const tSent=document.getElementById('tSentinel'), tGlob=document.getElementById('tGlob'), tCorr=document.getElementById('tCorrupt');
+  const lamp=document.getElementById('lamp'), stampEl=document.getElementById('stamp'), reasons=document.getElementById('reasons'), ladder=document.getElementById('ladder'), qtable=document.getElementById('qtable');
+
+  /* ---------- stage: legend scroll + per-depth dumbbells ---------- */
+  const W=800,H=476, stage=document.getElementById('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Left: the pack legend. Right: accuracy per depth for arms A and B, raw run versus rerun after the legend fix.'});
+  stage.appendChild(root);
+  // paper scroll
+  const scroll=svg('g',{transform:'translate(18,18)'});
+  scroll.appendChild(svg('rect',{x:0,y:0,width:340,height:H-36,rx:6,fill:'var(--tape)'}));
+  scroll.appendChild(svg('rect',{x:0,y:0,width:340,height:7,rx:2,fill:'var(--tape-2)'}));
+  scroll.appendChild(svg('text',{x:14,y:30,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--ink-2)'},['packB.txt — legend (state sent to the judge)']));
+  root.appendChild(svg('defs',{},[svg('clipPath',{id:'paperClip'},[svg('rect',{x:0,y:0,width:340,height:H-36})])]));
+  const legendG=svg('g',{transform:'translate(14,52)','clip-path':'url(#paperClip)'}); scroll.appendChild(legendG);
+  root.appendChild(scroll);
+
+  const wrapLine=(s,n=40)=>{const out=[];let cur='';for(const w of s.split(' ')){if((cur+' '+w).trim().length>n){out.push(cur.trim());cur=w;}else cur=(cur+' '+w);}if(cur.trim())out.push(cur.trim());return out;};
+  function drawLegend(){
+    legendG.innerHTML='';
+    let y=0;
+    const base=E5.legendV1.filter(l=>!l.startsWith('# WIRING PACK'));
+    const added=E5.legendAdded.filter(l=>!l.startsWith('# WIRING PACK'));
+    const glob=["# '*Repository*' matches any type whose NAME contains 'Repository' (substring, not suffix)."];
+    const rows=[...base.map(l=>({t:l,k:'base'})),...added.map(l=>({t:l,k:tSent.checked?'added':'missing'})),...glob.map(l=>({t:l,k:tGlob.checked?'added':'missing'}))];
+    for(const r of rows){
+      for(const piece of wrapLine(r.t)){
+        const bg=r.k==='added'?svg('rect',{x:-4,y:y-11,width:308,height:15,rx:3,fill:'rgba(61,220,132,.30)'}):null;
+        if(bg)legendG.appendChild(bg);
+        const t=svg('text',{x:0,y:y,'font-size':'10',class:'mono',fill:r.k==='missing'?'var(--ink-2)':'var(--ink)','text-decoration':r.k==='missing'?'line-through':'none',opacity:r.k==='missing'?.6:1},[piece]);
+        legendG.appendChild(t); y+=15;
+      }
+      y+=4;
+    }
+    if(tCorr.checked){
+      y+=10;
+      legendG.appendChild(svg('text',{x:0,y:y,'font-size':'11',class:'mono',fill:'var(--red-ink)'},['inst CommandHandler(CloseLoanCommandHandler, LoanWritePlatformService,']));
+      legendG.appendChild(svg('text',{x:0,y:y+15,'font-size':'11',class:'mono',fill:'var(--red-ink)'},['  writePlatformService, closeLoan, LOAN)   ← one fill dropped']));
+    }
+  }
+
+  // dumbbell chart
+  const cx0=392, cw=W-cx0-30, top=76, rowH=31;
+  const chart=svg('g',{}); root.appendChild(chart);
+  chart.appendChild(svg('text',{x:cx0,y:32,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['pooled accuracy per depth · A explicit ○ · B factored ●']));
+  const titleT=svg('text',{x:cx0,y:52,'font-size':'12',class:'mono',fill:'var(--amber)'},['raw run']); chart.appendChild(titleT);
+  const xs=v=>cx0+50+v*(cw-120);
+  for(const v of [0,.5,1]){chart.appendChild(svg('line',{x1:xs(v),x2:xs(v),y1:top-8,y2:top+rowH*10-6,stroke:'var(--rule)','stroke-dasharray':'2 4'}));chart.appendChild(svg('text',{x:xs(v),y:top+rowH*10+10,'font-size':'11','text-anchor':'middle',fill:'var(--dim)'},[v===1?'1.0':v===.5?'0.5':'0']));}
+  const rows={};
+  for(let d=1;d<=10;d++){
+    const y=top+rowH*(d-1)+8;
+    chart.appendChild(svg('text',{x:cx0,y:y+4,'font-size':'12',class:'mono',fill:'var(--dim)'},[`D${d}`]));
+    const link=svg('line',{x1:xs(1),x2:xs(1),y1:y,y2:y,stroke:'var(--dim)','stroke-width':2,opacity:.7});
+    const a=svg('circle',{cx:xs(1),cy:y,r:6,fill:'var(--desk)',stroke:'var(--bone)','stroke-width':2});
+    const b=svg('circle',{cx:xs(1),cy:y,r:6,fill:'var(--amber)'});
+    const lab=svg('text',{x:xs(1)+12,y:y+4,'font-size':'11',class:'mono',fill:'var(--dim)'},['']);
+    chart.append(link,a,b,lab); rows[d]={link,a,b,lab};
+  }
+  const pooled=svg('text',{x:cx0,y:H-30,'font-size':'15','font-family':'var(--display)','font-style':'italic',fill:'var(--bone)'},['']); chart.appendChild(pooled);
+  const pooled2=svg('text',{x:cx0,y:H-12,'font-size':'12',class:'mono',fill:'var(--dim)'},['']); chart.appendChild(pooled2);
+  const tr=(el,attr,to)=>{el.style.transition='all .6s cubic-bezier(.2,.8,.2,1)';el.setAttribute(attr,to);};
+  function drawChart(){
+    const fixed=tSent.checked&&tGlob.checked, src=fixed?E5.fixed.pooled_per_depth:E5.raw.pooled_per_depth;
+    titleT.textContent=fixed?'rerun after the two-line fix (E5.1)':'raw run (E5, legend incomplete)';
+    titleT.setAttribute('fill',fixed?'var(--green)':'var(--amber)');
+    for(let d=1;d<=10;d++){const r=src['D'+d],o=rows[d];
+      tr(o.a,'cx',xs(r.A)); tr(o.b,'cx',xs(r.B)); tr(o.link,'x1',xs(Math.min(r.A,r.B))); tr(o.link,'x2',xs(Math.max(r.A,r.B)));
+      o.b.setAttribute('fill',fixed?'var(--green)':'var(--amber)');
+      const gap=r.B_minus_A_pts; o.lab.textContent=gap===0?'':(gap>0?'+':'')+gap+' pts'; o.lab.setAttribute('x',xs(Math.max(r.A,r.B))+12);o.lab.setAttribute('text-anchor','start'); o.lab.setAttribute('fill',gap<-5?'var(--red)':gap>0?'var(--green)':'var(--dim)');
+    }
+    const po=fixed?E5.fixed.pooled_overall:E5.raw.pooled_overall;
+    const A=po.A_v1??po.A, B=po.B_v2??po.B;
+    pooled.textContent=`pooled B − A = ${po.B_minus_A_pts} pts (A ${A}, B ${B})`;pooled2.textContent=po.B_minus_A_pts<=-5?'fails the pre-registered 5-pt rule':'inside the pre-registered 5-pt rule';pooled2.setAttribute('fill',po.B_minus_A_pts<=-5?'var(--red)':'var(--green)');
+  }
+  drawLegend(); drawChart();
+  [tSent,tGlob,tCorr].forEach(t=>t.addEventListener('change',()=>{drawLegend();drawChart();}));
+
+  /* ---------- the gate ---------- */
+  const questions={
+    sentinel_defined:{type:'noul',instructions:"Does the legend define every sentinel the inst rows use ('-' omit marker, Constants.* fills)?"},
+    glob_unambiguous:{type:'noul',instructions:"Does the legend fix the reading of '*Repository*' (substring vs suffix)?"},
+    reader_spec_equivalent:{type:'choice',instructions:'May this pack ship to a reader as spec-equivalent to the explicit form?',criteria:{GREEN:'Legend complete: a reader can expand every row',AMBER:'One convention undefined: review before shipping',RED:'Reader cannot recover the explicit form'}}
+  };
+  const resolvers={
+    sentinel_defined:()=>tSent.checked?0.96:0.07,
+    glob_unambiguous:()=>tGlob.checked?0.93:0.11,
+    reader_spec_equivalent:()=>{const n=(tSent.checked?1:0)+(tGlob.checked?1:0); return n===2?{choice:'GREEN',probabilities:{GREEN:.91,AMBER:.07,RED:.02}}:n===1?{choice:'AMBER',probabilities:{GREEN:.28,AMBER:.63,RED:.09}}:{choice:'RED',probabilities:{GREEN:.03,AMBER:.14,RED:.83}};}
+  };
+  function renderQ(answers){
+    qtable.innerHTML=Object.entries(questions).map(([id,q])=>{const a=answers&&answers[id];let v='—';
+      if(a){v=a.type==='noul'?`noul ${a.noul.toFixed(2)}`:`${a.choice} · P(${a.choice})=${a.probabilities[a.choice].toFixed(2)}`;}
+      return `<tr><td>${id}<br><span style="color:var(--dim)">${q.type}</span></td><td>${esc(q.instructions)}</td><td class="ans">${esc(v)}</td></tr>`;}).join('');
+  }
+  renderQ(null);
+  const setPath=(...ps)=>{[...ladder.children].forEach(d=>d.classList.toggle('used',ps.includes(+d.dataset.p)));};
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+
+  let running=false;
+  async function run(){
+    if(running)return; running=true; document.getElementById('run').disabled=true;
+    reasons.innerHTML=''; stampEl.className=''; stampEl.textContent=''; setLamp(lamp,'OFF'); renderQ(null); setPath();
+    // path 0 — code
+    tape.record({kind:'code',label:'assertLegalCommand',verdict:'ShipPack ok',detail:'deterministic, not recorded as an Activity'});
+    await wait(350);
+    const byteIdentical=!tCorr.checked && E5.manifest.gate_byte_identical;
+    tape.record({kind:'code',label:'re-expand inst rows',verdict:byteIdentical?'byte-identical':'MISMATCH',detail:`manifest gate_byte_identical=${E5.manifest.gate_byte_identical}; corrupt row=${tCorr.checked}`});
+    setPath(0);
+    if(!byteIdentical){
+      await wait(300);
+      const c=compose({},{localRed:['re-expansion is not byte-identical']});
+      setLamp(lamp,'RED'); stamp(stampEl,'RED','local RED · judge never asked');
+      reasons.innerHTML=c.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+'<li>Path 0 only. Zero POSTs. Nothing to record.</li>';
+      tape.record({kind:'gate',label:'gate',verdict:'RED',detail:'local RED from code; no TypeSafe POST was made'});
+      running=false; document.getElementById('run').disabled=false; return;
+    }
+    // path 1 — one batched judge call
+    await wait(350); setPath(0,1);
+    const req={model:JEV.PIN,state:{pack:'packB.txt',legend:tSent.checked?E5.legendV2:E5.legendV1,glob_defined:tGlob.checked},questions};
+    const res=twin.systemOne(req,resolvers);
+    renderQ(res.answers);
+    tape.record({kind:'activity',label:'qualifyPack',verdict:`${Object.keys(res.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(questions).length} questions · model=${res.model} (twin)`});
+    await wait(500);
+    const c=compose(res.answers,{theta:.7,floor:.6,noulGate:['sentinel_defined']});
+    setLamp(lamp,c.verdict); stamp(stampEl,c.verdict,c.verdict==='GREEN'?'GREEN · ship the pack':c.verdict==='AMBER'?'AMBER · park for review':'RED · refuse');
+    reasons.innerHTML=c.reasons.map(r=>`<li>${esc(r)}</li>`).join('');
+    tape.record({kind:'gate',label:'composeAnswers',verdict:c.verdict,detail:c.reasons.join(' | ')});
+    await wait(400);
+    if(c.verdict==='GREEN'){setPath(0,1,3);tape.record({kind:'apply',label:'ship packB → reader',verdict:'applied last',detail:'first write, after both gates'});}
+    else if(c.verdict==='AMBER'){setPath(0,1,3);tape.record({kind:'human',label:'park: humanVerdict',verdict:'waiting',detail:'Signal humanVerdict {compose|escalate|refuse}'});}
+    running=false; document.getElementById('run').disabled=false;
+  }
+  document.getElementById('run').addEventListener('click',run);
+  document.getElementById('reset').addEventListener('click',()=>{tape.clear();reasons.innerHTML='<li>Tape rewound.</li>';stampEl.className='';stampEl.textContent='';setLamp(lamp,'OFF');renderQ(null);setPath();});
+
+  provenanceTable(document.getElementById('prov'),[
+    {n:'D7: A 0.708 · B 0.25 (raw)',f:'experiments/e5-depth/E5-GRADES.json → pooled_per_depth.D7',note:'the collapse that was ~80% harness artifact'},
+    {n:'pooled B−A −10.2 pts (raw) → −3.7 pts (rerun)',f:'E5-GRADES.json · E5.1-GRADES.json → pooled_overall',note:'inside the pre-registered 5-pt rule after the fix'},
+    {n:'the two added legend lines',f:'experiments/e5-depth/packB.v1.txt vs packB.txt',note:'diff of the # legend header'},
+    {n:'re-expansion byte-identical',f:'experiments/e5-depth/manifest.json → gate_byte_identical',note:'the Path 0 check'},
+    {n:'noul mid-band 0.4–0.6 · Choice ≥2 criteria · pin jev-1.13.0',f:'jev-tape/src/typesafe/contract.ts',note:'the twin enforces the same contract'},
+    {n:'assertLegalCommand → qualifyTask → gate → … → applyCommand',f:'jev-tape/spec/SPEC-v1-TAPE.md',note:'the loop this page walks'},
+  ]);
+})();
+</script>
+</body>
+</html>
