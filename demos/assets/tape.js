@@ -82,6 +82,10 @@
     pin: PIN,
     systemOne(req, resolvers) {
       const bad = validateRequest(req); if (bad) throw new Error(`422 ${bad.message}`);
+      const key = reqKey(req);
+      (window.__jevRequests = window.__jevRequests || []).push({ key, req });   // read by demos/record.mjs
+      const rec = (D.recorded && D.recorded.answers && D.recorded.answers[key]) || null;
+      if (rec) { markRecorded(rec); return { model: rec.model, answers: rec.answers, usage: rec.usage, twin: false, recorded: true, recordedAt: rec.at }; }
       const answers = {};
       for (const [id, q] of Object.entries(req.questions)) {
         const r = resolvers[id]; if (!r) throw new Error(`twin: no resolver for ${id}`);
@@ -98,8 +102,12 @@
       const usage = { input_tokens: Math.round(JSON.stringify(req.state).length / 3.6) + 40 * Object.keys(req.questions).length, output_tokens: 12 * Object.keys(req.questions).length };
       return { model: PIN, answers, usage, twin: true };
     },
-    validateRequest,
+    validateRequest, reqKey,
   };
+  /** stable key for a request: the same state + questions always map to the same recorded answer map */
+  function stableStr(v) { if (Array.isArray(v)) return "[" + v.map(stableStr).join(",") + "]"; if (v && typeof v === "object") return "{" + Object.keys(v).sort().map(k => JSON.stringify(k) + ":" + stableStr(v[k])).join(",") + "}"; return JSON.stringify(v); }
+  function reqKey(req) { const s = stableStr({ model: req.model, state: req.state, questions: req.questions }); let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16).padStart(8, "0") + "-" + s.length; }
+  function markRecorded(rec) { const pill = document.querySelector(".topbar .pin"); if (pill) { pill.textContent = `recorded TypeSafe answers · ${String(rec.at).slice(0, 10)} · model ${rec.model}`; pill.style.borderColor = "var(--green)"; pill.style.color = "var(--green)"; } }
   function softmaxFor(keys, pick, peak = 0.86) { const o = {}; const rest = (1 - peak) / Math.max(1, keys.length - 1); for (const k of keys) o[k] = k === pick ? peak : rest; return o; }
 
   /* ---------- composeAnswers (code) ---------- */
@@ -152,7 +160,8 @@
     el.innerHTML = `<table><thead><tr><th>number</th><th>file</th><th>note</th></tr></thead><tbody>${rows.map(r => `<tr><td><code>${esc(r.n)}</code></td><td><code>${esc(r.f)}</code></td><td>${esc(r.note || "")}</td></tr>`).join("")}</tbody></table>`;
   }
   function topbar(el, opts) {
-    el.innerHTML = `<div class="crumbs"><a href="index.html">jev demos</a><span>/</span><b>${esc(opts.title)}</b></div><span class="pin">twin · no TypeSafe call · pin ${PIN}</span>`;
+    const n = D.recorded && D.recorded.answers ? Object.keys(D.recorded.answers).length : 0;
+    el.innerHTML = `<div class="crumbs"><a href="index.html">jev demos</a><span>/</span><b>${esc(opts.title)}</b></div><span class="pin" title="${n ? n + ' recorded answer maps on disk; a page turns green when it replays one' : 'no recorded answers on disk: run node demos/record.mjs with your key'}">twin · no live TypeSafe call · pin ${PIN}</span>`;
   }
 
   window.JEV = { Tape, twin, compose, esc, clamp, setLamp, stamp, tick, segControl, svg, SVGNS, provenanceTable, topbar, PIN, data: D };
