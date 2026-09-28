@@ -32,6 +32,7 @@ function main() {
     case "text": return ok(cur.text);
     case "map": return ok(cur.map || "No interactive elements found");
     case "diff": return ok("(positional diff not modelled)");
+    case "wait": return ok("Page loaded (readyState: complete)");
     case "daemon": return ok({ running: false, stopped: true });
     default: {
       if (verb === "click" && rest[0] && !/^@e\d+$/.test(rest[0]) && !cur.map.includes(rest[0])) return fail(`element not found: ${rest[0]}`);

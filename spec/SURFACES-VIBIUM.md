@@ -82,6 +82,26 @@ In a root container Chrome needs `VIBIUM_CHROME_ARGS="--no-sandbox"`; behind a T
 
 Launch flags go on the daemon, once. The CLI forwards `--headless` (and `--engine`, `--channel`) to the daemon as a `browser_start` before every verb that carries them (`cmd/clicker/daemon_client.go`), so passing the flag on every call is not free once a browser is up: the first live run paid an 18 s "snapshot" and lost its `@refs` between `map` and `fill`. `ensureDaemon()` starts the session's daemon with the flags if it is not running; `vibium()` never adds them. Four reads in `snapshot()` run in sequence, and `map` is last so the refs it mints are the ones the next verb resolves.
 
+## 8a. First live run, 2026-09-28
+
+Keyed, `jev-1.13.0 (direct)`, Chrome for Testing 152 headless in a root container behind a TLS-inspecting egress proxy.
+
+| What | Measured |
+| --- | --- |
+| vibium read (url / title / text / map), warm | ~13 ms each; a 4-read snapshot 41–56 ms |
+| gate POST (4 questions, ~700-token state) | 331 ms in the loop; kit over 43 targets p50 186 ms, p95 240 ms, $0.00155 total |
+| verify POST (3–4 questions) | kit p50 255–269 ms |
+| `score` shape | expected level on a 0-based legend (0.3 from p={0:.72, 1:.27, 3:.01}); probabilities per level alongside |
+| login click, gate verdict | **escalate**: mutatesWorld 0.79–0.81, reversible 0.39, spendsOrSends 0.29–0.37 — mid-band on two pages, no rule fired, default held |
+| operator answers compose (`--approve-escalate`), then verify POST (`login-verify`) | **true** in 503 ms: signedInSignsShown 0.99, loginFormGone 0.98, credentialErrorShown 0.02, interstitial none (p 1.00) |
+| whole login flow against the local fixture site | 4.7 s, of which 0.6 s page load; 1 POST + 1 tape hit on the second run |
+
+Label-free question quality on the 43 gate targets: `mutatesWorld` JEV-SAFE (91% at ends), `blastRadius` JEV-SAFE (91%), `reversible` JEV-SAFE (72%), `spendsOrSends` MARGINAL (40%). Verify and login sets are below the 8-observation floor, so no verdict; on the labels they carried, every answer was right except `loginFormGone` on the page where the flash was closed but the form was still gone (0.64, mid-band). Results: JEV-works `kit/results/browser-*-2026-09-28.json`.
+
+Reading the escalate: a sign-in submit does change server state, so 0.79 on `mutatesWorld` is a fair answer to the question as worded, and by rule 7 the threshold is not moved because the result disappointed. The lever is the instrument or the policy: either the operator names routine commits (a submit labelled Login on an allowlisted host) in `Policy` so path 0 approves them in code, or the question is re-worded to what the operator means by "changes something". Both are code or wording, neither is a threshold.
+
+Two environment facts learned the hard way, both handled in code now: the egress proxy here gives up on an upstream after 30 s and hands Chrome a document whose whole text is "upstream request failed"; the public demo host sleeps and cold-starts in ~30 s. `settleNav()` waits for load, treats an empty map on a near-empty document as a failed navigation, reloads once, then fails closed. `scripts/fixture-site.mjs` serves the same three pages locally so a live run does not depend on a sleeping host.
+
 ## 9. Next cuts, in order
 
 1. First keyed run; record the gate's score indexing and the real p50 per POST in this file.

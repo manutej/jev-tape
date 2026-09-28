@@ -186,6 +186,32 @@ test("mid-band answers escalate and do not act; a stale ref throws before any PO
   assert.equal(seen.length, 1);
 });
 
+test("an escalate parks unless a person says compose; a refusal is never overridden; a C10 park can be composed", async () => {
+  const mid = { mutatesWorld: noul(0.8), reversible: noul(0.4), spendsOrSends: noul(0.3), blastRadius: { type: "score" as const, score: 0.2, legend: {}, probabilities: {}, confidence: 0.8 } };
+  const bad = { ...mid, spendsOrSends: noul(0.99), reversible: noul(0.01) };
+  const ok = { signedInSignsShown: noul(0.98), loginFormGone: noul(0.98), credentialErrorShown: noul(0.02), interstitial: choice("none", { none: 0.99, captcha: 0.01 }) };
+  // escalate + compose → acts, then verifies
+  let fb = fakeBrowser(["login-page", "login-success"]);
+  let seenRoute: string | undefined;
+  let r = await step({ verb: "click", args: ["@e3"], expect: "signed in" }, ctxFor(fb, scripted([mid, ok]).judge, { verifyModule: "login-verify", humanVerdict: ({ route }) => { seenRoute = route; return "compose"; } }));
+  assert.equal(seenRoute, "escalate");
+  assert.equal(r.route, "human-compose");
+  assert.equal(r.acted, true);
+  assert.equal(r.verify?.decided.verdict, true);
+  // refuse is final even with a compose-happy human
+  fb = fakeBrowser(["login-page"]);
+  r = await step({ verb: "click", args: ["@e3"] }, ctxFor(fb, scripted([bad]).judge, { humanVerdict: () => "compose" }));
+  assert.equal(r.route, "refuse");
+  assert.equal(r.acted, false);
+  // C10 park + compose → acts without any POST
+  fb = fakeBrowser(["checkout", "checkout"]);
+  const s = scripted([]);
+  r = await step({ verb: "click", args: ["@e2"] }, ctxFor(fb, s.judge, { humanVerdict: () => "compose" }));
+  assert.equal(r.route, "human-compose");
+  assert.equal(r.acted, true);
+  assert.equal(s.seen.length, 0);
+});
+
 test("host policy refuses navigation and commits off the allowlist without a POST", async () => {
   const fb = fakeBrowser(["login-page"]);
   const { judge, seen } = scripted([]);

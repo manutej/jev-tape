@@ -54,13 +54,48 @@ export interface Policy {
   /** C10: targets whose label matches never run without a human verdict, whatever the judge says. */
   humanGate: RegExp;
   textExcerptChars: number;
+  /** After `go`: wait this long for load, then require a page that is not an empty or error document. */
+  navSettleMs: number;
+  /** Reloads allowed when `go` lands on an empty document (a sleeping host behind a proxy timeout). Code, not the judge. */
+  navRetries: number;
 }
 
 export const DEFAULT_POLICY: Policy = {
   allowHosts: [],
   humanGate: /\b(pay|purchase|checkout|place order|buy now|send|delete|remove|transfer|confirm payment|unsubscribe|submit payment)\b/i,
   textExcerptChars: 1500,
+  navSettleMs: 30_000,
+  navRetries: 1,
 };
+
+export class NavError extends Error {
+  url: string;
+  text: string;
+  constructor(url: string, text: string) {
+    super(`navigation to ${url} landed on an empty document (${JSON.stringify(text.slice(0, 80))}); the host did not answer in time`);
+    this.name = "NavError";
+    this.url = url;
+    this.text = text;
+  }
+}
+
+/**
+ * A `go` that "succeeds" on a document with no interactive elements and almost no text is a timed-out
+ * upstream, not a page. Wait for load, check, reload up to `navRetries` times, then fail closed.
+ */
+async function settleNav(dest: string, policy: Policy, opts: VibiumOpts | undefined): Promise<Snapshot> {
+  for (let attempt = 0; ; attempt++) {
+    await vibium(["wait", "load", "--timeout", String(policy.navSettleMs)], opts).catch(() => undefined);
+    const s = await snapshot(opts);
+    const empty = s.map === "" && s.text.trim().length < 200;
+    if (!empty) return s;
+    if (attempt >= policy.navRetries) throw new NavError(dest, s.text);
+    await vibium(["reload"], opts);
+  }
+}
+
+/** The C10 signal: a person's verdict on a parked step. `compose` applies it; anything else leaves it parked. */
+export type HumanVerdict = "compose" | "escalate" | "refuse";
 
 export interface StepContext {
   vibium?: VibiumOpts;
@@ -70,9 +105,14 @@ export interface StepContext {
   gateModule?: string;
   verifyModule?: string;
   policy?: Partial<Policy>;
+  /**
+   * Asked when the gate escalates or a C10 target parks. Absent = parked (fail closed). The judge's
+   * answers are passed so the person sees what the model said; the person, not the model, decides.
+   */
+  humanVerdict?: (info: { route: "human" | "escalate"; target: string; answers?: Record<string, TypesafeAnswer> }) => Promise<HumanVerdict> | HumanVerdict;
 }
 
-export type Route = "read" | "tab-edit" | "nav" | "human" | "refused-host" | "auto" | "refuse" | "escalate";
+export type Route = "read" | "tab-edit" | "nav" | "human" | "human-compose" | "refused-host" | "auto" | "refuse" | "escalate";
 
 export interface JudgedStage {
   decided: Decided;
@@ -148,14 +188,19 @@ export async function step(action: Action, ctx: StepContext): Promise<StepResult
     return finish();
   }
 
-  // `go` without an expectation needs no page snapshot: the page it leaves is not evidence for anything.
+  // `go` without an expectation needs no page snapshot before it: the page it leaves is not evidence.
+  // After it, the landing page must be a page (settleNav), or the step fails closed.
   if (verbClass === "nav" && action.verb === "go" && !action.expect) {
-    if (!hostAllowed(policy, action.args[0] ?? null)) {
+    const dest = action.args[0] ?? null;
+    if (!hostAllowed(policy, dest)) {
       result.route = "refused-host";
       return finish();
     }
     result.route = "nav";
     await act();
+    const ts = performance.now();
+    result.after = await settleNav(dest ?? "", policy, ctx.vibium);
+    ms.snapshot = Math.round(performance.now() - ts);
     return finish();
   }
 
@@ -189,29 +234,46 @@ export async function step(action: Action, ctx: StepContext): Promise<StepResult
       result.route = "refused-host";
       return finish();
     }
+    const askHuman = async (route: "human" | "escalate", answers?: Record<string, TypesafeAnswer>): Promise<boolean> => {
+      if (!ctx.humanVerdict) return false;
+      const hv = await ctx.humanVerdict({ route, target, answers });
+      if (hv !== "compose") return false;
+      result.route = "human-compose";
+      return true;
+    };
     if (policy.humanGate.test(target) || policy.humanGate.test(action.args.join(" "))) {
       result.route = "human"; // C10: parks even before the judge is asked
-      return finish();
+      if (!(await askHuman("human"))) return finish();
+      await act();
+    } else {
+      result.judgeCalls++;
+      result.gate = await judged(ctx, ctx.gatePack, ctx.gateModule ?? ctx.gatePack.modules[0]!.name, {
+        url: before.url,
+        title: before.title,
+        action: describeAction(action, line?.raw ?? null),
+        target,
+        textExcerpt: excerpt(before.text, policy.textExcerptChars),
+      });
+      ms.gate = result.gate.ms;
+      const v = result.gate.decided.verdict;
+      result.route = v === true ? "auto" : v === false ? "refuse" : "escalate";
+      if (v === false) return finish(); // a refusal is never overridden here
+      if (v === "escalate" && !(await askHuman("escalate", result.gate.answers))) return finish();
+      await act();
     }
-    result.judgeCalls++;
-    result.gate = await judged(ctx, ctx.gatePack, ctx.gateModule ?? ctx.gatePack.modules[0]!.name, {
-      url: before.url,
-      title: before.title,
-      action: describeAction(action, line?.raw ?? null),
-      target,
-      textExcerpt: excerpt(before.text, policy.textExcerptChars),
-    });
-    ms.gate = result.gate.ms;
-    const v = result.gate.decided.verdict;
-    result.route = v === true ? "auto" : v === false ? "refuse" : "escalate";
-    if (v !== true) return finish();
-    await act();
   }
 
   if (!action.expect) return finish();
 
   const tv = performance.now();
-  const after = await snapshot(ctx.vibium);
+  // A commit often starts a navigation. Let the document settle, and tolerate one transient BiDi
+  // "cannot find context" while the old document is torn down: retry the snapshot once.
+  await vibium(["wait", "load", "--timeout", String(policy.navSettleMs)], ctx.vibium).catch(() => undefined);
+  const after = await snapshot(ctx.vibium).catch(async (e: unknown) => {
+    if (!/context/i.test(String((e as Error).message))) throw e;
+    await vibium(["wait", "load", "--timeout", String(policy.navSettleMs)], ctx.vibium).catch(() => undefined);
+    return snapshot(ctx.vibium);
+  });
   result.after = after;
   result.diff = labelDiff(before.map, after.map);
   result.judgeCalls++;

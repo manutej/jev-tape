@@ -171,9 +171,10 @@ export function excerpt(text: string, max = 1500): string {
   return t.length <= max ? t : `${t.slice(0, max)}…`;
 }
 
+/** Hostname without the port: allowlist entries are hosts, and a dev server on :8787 is still 127.0.0.1. */
 export function hostOf(url: string): string | null {
   try {
-    return new URL(url).host || null;
+    return new URL(url).hostname || null;
   } catch {
     return null;
   }

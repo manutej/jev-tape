@@ -16,6 +16,8 @@
  *   --allow-host H          repeatable; empty = no host check
  *   --tape PATH             JSONL answer tape (default runs/vibium-tape.jsonl)
  *   --replay                answer only from the tape; never calls TypeSafe
+ *   --approve-escalate      you, the operator, answer "compose" to an escalate or a C10 park (the model's
+ *                           answers are printed first); without it a parked step stays parked
  *   --corpus PATH           append every snapshot as a state for JEV-works measure-confidence
  *   --headless --session S --bin PATH --stop
  *
@@ -51,8 +53,13 @@ mkdirSync(dirname(tapePath), { recursive: true });
 const tape = new Tape(tapePath);
 const stats = { posts: 0, replays: 0 };
 const live: Judge = (req) => systemOne(req);
+const replayOnly = tape.replayJudge();
 const judge: Judge = replay
-  ? tape.replayJudge()
+  ? async (req) => {
+      const res = await replayOnly(req);
+      stats.replays++;
+      return res;
+    }
   : async (req) => {
       const isGate = "mutatesWorld" in req.questions;
       return tapedJudge(live, tape, stats, isGate ? { pack: gatePack.name, module: "action-gate" } : { pack: verifyPack.name, module: opt("--verify-module") ?? "step-verify" })(req);
@@ -98,6 +105,12 @@ try {
       verifyPack,
       verifyModule: opt("--verify-module") ?? "step-verify",
       policy: { allowHosts: opts("--allow-host") },
+      humanVerdict: flag("--approve-escalate")
+        ? ({ route, target, answers }) => {
+            console.log(JSON.stringify({ humanVerdict: "compose", on: route, target, answers }));
+            return "compose";
+          }
+        : undefined,
     });
     const line = {
       action: `${a.verb} ${a.args.map((x, i) => (a.verb === "fill" && i === 1 ? `<value:${x.length}>` : x)).join(" ")}`.trim(),
@@ -112,7 +125,7 @@ try {
       if (last.before) corpus.push({ ...last.before, action: line.action, phase: "before" });
       if (last.after) corpus.push({ ...last.after, action: line.action, phase: "after", claim: a.expect });
     }
-    if (last.route !== "auto" && last.route !== "nav" && last.route !== "tab-edit" && last.route !== "read") break;
+    if (!["auto", "human-compose", "nav", "tab-edit", "read"].includes(last.route)) break;
   }
 } finally {
   if (corpusPath) writeFileSync(corpusPath, `${JSON.stringify(corpus, null, 2)}\n`);
@@ -125,5 +138,5 @@ console.log(JSON.stringify(summary));
 if (last?.gate) console.log("gate answers:", JSON.stringify(last.gate.answers));
 if (last?.verify) console.log("verify answers:", JSON.stringify(last.verify.answers));
 
-const finalVerdict = last?.verify?.decided.verdict ?? (last?.route === "auto" || last?.route === "nav" || last?.route === "tab-edit" ? true : undefined);
+const finalVerdict = last?.verify?.decided.verdict ?? (["auto", "human-compose", "nav", "tab-edit"].includes(last?.route ?? "") ? true : undefined);
 process.exit(finalVerdict === true ? 0 : 2);
