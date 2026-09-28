@@ -73,18 +73,35 @@ Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFE
 | --- | --- |
 | `manutej/jev` | Operad names the questions |
 | TypeSafe `jev-1.13.0` | Hosted judge. Answers only |
-| This repo | Two gates + in-process Temporal twin |
+| This repo | Two gates, in-process twin, and four Temporal workflows on queue `jev-tape` |
 | Your Gmail / GitHub MCP | Read surfaces. Writes stay parked |
 
 Not a fourth product. Not Cloud Event History.
 
+## Run it on Temporal (the show)
+
+```bash
+npm run temporal:dev          # terminal 1: temporal server start-dev (needs the Temporal CLI; TEMPORAL_CLI=/path works)
+npm run demo                  # terminal 2: worker + 3 workflows + printed tape. Key → live judge. No key → set JEV_JUDGE=stub
+npm run harness               # live tape at http://localhost:4848: gates, lights, judge ms, parks with verdict buttons
+npm run demo:crash            # kill a worker mid-worklist, watch a fresh one resume with 0 duplicate applies
+npm run replay -- <wfId>      # replay Event History: 0 TypeSafe POSTs
+```
+
+Details, scale notes, Cloud config: [`docs/TEMPORAL-MVP.md`](docs/TEMPORAL-MVP.md).
+
 ## Commands
 
 ```
-npm test          # engine + twins — no key
+npm test          # loop + twins + real-Temporal workflow tests (skip without a server) — no key
+npm run typecheck # tsc
 npm run check     # FIRE still unrepresentable
 npm run temporal  # scripts match spec/TEMPORAL.md
+npm run worker    # one worker on queue jev-tape (run as many as you like)
+npm run demo      # three workflows through a real server
+npm run harness   # live dashboard on :4848
+npm run replay    # replay proof
 npm run smoke     # key required — pin check
-npm run live      # key required — one Capture
+npm run live      # key required — one Capture through the twin
 npm run qualify   # key required — fixture JSON in, verdict out
 ```

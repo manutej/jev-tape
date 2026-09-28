@@ -11,3 +11,6 @@ coverage/
 .DS_Store
 .vite/
 dist/
+
+# local tape + dev server db
+.jev-tape/
