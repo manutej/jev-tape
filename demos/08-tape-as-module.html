@@ -7,6 +7,8 @@
 <meta name="description" content="jev-tape's own source drawn as a wiring pack: six units, their ports, their edges. Glue the client to the contract and watch the pushout; no judge is needed, no κ fires.">
 <link rel="stylesheet" href="assets/tape.css">
 <style>
+  /* the SVG font-size attribute must win over .mono{font-size:.92em} from tape.css */
+  .stage svg text[font-size="10"]{font-size:10px}.stage svg text[font-size="11"]{font-size:11px}.stage svg text[font-size="12"]{font-size:12px}.stage svg text[font-size="13"]{font-size:13px}
   .stage .cap{padding:10px 14px 12px;font-size:13px;color:var(--dim);border-top:1px solid var(--rule);min-height:64px;line-height:1.45}
   .stage .cap b{color:var(--bone);font-weight:500}
   .stage .cap code{color:var(--bone);font-size:12px}
@@ -145,17 +147,18 @@
     'domain':            {x:60, y:52, w:200,h:96},
     'colors':            {x:300,y:52, w:140,h:70},
     'typesafe.client':   {x:60, y:190,w:200,h:96},
-    'typesafe.contract': {x:480,y:158,w:280,h:216},
-    'qualify-surface':   {x:60, y:342,w:200,h:74},
-    'smoke-key':         {x:300,y:342,w:140,h:74},
+    'typesafe.contract': {x:480,y:150,w:280,h:240},
+    'qualify-surface':   {x:60, y:342,w:200,h:90},
+    'smoke-key':         {x:480,y:410,w:160,h:80},
   };
-  const TAB={w:12,h:6,gap:9};
-  const tabPos=(name,i)=>{const L=layout[name];return {x:L.x-TAB.w+3,y:L.y+12+i*TAB.gap};};
+  const TAB={w:12,h:5};
+  // few ports: tabs start at the top; many ports (the contract, 22): tabs start under the header lines, packed tighter
+  const tabPos=(name,i)=>{const L=layout[name]; const many=U[name].ports.length>8; return {x:L.x-TAB.w+3,y:(many?L.y+74:L.y+12)+i*(many?7:9)};};
   const edgesG=svg('g',{}); const unitsG=svg('g',{}); const ghostG=svg('g',{class:'ghost'}); const junctionG=svg('g',{});
   root.append(edgesG, ghostG, unitsG, junctionG);
 
   // external box for node:fs (an import target outside the pack)
-  const ext={x:480,y:410,w:170,h:56};
+  const ext={x:300,y:352,w:160,h:56};
   ghostG.append(
     svg('rect',{x:ext.x,y:ext.y,width:ext.w,height:ext.h,rx:8,fill:'none',stroke:'var(--rule)','stroke-dasharray':'4 4'}),
     svg('rect',{x:ext.x-TAB.w+3,y:ext.y+12,width:TAB.w,height:TAB.h,rx:1.5,fill:'var(--dim)'}),
@@ -174,7 +177,7 @@
     g.appendChild(svg('text',{x:L.x+16,y:L.y+56,'font-size':'10',fill:'var(--dim)'},[`${u.ports.length} ports · ${u.imports.length} edges`]));
     if(u.fetches||u.envKey){
       const isScript=u.rel.startsWith('scripts/');
-      g.appendChild(svg('text',{x:L.x+16,y:L.y+L.h-10,'font-size':'10',class:'mono',fill:'var(--c-action)'},[isScript?'fetch · env key · script, by hand':'fetch · env key · the Activity']));
+      g.appendChild(svg('text',{x:L.x+16,y:L.y+L.h-10,'font-size':'10',class:'mono',fill:'var(--c-action)'},[isScript?'fetch · env key · by hand':'fetch · env key · the Activity']));
     }
     portEls[u.unit]=[];
     u.ports.forEach((p,i)=>{const t=tabPos(u.unit,i);
@@ -192,7 +195,7 @@
     unitEls[tu.unit].appendChild(tx); importedLabels.push(tx);
   }
   // edges
-  const curve=(x1,y1,x2,y2)=>`M${x1},${y1} C${x1+70},${y1} ${x2-60},${y2} ${x2},${y2}`;
+  const curve=(x1,y1,x2,y2)=>{const k=Math.min(70,(x2-x1)/2);return `M${x1},${y1} C${x1+k},${y1} ${x2-k},${y2} ${x2},${y2}`;};
   for(const u of P.units) for(const im of u.imports){
     const L=layout[u.unit]; const tu=unitByTarget(target(im.from));
     let x2,y2,to;
@@ -312,7 +315,7 @@
     {n:`explicit ${P.tokens.explicit} · factored ${P.tokens.factored} tokens`,f:'demos/build-data.mjs → jevPack.tokens',note:`tokenizer ${JEV.data.meta.tokenizer}; the 100-token gap is the two counters`},
     {n:`F ≈ ${F} tok · n* = ${nStar}`,f:'wiring-and-the-whole/experiments/e2-tokens/E2-RESULTS.md → n* = F/(e−m)',note:'F is an estimate (chars/3.6); e and m are averages of the real totals'},
     {n:'lines and tokens per unit (72 · 9 · 86 · 62 · 82 · 29)',f:'jevPack.units[].lines, .tokens',note:'shown under each box'},
-    {n:'fetch · env key on typesafe.client, qualify-surface, smoke-key',f:'jev-tape/src/typesafe/client.ts · scripts/qualify-surface.ts · scripts/smoke-key.ts',note:'regex fetch( and TYPESAFE_API_KEY over the source; the key itself is never read by this page'},
+    {n:'fetch · env key on typesafe.client, qualify-surface, smoke-key',f:'jev-tape/src/typesafe/client.ts · scripts/qualify-surface.ts · scripts/smoke-key.ts',note:'regex over the source for fetch( and the env variable that names the key; the key itself is never read by this page'},
     {n:'five identified symbols · κ silent',f:'computed live from jevPack.units[typesafe.client].imports vs [typesafe.contract].ports',note:'κ rule as in wiring-and-the-whole/witness/run_witness.py step 9: two signatures for one symbol'},
     {n:'Operad names questions. TypeSafe answers them. Temporal remembers.',f:'jev-tape/wiki/pages/three-planes.md',note:'the seam drawn on the stage'},
     {n:'path 0: code, no TypeSafe, no Temporal',f:'jev-tape/spec/SPEC-v1-SPEED.md',note:'why the POST counter is zero'},

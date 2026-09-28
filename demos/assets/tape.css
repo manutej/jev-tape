@@ -36,7 +36,8 @@ h2{font-size:clamp(24px,3vw,34px);line-height:1.12}
 h3{font-size:20px;line-height:1.2}
 p{margin:0 0 .9em;max-width:62ch}
 em{font-style:italic}
-code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code,kbd{font-family:var(--mono);font-size:.92em}
+.mono{font-family:var(--mono)} /* no font-size here: an em size would override the font-size attribute on SVG text */
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}

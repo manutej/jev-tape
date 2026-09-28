@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Witness Tape — jev demo 10</title>
+<meta name="description" content="The thirteen E1 witness checks played as Activities on a tape: crash at check 8, replay relights eight from history and computes five, and the claim at the last rung waits for a human.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  /* the SVG font-size attribute must win over .mono{font-size:.92em} from tape.css */
+  .stage svg text[font-size="10"]{font-size:10px}.stage svg text[font-size="11"]{font-size:11px}.stage svg text[font-size="12"]{font-size:12px}.stage svg text[font-size="13"]{font-size:13px}.stage svg text[font-size="20"]{font-size:20px}
+  .stage svg .node circle.c{transition:fill .25s,stroke .25s}
+  .stage svg .node.on circle.c{fill:var(--amber);stroke:var(--amber)}
+  .stage svg .node.pass circle.c{fill:var(--green);stroke:var(--green)}
+  .stage svg .node.reused circle.c{fill:var(--desk);stroke:var(--green);stroke-dasharray:3 2}
+  .stage svg .node.pass text.k,.stage svg .node.on text.k{fill:var(--ink)}
+  .stage svg .node.reused text.k{fill:var(--green)}
+  .stage svg .node.dead circle.c{stroke:var(--red)}
+  .stage svg .arc{transition:stroke-dashoffset .3s linear}
+  .stage svg.dead .ring{opacity:.45}
+  .crashrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .crashrow input[type=number]{width:64px;min-height:36px;background:var(--desk-3);border:1px solid var(--rule);border-radius:8px;color:var(--bone);font:inherit;font-family:var(--mono);padding:4px 8px}
+  .rung{margin-top:12px;border:1px solid var(--rule);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--dim);opacity:.45;transition:opacity .3s}
+  .rung.live{opacity:1;border-color:var(--amber)}
+  .rung b{color:var(--bone);font-weight:500}
+  .rung code{color:var(--bone)}
+  .rung .btnrow{margin:8px 0 2px}
+  .rung .btn{min-height:34px;padding:4px 12px;font-size:13px}
+  .rung .verdict{min-height:26px;font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .rung.dead{border-color:var(--rule);opacity:.6}
+  .rung.dead code{color:var(--dim)}
+  .rung .illegal{font-family:var(--mono);font-size:12px;color:var(--red)}
+  #stage{display:flex;align-items:center}
+  .note{font-size:13px;color:var(--amber);margin:8px 0 0;display:none}
+  .note.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 10 of 10 · witness tape</div>
+      <h1>Thirteen checks, one crash, zero repeated judgements, and a human at the last rung.</h1>
+      <p class="lede">E1 ran <b>thirteen</b> checks over a <b>sixteen</b>-file toy bank and every one passed. Each check is an Activity: computed once, recorded once. Crash the worker at check <b>8</b> and replay: the first eight relight from the tape, the last five are computed, and nothing is judged twice, because nothing here is judged at all. The witness is code. Then the last rung: minting the claim <i>demonstrated</i> is a write, so a human signs it.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em>'s claims ladder says demonstrated ≠ proved. <em>jev-tape</em>'s C10 says the irreversible write waits for a human. The word that goes on the ladder is the write.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Witness tape instrument">
+    <div class="controls">
+      <h3>Run the witness</h3>
+      <p>Thirteen checks from <code>WITNESS.json</code>, in file order. Each one lights a node and records an Activity with no POST: this tape records Activities, not judge calls. Crash mid-way, then replay.</p>
+
+      <div class="crashrow">
+        <label class="toggle" style="min-height:36px"><input type="checkbox" id="tCrash" checked> <span>Crash at check</span></label>
+        <input type="number" id="crashAt" min="1" max="13" value="8" aria-label="Crash at check number">
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Run the witness</button>
+        <button class="btn" id="replay" disabled>Replay</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+      <div class="note" id="note"></div>
+
+      <div class="counters">
+        <div class="counter"><div class="v" id="cPass">0</div><div class="l">checks passed</div></div>
+        <div class="counter"><div class="v" id="cRe">0</div><div class="l">replayed</div></div>
+        <div class="counter zero"><div class="v" id="cPosts">0</div><div class="l">POSTs</div></div>
+      </div>
+
+      <div class="rung" id="rung">
+        <b>The last rung.</b> <code>MintClaim("demonstrated")</code> is human-gated. This page treats it like <code>Complete</code>: C10 parks it on Signal <code>humanVerdict</code> even though every check is green.
+        <div class="btnrow">
+          <button class="btn" id="hCompose" disabled>compose</button>
+          <button class="btn" id="hEscalate" disabled>escalate</button>
+          <button class="btn" id="hRefuse" disabled>refuse</button>
+        </div>
+        <div class="verdict" id="hVerdict">waiting for 13 green checks</div>
+      </div>
+      <div class="rung dead" id="rung2">
+        <code>MintClaim("proved")</code> <span class="illegal">illegal: MUST-PROVE 1–5 open</span><br>
+        <span>assertLegalCommand refuses it before any Activity runs. Path 0. No cell, no POST.</span>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Thirteen witness checks drawn as a ring around the toy bank, with the witness detail of the current check"></div>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>Every cell here is an Activity with no POST mark. The witness is a Python script: it builds the pushout, enumerates the cocones, transports the edges, and reports booleans. A deterministic check does not need a judge, but it does need a record, because a crash between check 8 and check 9 must not run check 8 again. Temporal reuses recorded results; it does not recompute them.</p>
+        <p>Replay proves it on the ring. The first k nodes relight with a dashed <i>reused</i> ring and the replayed counter climbs; the rest light solid as they are computed for the first time. The POST counter never leaves zero. If the checks had been judge calls, the same shape would hold: a replay reuses the recorded answer map and asks nothing.</p>
+        <p>Then the rung. Thirteen green booleans are a fact; the word <i>demonstrated</i> on the claims ladder is a write. So the command parks on <code>humanVerdict</code>. Compose applies it and the applied cell reads <i>demonstrated ≠ proved</i>. The stronger word is not offered: <code>MintClaim("proved")</code> fails <code>assertLegalCommand</code> because five MUST-PROVE items are open.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>13/13 is a toy-scale demonstration by bounded enumeration.</b> The universal-property check is narrower than the pre-registered exhaustive bound; the script records that as a protocol deviation. "Demonstrated ≠ proved" is not modesty, it is the claims ladder: MUST-PROVE 1–5 remain open, and nothing on this page closes them.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin, and this page never asks it.</b> The checks are booleans read from a recorded file; the human verdict is three buttons. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 10 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> witness/WITNESS.json and <code>manutej/jev-tape</code> spec and wiki.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e1.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, esc, svg, provenanceTable, topbar, tick} = JEV;
+  const Wt = JEV.data.e1.witness, J = JEV.data.jev;
+  topbar(document.getElementById('topbar'), {title:'10 · Witness tape'});
+  const tape = new Tape({title:'Witness tape'});
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+  const $=id=>document.getElementById(id);
+
+  /* ---------- the thirteen checks, in file order ---------- */
+  const LABEL={step4_pushout_commutes:'pushout commutes',step4_universal_property_bounded:'universal property (bounded)',step5_fresh_names_inside_C:'fresh names',step5_no_false_kappa:'no false κ',step6_system_map_square:'system map square',step7_automorphism_composite_iso:'automorphism ⇒ iso',step8_invariant_constant_on_orbit:'invariant on orbit',step9_kappa_fires_on_collision:'κ on collision',step10_associativity_canonical_iso:'associativity',step10_monoidal_unit_disjoint_union:'monoidal unit',step10_ex425_squares_compose:'Ex 4.25 squares',step8a_system_maps_preserve_invariant:'maps keep invariant',step6_ports_preserved:'ports preserved'};
+  const w=Wt.witnesses;
+  const wrap=(s,n=40)=>{const out=[];let cur='';for(const t of String(s).split(' ')){if((cur+' '+t).trim().length>n){out.push(cur.trim());cur=t;}else cur=cur+' '+t;}if(cur.trim())out.push(cur.trim());return out;};
+  const DETAIL={
+    step4_pushout_commutes:['checks.step4_pushout_commutes = true','pushout = amalgamation (code_c)'],
+    step4_universal_property_bounded:['bounded enumeration','recorded protocol deviation:',...wrap('narrower than the pre-registered exhaustive |Q| ≤ |Z|+2 (run_witness.py)')],
+    step5_fresh_names_inside_C:[`|Z| = ${w.step5['|Z|']} · cocones tested ${w.step5.cocones_tested}`,'kept distinct:',...w.step5.log_symbols_kept_distinct.map(s=>'  '+s)],
+    step5_no_false_kappa:[`|Z| = ${w.step5['|Z|']}`,'the two #log symbols share a name','and different owners: no κ'],
+    step6_system_map_square:[`renamed: ${w.step6.renamed.join(', ')}`,'→ #writeAudit; the square commutes'],
+    step7_automorphism_composite_iso:[`φ size ${w.step7.phi_size}`,`composite size ${w.step7.composite_size}`,`construct then verify: ${w.step7.construct_then_verify}`],
+    step8_invariant_constant_on_orbit:[`B_accounts edges ${w.step8.B_accounts_edges}`,`B_savings edges ${w.step8.B_savings_edges}`,`equal after transport: ${w.step8.equal_after_transport}`,`sample: ${w.step8.sample[0][0].split('#')[1]} → ${w.step8.sample[0][1].split('#')[1]}`],
+    step9_kappa_fires_on_collision:[`identified: ${w.step9.kappa[0].identified[0]}`,`       with ${w.step9.kappa[0].identified[1]}`,`signatures ${w.step9.kappa[0].signatures.join(' ≠ ')}`,...wrap('silent merge would have: '+w.step9.silent_merge_would_have,42)],
+    step10_associativity_canonical_iso:[`|(A+B)+C| = ${w.step10_assoc['|(A+B)+C|']}`,`|A+(B+C)| = ${w.step10_assoc['|A+(B+C)|']}`,`identical canonical form: ${w.step10_assoc.identical_canonical_form}`],
+    step10_monoidal_unit_disjoint_union:['checks.step10_monoidal_unit_disjoint_union = true','A + ∅ ≅ A, disjoint union'],
+    step10_ex425_squares_compose:[`lift nontrivial on ${w.step10_ex425.lift_nontrivial_on}`,`lift is morphism: ${w.step10_ex425.lift_is_morphism}`,`accounts ports fixed: ${w.step10_ex425.accounts_ports_fixed}`,`naturality (lift, σ) commute: ${w.step10_ex425.naturality_lift_sigma_commute}`,...wrap(w.step10_ex425.note,42)],
+    step8a_system_maps_preserve_invariant:[`${w.step8.B_accounts_edges} = ${w.step8.B_savings_edges} edges, accounts ↔ savings`,`equal after transport: ${w.step8.equal_after_transport}`],
+    step6_ports_preserved:['checks.step6_ports_preserved = true',`renamed only: ${w.step6.renamed.join(', ')}`,'every other port unchanged'],
+  };
+  const checks=Object.entries(Wt.checks).map(([key,ok],i)=>({i,key,ok,label:LABEL[key]||key,detail:DETAIL[key]||[String(ok)]}));
+  const N=checks.length;
+  const files=(Wt.notes.find(n=>/files/.test(n))||'').match(/(\d+) files/)?.[1]||'16';
+  const symbols=(Wt.notes.find(n=>/symbols/.test(n))||'').match(/symbols (\d+)/)?.[1]||'37';
+
+  /* ---------- stage: the ring ---------- */
+  const W=860,H=480, stage=$('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${N} witness checks drawn as a ring around the toy bank`});
+  stage.appendChild(root);
+  const CX=270,CY=244,R=150;
+  const ring=svg('g',{class:'ring'}); root.appendChild(ring);
+  ring.appendChild(svg('circle',{cx:CX,cy:CY,r:R,fill:'none',stroke:'var(--rule)','stroke-width':1.5}));
+  const CIRC=2*Math.PI*R;
+  const arcDone=svg('circle',{class:'arc',cx:CX,cy:CY,r:R,fill:'none',stroke:'var(--green)','stroke-width':3,'stroke-dasharray':`${CIRC}`,'stroke-dashoffset':`${CIRC}`,transform:`rotate(-90 ${CX} ${CY})`});
+  ring.appendChild(arcDone);
+  ring.appendChild(svg('text',{x:CX,y:CY-6,'font-size':'20','text-anchor':'middle','font-style':'italic','font-family':'var(--display)',fill:'var(--bone)'},['toybank']));
+  ring.appendChild(svg('text',{x:CX,y:CY+14,'font-size':'11','text-anchor':'middle',fill:'var(--dim)'},[`${files} files · ${symbols} symbols`]));
+  const status=svg('text',{x:CX,y:CY+36,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--amber)'},['']); ring.appendChild(status);
+  const nodes=checks.map(c=>{
+    const a=(c.i/N)*2*Math.PI-Math.PI/2, x=CX+Math.cos(a)*R, y=CY+Math.sin(a)*R;
+    const g=svg('g',{class:'node','data-i':c.i});
+    g.appendChild(svg('circle',{class:'c',cx:x,cy:y,r:13,fill:'var(--desk-2)',stroke:'var(--rule)','stroke-width':2}));
+    g.appendChild(svg('text',{class:'k mono',x,y:y+4,'font-size':'11','text-anchor':'middle',fill:'var(--dim)'},[String(c.i+1)]));
+    const lx=CX+Math.cos(a)*(R+20), ly=CY+Math.sin(a)*(R+20);
+    const top=Math.abs(Math.cos(a))<.3&&Math.sin(a)<0;
+    const anchor=top?'middle':Math.cos(a)>0?'start':'end';
+    const dy=top?-10:Math.sin(a)>.9?12:4;
+    g.appendChild(svg('text',{x:lx,y:ly+dy,'font-size':'11','text-anchor':anchor,fill:'var(--dim)',class:'lab'},[c.label]));
+    const re=svg('text',{class:'re',x:lx,y:ly+dy+12,'font-size':'10','text-anchor':anchor,fill:'var(--green)',opacity:0},['reused']);
+    g.appendChild(re);
+    ring.appendChild(g); return {g,re,x,y,a};
+  });
+  // side panel: the witness detail
+  const PX=548;
+  const panel=svg('g',{}); root.appendChild(panel);
+  panel.appendChild(svg('rect',{x:PX,y:24,width:W-PX-16,height:H-48,rx:8,fill:'var(--tape)'}));
+  panel.appendChild(svg('rect',{x:PX,y:24,width:W-PX-16,height:6,rx:2,fill:'var(--tape-2)'}));
+  const pTitle=svg('text',{x:PX+14,y:52,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--ink-2)'},['WITNESS.json — nothing running']); panel.appendChild(pTitle);
+  const pKey=svg('text',{x:PX+14,y:74,'font-size':'10',class:'mono',fill:'var(--ink)'},['']); panel.appendChild(pKey);
+  const pLines=svg('g',{}); panel.appendChild(pLines);
+  const pFoot=svg('text',{x:PX+14,y:H-46,'font-size':'11',class:'mono',fill:'var(--ink-2)'},['']); panel.appendChild(pFoot);
+  const pFoot2=svg('text',{x:PX+14,y:H-32,'font-size':'11',class:'mono',fill:'var(--ink-2)'},['']); panel.appendChild(pFoot2);
+  function showDetail(c,mode){
+    pTitle.textContent=c?`check ${c.i+1} of ${N} · ${c.label}`:'WITNESS.json — nothing running';
+    pKey.textContent=c?`checks.${c.key} = ${c.ok}`:'';
+    pLines.innerHTML=''; if(!c) return;
+    c.detail.forEach((l,i)=>pLines.appendChild(svg('text',{x:PX+14,y:100+i*17,'font-size':'11',class:'mono',fill:'var(--ink)'},[l])));
+    pFoot.textContent=mode==='reused'?'reused from Event History · not recomputed':'computed now · recorded as an Activity';
+    pFoot2.textContent='post: false · the witness is code';
+  }
+  showDetail(null);
+  const setArc=(k)=>arcDone.setAttribute('stroke-dashoffset',String(CIRC*(1-k/N)));
+  const setNode=(i,cls)=>{const n=nodes[i]; n.g.classList.remove('on','pass','reused','dead'); if(cls) n.g.classList.add(cls); n.re.setAttribute('opacity',cls==='reused'?1:0);};
+
+  /* ---------- run / crash / replay ---------- */
+  let running=false, crashedAt=0, doneCount=0;
+  const counters=()=>{tick($('cPass'),doneCount,300); tick($('cRe'),tape.replayed,300); $('cPosts').textContent=tape.posts;};
+  const record=(c)=>tape.record({kind:'activity',label:c.label,verdict:String(c.ok),post:false,detail:`${c.key}: ${c.detail[0]}`});
+  async function play(from){
+    const crash=$('tCrash').checked?Math.max(1,Math.min(N,+$('crashAt').value||8)):0;
+    for(let i=from;i<N;i++){const c=checks[i];
+      setNode(i,'on'); status.textContent=`check ${i+1} · computing`; showDetail(c,'now'); await wait(260);
+      record(c); setNode(i,'pass'); doneCount=i+1; setArc(doneCount); counters();
+      if(crash&&i+1===crash&&from===0){ // the worker dies right after this Activity is recorded
+        await wait(200); tape.crash('worker crashed'); crashedAt=i+1; root.classList.add('dead'); status.textContent=`crashed after check ${crashedAt}`;
+        for(let j=i+1;j<N;j++) setNode(j,'dead');
+        $('replay').disabled=false; $('note').className='note'+(crashedAt>=8?' on':'');
+        $('note').textContent=crashedAt>=8?'Continue-As-New every 8: the history rolled after check 8, so replay starts from a fresh Workflow run that carries the recorded results forward.':'';
+        return false; }
+      await wait(90);
+    }
+    status.textContent=`${N} of ${N} green`;
+    return true;
+  }
+  async function run(){
+    if(running||doneCount) return; running=true; $('run').disabled=true;
+    const ok=await play(0);
+    if(ok) lastRung();
+    running=false;
+  }
+  async function replay(){
+    if(running||!crashedAt) return; running=true; $('replay').disabled=true; root.classList.remove('dead');
+    for(let j=crashedAt;j<N;j++) setNode(j,null);
+    const n=tape.replay();                        // re-emits the recorded Activities, no POST
+    status.textContent='replay · reading history';
+    for(let i=0;i<crashedAt;i++){setNode(i,'reused'); showDetail(checks[i],'reused'); await wait(120);}
+    counters();
+    const from=crashedAt; crashedAt=0; $('note').className='note';
+    const ok=await play(from);
+    if(ok) lastRung();
+    running=false;
+  }
+  function lastRung(){
+    tape.record({kind:'code',label:'assertLegalCommand',verdict:'MintClaim(proved) illegal',detail:'MUST-PROVE 1–5 open; refused before any Activity'});
+    tape.record({kind:'human',label:'park: humanVerdict',verdict:'waiting',detail:'MintClaim(demonstrated) is human-gated (C10): compose | escalate | refuse'});
+    $('rung').classList.add('live'); ['hCompose','hEscalate','hRefuse'].forEach(id=>$(id).disabled=false);
+    $('hVerdict').textContent='parked on Signal humanVerdict';
+    status.textContent=`${N} of ${N} green · parked on humanVerdict`;
+  }
+  function verdict(v){
+    ['hCompose','hEscalate','hRefuse'].forEach(id=>$(id).disabled=true);
+    if(v==='compose'){tape.record({kind:'apply',label:'MintClaim(demonstrated)',verdict:'claim: demonstrated ≠ proved',detail:'first domain write, after the human verdict'}); $('hVerdict').textContent='compose → applied: claim: demonstrated ≠ proved'; $('hVerdict').style.color='var(--green)';}
+    else if(v==='escalate'){tape.record({kind:'signal',label:'humanVerdict',verdict:'escalate',detail:'no write; the claim goes up a level'}); $('hVerdict').textContent='escalate → no write. Someone else decides.'; $('hVerdict').style.color='var(--amber)';}
+    else {tape.record({kind:'signal',label:'humanVerdict',verdict:'refuse',detail:'no write'}); $('hVerdict').textContent='refuse → no write. The ladder keeps its last rung.'; $('hVerdict').style.color='var(--red)';}
+    counters();
+  }
+  $('run').addEventListener('click',run);
+  $('replay').addEventListener('click',replay);
+  $('hCompose').addEventListener('click',()=>verdict('compose'));
+  $('hEscalate').addEventListener('click',()=>verdict('escalate'));
+  $('hRefuse').addEventListener('click',()=>verdict('refuse'));
+  $('reset').addEventListener('click',()=>{
+    tape.clear(); running=false; crashedAt=0; doneCount=0; root.classList.remove('dead');
+    nodes.forEach((n,i)=>setNode(i,null)); setArc(0); status.textContent=''; showDetail(null);
+    $('run').disabled=false; $('replay').disabled=true; $('note').className='note';
+    $('rung').classList.remove('live'); ['hCompose','hEscalate','hRefuse'].forEach(id=>$(id).disabled=true); $('hVerdict').textContent='waiting for 13 green checks'; $('hVerdict').style.color='';
+    $('cPass').textContent='0'; $('cPass').dataset.v='0'; $('cRe').textContent='0'; $('cRe').dataset.v='0'; $('cPosts').textContent='0';
+  });
+
+  provenanceTable($('prov'),[
+    {n:`${N} checks, all true · all_pass ${Wt.all_pass}`,f:'wiring-and-the-whole/witness/WITNESS.json → checks',note:'file order; the labels on the ring are short forms of the keys'},
+    {n:`${files} files · ${symbols} symbols`,f:'wiring-and-the-whole/witness/WITNESS.json → notes',note:'the toy bank the checks run over'},
+    {n:`|Z| ${w.step5['|Z|']} · cocones ${w.step5.cocones_tested} · φ ${w.step7.phi_size} · composite ${w.step7.composite_size} · ${w.step8.B_accounts_edges} = ${w.step8.B_savings_edges} edges · |(A+B)+C| ${w.step10_assoc['|(A+B)+C|']} · lift on ${w.step10_ex425.lift_nontrivial_on}`,f:'wiring-and-the-whole/witness/WITNESS.json → witnesses',note:'shown in the side panel as each check completes'},
+    {n:'κ: accounts.Money#amountCents ~ loans.Money#amount, double ≠ long',f:'WITNESS.json → witnesses.step9.kappa',note:'the one collision the witness is meant to fire on'},
+    {n:'bounded enumeration · recorded protocol deviation',f:'wiring-and-the-whole/witness/run_witness.py → universal_check docstring',note:'narrower than the pre-registered |Q| ≤ |Z|+2'},
+    {n:'demonstrated ≠ proved · MUST-PROVE 1–5 open',f:'wiring-and-the-whole/README.md (claims ladder)',note:'why MintClaim("proved") is illegal'},
+    {n:`C10: ${J.humanGated.join(', ')} park on humanVerdict {compose|escalate|refuse}`,f:'jev-tape/src/domain.ts → HUMAN_GATED_COMMANDS · wiki/pages/c10-human-gate.md',note:'MintClaim is not a jev command; this page treats it like Complete'},
+    {n:'Continue-As-New every 8',f:'jev-tape/spec/SPEC-v1-TAPE.md',note:'why the crash at check 8 is the interesting one'},
+    {n:'POSTs 0 · replayed k · Activity results reused, not recomputed',f:'jev-tape/wiki/pages/temporal-replay.md · wiki/pages/temporal-activity.md',note:'the tape counters'},
+  ]);
+})();
+</script>
+</body>
+</html>
