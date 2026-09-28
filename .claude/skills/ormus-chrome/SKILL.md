@@ -62,8 +62,13 @@ Never redraw the swan as line art; if the mark files are not at hand, leave mark
    are the point. Tables inside an `overflow-x: auto` box with mono uppercase headers.
 4. Charts: follow `references/charts.md`. Series by intensity (gold, ink, ink-muted, muted), one
    linear scale when the point is contrast, a direct label and a ratio on every mark.
-5. Close on a gold rule and a mono sign-off line; decks close on the kintsugi mark.
-6. Check the page at phone width, in print, and with reduced motion, then publish or commit under
+5. Research pages: state the record first (how many experiments, calls, rows, pages), show example
+   tasks as chips that open the row, and carry the notebook stamp grammar on every verdict, as a
+   glyph with a word (⚖ measured · ✓ accept · ± refine · ? speculative · ⊘ gate · ◐ partial · ◆ law).
+   Sections may follow the arc Laws → Observed → Prospects → Assay → Yield. A searchable table of
+   every encoded row belongs at the end, with the data inlined as JSON in the page.
+6. Close on a gold rule and a mono sign-off line; decks close on the kintsugi mark.
+7. Check the page at phone width, in print, and with reduced motion, then publish or commit under
    `docs/`.
 
 ## References
@@ -77,7 +82,10 @@ Never redraw the swan as line art; if the mark files are not at hand, leave mark
 | `references/components.md` | The six components with their rules and preview markup |
 | `references/cover.md` | The cover block composition, with the SVG |
 | `references/charts.md` | Chart rules in this chrome, with the contrast-bar pattern |
+| `references/icons.md` | The gold line-icon set as SVG symbols, and how to draw more |
 | `references/page-template.html` | A complete page skeleton in the chrome, self-contained |
 
 Assets (lacquer texture, marks, sigils, banners, footage) live in the design artifact and the brand
-repo, not here. `fusion.css` expects them under `assets/` next to it.
+repo `Ormus-Solutions/ormus-brand` under `assets/`, not here. `fusion.css` expects them under `assets/`
+next to it. Until they are vendored, the page template draws the surface from tokens (gradient plus a
+gold-tinted SVG grain) and leaves the marks out.

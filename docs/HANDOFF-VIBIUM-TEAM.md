@@ -46,7 +46,8 @@ commits without an operator policy.
 
 | Path | What |
 | --- | --- |
-| `docs/vibium-team-brief.html` | This brief as a page (Ormus Fusion chrome) |
+| `docs/vibium-team-brief.html` | This brief as a page (Ormus Fusion chrome): record of the 12 experiments, loop diagram, questions, stamped prospects and gates, and a searchable explorer of all 152 result rows |
+| `scripts/brief-data.js` | Builds the explorer's dataset from the result files (`node scripts/brief-data.js unused out.json`) |
 | `docs/HANDOFF-2026-09-28.md` | Session state, all measurements, next steps in order, rails |
 | `spec/SURFACES-VIBIUM.md` | The design and every measurement, §1–§9; results §8a–§8e and §8c′ |
 | `docs/COMPUTER-USE-CROSSCHECK.md` | Blind screenshot judge and pixel operator beside Jev and `check`; blinding protocol |
