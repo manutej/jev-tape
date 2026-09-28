@@ -1,0 +1,55 @@
+{
+  "surface": "wiring",
+  "timestamp": "2026-09-28T00:00:00Z",
+  "source": {
+    "repo": "manutej/wiring-and-the-whole",
+    "commit": "77a4d7d13f3e3981c44b8e04be00272b368afe2c",
+    "grades": "experiments/e5-depth/E5.1-GRADES.json",
+    "grades_sha256": "537d11d80161e2a3e9173d0135db7d42566682fb12662da4b5964f9665d5984a",
+    "pack": "experiments/e5-depth/packB.txt",
+    "pack_sha256": "167a12e60550b28197c7d7d3f7101d43bbd75373bc05f53001480f8217bf26ca",
+    "results": "experiments/e5-depth/E5-RESULTS.md",
+    "results_sha256": "f995a8d407523f723d66a8ac2c15699f3b3a73ee86bd352a822515bdb7a4dfcd"
+  },
+  "claim": {
+    "ladder": "README.md > Claims discipline > MAY",
+    "rung": "E5.1: after the pack legend is complete, a strong model reads both forms at exact parity through depth 10; pooled gap stays inside the 5-pt rule.",
+    "rule": "L2 fails iff pooled B <= A - 5 pts (frozen in EXPERIMENTS.md section E3, carried to E5).",
+    "threshold_pts": -5,
+    "may_not": [
+      "cross-corpus generality",
+      "CR@F95 (needs baselines + fidelity anchor)",
+      "anything about L3/L4",
+      "that OC v1 validated model reasoning (it validated the harness)"
+    ]
+  },
+  "measured": {
+    "grading": "panel-corrected (dual-key D9, OC valid-trees only, item-recall reported)",
+    "pooled_overall": { "A_v1": 0.968, "B_v2": 0.93, "B_minus_A_pts": -3.7 },
+    "per_model_overall": { "A_haiku": 0.935, "A_sonnet": 1.0, "B_haiku": 0.861, "B_sonnet": 1.0 },
+    "per_depth_B_minus_A_pts": { "D1": 0.0, "D2": 0.0, "D3": 0.0, "D4": -8.3, "D5": 0.0, "D6": 0.0, "D7": 0.0, "D8": -5.0, "D9": -6.2, "D10": -16.7 },
+    "D6_flag": "NON-DISCRIMINATING (uniform gold, name-derivable) per QA-2",
+    "D7_note": "A 0.708 = B 0.708; per-model B D7 == A D7 exactly (haiku 0.417, sonnet 1.0); residual is arm-independent large-list enumeration",
+    "oc_valid_trees": { "valid": 6, "consistent_and_correct_all_runs": 6, "invalid_trees_rejected_as_decomposition_theater": 4 },
+    "reexpansion_gate": "byte-identical (build-time code, path 0)",
+    "hash_freeze": "questions + packs SHA-256 frozen before any model call (path 0)"
+  },
+  "legend": [
+    "# WIRING PACK v2.1 - generator-data form",
+    "# 'motif NAME(slots): template' defines a wiring shape; '$slot' substitutes fills.",
+    "# 'inst NAME(fills)' instantiates the template. An indented '+ line' is a DELTA: add it",
+    "# verbatim after expansion. 'impl I -> C' declares C as the implementation of interface I.",
+    "# A fill of '-' means the corresponding line is OMITTED from the expansion (e.g. entity=-",
+    "# and action=- mean the unit has NO anno line). Constants.* fills are literal values.",
+    "# Non-motif units appear explicitly (unit/dep/edge lines). Expansion of every inst",
+    "# reproduces the explicit form exactly."
+  ],
+  "legend_history": "v1 legend omitted the '-' sentinel and the *Repository* glob gloss; both B models then misread D7/D8. v2.1 adds two legend lines and one glob clause. Only the B arm was re-run.",
+  "deviations": [
+    "One corpus (Fineract, one framework, convention-heavy); haiku/sonnet harness models; same-author question templates; full-protocol firewall still owed.",
+    "D3 has 6 not 12 questions; 4 D9 duplicates deduped; D6 retained but non-discriminating; arm-C audit dropped in E5 and should be restored.",
+    "The v1 to v2 fix changed pack B's hash (v1 archived). A arm was not re-run.",
+    "Binary set-grading is the primary metric; all-or-nothing on 20-name lists."
+  ],
+  "proposed_apply": "Write the rung, as worded, into the MAY list of manutej/wiring-and-the-whole README.md with its recorded limits. Do not touch the MAY NOT list. This is a human write (C10)."
+}

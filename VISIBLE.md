@@ -40,6 +40,7 @@ This repo is the source of record. Read **in this order**. Ignore `archive/`.
 - `wiki/pages/speed-path.md`
 - `wiki/pages/harness-vs-process.md`
 - `wiki/pages/surfaces-gmail-github.md`
+- `wiki/pages/wiring-claim-gate.md`
 
 Sibling wiki pages that repeat a hub live in `archive/wiki-duplicates/`.
 

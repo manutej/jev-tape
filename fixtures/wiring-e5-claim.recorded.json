@@ -1,0 +1,34 @@
+{
+  "fixture": "fixtures/wiring-e5-claim.json",
+  "recorded_at": "2026-09-28",
+  "rule_result": { "B_minus_A_pts": -3.7, "threshold_pts": -5, "passes": true },
+  "model": "jev-1.13.0",
+  "answers": {
+    "legend_readable": { "type": "noul", "noul": 0.33 },
+    "evidence_sufficiency": {
+      "type": "choice",
+      "choice": "parity",
+      "confidence": 0.18,
+      "probabilities": { "tax": 0.27, "insufficient_n": 0.28, "parity": 0.45 }
+    },
+    "promote_rung": {
+      "type": "choice",
+      "choice": "RED",
+      "confidence": 0.35,
+      "probabilities": { "RED": 0.56, "GREEN": 0.08, "AMBER": 0.36 }
+    },
+    "scope": {
+      "type": "score",
+      "score": 1.05,
+      "confidence": 0.74,
+      "legend": {
+        "0": "Rung wording stays inside what the recorded run measured",
+        "1": "Rung wording implies something the run did not measure, but nothing on the MAY-NOT list",
+        "2": "Rung wording asserts a MAY-NOT item (CR@F95, L3/L4, cross-corpus, OC validates model reasoning)"
+      },
+      "probabilities": { "0": 0.06, "1": 0.83, "2": 0.11 }
+    }
+  },
+  "usage": { "input_tokens": 1858, "output_tokens": 122 },
+  "verdict": "RED"
+}

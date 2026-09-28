@@ -60,6 +60,8 @@ Local Grok can see your connected Gmail / GitHub MCP. This repo does not embed t
 4. `npm run qualify -- fixtures/example-availability.json`
 5. Read printed `model` + answers. The script will not send.
 
+Wiring surface: `npm run qualify -- fixtures/wiring-e5-claim.json` gates one frozen result from `manutej/wiring-and-the-whole` before its MAY rung is written. See `wiki/pages/wiring-claim-gate.md`.
+
 Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFETY.md`](spec/KEY-SAFETY.md).
 
 | Allowed MCP | Forbidden until you explicitly flip a local flag |

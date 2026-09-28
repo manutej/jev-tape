@@ -19,3 +19,4 @@ Start: [[home]]
 
 ## Surfaces
 - [[gmail-github-surfaces]]
+- [[wiring-claim-gate]]

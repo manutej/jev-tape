@@ -10,4 +10,4 @@ Durable execution for Block C work: TypeSafe `jev-1.13.0` answers seats; code ga
 
 Ormus-jev constructs live here as doctrine, not new seats. Speed is skip + one POST + record only if the write can hurt.
 
-Related: [[three-planes]] [[apply-last-loop]] [[ormus-jev-lanes]] [[harness-vs-process]] [[surfaces-gmail-github]] [[c10-human-gate]] [[completed-spec]]
+Related: [[three-planes]] [[apply-last-loop]] [[ormus-jev-lanes]] [[harness-vs-process]] [[surfaces-gmail-github]] [[wiring-claim-gate]] [[c10-human-gate]] [[completed-spec]]
