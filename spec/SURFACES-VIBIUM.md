@@ -157,6 +157,21 @@ Measured live on github.com/microsoft/vscode/issues, 80 candidate elements in on
 
 One POST replaces the planner turn that would otherwise choose the element, and the escape option holds when nothing fits. n=3, one page: a lead, not a law.
 
+## 8e. The larger number space: 80 rows, 3 parallel workers (2026-09-28)
+
+`npm run corpus -- --workers 3` over `fixtures/vibium/catalog-pages.json`: 40 public pages, each with a true claim and a false claim. Each worker is its own Vibium session making its own Jev calls.
+
+| | |
+| --- | --- |
+| wall time | 88 s for 80 rows (nav median 1.5 s, Jev median 178 ms) |
+| settled | 74; 6 never settled: PyPI's bot check ("is verifying your browser") ×3, gnu.org 429 to three parallel workers ×2, one empty document. Caught in code, no call made |
+| decided | 73 of 74, **73 right, 0 wrong**; 1 escalate (WCAG quick reference, `outcome` entropy 0.78 → rule 0) |
+| cost | 74 POSTs, about $0.005 |
+
+Lab measurement over the same 74 items (JEV-works `kit/results/browser-step-verify-corpus-2026-09-28.json`): `outcome` JEV-SAFE (82% at ends), **98.6%** vs majority 50%, McNemar b=36 c=0, p = 2.9e-11, coverage 100% ≥ declared 90%. `errorShown` and `blocked` came back NO-INFORMATION: every page in this catalog is a normal page, so they answered the same way every time. That is a catalog gap (add 404 / 500 / login-wall / consent rows), not a question defect; on the bench run `blocked` was the question that caught the Cloudflare wall.
+
+What this is: coverage, consistency, and latency under parallel load on a sample big enough for the kit's own verdicts. What it is not: a generalisation claim. The claims were written with the pages known (L31), the false ones are mostly wrong-subject claims, and thresholds are hand-set. The next step is a fit/test split with claims written blind, and rows with actions so the gate gets the same treatment.
+
 ## 9. Next cuts, in order
 
 1. First keyed run; record the gate's score indexing and the real p50 per POST in this file.
