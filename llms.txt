@@ -15,6 +15,7 @@ Read first:
 6. spec/SPEC-v1-SPEED.md
 7. spec/TEMPORAL.md
 8. wiki/pages/home.md
+9. spec/SURFACES-VIBIUM.md (browser surface; packs/ + src/vibium/)
 
 Skip: archive/, .env, rendered HTML.
 If a path above is missing after git pull, the clone is behind. Do not reconstruct v1 from HTML.

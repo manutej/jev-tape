@@ -1,0 +1,28 @@
+{
+  "name": "browser.bad-example",
+  "description": "Deliberately fails the pack shape rules; used by the twins to prove loadPack fails closed.",
+  "artifact": { "type": "x", "stateFields": ["textExcerpt"] },
+  "modules": [
+    {
+      "name": "bad",
+      "purpose": "two defects: a choice without an escape option, and a two-question instruction",
+      "questions": {
+        "kind": {
+          "type": "choice",
+          "polarity": "neutral",
+          "reads": ["textExcerpt"],
+          "instructions": "What kind of page is this?",
+          "criteria": { "login": "a", "form": "b" }
+        },
+        "twin": {
+          "type": "noul",
+          "polarity": "neutral",
+          "reads": ["textExcerpt"],
+          "instructions": "Is it an error? Is it also empty?",
+          "criteria": { "true": "y", "false": "n" }
+        }
+      },
+      "compose": { "positive": "x", "rules": [], "default": "escalate" }
+    }
+  ]
+}

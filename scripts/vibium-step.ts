@@ -1,0 +1,126 @@
+#!/usr/bin/env node
+/**
+ * One live, typed browser flow through Vibium and TypeSafe. Key required; missing key = exit 1, no verdict invented.
+ *
+ *   npm run vibium -- --url https://the-internet.herokuapp.com/login \
+ *     --fill @e1 tomsmith --fill @e2 'SuperSecretPassword!' \
+ *     --click @e3 --expect "the user is signed in and sees the secure area" \
+ *     --verify-module login-verify --allow-host the-internet.herokuapp.com
+ *
+ * Options
+ *   --url U                 first step: go U (nav, path 0)
+ *   --fill @eN VALUE        tab edit, path 0 (repeatable)
+ *   --click @eN | --press K commit verb: one gate POST
+ *   --expect "claim"        verify the last commit: one verify POST
+ *   --verify-module NAME    step-verify (default) | login-verify
+ *   --allow-host H          repeatable; empty = no host check
+ *   --tape PATH             JSONL answer tape (default runs/vibium-tape.jsonl)
+ *   --replay                answer only from the tape; never calls TypeSafe
+ *   --corpus PATH           append every snapshot as a state for JEV-works measure-confidence
+ *   --headless --session S --bin PATH --stop
+ *
+ * Exit 0: last verdict true. Exit 2: escalate / human / refuse / refused-host. Exit 1: error or missing key.
+ */
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
+import { systemOne } from "../src/typesafe/client.ts";
+import { loadPack } from "../src/vibium/pack.ts";
+import { step, type Action, type StepResult } from "../src/vibium/step.ts";
+import { Tape, tapedJudge, type Judge } from "../src/vibium/tape.ts";
+import { vibium } from "../src/vibium/cli.ts";
+
+const argv = process.argv.slice(2);
+const flag = (name: string) => argv.includes(name);
+const opt = (name: string): string | undefined => {
+  const i = argv.indexOf(name);
+  return i >= 0 ? argv[i + 1] : undefined;
+};
+const opts = (name: string): string[] => argv.flatMap((a, i) => (a === name ? [argv[i + 1]!] : []));
+
+const replay = flag("--replay");
+if (!replay && !process.env.TYPESAFE_API_KEY) {
+  console.error("TYPESAFE_API_KEY is not set. Copy .env.example → .env on this machine, or pass --replay with a tape.");
+  process.exit(1);
+}
+
+const ROOT = new URL("../", import.meta.url).pathname;
+const gatePack = loadPack(`${ROOT}packs/browser.action-gate.json`);
+const verifyPack = loadPack(`${ROOT}packs/browser.step-verify.json`);
+const tapePath = opt("--tape") ?? `${ROOT}runs/vibium-tape.jsonl`;
+mkdirSync(dirname(tapePath), { recursive: true });
+const tape = new Tape(tapePath);
+const stats = { posts: 0, replays: 0 };
+const live: Judge = (req) => systemOne(req);
+const judge: Judge = replay
+  ? tape.replayJudge()
+  : async (req) => {
+      const isGate = "mutatesWorld" in req.questions;
+      return tapedJudge(live, tape, stats, isGate ? { pack: gatePack.name, module: "action-gate" } : { pack: verifyPack.name, module: opt("--verify-module") ?? "step-verify" })(req);
+    };
+
+const actions: Action[] = [];
+const url = opt("--url");
+if (url) actions.push({ verb: "go", args: [url] });
+for (let i = 0; i < argv.length; i++) {
+  if (argv[i] === "--fill") actions.push({ verb: "fill", args: [argv[i + 1]!, argv[i + 2]!] });
+  if (argv[i] === "--click") actions.push({ verb: "click", args: [argv[i + 1]!] });
+  if (argv[i] === "--press") actions.push({ verb: "press", args: [argv[i + 1]!] });
+}
+const expect = opt("--expect");
+if (expect) {
+  const last = [...actions].reverse().find((a) => a.verb === "click" || a.verb === "press");
+  if (!last) {
+    console.error("--expect needs a --click or --press to verify");
+    process.exit(1);
+  }
+  last.expect = expect;
+}
+if (!actions.length) {
+  console.error("nothing to do: give --url and/or --fill/--click/--press");
+  process.exit(1);
+}
+
+const vopts = { bin: opt("--bin"), session: opt("--session"), headless: flag("--headless") };
+const corpusPath = opt("--corpus");
+const corpus: unknown[] = corpusPath && existsSync(corpusPath) ? (JSON.parse(readFileSync(corpusPath, "utf8")) as unknown[]) : [];
+
+let last: StepResult | undefined;
+const t0 = performance.now();
+try {
+  for (const a of actions) {
+    last = await step(a, {
+      vibium: vopts,
+      judge,
+      gatePack,
+      verifyPack,
+      verifyModule: opt("--verify-module") ?? "step-verify",
+      policy: { allowHosts: opts("--allow-host") },
+    });
+    const line = {
+      action: `${a.verb} ${a.args.map((x, i) => (a.verb === "fill" && i === 1 ? `<value:${x.length}>` : x)).join(" ")}`.trim(),
+      route: last.route,
+      gate: last.gate?.decided.verdict,
+      verify: last.verify?.decided.verdict,
+      judgeCalls: last.judgeCalls,
+      ms: last.ms,
+    };
+    console.log(JSON.stringify(line));
+    if (corpusPath) {
+      if (last.before) corpus.push({ ...last.before, action: line.action, phase: "before" });
+      if (last.after) corpus.push({ ...last.after, action: line.action, phase: "after", claim: a.expect });
+    }
+    if (last.route !== "auto" && last.route !== "nav" && last.route !== "tab-edit" && last.route !== "read") break;
+  }
+} finally {
+  if (corpusPath) writeFileSync(corpusPath, `${JSON.stringify(corpus, null, 2)}\n`);
+  if (flag("--stop")) await vibium(["daemon", "stop"], vopts).catch(() => undefined);
+}
+
+const totalMs = Math.round(performance.now() - t0);
+const summary = { steps: actions.length, posts: stats.posts, replays: stats.replays, tape: tapePath, tapeSize: tape.size, totalMs, model: "jev-1.13.0" };
+console.log(JSON.stringify(summary));
+if (last?.gate) console.log("gate answers:", JSON.stringify(last.gate.answers));
+if (last?.verify) console.log("verify answers:", JSON.stringify(last.verify.answers));
+
+const finalVerdict = last?.verify?.decided.verdict ?? (last?.route === "auto" || last?.route === "nav" || last?.route === "tab-edit" ? true : undefined);
+process.exit(finalVerdict === true ? 0 : 2);

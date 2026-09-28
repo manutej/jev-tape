@@ -75,6 +75,7 @@ Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFE
 | TypeSafe `jev-1.13.0` | Hosted judge. Answers only |
 | This repo | Two gates + in-process Temporal twin |
 | Your Gmail / GitHub MCP | Read surfaces. Writes stay parked |
+| Vibium (browser) | Sensor + actuator. `map` / `text` / `url` in, verbs out. Commit verbs gated, steps verified. `spec/SURFACES-VIBIUM.md` |
 
 Not a fourth product. Not Cloud Event History.
 
@@ -87,4 +88,5 @@ npm run temporal  # scripts match spec/TEMPORAL.md
 npm run smoke     # key required — pin check
 npm run live      # key required — one Capture
 npm run qualify   # key required — fixture JSON in, verdict out
+npm run vibium    # key required — one typed browser flow: gate the click, verify the page, ≤ 2 POSTs
 ```
