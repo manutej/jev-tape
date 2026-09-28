@@ -5,8 +5,10 @@
  *   WaitingWorkflow         StartWaiting → timer nudges → resolve Signal → ResolveWaiting (C10)
  *   HabitWorkflow           mints Instances on an interval. CreateHabit is illegal here.
  *   SomedayReviewWorkflow   review timer; snooze or trash on Signal
+ *   SurfaceIngestWorkflow   pull pages from a connector (Activity), dedupe by threadId, fan out lanes
  */
 import {
+  ParentClosePolicy,
   condition,
   continueAsNew,
   defineQuery,
@@ -14,6 +16,7 @@ import {
   proxyActivities,
   setHandler,
   sleep,
+  startChild,
   workflowInfo,
 } from "@temporalio/workflow";
 import type { Command } from "../domain.ts";
@@ -24,6 +27,8 @@ import { NON_RETRYABLE } from "../loop.ts";
 
 export const TASK_QUEUE = "jev-tape";
 export const CONTINUE_AS_NEW_EVERY = 8;
+/** Items per concurrent batch inside one lane. Equal to the ContinueAsNew stride: one batch per run. */
+export const BATCH_CONCURRENCY = CONTINUE_AS_NEW_EVERY;
 
 const acts = proxyActivities<Activities>({
   startToCloseTimeout: "60 seconds",
@@ -115,12 +120,16 @@ export async function JevCorrectnessWorkflow(input: WorklistInput): Promise<Work
   const ports = makePorts(verdicts, parked, input.parkTimeoutMs);
   const end = Math.min(input.commands.length, cursor + CONTINUE_AS_NEW_EVERY);
 
-  for (; cursor < end; cursor++) {
-    const key = `${workflowId}:${cursor}`;
-    const outcome = await runItem(input.commands[cursor]!, key, ports);
+  // The batch runs concurrently: items are disjoint (parallel associativity), so a park never blocks its
+  // neighbours and every gate POST in the batch is in flight at once. Results are folded back in index order.
+  const batch: Promise<ItemOutcome>[] = [];
+  for (let i = cursor; i < end; i++) batch.push(runItem(input.commands[i]!, `${workflowId}:${i}`, ports));
+  const results = await Promise.all(batch);
+  for (const outcome of results) {
     outcomes.push(outcome);
-    (outcome.status === "applied" ? applied : residual).push(key);
+    (outcome.status === "applied" ? applied : residual).push(outcome.idempotencyKey);
   }
+  cursor = end;
 
   if (cursor < input.commands.length) {
     await continueAsNew<typeof JevCorrectnessWorkflow>({
@@ -259,3 +268,84 @@ export async function SomedayReviewWorkflow(input: SomedayInput): Promise<{ revi
     }
   }
 }
+
+// ---------------------------------------------------------------- SurfaceIngestWorkflow
+
+const ingestActs = proxyActivities<Activities>({
+  startToCloseTimeout: "2 minutes",
+  heartbeatTimeout: "60 seconds",
+  retry: { initialInterval: "2 seconds", backoffCoefficient: 2, maximumInterval: "1 minute", maximumAttempts: 5, nonRetryableErrorTypes: ["SurfaceUnconfigured", "SurfaceUnknown"] },
+});
+
+export interface IngestInput {
+  surface: "gmail";
+  query: string;
+  pageSize?: number;
+  /** Stop after this many new commands (one run). Omit for "all pages". */
+  maxItems?: number;
+  laneSize?: number;
+  parkTimeoutMs?: number;
+  /** Carried across ContinueAsNew: next page and what has been started so far. */
+  pageToken?: string;
+  pulled?: number;
+  started?: number;
+  lanes?: string[];
+  pages?: number;
+}
+
+export interface IngestResult {
+  pulled: number;
+  deduped: number;
+  started: number;
+  lanes: string[];
+  pages: number;
+}
+
+/**
+ * Pull → dedupe → lanes. Each page is one Activity, so a crash resumes from the last recorded page.
+ * Lanes are child workflows with ABANDON parent-close policy: the ingest may finish while lanes still judge.
+ * ContinueAsNew every 8 pages keeps history bounded for a long backfill.
+ */
+export async function SurfaceIngestWorkflow(input: IngestInput): Promise<IngestResult> {
+  const { workflowId } = workflowInfo();
+  const pageSize = input.pageSize ?? 50;
+  const laneSize = input.laneSize ?? 25;
+  const lanes = [...(input.lanes ?? [])];
+  let pulled = input.pulled ?? 0;
+  let started = input.started ?? 0;
+  let deduped = 0;
+  let pages = input.pages ?? 0;
+  let pageToken = input.pageToken;
+  let pagesThisRun = 0;
+
+  for (;;) {
+    const page = await ingestActs.pullSurface(input.surface, input.query, pageSize, pageToken);
+    pages += 1;
+    pagesThisRun += 1;
+    pulled += page.commands.length;
+    const ids = page.commands.map((c) => String(c.payload.threadId ?? ""));
+    const seen = new Set(await ingestActs.seenThreadIds(ids));
+    const fresh = page.commands.filter((c) => !seen.has(String(c.payload.threadId ?? "")));
+    deduped += page.commands.length - fresh.length;
+
+    for (let i = 0; i < fresh.length; i += laneSize) {
+      const slice = fresh.slice(i, i + laneSize);
+      const laneId = `${workflowId}-p${String(pages).padStart(3, "0")}-L${String(i / laneSize).padStart(2, "0")}`;
+      await startChild(JevCorrectnessWorkflow, {
+        workflowId: laneId,
+        args: [{ commands: slice, parkTimeoutMs: input.parkTimeoutMs }],
+        parentClosePolicy: ParentClosePolicy.ABANDON,
+      });
+      lanes.push(laneId);
+      started += slice.length;
+    }
+
+    pageToken = page.nextPageToken;
+    const done = !pageToken || (input.maxItems !== undefined && started >= input.maxItems);
+    if (done) return { pulled, deduped, started, lanes, pages };
+    if (pagesThisRun >= CONTINUE_AS_NEW_EVERY) {
+      await continueAsNew<typeof SurfaceIngestWorkflow>({ ...input, pageToken, pulled, started, lanes, pages });
+    }
+  }
+}
+

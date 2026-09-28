@@ -79,6 +79,26 @@ verdict takes the more conservative light. The harness marks such rows `oc!` and
 
 Judge-derived item kind (Q6: action / waiting / reference / someday / noise) rides on the verdict for the layers.
 
+## Ingest from a connector (no model in the loop)
+
+`SurfaceIngestWorkflow` pulls pages from an MCP server as an Activity (`pullSurface`), maps rows to Capture commands with a
+code codec (`src/surfaces/codec.ts`, scrubbed by `src/surfaces/scrub.ts`), drops threads already on the tape
+(`seenThreadIds`), and starts lanes as child workflows. Each page lands in Event History, so a crash resumes from the last
+recorded page. ContinueAsNew every 8 pages.
+
+```bash
+# worker / harness needs a connector target:
+export JEV_MCP_COMMAND="npx -y <your-gmail-mcp-server>"      # stdio
+# or JEV_MCP_URL=http://localhost:3333/mcp  (JEV_MCP_BEARER for auth)
+npm run ingest                                   # once, in:inbox newer_than:7d
+npm run ingest -- --query "in:inbox is:unread" --max 200 --lane 25 --park 30
+npm run ingest -- --every 15m                    # Temporal Schedule; --every off deletes it
+```
+
+No Gmail MCP server yet? `JEV_MCP_COMMAND="node --experimental-strip-types scripts/mcp-fake-gmail.ts"` serves your local
+pack in the connector's shape over real MCP stdio. The harness has an "Ingest from connector" button when a target is set.
+Performance notes and the adversarial evaluation of the two parallelisms: [`PARALLELISM.md`](PARALLELISM.md).
+
 ## Loop, as code
 
 `src/item.ts` is the loop. Both the twin (`src/engine.ts`) and the workflow (`src/temporal/workflows.ts`) call `runItem`

@@ -122,7 +122,9 @@
         <button class="primary" id="run-pack">Run demo pack</button>
         <button id="run-waiting">Start Waiting</button>
         <button id="run-habit">Start Habit</button>
+        <button id="run-ingest" title="SurfaceIngestWorkflow: pull pages from the connector through MCP, dedupe by thread, start lanes">Ingest from connector</button>
       </div>
+      <div class="row"><input type="text" id="ingest-q" value="in:inbox newer_than:7d" placeholder="Gmail query" style="max-width:320px"><label class="hint">max <input type="number" id="ingest-max" value="100" min="1" style="width:70px;background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 6px"></label><span class="hint" id="mcp-note">no connector on this worker</span></div>
       <div class="row">
         <label class="hint">lane size <input type="number" id="lane" value="25" min="1" style="width:64px;background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 6px"></label>
         <label class="hint">park timeout s <input type="number" id="park" value="30" min="0" style="width:64px;background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 6px"></label>
@@ -237,6 +239,7 @@ function saveView() { try { localStorage.setItem("jev-view", JSON.stringify(view
 function flatten() {
   const out = [];
   for (const [id, w] of [...wfs.entries()].reverse()) {
+    if (w.kind === "SurfaceIngestWorkflow") continue;
     for (const [key, it] of w.items) {
       const idx = key.slice(id.length + 1); const n = +idx; const cmd = w.commands[n];
       const p = cmd?.payload || {};
@@ -360,7 +363,7 @@ const hhmm = (iso) => (iso || "").slice(11, 23);
 
 function onMsg(m) {
   switch (m.type) {
-    case "workflow": { const w = wf(m.workflowId); w.kind = m.kind; w.commands = m.commands || []; w.link = m.link; if (m.kind === "JevCorrectnessWorkflow") w.commands.forEach((_, i) => item(w, `${m.workflowId}:${i}`)); feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">started ${m.kind} ${m.workflowId}</span>`); break; }
+    case "workflow": { const w = wf(m.workflowId); w.kind = m.kind; w.commands = m.commands || []; w.link = m.link; if (m.kind === "JevCorrectnessWorkflow") w.commands.forEach((_, i) => item(w, `${m.workflowId}:${i}`)); if (m.kind === "SurfaceIngestWorkflow") { w.ingest = true; } feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">${m.adopted ? "lane" : "started"} ${m.kind} ${m.workflowId}</span>`); break; }
     case "path0": { const w = wf(m.workflowId); const it = item(w, m.key); it.status = "residual"; it.path0 = true; it.task = "RED"; it.notes.push(m.reasons.join("; ")); path0++; loopCounts.assertLegalCommand = (loopCounts.assertLegalCommand || 0) + 1; feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span><span class="RED">path 0 · RED</span> ${m.command}: ${m.reasons.join("; ")}`); break; }
     case "step": {
       const w = wf(m.workflowId); const it = item(w, m.key);
@@ -379,6 +382,7 @@ function onMsg(m) {
         else if (m.kind === "qualifyOutput" && it.task !== "AMBER") it.status = "running";
         feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span>${m.kind} <span class="${m.light}">${m.light}</span> <b>${m.ms ?? "–"}ms</b> ${m.source} · ${(m.reasons || []).join("; ")}`);
       } else if (m.kind === "applyCommand") { it.status = "applied"; it.notes.push(m.duplicate ? "idempotent: already on tape" : `${m.event} written`); feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span><span class="GREEN">applyCommand</span> ${m.event}${m.duplicate ? " (duplicate, skipped)" : ""}`); loadTape(); }
+      else if (m.kind === "pullSurface") { feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key}</span>pullSurface <b>${m.ms ?? "–"}ms</b> mcp · ${(m.reasons || []).join("; ")}`); }
       else if (m.kind === "recordEvent") { it.status = "recorded"; it.recorded = m.event; it.source = "code"; it.notes.push(`${m.event}${m.duplicate ? " (duplicate, skipped)" : " written"}`); feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").slice(1).join(":")}</span>${m.event}`); loadTape(); }
       break;
     }
@@ -407,6 +411,7 @@ const runOne = () => { const text = $("#one").value.trim(); if (!text) return; $
 $("#run-one").onclick = runOne; $("#one").addEventListener("keydown", (e) => { if (e.key === "Enter") runOne(); });
 $("#run-waiting").onclick = () => api("/waiting", { display_name: "Ana", what: "confirm the Oct 2 dry run", nudgeEveryMs: 3000, maxNudges: 3 }).then((r) => feed(`<span class="sys">Waiting ${r.workflowId}: send resolve with <button class="sm" onclick="api('/resolve',{workflowId:'${r.workflowId}',note:'confirmed'})">resolve</button></span>`));
 $("#run-habit").onclick = () => api("/habit", { habitId: "stretch", everyMs: 1000, maxInstances: 3 });
+$("#run-ingest").onclick = () => { const laneSize = Number($("#lane").value) || 25; const park = Number($("#park").value); api("/ingest", { query: $("#ingest-q").value, maxItems: Number($("#ingest-max").value) || undefined, laneSize, parkTimeoutMs: park > 0 ? park * 1000 : undefined }).then((r) => feed(`<span class="sys">ingest ${r.workflowId} started</span>`)).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
 
 async function loadTape() { try { const rows = await (await fetch("/tape")).json(); $("#tape").innerHTML = rows.slice().reverse().slice(0, 60).map((r) => `<tr><td class="mono">${r.key}</td><td class="mono">${r.event}</td><td class="mono">${r.command}</td><td class="mono">${hhmm(r.at)}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">tape is empty</td></tr>`; } catch {} }
 async function loadInfo() {
@@ -414,6 +419,8 @@ async function loadInfo() {
   const bj = $("#b-judge"); bj.className = `badge ${i.judge}`; bj.innerHTML = `<span class="dot ${i.judge === "live" ? "on" : ""}"></span>judge <b>${i.judge === "live" ? "LIVE " + i.pin : i.judge === "stub" ? "STUB (not a verdict)" : "CLOSED (no key)"}</b>`;
   $("#b-pin").innerHTML = `pin <b>${i.pin}</b>`; $("#b-temporal").innerHTML = `temporal <b>${i.temporal.address}</b> ${i.temporal.namespace}`; $("#b-queue").innerHTML = `queue <b>${i.taskQueue}</b>`;
   $("#b-worker").innerHTML = `<span class="dot ${i.worker.inProcess ? "on" : ""}"></span>worker <b>${i.worker.inProcess ? i.worker.identity : "external"}</b>`;
+  $("#mcp-note").textContent = i.mcp ? `connector: ${i.mcp.kind} ${i.mcp.target}` : "no connector on this worker (set JEV_MCP_COMMAND or JEV_MCP_URL)";
+  $("#run-ingest").disabled = !i.mcp;
   $("#ui-link").href = i.temporal.ui + "/namespaces/" + i.temporal.namespace + "/workflows"; $("#tape-path").textContent = i.tapePath; $("#lat-note").textContent = i.judge === "live" ? "wall ms per POST to " + i.endpoint : i.judge === "stub" ? "stub answers: ms measures the loop, not Jev" : "no judge: gates fail closed";
   $("#loaded").innerHTML = [["judge", i.judge], ["endpoint", i.endpoint], ["workflows", i.workflows.join(", ")], ["activities", i.activities.join(", ")], ["queue", i.taskQueue], ["tape", i.tapePath]].map(([k, v]) => `<div>${k}</div><div>${v}</div>`).join("");
 }

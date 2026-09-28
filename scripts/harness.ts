@@ -19,9 +19,11 @@ import { localGate } from "../src/loop.ts";
 import { fileTape, type StepEvent } from "../src/temporal/activities.ts";
 import { temporalTarget, uiUrl } from "../src/temporal/connection.ts";
 import { DEFAULT_TAPE, createWorker } from "../src/temporal/worker.ts";
+import { mcpTargetFromEnv } from "../src/surfaces/mcp.ts";
 import {
   HabitWorkflow,
   JevCorrectnessWorkflow,
+  SurfaceIngestWorkflow,
   TASK_QUEUE,
   WaitingWorkflow,
   humanVerdictSignal,
@@ -67,7 +69,7 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
   let worker: Awaited<ReturnType<typeof createWorker>> | undefined;
   if (opts.worker ?? true) {
     try {
-      worker = await createWorker({ tapePath, taskQueue, onStep: (e: StepEvent) => broadcast({ type: "step", ...e }) });
+      worker = await createWorker({ tapePath, taskQueue, onStep: (e: StepEvent) => { broadcast({ type: "step", ...e }); if (e.workflowId.startsWith("jev-ingest-")) adopt(e.workflowId); } });
       judgeSource = worker.judge.source;
       void worker.worker.run();
     } catch (err) {
@@ -78,9 +80,23 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
   const handles = new Map<string, WorkflowHandle>();
   const pollers = new Map<string, NodeJS.Timeout>();
 
-  function track(handle: WorkflowHandle, kind: string, commands?: Command[]) {
+  const adopt = (workflowId: string) => {
+    if (handles.has(workflowId) || !workflowId.includes("-p") || !workflowId.startsWith("jev-ingest-")) return;
+    const handle = client.workflow.getHandle(workflowId);
+    handles.set(workflowId, handle);
+    handle.describe().then(async () => {
+      // Read the lane's commands from its start input so the page can show text and payload.
+      const hist = await handle.fetchHistory();
+      const start = hist.events?.find((e) => e.workflowExecutionStartedEventAttributes)?.workflowExecutionStartedEventAttributes;
+      const payload = start?.input?.payloads?.[0]?.data;
+      const args = payload ? (JSON.parse(Buffer.from(payload).toString("utf8")) as { commands: Command[] }) : undefined;
+      track(handle, "JevCorrectnessWorkflow", args?.commands, true);
+    }).catch(() => handles.delete(workflowId));
+  };
+
+  function track(handle: WorkflowHandle, kind: string, commands?: Command[], adopted = false) {
     handles.set(handle.workflowId, handle);
-    broadcast({ type: "workflow", kind, workflowId: handle.workflowId, commands, link: `${ui}/namespaces/${target.namespace}/workflows/${handle.workflowId}` });
+    broadcast({ type: "workflow", kind, workflowId: handle.workflowId, commands, adopted, link: `${ui}/namespaces/${target.namespace}/workflows/${handle.workflowId}` });
     if (kind === "JevCorrectnessWorkflow") {
       // Path-0 items never reach an Activity. Predict them from the same code the workflow runs.
       commands?.forEach((cmd, i) => {
@@ -89,6 +105,7 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
       });
       let last = "";
       const t = setInterval(async () => {
+        if (clients.size === 0) return; // nobody is watching: a query costs a workflow task
         try {
           const s = (await handle.query(statusQuery)) as WorklistStatus;
           const sig = JSON.stringify(s);
@@ -98,7 +115,7 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
         } catch {
           /* completed or not yet started */
         }
-      }, 500);
+      }, 2000);
       pollers.set(handle.workflowId, t);
     }
     handle
@@ -145,6 +162,7 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
           taskQueue,
           temporal: { address: target.address, namespace: target.namespace, ui },
           worker: worker ? { identity: worker.worker.options.identity, inProcess: true } : { inProcess: false },
+          mcp: (() => { const t = mcpTargetFromEnv(); return t ? { kind: t.kind, target: t.kind === "http" ? t.url : [t.command, ...(t.args ?? [])].join(" ") } : null; })(),
           workflows: ["JevCorrectnessWorkflow", "WaitingWorkflow", "HabitWorkflow", "SomedayReviewWorkflow"],
           activities: ["qualifyTask", "qualifyOutput", "applyCommand", "typesafeJudge", "recordEvent"],
           loop: ["assertLegalCommand", "qualifyTask", "gate", "propose", "qualifyOutput", "gate", "humanVerdict?", "applyCommand"],
@@ -214,6 +232,17 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
         track(handle, "HabitWorkflow");
         return json(res, 200, { workflowId });
       }
+      if (req.method === "POST" && url.pathname === "/ingest") {
+        const body = await readBody(req);
+        const workflowId = `jev-ingest-${Date.now().toString(36)}`;
+        const handle = await client.workflow.start(SurfaceIngestWorkflow, {
+          taskQueue,
+          workflowId,
+          args: [{ surface: "gmail", query: body.query ?? "in:inbox newer_than:7d", pageSize: body.pageSize ?? 50, maxItems: body.maxItems ?? undefined, laneSize: body.laneSize ?? 25, parkTimeoutMs: body.parkTimeoutMs ?? undefined }],
+        });
+        track(handle, "SurfaceIngestWorkflow");
+        return json(res, 200, { workflowId });
+      }
       if (req.method === "POST" && url.pathname === "/verdict") {
         const { workflowId, key, verdict } = await readBody(req);
         if (!["compose", "escalate", "refuse"].includes(verdict)) return json(res, 400, { error: "verdict must be compose|escalate|refuse" });
@@ -246,6 +275,7 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
       if (worker) {
         worker.worker.shutdown();
         await new Promise((r) => setTimeout(r, 300));
+        await worker.dispose().catch(() => {});
         await worker.connection.close().catch(() => {});
       }
       await connection.close();

@@ -18,6 +18,8 @@ export interface TapeEntry {
 export interface Tape {
   append(entry: TapeEntry): Promise<{ applied: boolean; duplicate: boolean }>;
   entries(): Promise<TapeEntry[]>;
+  /** Optional fast path for ingest dedupe; falls back to a scan of entries(). */
+  seenThreadIds?(ids: string[]): Promise<string[]>;
 }
 
 export function memoryTape(): Tape {

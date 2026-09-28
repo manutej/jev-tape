@@ -24,7 +24,12 @@ Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe o
 | `src/someday.ts` | SomedayReview twin. |
 | `src/habit.ts` | Habit twin. CreateHabit illegal. |
 | `src/temporal/workflows.ts` | Same names and branches. |
-| `src/temporal/activities.ts` | qualifyTask, qualifyOutput, applyCommand, typesafeJudge. |
+| `src/temporal/activities.ts` | qualifyTask, qualifyOutput, applyCommand, typesafeJudge, recordEvent, pullSurface, seenThreadIds. |
+| `src/surfaces/mcp.ts` | jev as an MCP client (stdio or HTTP). Worker only. |
+| `src/surfaces/codec.ts` | connector result → Capture commands, in code. Gmail first. |
+| `src/surfaces/scrub.ts` | addresses, phones, codes, URLs out before anything is judge state. |
+| `scripts/ingest.ts` | one SurfaceIngestWorkflow, or a Temporal Schedule with `--every`. |
+| `scripts/mcp-fake-gmail.ts` | stdio MCP server that pages a local pack; tests and demos without Gmail. |
 | `src/temporal/worker.ts` | TASK_QUEUE=jev-tape. Local dev server by default; Cloud via TEMPORAL_ADDRESS/API_KEY. |
 | `src/temporal/connection.ts` | Where Temporal is. Env only. |
 | `scripts/demo.ts` | Three workflows through a real server. `--crash` kills and resumes a worker. |
@@ -36,7 +41,8 @@ Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe o
 
 ## Names
 
-Workflows: JevCorrectnessWorkflow, WaitingWorkflow, HabitWorkflow, SomedayReviewWorkflow.
+Workflows: JevCorrectnessWorkflow, WaitingWorkflow, HabitWorkflow, SomedayReviewWorkflow, SurfaceIngestWorkflow.
+JevCorrectnessWorkflow runs each batch of 8 concurrently (items are disjoint); a park never blocks its neighbours.
 Signals: humanVerdict {compose\|escalate\|refuse}.
 Pin: jev-1.13.0. Pack: v2.0 (24 task + 4 output questions, one POST each). Every verdict carries `pack` and `oc`.
 

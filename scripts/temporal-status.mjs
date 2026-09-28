@@ -10,7 +10,7 @@ const files = [...spec.matchAll(/^\| `([^`]+)` \|/gm)].map((m) => m[1]).filter((
 for (const f of files) if (!existsSync(new URL(f, root))) fails.push(`missing file named in spec: ${f}`);
 
 const wf = existsSync(new URL("src/temporal/workflows.ts", root)) ? read("src/temporal/workflows.ts") : "";
-for (const name of ["JevCorrectnessWorkflow", "WaitingWorkflow", "HabitWorkflow", "SomedayReviewWorkflow"]) {
+for (const name of ["JevCorrectnessWorkflow", "WaitingWorkflow", "HabitWorkflow", "SomedayReviewWorkflow", "SurfaceIngestWorkflow"]) {
   if (!new RegExp(`export async function ${name}\\b`).test(wf)) fails.push(`workflow not exported: ${name}`);
 }
 if (!/defineSignal[^\n]*"humanVerdict"/.test(wf)) fails.push("signal humanVerdict not defined");
@@ -26,4 +26,4 @@ if (fails.length) {
   for (const f of fails) console.error("  ✗ " + f);
   process.exit(1);
 }
-console.log(`temporal: ok — ${files.length} files, 4 workflows, signal humanVerdict, queue jev-tape, pin jev-1.13.0`);
+console.log(`temporal: ok — ${files.length} files, 5 workflows, signal humanVerdict, queue jev-tape, pin jev-1.13.0`);
