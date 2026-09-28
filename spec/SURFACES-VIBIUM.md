@@ -123,7 +123,17 @@ What this does and does not show. It shows the per-decision cost gap on literal 
 
 ## 3a. Fallback order
 
-Jev first. On `escalate`, the text model (`llmFallback`, typically `vibium check`) with the same claim; for a gate, a safety claim with an instruction to inspect only. On the model's own escalate, a person (`humanVerdict`). Never the model after a Jev refusal, and never the model for a C10 park: those belong to the person. `--llm-fallback` on the runner wires it to `vibium check`.
+Jev first. On a **verify** escalate, the text model (`llmFallback`, wired to `vibium check` by `--llm-fallback`) with the step's own claim; on the model's own escalate, a person. On a **gate** escalate, policy or a person, not the model: asked whether a click would be safe, `check` investigates for its whole 3-minute budget and times out with no verdict (measured, §8c). Never the model after a Jev refusal, and never the model for a C10 park: those belong to the person.
+
+## 8c. The same login three ways (2026-09-28, local fixture site, screenshots per step)
+
+| variant | what decides | wall time | of which page load | decisions | outcome |
+| --- | --- | --- | --- | --- | --- |
+| A. model only | `vibium run` (grok-4.6) plans and acts, `vibium check` verifies | **32.8 s** | 0.6 s | run 14.8 s, check 17.3 s | completed, passed |
+| B. Jev + operator policy | scripted verbs; Jev gates the submit (escalate → operator compose); Jev verifies | **5.0 s** | 0.7 s | gate 0.33 s and verify 0.50 s when fresh; 81 ms together from the tape on this run | verified true |
+| C. Jev + model fallback on the gate | as B, but the gate escalate goes to `check` | 185 s | 0.7 s | `check` timed out at 180 s, no verdict → parked | not applied (correct fail-closed) |
+
+Whole task: about **6×** (B over A). The decisions alone: about **40×** with fresh POSTs, more from the tape. The gap that remains in B is the page itself. Variant A also plans the steps, which B does not: B is the shape for a known flow (a playbook), A for an unknown page. The per-decision gap on real pages is in §8b.
 
 ## 9. Next cuts, in order
 

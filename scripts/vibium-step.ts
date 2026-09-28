@@ -98,6 +98,10 @@ const provider = opt("--provider") ?? "xai";
 const model = opt("--model") ?? "grok-4.6";
 const llmFallback = flag("--llm-fallback")
   ? async ({ kind, claim }: { kind: "gate" | "verify"; claim: string }) => {
+      // Verify only. `vibium check` answers claims about page state; asked whether a click would be safe it
+      // investigates for its whole 3-minute budget and times out (measured 2026-09-28: 180 s, no verdict).
+      // A gate escalate goes to policy or a person instead.
+      if (kind === "gate") return { verdict: "escalate" as const, ms: 0, summary: "gate fallback is policy or a person, not the model" };
       const t = performance.now();
       try {
         const r = await vibium<{ status: string; summary?: string }>(["check", "--provider", provider, "--model", model, "--reasoning-effort", "", claim], { ...vopts, timeoutMs: 300_000 });
