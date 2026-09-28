@@ -13,7 +13,12 @@
   .exits .v b{color:var(--green)} .exits .c b{color:var(--red)} .exits .u b{color:var(--amber)}
   .verdict-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:44px;margin:10px 0 2px}
   .verdict-row .rn{font-family:var(--mono);font-size:12px;color:var(--dim)}
-  .claimtext{font-size:14px;color:var(--bone);margin:0 0 6px;font-family:var(--display);font-style:italic;font-size:17px;line-height:1.3}
+  .claimtext{color:var(--bone);margin:0 0 6px;font-family:var(--display);font-style:italic;font-size:17px;line-height:1.3}
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  .reasons li.src{color:var(--bone)}
+  .reasons li.diff{color:var(--amber)}
+  .reasons li q{color:var(--bone);font-style:italic}
   .reasons{font-size:13px;color:var(--dim);margin:6px 0 0;padding-left:18px}
   .reasons li{margin:2px 0}
   .counters{margin:10px 0 4px}
@@ -40,9 +45,9 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 07 of 10 · claim verify lane</div>
+      <div class="q"><small>demo 07 of 10</small>If a repo already writes down what it may not claim, what does a judge add by stamping each rung verified, contradicted, or unsupported?</div>
       <h1>A claim is a fork with three exits.</h1>
-      <p class="lede">The wiring repo keeps a claims ladder: what its experiments <b>may</b> say and what they <b>may not</b>. Every rung is a claim with evidence pointers, and every claim is a closed fork: <b>verified</b>, <b>contradicted</b>, or <b>unsupported</b>. That is lane 2. Claim text and recorded evidence go in, one of three words comes out, and the lane never writes the claim. This demo walks the ten rungs with one request and stamps each one.</p>
+      <p class="lede">The wiring repo keeps a claims ladder: what its experiments <b>may</b> say and what they <b>may not</b>. Every rung is a claim with evidence pointers, and every claim is a closed fork: <b>verified</b>, <b>contradicted</b>, or <b>unsupported</b>. That is lane 2. Claim text and recorded evidence go in, one of three words comes out, and the lane never writes the claim. This demo walks the ten rungs with one request and stamps each one. When the pill is green the stamps are the real judge's, recorded once; otherwise a twin returns the repo's own discipline.</p>
     </div>
     <aside class="aside">
       <b>The intersection.</b> <em>wiring-and-the-whole</em> is disciplined about what it may claim: demonstrated is not proved, consistency is not correctness. <em>jev-tape</em> has a lane for exactly that discipline. Put the ladder in the lane and each rung gets a stamp it cannot give itself.
@@ -92,12 +97,13 @@
         <h2>What the tape shows</h2>
         <p>Lane 2 is a judge job because the option set is closed: three words, no fourth. It is not a code job because the match between a sentence and a quotation is not deterministic. So one request carries ten Choice questions, each with the claim and its evidence snippets as state, and the tape records the answer map once, with one POST.</p>
         <p>The walk that follows is code reading the recorded answers. Each rung gets a code cell with its stamp; nothing is posted again. There is no apply cell at the end, because the lane does not write the claim. Whoever edits the README does that, on the human's side of the line.</p>
-        <p>Rungs above the highest verified rung are drawn dashed, and a contradicted rung is drawn broken. The ladder is only as high as its last verified rung. Here that is rung 7, exact parity through depth 10 after the legend fix, with three broken rungs beneath it that the repo itself refuses to stand on.</p>
+        <p>Rungs above the highest verified rung are drawn dashed, and a contradicted rung is drawn broken. The ladder is only as high as its last verified rung. <span id="walkNote">Walk it to see where that is.</span></p>
+        <p>The twin returns exactly what the repo's claims discipline records for each claim. The recorded judge does not have to agree with it, and where it does not, the stamp shows the judge's answer and the reasons list names the difference. That difference is the finding: a lane that only ever echoed the README would not be worth a POST.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>The lane checks a claim against recorded evidence.</b> It does not re-run the experiment. A verified rung inherits every caveat in its source: toy scale, one corpus, one handler family, questions written by the same author as the packs. "Verified" means the evidence on file says what the claim says, not that the claim is true of the world.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> It returns the verdict the repo's own claims discipline records for each claim, with a peaked probability, deterministically, through the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>Recorded once, or a twin.</b> When the pill is green, the ten answers shown are recorded from one real call on this page's default state and replayed from <code>data/recorded.js</code>. Otherwise a twin returns the verdict the repo's own claims discipline records for each claim, with a peaked probability, through the same wire shape and contract checks as the real client. This page never calls the judge itself: no key, no network.</div>
       </div>
     </div>
   </section>
@@ -116,6 +122,7 @@
 <script src="data/e2.js"></script>
 <script src="data/e3.js"></script>
 <script src="data/e5.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
@@ -170,7 +177,8 @@
       {q:'"It validated the harness. 4/10 trees were decomposition theater, caught label-free by universal inconsistency."',f:'README.md → MAY NOT'}]},
   ];
   const N=CLAIMS.length;
-  let answers=null, judged={}, sel=0, running=false;
+  let answers=null, judged={}, sel=0, running=false, source='twin';
+  const P=(a,k)=>(a&&a.probabilities&&a.probabilities[k]!=null)?+a.probabilities[k]:0;   // real maps may omit a key
 
   /* ---------- stage: the ladder and the evidence cards ---------- */
   const W=800,H=520, stage=$('stage');
@@ -247,13 +255,17 @@
     [railLd,railRd].forEach(l=>{l.setAttribute('y2',yTop); l.setAttribute('opacity',highest?1:0);});
     const done=Object.keys(judged).length;
     capt.textContent=done?`the ladder is only as high as its last verified rung: ${highest?'rung '+highest:'none yet'}`:'ten rungs, three exits each';
+    if(done===N){const nC=CLAIMS.filter(c=>judged[c.n]==='contradicted').length, nU=CLAIMS.filter(c=>judged[c.n]==='unsupported').length, dis=CLAIMS.filter(c=>judged[c.n]!==c.expect);
+      $('walkNote').textContent=`With the ${source==='recorded'?'recorded judge answers':"twin's answers"} it is rung ${highest} (${CLAIMS[highest-1].title}), with ${nC} broken and ${nU} dashed rung${nC+nU===1?'':'s'} below and above it.`+(source==='recorded'?(dis.length?` The recorded judge departs from the repo's own discipline on rung${dis.length>1?'s':''} ${dis.map(c=>c.n).join(', ')}: ${dis.map(c=>`${c.expect} on file, ${judged[c.n]} from the judge`).join('; ')}.`:' The recorded judge agrees with the repo on every rung.'):'');}
+    else if(!done) $('walkNote').textContent='Walk it to see where that is.';
   }
   function show(k){ sel=k; drawCards(k); drawLadder();
     const c=CLAIMS[k], v=judged[c.n];
     $('rungNo').textContent=`rung ${c.n} of ${N}`; $('claimText').textContent=c.claim;
     const st=$('stampEl'); if(v){stamp(st,v,v==='unsupported'?'unsupported ⊘ gate':v);} else {st.className='';st.textContent='';}
     const a=answers&&answers['claim_'+c.n];
-    $('reasons').innerHTML=(v?`<li>${v}: P(${v}) = ${a.probabilities[v].toFixed(2)} on the evidence above.</li>`:`<li>${answers?'Answer recorded on the tape; the walk has not reached this rung.':'Not yet judged. Walk the ladder.'}</li>`)+c.evidence.map(e=>`<li><code>${esc(e.f)}</code></li>`).join('');
+    const diff=(v&&source==='recorded'&&v!==c.expect)?`<li class="diff">The repo's own claims discipline files this claim as ${c.expect}; the recorded judge chose ${v} (P(${c.expect}) = ${P(a,c.expect).toFixed(2)}). The judge's answer is shown.</li>`:(v&&source==='recorded'?`<li class="diff">Agrees with the repo's own discipline (${c.expect}).</li>`:'');
+    $('reasons').innerHTML=(v?`<li class="src">${v}: P(${v}) = ${P(a,v).toFixed(2)} on the evidence below, from ${source==='recorded'?'the recorded judge answers':'the twin'}.</li>`:`<li>${answers?'Answer on the tape; the walk has not reached this rung.':'Not yet judged. Walk the ladder.'}</li>`)+diff+c.evidence.map(e=>`<li><q>${esc(String(e.q).replace(/^"|"$/g,""))}</q> <code>${esc(e.f)}</code></li>`).join('');
   }
   function counts(){const n={verified:0,contradicted:0,unsupported:0}; Object.values(judged).forEach(v=>n[v]++); tick($('cV'),n.verified); tick($('cC'),n.contradicted); tick($('cU'),n.unsupported); return n;}
 
@@ -269,15 +281,15 @@
     tape.record({kind:'code',label:'assertLegalCommand',verdict:'VerifyClaims ok',detail:'lane 2: claim + evidence → verified | contradicted | unsupported. Does not write the claim.'});
     await wait(300); setPath(0);
     const res=twin.systemOne({model:JEV.PIN,state:{claims:CLAIMS.map(c=>({n:c.n,claim:c.claim,evidence:c.evidence}))},questions},resolvers);
-    answers=res.answers; setPath(0,1);
-    tape.record({kind:'activity',label:'claim verify · 10 claims',verdict:`${Object.keys(answers).length} answers`,post:true,detail:`one POST, ${N} Choice questions · model=${res.model} (twin) · ≈ ${res.usage.input_tokens} tok in (chars/3.6)`});
+    answers=res.answers; source=res.recorded===true?'recorded':'twin'; setPath(0,1);
+    tape.record({kind:'activity',label:'claim verify · 10 claims',verdict:`${Object.keys(answers).length} answers · ${source}`,post:true,detail:source==='recorded'?`one POST, ${N} Choice questions · recorded ${String(res.recordedAt).slice(0,10)} from model ${res.model}, replayed from data/recorded.js · ${res.usage.input_tokens} tok in (real usage)`:`one POST, ${N} Choice questions · twin (no recorded map for this state) · ≈ ${res.usage.input_tokens} tok in (chars/3.6)`});
     await wait(400);
     for(let k=0;k<N;k++){
       const c=CLAIMS[k], a=answers['claim_'+c.n];
       sel=k; drawCards(k); drawLadder();
       await wait(260);
       judged[c.n]=a.choice; show(k); counts();
-      tape.record({kind:'code',label:`rung ${c.n}`,verdict:a.choice,detail:`${c.title} · P(${a.choice}) = ${a.probabilities[a.choice].toFixed(2)} · read from the recorded answer map, no POST`});
+      tape.record({kind:'code',label:`rung ${c.n}`,verdict:a.choice,detail:`${c.title} · P(${a.choice}) = ${P(a,a.choice).toFixed(2)} · read from the answer map on the tape (${source}), no POST${source==='recorded'&&a.choice!==c.expect?` · differs from the repo's own discipline (${c.expect})`:''}`});
       await wait(520);
     }
     const n=counts();
@@ -301,7 +313,8 @@
     {n:'rung 9 · "That full benchmark is not in this repo"',f:'README.md → headline that is allowed; MAY NOT',note:'unsupported'},
     {n:`rung 10 · ${theater}/${E5.trees.length} trees composeValid = false`,f:'experiments/e5-depth/questions.json → oc trees · e5_grade2.py → VALID_TREES · README.md → MAY NOT',note:'contradicted: it validated the harness'},
     {n:'lane 2: claim + evidence → verified | contradicted | unsupported',f:'jev-tape/wiki/pages/claim-verify.md · wiki/pages/three-lanes.md',note:'"Does not write the claim."'},
-    {n:'P(expected) = 0.92 · Choice ≥2 criteria · pin jev-1.13.0',f:'this page (twin resolver) · jev-tape/src/typesafe/contract.ts',note:'the twin returns the repo’s own recorded discipline with a peaked probability; ten questions in one request'},
+    {n:'twin only: P(expected) = 0.92 · Choice ≥2 criteria · pin jev-1.13.0',f:'this page (twin resolver) · jev-tape/src/typesafe/contract.ts',note:'the twin returns the repo’s own recorded discipline with a peaked probability; used only when no recorded map matches the state; ten questions in one request'},
+    {n:`recorded answer map for the ten claims (${(JEV.data.recorded&&JEV.data.recorded.pages&&JEV.data.recorded.pages['07-claim-verify-lane.html']||[]).length} on disk)`,f:'demos/data/recorded.js → pages["07-claim-verify-lane.html"] (recorded by demos/record.mjs)',note:'one real POST on the default state; the pill turns green when it is replayed; the stamps are its choices'},
   ]);
 })();
 </script>

@@ -37,6 +37,10 @@
   .qtable .ans{font-family:var(--mono)}
   .qtable .auto{color:var(--green)} .qtable .review{color:var(--amber)} .qtable .block{color:var(--red)}
   @media(max-width:600px){.qtable .why{display:none}.qtable td:first-child{width:24%}}
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  .reasons li.src{color:var(--bone)}
+  .reasons li.diff{color:var(--amber)}
 </style>
 </head>
 <body>
@@ -45,19 +49,19 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 06 of 10 · depth router</div>
+      <div class="q"><small>demo 06 of 10</small>When a judge is only half sure a depth-9 answer is right, why is the cheap move a review queue and not a second call?</div>
       <h1>Low confidence is not ask again. It is amber.</h1>
-      <p class="lede">After the legend fix, the depth experiment measured four runs across ten depths: strict accuracy and item recall at each. This demo reads those numbers as a judge's belief, one Choice per depth: GREEN weighted by the strict accuracy, AMBER by the partial-credit mass, RED by the rest. Then it routes with two dials. <b>θ</b> is the threshold on P(GREEN). The <b>floor</b> is how peaked the answer must be. A depth that falls short is not asked again. It goes to review.</p>
+      <p class="lede">After the legend fix, the depth experiment measured four runs across ten depths: strict accuracy and item recall at each. This demo sends those numbers to the judge as one Choice per depth, GREEN / AMBER / RED, and routes the answers with two dials. When the pill is green the answers are recorded from one real call; otherwise a twin builds them from the accuracies, labelled as a device. <b>θ</b> is the threshold on P(GREEN). The <b>floor</b> is how peaked the answer must be. A depth that falls short is not asked again. It goes to review.</p>
     </div>
     <aside class="aside">
-      <b>The intersection.</b> <em>wiring-and-the-whole</em> measured how far a reader could follow a factored pack. <em>jev-tape</em> routes on confidence: auto, review, block. Here the measurement stands in for the belief, the belief meets the policy, and the policy is code.
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> measured how far a reader could follow a factored pack. <em>jev-tape</em> routes on confidence: auto, review, block. Here the measurement is the state the judge is shown, the answer meets the policy, and the policy is code.
     </aside>
   </header>
 
   <section class="instrument" aria-label="Depth router instrument">
     <div class="controls">
       <h3>Route ten depths</h3>
-      <p>Pick a run. All ten depths travel in one request and the answer map comes back once. Move the dials after the run: routing is code, so the recorded answers are re-composed without a new call.</p>
+      <p>Pick a run. All ten depths travel in one request and the answer map comes back once. Move the dials after the run: routing is code, so the answers on the tape are re-composed without a new call.</p>
 
       <div class="segrow"><span class="lab">arm</span><div class="seg" id="segArm"><button data-v="A" aria-pressed="false">A explicit</button><button data-v="B" aria-pressed="true">B factored</button></div></div>
       <div class="segrow"><span class="lab">model</span><div class="seg" id="segModel"><button data-v="haiku" aria-pressed="true">haiku</button><button data-v="sonnet" aria-pressed="false">sonnet</button></div></div>
@@ -99,12 +103,13 @@
         <h2>What the tape shows</h2>
         <p>One request carries ten Choice questions, route_D1 through route_D10, over one state: the run's per-depth strict accuracy and item recall. The answer map is written to the tape once, with one POST. Everything after that is code.</p>
         <p>composeAnswers turns each answer into a route. A GREEN choice with P(GREEN) under θ becomes review. Any answer whose top probability sits under the floor becomes review, whatever it chose. RED would block. Drag the dials after a run and watch the tape: a code cell lands, the dots recolour, and the POST counter does not move. Low confidence is not a reason to ask the judge again.</p>
-        <p>Flip "show both arms" and the second line is the other arm in the same model. For sonnet the two lines are the same line: 1.0 at every depth in both arms. For haiku the gap is where the pooled −3.7 points live, and it is concentrated at depth 7, where both arms fall together.</p>
+        <p>Flip "show both arms" and the second line is the other arm in the same model. For sonnet the two lines are the same line: 1.0 at every depth in both arms. For haiku, <span id="gapNote"></span></p>
+        <p>After a run the chart adds a small diamond per depth at the judge's P(GREEN), joined to the measured dot by a stem. With the twin the diamond sits on the dot. With the recorded answers it does not, and the reasons list says where the real judge and the measurement part ways.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>Accuracy is not belief.</b> P(GREEN) here is a measured frequency from one run on one corpus, not the judge's confidence about one question. Using it as the answer's probability is a demo device, and the chart says so. Depth 6 is worse than that: its gold is uniform and name-derivable, so its 1.0 measures nothing. It is marked ⊘ and should not count as evidence.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> It reads E5.1-GRADES.json and returns probabilities built from those numbers, deterministically, with the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>Recorded once, or a twin.</b> When the pill is green, the ten answers shown are recorded from one real call on this page's default state (arm B, haiku) and replayed from <code>data/recorded.js</code>. For any other state, a twin computes them from E5.1-GRADES.json with the same wire shape and contract checks as the real client. This page never calls the judge itself: no key, no network.</div>
       </div>
     </div>
   </section>
@@ -120,6 +125,7 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/e5.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
@@ -143,6 +149,11 @@
     return {GREEN:+(G/z).toFixed(3), AMBER:+(A/z).toFixed(3), RED:+(R/z).toFixed(3)};
   }
   const argmax=p=>Object.keys(p).reduce((a,b)=>p[b]>p[a]?b:a);
+  const P=(a,k)=>(a&&a.probabilities&&a.probabilities[k]!=null)?+a.probabilities[k]:0;   // real maps may omit a key
+  let source='twin';   // 'recorded' when the answer map came from data/recorded.js
+  { const gapD=DEPTHS.filter(d=>RUNS.A_haiku_v1.per_depth_strict['D'+d]!==RUNS.B_haiku_v2.per_depth_strict['D'+d]);
+    const same=DEPTHS.filter(d=>RUNS.A_haiku_v1.per_depth_strict['D'+d]===RUNS.B_haiku_v2.per_depth_strict['D'+d]&&RUNS.A_haiku_v1.per_depth_strict['D'+d]<1);
+    $('gapNote').textContent=`the pooled ${OVER.B_minus_A_pts} points live at ${gapD.map(d=>'D'+d).join(', ')}, where only arm B falls; at ${same.map(d=>'D'+d).join(', ')} both arms fall together (${same.map(d=>RUNS.A_haiku_v1.per_depth_strict['D'+d]).join(', ')}), so that depth is not part of the gap.`; }
   const routeWord={GREEN:'auto',AMBER:'review',RED:'block'};
 
   /* ---------- stage ---------- */
@@ -174,19 +185,43 @@
     flags[d]=svg('text',{x:xs(d),y:ys(1)-16,'font-size':'14','text-anchor':'middle',fill:'var(--dim)',opacity:0},['⊘']); root.appendChild(flags[d]);
     dots[d].appendChild(svg('title',{},['']));
   }
+  // the judge's P(GREEN) per depth: a diamond joined to the measured dot by a stem (drawn after a run)
+  const jStem={}, jDia={};
+  for(const d of DEPTHS){
+    jStem[d]=svg('line',{x1:xs(d),x2:xs(d),y1:ys(1),y2:ys(1),stroke:'var(--amber)','stroke-width':1,'stroke-dasharray':'2 2',opacity:0}); root.appendChild(jStem[d]);
+    jDia[d]=svg('rect',{x:xs(d)-4.5,y:ys(1)-4.5,width:9,height:9,fill:'var(--amber)',stroke:'var(--desk)','stroke-width':1.5,transform:`rotate(45 ${xs(d)} ${ys(1)})`,opacity:0}); root.appendChild(jDia[d]);
+    jDia[d].appendChild(svg('title',{},['']));
+  }
+  function paintJudge(){
+    for(const d of DEPTHS){const a=answers&&answers['route_D'+d];
+      if(!a){jStem[d].setAttribute('opacity',0); jDia[d].setAttribute('opacity',0); continue;}
+      const g=P(a,'GREEN'), y=ys(g), s=RUNS[runKey(arm,model)].per_depth_strict['D'+d];
+      jStem[d].setAttribute('y1',ys(s)); jStem[d].setAttribute('y2',y); jStem[d].setAttribute('opacity',Math.abs(g-s)>.01?1:0);
+      jDia[d].setAttribute('y',y-4.5); jDia[d].setAttribute('transform',`rotate(45 ${xs(d)} ${y})`); jDia[d].setAttribute('opacity',1);
+      jDia[d].querySelector('title').textContent=`D${d}: judge chose ${a.choice} · P(GREEN) ${g.toFixed(2)} · ${source}`;
+    }
+  }
   // ribbon
   const ribbon={}; const RBY=B+30;
   for(const d of DEPTHS){const g=svg('g',{class:'rib'}); const r=svg('rect',{x:xs(d)-27,y:RBY,width:54,height:22,rx:6,fill:'var(--desk-2)',stroke:'var(--rule)'}); const t=svg('text',{x:xs(d),y:RBY+15,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--dim)'},['—']); g.append(r,t); root.appendChild(g); ribbon[d]={r,t};}
   root.appendChild(svg('text',{x:L,y:RBY+40,'font-size':'10',class:'mono',fill:'var(--dim)'},['route per depth: auto (GREEN) · review (AMBER) · block (RED)']));
   const foot=svg('text',{x:L,y:RBY+56,'font-size':'10',class:'mono',fill:'var(--dim)'},['']); root.appendChild(foot);
-  root.appendChild(svg('text',{x:L,y:RBY+72,'font-size':'10',class:'mono',fill:'var(--dim)'},['P(GREEN) := strict · P(AMBER) := recall − strict · P(RED) := 1 − recall']));
-  root.appendChild(svg('text',{x:L,y:RBY+88,'font-size':'10',class:'mono',fill:'var(--dim)'},['a demo device: a measured frequency standing in for a belief']));
+  const dev1=svg('text',{x:L,y:RBY+72,'font-size':'10',class:'mono',fill:'var(--dim)'},['twin: P(GREEN) := strict · P(AMBER) := recall − strict · P(RED) := 1 − recall']); root.appendChild(dev1);
+  const dev2=svg('text',{x:L,y:RBY+88,'font-size':'10',class:'mono',fill:'var(--dim)'},['a demo device: a measured frequency standing in for a belief']); root.appendChild(dev2);
+  function paintSourceNote(){
+    if(!answers){dev1.textContent='before a run: no answers yet. The dots are the measured strict accuracy the judge will be shown.'; dev2.textContent='twin fallback: P(GREEN) := strict · P(AMBER) := recall − strict · P(RED) := 1 − recall (a demo device)'; return;}
+    if(source==='recorded'){dev1.textContent='diamonds: the recorded judge\'s own P(GREEN) per depth (data/recorded.js), not derived from the accuracies'; dev2.textContent='dots: the measured strict accuracy the judge was shown as state';}
+    else {dev1.textContent='diamonds: twin P(GREEN) := strict · P(AMBER) := recall − strict · P(RED) := 1 − recall'; dev2.textContent='a demo device: a measured frequency standing in for a belief';}
+  }
+  paintSourceNote();
   // legend (top right)
   const lg=svg('g',{transform:'translate(20,34)'}); root.appendChild(lg);
   lg.appendChild(svg('line',{x1:0,x2:26,y1:10,y2:10,stroke:'var(--bone)','stroke-width':2.5})); lg.appendChild(svg('text',{x:32,y:14,'font-size':'11',fill:'var(--dim)'},['strict']));
   lg.appendChild(svg('line',{x1:74,x2:100,y1:10,y2:10,stroke:'var(--bone)','stroke-width':1.5,'stroke-dasharray':'5 4'})); lg.appendChild(svg('text',{x:106,y:14,'font-size':'11',fill:'var(--dim)'},['item recall']));
   const lgOther=svg('g',{opacity:0}); lg.appendChild(lgOther);
   lgOther.appendChild(svg('line',{x1:176,x2:202,y1:10,y2:10,stroke:'var(--dim)','stroke-width':1.5,'stroke-dasharray':'7 3 1 3'})); lgOther.appendChild(svg('text',{x:208,y:14,'font-size':'11',fill:'var(--dim)'},['other arm']));
+  const lgJudge=svg('g',{opacity:0}); lg.appendChild(lgJudge);
+  lgJudge.appendChild(svg('rect',{x:280,y:6,width:8,height:8,fill:'var(--amber)',transform:'rotate(45 284 10)'})); lgJudge.appendChild(svg('text',{x:294,y:14,'font-size':'11',fill:'var(--dim)'},['judge P(GREEN)']));
   const gapText=svg('text',{x:R,y:B-8,'font-size':'13','font-family':'var(--display)','font-style':'italic','text-anchor':'end',fill:'var(--bone)',opacity:0},['']); root.appendChild(gapText);
 
   const pathOf=(run,key)=>DEPTHS.map((d,i)=>`${i?'L':'M'}${xs(d).toFixed(1)} ${ys(RUNS[run][key]['D'+d]).toFixed(1)}`).join(' ');
@@ -205,6 +240,7 @@
     gapText.setAttribute('opacity',show?1:0);
     gapText.textContent=`other arm: ${runKey(arm==='A'?'B':'A',model)} · pooled B − A = ${OVER.B_minus_A_pts} pts (A ${OVER.A_v1}, B ${OVER.B_v2})`;
     foot.textContent='⊘ D6 flagged non-discriminating (uniform gold): its 1.0 is not evidence';
+    paintJudge();
   }
   function drawDials(){
     const th=+thIn.value, fl=+flIn.value; thV.textContent=th.toFixed(2); flV.textContent=fl.toFixed(2);
@@ -221,22 +257,36 @@
     }
     const n={auto:0,review:0,block:0}; Object.values(routes).forEach(r=>n[r.route]++);
     tick($('cAuto'),n.auto); tick($('cReview'),n.review); tick($('cBlock'),n.block);
+    lgJudge.setAttribute('opacity',answers?1:0); paintJudge(); paintSourceNote();
     return n;
   }
   function renderTable(){
     if(!answers){qtable.innerHTML='';return;}
-    qtable.innerHTML='<tr><th>question</th><th>choice · P(G) P(A) P(R)</th><th>route</th><th class="why">why</th></tr>'+DEPTHS.map(d=>{const a=answers['route_D'+d], rt=routes[d];
-      return `<tr><td>route_D${d}</td><td class="ans">${a.choice} · ${a.probabilities.GREEN.toFixed(2)} ${a.probabilities.AMBER.toFixed(2)} ${a.probabilities.RED.toFixed(2)}</td><td class="ans ${rt.route}">${rt.route}</td><td class="why">${esc(rt.reasons.join(' | '))}</td></tr>`;}).join('');
+    qtable.innerHTML=`<tr><th>question</th><th>${source} choice · P(G) P(A) P(R)</th><th>route</th><th class="why">why</th></tr>`+DEPTHS.map(d=>{const a=answers['route_D'+d], rt=routes[d];
+      return `<tr><td>route_D${d}</td><td class="ans">${esc(a.choice)} · ${P(a,'GREEN').toFixed(2)} ${P(a,'AMBER').toFixed(2)} ${P(a,'RED').toFixed(2)}</td><td class="ans ${rt.route}">${rt.route}</td><td class="why">${esc(rt.reasons.join(' | '))}</td></tr>`;}).join('');
   }
   function reroute(record){
     if(!answers)return;
     const th=+thIn.value, fl=+flIn.value;
     for(const d of DEPTHS){const c=compose({['route_D'+d]:answers['route_D'+d]},{theta:th,floor:fl}); routes[d]={route:routeWord[c.verdict],reasons:c.reasons};}
     const n=paintRoutes(); renderTable();
-    if(record){tape.record({kind:'code',label:`re-route θ ${th.toFixed(2)} · floor ${fl.toFixed(2)}`,verdict:`auto ${n.auto} · review ${n.review} · block ${n.block}`,detail:'composeAnswers is code: recorded answers re-composed, no POST'});
-      reasons.innerHTML=`<li>Dials moved: θ ${th.toFixed(2)}, floor ${fl.toFixed(2)}. Re-composed from the recorded answers. POSTs unchanged.</li>`+summary(n);}
+    if(record){tape.record({kind:'code',label:`re-route θ ${th.toFixed(2)} · floor ${fl.toFixed(2)}`,verdict:`auto ${n.auto} · review ${n.review} · block ${n.block}`,detail:'composeAnswers is code: the answer map on the tape re-composed, no POST'});
+      reasons.innerHTML=`<li>Dials moved: θ ${th.toFixed(2)}, floor ${fl.toFixed(2)}. Re-composed from the answer map on the tape. POSTs unchanged.</li>`+summary(n)+DEPTHS.filter(d=>routes[d].route!=='auto').map(d=>`<li>D${d}: ${esc(routes[d].reasons.join(' | '))}</li>`).join('')+disagreements();}
   }
-  const summary=(n)=>`<li>auto ${n.auto} · review ${n.review} · block ${n.block}. ${n.block?'':'Nothing blocks: no depth has P(RED) as its top probability; the lowest recall in E5.1 is '+Math.min(...Object.values(RUNS).flatMap(r=>Object.values(r.per_depth_item_recall)))+'.'}</li>`;
+  const summary=(n)=>{
+    const maxRed=answers?Math.max(...DEPTHS.map(d=>P(answers['route_D'+d],'RED'))):0;
+    const why=n.block?'':source==='recorded'
+      ?`Nothing blocks: the recorded judge never chose RED; its highest P(RED) is ${maxRed.toFixed(2)}.`
+      :`Nothing blocks: no depth has P(RED) as its top probability; the lowest recall in E5.1 is ${Math.min(...Object.values(RUNS).flatMap(r=>Object.values(r.per_depth_item_recall)))}.`;
+    return `<li class="src">Answers: ${source==='recorded'?'recorded judge answers (one real call, replayed from data/recorded.js)':'twin, computed from the accuracies (no recorded map for this state)'}.</li><li>auto ${n.auto} · review ${n.review} · block ${n.block}. ${why}</li>`;};
+  // where the recorded judge and the twin's device part ways: shown, not hidden
+  function disagreements(){
+    if(!answers||source!=='recorded') return '';
+    const rk=runKey(arm,model); const out=[];
+    for(const d of DEPTHS){const a=answers['route_D'+d], p=probsFor(rk,d), tw=argmax(p), g=P(a,'GREEN');
+      if(a.choice!==tw||Math.abs(g-p.GREEN)>=.2) out.push(`D${d}: judge ${esc(a.choice)} at P(GREEN) ${g.toFixed(2)}, twin would say ${tw} at ${p.GREEN.toFixed(2)} (strict ${RUNS[rk].per_depth_strict['D'+d]})`);}
+    return out.length?`<li class="diff">Where the recorded judge and the twin's device part ways (the real answer is shown): ${out.join('; ')}.</li>`:'<li class="diff">The recorded judge agrees with the twin at every depth.</li>';
+  }
   function invalidate(){answers=null; routes={}; paintRoutes(); renderTable(); setPath(); reasons.innerHTML='<li>Run changed. Route again to record a new answer map.</li>';}
 
   segControl($('segArm'),v=>{arm=v; drawRun(); invalidate();});
@@ -258,14 +308,14 @@
       resolvers['route_D'+d]=()=>{const p=probsFor(rk,d); return {choice:argmax(p),probabilities:p};};
     }
     const res=twin.systemOne({model:JEV.PIN,state:{run:rk,per_depth_strict:RUNS[rk].per_depth_strict,per_depth_item_recall:RUNS[rk].per_depth_item_recall},questions},resolvers);
-    answers=res.answers; setPath(0,1);
-    tape.record({kind:'activity',label:`route · ${rk}`,verdict:`${Object.keys(answers).length} answers`,post:true,detail:`one POST, ${DEPTHS.length} Choice questions · model=${res.model} (twin) · ≈ ${res.usage.input_tokens} tok in (chars/3.6)`});
+    answers=res.answers; source=res.recorded===true?'recorded':'twin'; setPath(0,1);
+    tape.record({kind:'activity',label:`route · ${rk}`,verdict:`${Object.keys(answers).length} answers · ${source}`,post:true,detail:source==='recorded'?`one POST, ${DEPTHS.length} Choice questions · recorded ${String(res.recordedAt).slice(0,10)} from model ${res.model}, replayed from data/recorded.js · ${res.usage.input_tokens} tok in (real usage)`:`one POST, ${DEPTHS.length} Choice questions · twin (no recorded map for this state) · ≈ ${res.usage.input_tokens} tok in (chars/3.6)`});
     // reveal route by route
     const th=+thIn.value, fl=+flIn.value;
     for(const d of DEPTHS){const c=compose({['route_D'+d]:answers['route_D'+d]},{theta:th,floor:fl}); routes[d]={route:routeWord[c.verdict],reasons:c.reasons}; paintRoutes(); await wait(120);}
     const n=paintRoutes(); renderTable();
     tape.record({kind:'gate',label:'composeAnswers × 10',verdict:n.block?'RED':n.review?'AMBER':'GREEN',detail:`θ ${th.toFixed(2)} · floor ${fl.toFixed(2)} → auto ${n.auto} · review ${n.review} · block ${n.block}`});
-    reasons.innerHTML=summary(n)+DEPTHS.filter(d=>routes[d].route!=='auto').map(d=>`<li>D${d}: ${esc(routes[d].reasons.join(' | '))}</li>`).join('');
+    reasons.innerHTML=summary(n)+DEPTHS.filter(d=>routes[d].route!=='auto').map(d=>`<li>D${d}: ${esc(routes[d].reasons.join(' | '))}</li>`).join('')+disagreements();
     if(n.review) tape.record({kind:'human',label:`park ${n.review} depth${n.review>1?'s':''}`,verdict:'review',detail:'AMBER routes to review: Signal humanVerdict, not another judge call'});
     running=false; $('run').disabled=false;
   }
@@ -279,7 +329,8 @@
     {n:`overall strict: A_haiku ${ah.overall_strict} · A_sonnet ${RUNS.A_sonnet_v1.overall_strict} · B_haiku ${bh.overall_strict} · B_sonnet ${RUNS.B_sonnet_v2.overall_strict}`,f:'E5.1-GRADES.json → runs.<run>.overall_strict',note:'the stage title'},
     {n:`pooled B − A = ${OVER.B_minus_A_pts} pts (A ${OVER.A_v1}, B ${OVER.B_v2})`,f:'E5.1-GRADES.json → pooled_overall',note:'shown when both arms are overlaid; inside the pre-registered 5-pt rule'},
     {n:'D6 ⊘ non-discriminating',f:'E5.1-GRADES.json → pooled_per_depth.D6.flag',note:POOL.D6.flag},
-    {n:'P(GREEN) := strict · P(AMBER) := recall − strict · P(RED) := 1 − recall',f:'this page (demo device)',note:'a measured frequency used as a belief, clamped and renormalised; not from the repo'},
+    {n:'twin only: P(GREEN) := strict · P(AMBER) := recall − strict · P(RED) := 1 − recall',f:'this page (demo device)',note:'a measured frequency used as a belief, clamped and renormalised; not from the repo; used only when no recorded map matches the state'},
+    {n:`recorded answer map for B_haiku_v2 (${(JEV.data.recorded&&JEV.data.recorded.pages&&JEV.data.recorded.pages['06-depth-router.html']||[]).length} on disk)`,f:'demos/data/recorded.js → pages["06-depth-router.html"] (recorded by demos/record.mjs)',note:'one real POST on the default state; the pill turns green when it is replayed; the diamonds are its P(GREEN)'},
     {n:'θ 0.70 · top_prob_floor 0.60, two axes',f:'jev-tape/wiki/pages/dual-axis.md',note:'"θ is P(fail-closed-gate is GREEN). top_prob_floor is pack peakedness. Never set θ ≡ top_prob_floor."'},
     {n:'auto · review · block',f:'jev-tape/wiki/pages/confidence-routing.md',note:'"Low confidence is not ask Jev again. It is AMBER / Signal."'},
     {n:'noul mid-band 0.4–0.6 · Choice ≥2 criteria · pin jev-1.13.0',f:'jev-tape/src/typesafe/contract.ts',note:'the twin enforces the same contract; ten Choice questions in one request'},

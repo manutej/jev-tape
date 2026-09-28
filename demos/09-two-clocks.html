@@ -36,6 +36,13 @@
   .qtable td{padding:5px 8px 5px 0;border-bottom:1px solid var(--rule);vertical-align:top;word-break:break-word}
   .qtable td:first-child{font-family:var(--mono);color:var(--dim);width:34%}
   .qtable td:last-child{font-family:var(--mono);width:30%}
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  .row .st .lo{display:block;font-size:9.5px;color:var(--amber-ink);font-family:var(--sans);margin-top:1px}
+  .reasons{font-size:13px;color:var(--dim);margin:10px 0 0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .reasons li.src{color:var(--bone)}
+  .reasons li.diff{color:var(--amber)}
 </style>
 </head>
 <body>
@@ -44,9 +51,9 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 09 of 10 · two clocks</div>
+      <div class="q"><small>demo 09 of 10</small>If the worker dies between the screen and the write, how do we know the blocked line stays blocked?</div>
       <h1>One engine, two clocks. The block survives the crash.</h1>
-      <p class="lede">Fifteen lines of an untrusted pack: <b>twelve</b> real ones from the E3 factored pack and <b>three</b> planted by this demo. The harness clock screens them in seconds, all fifteen in <b>one</b> request, and <b>two</b> are blocked. Then the process clock takes over: qualify, propose, qualify, apply, one step an hour. Crash the worker between the two and replay. The blocks come back from the tape, not from the judge.</p>
+      <p class="lede">Fifteen lines of an untrusted pack: <b>twelve</b> real ones from the E3 factored pack and <b>three</b> planted by this demo. The harness clock screens them in seconds, all fifteen in <b>one</b> request, and the blocked lines are dropped. Then the process clock takes over: qualify, propose, qualify, apply, one step an hour. Crash the worker between the two and replay. The blocks come back from the tape, not from the judge.</p>
     </div>
     <aside class="aside">
       <b>The intersection.</b> A wiring pack is text a model will read, and text a model will read is untrusted until screened. <em>jev-tape</em>'s lane 3 screens it; its lane 1 gates the write that ships it. The same tape records both, on two clocks.
@@ -78,6 +85,7 @@
       </div>
       <div class="banner" id="banner"></div>
       <div class="okline" id="okline"></div>
+      <ul class="reasons" id="reasons"><li>No run yet.</li></ul>
     </div>
 
     <div class="stage" id="stage" aria-label="Two clocks and the screened pack lines">
@@ -91,13 +99,13 @@
       <div>
         <h2>What the tape shows</h2>
         <p>Two clocks, one engine. The harness clock runs in seconds: fifteen lines, one request, one answer map, one cell on the tape with a POST mark. Its goal is fewer LLM calls, so the fifteen questions travel together. The process clock runs in hours: qualify the task, propose in memory, qualify the output, apply last. Its goal is the write that cannot happen twice.</p>
-        <p>Crash between them and replay. The screen's fifteen answers are already in Event History, so replay re-emits them without a POST, and the two blocked lines land as blocked again with a <i>from tape</i> tag. Then the loop continues from where it stopped: gates that never completed run now and are recorded now. The POST counter tells the story: 1 after the screen, 3 after both gates, and replay adds nothing.</p>
+        <p>Crash between them and replay. The screen's fifteen answers are already in Event History, so replay re-emits them without a POST, and every blocked line lands as blocked again with a <i>from tape</i> tag. Then the loop continues from where it stopped: gates that never completed run now and are recorded now. The POST counter tells the story: 1 after the screen, 3 after both gates, and replay adds nothing.</p>
         <p>The toggle shows the shape the spec calls unrepresentable. If the judge sat in Workflow code, replay would ask again, and a recorded BLOCK could come back as something else and be ingested. The banner is the demo's way of drawing a line that must not exist.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>The screen is a filter, not a security boundary.</b> It routes lines before they reach the generator's context; it does not sandbox anything. A block on a line is not a judgement of the pack's author. The three planted lines are planted by this demo; they are not in the repo.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> Its rules are written in this page: a comment that contradicts the legend blocks, a mail verb or an entity outside the pack blocks, a duplicate delta skips. Same wire shape and contract checks as the real client, no key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>Recorded once, or a twin.</b> When the pill is green, the screen's fifteen answers and the task gate's answer are recorded from one real call each on this page's default state and replayed from <code>data/recorded.js</code>; the output gate has no recorded map, so it is always the twin, and each cell on the tape says which it was. Otherwise the twin answers by rules written in this page: a comment that contradicts the legend blocks, a mail verb or an entity outside the pack blocks, a duplicate delta skips. This page never calls the judge itself: no key, no network.</div>
       </div>
     </div>
   </section>
@@ -113,6 +121,7 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/e3.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
@@ -192,18 +201,35 @@
   const qtable=$('qtable');
   function renderQ(answers){
     const shown=lines.map((l,i)=>`screen_L${i+1}`);
-    qtable.innerHTML=`<tr><td>${shown.length} × screen_L{n}<br><span style="color:var(--dim)">choice · one request</span></td><td>${esc(questions.screen_L1.instructions.replace('line 1','line n'))} Criteria: pass · review · block · skip.</td><td>${answers?shown.map((id)=>`${id.replace('screen_','')} ${answers[id].choice}`).join(' · '):'—'}</td></tr>`
-      +`<tr><td>legal_task<br><span style="color:var(--dim)">choice</span></td><td>May the screened pack (blocked lines dropped) be prepared for a reader?</td><td>${gateAnswers.task?gateAnswers.task.legal_task.choice+' · P='+gateAnswers.task.legal_task.probabilities[gateAnswers.task.legal_task.choice].toFixed(2):'—'}</td></tr>`
-      +`<tr><td>ship<br><span style="color:var(--dim)">choice</span></td><td>Does the proposed pack re-expand to the screened lines and nothing else?</td><td>${gateAnswers.out?gateAnswers.out.ship.choice+' · P='+gateAnswers.out.ship.probabilities[gateAnswers.out.ship.choice].toFixed(2):'—'}</td></tr>`;
+    qtable.innerHTML=`<tr><td>${shown.length} × screen_L{n}<br><span style="color:var(--dim)">choice · one request${answers?' · '+src.screen:''}</span></td><td>${esc(questions.screen_L1.instructions.replace('line 1','line n'))} Criteria: pass · review · block · skip.</td><td>${answers?shown.map((id)=>`${id.replace('screen_','')} ${esc(answers[id].choice)} ${P(answers[id],answers[id].choice).toFixed(2)}`).join(' · '):'—'}</td></tr>`
+      +`<tr><td>legal_task<br><span style="color:var(--dim)">choice${gateAnswers.task?' · '+src.task:''}</span></td><td>May the screened pack (blocked lines dropped) be prepared for a reader?</td><td>${gateAnswers.task?esc(gateAnswers.task.legal_task.choice)+' · P='+P(gateAnswers.task.legal_task,gateAnswers.task.legal_task.choice).toFixed(2):'—'}</td></tr>`
+      +`<tr><td>ship<br><span style="color:var(--dim)">choice${gateAnswers.out?' · '+src.out:''}</span></td><td>Does the proposed pack re-expand to the screened lines and nothing else?</td><td>${gateAnswers.out?esc(gateAnswers.out.ship.choice)+' · P='+P(gateAnswers.out.ship,gateAnswers.out.ship.choice).toFixed(2):'—'}</td></tr>`;
   }
   const gateAnswers={task:null,out:null};
+  const src={screen:'twin',task:'twin',out:'twin'};      // 'recorded' when the answer map came from data/recorded.js
+  const P=(a,k)=>(a&&a.probabilities&&a.probabilities[k]!=null)?+a.probabilities[k]:0;   // real maps may omit a key
+  const topP=a=>Math.max(0,...Object.values(a.probabilities||{}).map(Number));
+  const FLOOR=0.6;
+  const srcText=(r)=>r.recorded===true?`recorded ${String(r.recordedAt).slice(0,10)} from model ${r.model}, replayed from data/recorded.js`:'twin (no recorded map for this state)';
   renderQ(null);
 
   const setPhase=(name,state)=>{[...$('phase').children].forEach(s=>{if(s.dataset.p===name){s.classList.remove('on','done');if(state)s.classList.add(state);}});};
   const clearPhase=()=>[...$('phase').children].forEach(s=>s.classList.remove('on','done'));
   function counters(){ $('cPosts').textContent=tape.posts; $('cPosts').parentElement.classList.toggle('zero',tape.posts===0); $('cPosts').parentElement.classList.toggle('hot',tape.posts>0);
     $('cLines').textContent=history.screen?N:0; $('cBlocked').textContent=history.screen?Object.values(history.screen).filter(a=>a.choice==='block').length:0; }
-  function landStamp(i,choice,fromTape){const st=rowEls[i].querySelector('.st'); st.innerHTML=`<span class="stamp ${choice} in">${choice}</span>${fromTape?'<span class="ft">from tape · no POST</span>':''}`; rowEls[i].classList.toggle('dropped',choice==='block');}
+  function landStamp(i,choice,fromTape){const st=rowEls[i].querySelector('.st'); const a=history.screen&&history.screen[`screen_L${i+1}`]; const lo=a&&topP(a)<FLOOR;
+    st.innerHTML=`<span class="stamp ${choice} in">${choice}</span>${fromTape?'<span class="ft">from tape · no POST</span>':''}${lo&&!fromTape?`<span class="lo">p ${topP(a).toFixed(2)} &lt; floor ${FLOOR.toFixed(2)}</span>`:''}`; rowEls[i].classList.toggle('dropped',choice==='block');}
+  function screenReasons(){
+    const A=history.screen; if(!A){$('reasons').innerHTML='<li>No run yet.</li>';return;}
+    const li=[`<li class="src">Screen answers: ${src.screen==='recorded'?'recorded judge answers (one real call, replayed from data/recorded.js)':'twin, by the rules written in this page (no recorded map for this state)'}.</li>`];
+    const blocked=lines.map((l,i)=>A[`screen_L${i+1}`].choice==='block'?`L${i+1}`:null).filter(Boolean);
+    li.push(`<li>Blocked: ${blocked.length?blocked.join(', '):'none'}. Blocked lines are dropped before the gates.</li>`);
+    const low=lines.map((l,i)=>({i,a:A[`screen_L${i+1}`]})).filter(x=>topP(x.a)<FLOOR);
+    if(low.length) li.push(`<li class="diff">Under the top_prob_floor ${FLOOR.toFixed(2)}: ${low.map(x=>`L${x.i+1} ${x.a.choice} (p ${topP(x.a).toFixed(2)})`).join(', ')}. The stamp shows the choice; a decision gate would send an answer this flat to review, not act on it, and never ask again.</li>`);
+    if(src.screen==='recorded'){const dis=lines.map((l,i)=>({i,rec:A[`screen_L${i+1}`].choice,tw:screenLine(l.t).choice})).filter(x=>x.rec!==x.tw);
+      li.push(dis.length?`<li class="diff">Where the recorded judge and the twin's rule part ways (the real answer is shown): ${dis.map(x=>`L${x.i+1} judge ${x.rec}, rule ${x.tw}${lines[x.i].planted?' (planted line)':''}`).join('; ')}.</li>`:'<li class="diff">The recorded judge agrees with the twin\'s rule on every line.</li>');}
+    $('reasons').innerHTML=li.join('');
+  }
 
   /* ---------- the run, on two clocks ---------- */
   // "history" is what this page reads on replay: the recorded answer maps, never the judge
@@ -215,8 +241,9 @@
     const req={model:JEV.PIN,state:{pack:'packB.txt (first 12 inst/motif lines) + 3 planted',lines:lines.map(l=>l.t)},questions};
     for(let i=0;i<N;i++){rowEls[i].classList.add('now'); harness.set((i+1)*6,`L${i+1} · ${i+1} s`); await wait(110); rowEls[i].classList.remove('now');}
     const res=twin.systemOne(req,resolvers);            // one POST, fifteen questions
-    history.screen=res.answers;
-    tape.record({kind:'activity',label:'contextScreen',verdict:`${N} lines · ${Object.values(res.answers).filter(a=>a.choice==='block').length} block`,post:true,detail:`one POST, ${N} Choice questions · lane 3 · model=${res.model} (twin)`});
+    history.screen=res.answers; src.screen=res.recorded===true?'recorded':'twin';
+    tape.record({kind:'activity',label:'contextScreen',verdict:`${N} lines · ${Object.values(res.answers).filter(a=>a.choice==='block').length} block · ${src.screen}`,post:true,detail:`one POST, ${N} Choice questions · lane 3 · ${srcText(res)}`});
+    screenReasons();
     for(let i=0;i<N;i++){landStamp(i,res.answers[`screen_L${i+1}`].choice,false); harness.set((i+1)*6,`L${i+1} · ${res.answers[`screen_L${i+1}`].choice}`); await wait(70);}
     harness.set(N*6,`${N} lines · ${N} s`);
     renderQ(res.answers); counters(); setPhase('screen','done');
@@ -231,8 +258,8 @@
     let h=0; const hour=(label)=>{h++; process.set(h*30,`${label} · h ${h}`);};
     if(!history.task){ setPhase('qualifyTask','on'); hour('qualifyTask'); await wait(650); if(step()) return;
       const r=twin.systemOne({model:JEV.PIN,state:{remaining:remaining()},questions:taskQ},{legal_task:gateResolver('legal_task')});
-      history.task=r.answers; gateAnswers.task=r.answers;
-      tape.record({kind:'activity',label:'qualifyTask',verdict:r.answers.legal_task.choice,post:true,detail:`one POST · blocked lines dropped before the ask`}); counters(); renderQ(history.screen);
+      history.task=r.answers; gateAnswers.task=r.answers; src.task=r.recorded===true?'recorded':'twin';
+      tape.record({kind:'activity',label:'qualifyTask',verdict:`${r.answers.legal_task.choice} · ${src.task}`,post:true,detail:`one POST · blocked lines dropped before the ask · ${srcText(r)}`}); counters(); renderQ(history.screen);
     } else { h=1; process.set(30,'qualifyTask · h 1 (tape)'); }
     setPhase('qualifyTask','done');
     const c1=compose(history.task,{theta:.7,floor:.6}); hour('gate'); tape.record({kind:'gate',label:'gate',verdict:c1.verdict,detail:c1.reasons.join(' | ')}); await wait(650); if(step()) return;
@@ -240,8 +267,8 @@
     setPhase('propose','on'); hour('propose'); tape.record({kind:'code',label:'propose in memory',verdict:`${remaining().length} lines`,detail:'the screened pack, built in memory; no write yet'}); await wait(650); if(step()) return; setPhase('propose','done');
     if(!history.out){ setPhase('qualifyOutput','on'); hour('qualifyOutput'); await wait(650); if(step()) return;
       const r=twin.systemOne({model:JEV.PIN,state:{remaining:remaining()},questions:outQ},{ship:gateResolver('ship')});
-      history.out=r.answers; gateAnswers.out=r.answers;
-      tape.record({kind:'activity',label:'qualifyOutput',verdict:r.answers.ship.choice,post:true,detail:'one POST'}); counters(); renderQ(history.screen);
+      history.out=r.answers; gateAnswers.out=r.answers; src.out=r.recorded===true?'recorded':'twin';
+      tape.record({kind:'activity',label:'qualifyOutput',verdict:`${r.answers.ship.choice} · ${src.out}`,post:true,detail:`one POST · ${srcText(r)}`}); counters(); renderQ(history.screen);
     } else { h=4; process.set(120,'qualifyOutput · h 4 (tape)'); }
     setPhase('qualifyOutput','done');
     const c2=compose(history.out,{theta:.7,floor:.6}); hour('gate'); tape.record({kind:'gate',label:'gate',verdict:c2.verdict,detail:c2.reasons.join(' | ')}); await wait(650); if(step()) return;
@@ -297,16 +324,20 @@
   $('run').addEventListener('click',run);
   $('replay').addEventListener('click',replay);
   $('reset').addEventListener('click',()=>{
-    tape.clear(); history.screen=history.task=history.out=null; history.applied=false; gateAnswers.task=gateAnswers.out=null;
+    tape.clear(); history.screen=history.task=history.out=null; history.applied=false; gateAnswers.task=gateAnswers.out=null; src.screen=src.task=src.out='twin'; $('reasons').innerHTML='<li>Tape rewound.</li>';
     running=false; crashed=false; crashRequested=false; done=false; root.classList.remove('dead');
     harness.set(0,''); process.set(0,''); rowEls.forEach(r=>{r.querySelector('.st').innerHTML='';r.classList.remove('now','dropped');});
     clearPhase(); $('banner').className='banner'; $('okline').className='okline'; renderQ(null); counters();
     $('run').disabled=false; $('crash').disabled=true; $('replay').disabled=true;
   });
 
+  const recScreen=(()=>{try{const R=JEV.data.recorded; const k=twin.reqKey({model:JEV.PIN,state:{pack:'packB.txt (first 12 inst/motif lines) + 3 planted',lines:lines.map(l=>l.t)},questions}); return R&&R.answers&&R.answers[k]||null;}catch(e){return null;}})();
+  const recNote=recScreen?`recorded ${String(recScreen.at).slice(0,10)}: ${[4,8,11].map(n=>`L${n} ${recScreen.answers['screen_L'+n].choice} (p ${topP(recScreen.answers['screen_L'+n]).toFixed(2)})`).join(', ')}`:'no recorded map on disk for this state';
   provenanceTable($('prov'),[
     {n:`${real.length} real lines (motif + 11 inst)`,f:'wiring-and-the-whole/experiments/e3-ablation/packB.txt',note:'the first 12 lines starting with inst or motif'},
-    {n:'3 planted lines at L4, L8, L11',f:'this page (demos/09-two-clocks.html)',note:'not in the repo; written to be blocked, blocked, skipped'},
+    {n:'3 planted lines at L4, L8, L11',f:'this page (demos/09-two-clocks.html)',note:`not in the repo; the twin's rule screens them block, block, skip; ${recNote}`},
+    {n:`recorded answer maps for this page (${(JEV.data.recorded&&JEV.data.recorded.pages&&JEV.data.recorded.pages['09-two-clocks.html']||[]).length} on disk: the screen and the task gate)`,f:'demos/data/recorded.js → pages["09-two-clocks.html"] (recorded by demos/record.mjs)',note:'one real POST each on the default state; the output gate was not recorded and is always the twin; the pill turns green when a map is replayed'},
+    {n:`top_prob_floor ${FLOOR.toFixed(2)}`,f:'jev-tape/wiki/pages/dual-axis.md · wiki/pages/confidence-routing.md',note:'a stamp whose top probability sits under the floor is tagged; "Low confidence is not ask Jev again. It is AMBER / Signal."'},
     {n:`entity set (${entities.size}) and edge set (${edgeSet.size})`,f:'wiring-and-the-whole/experiments/e3-ablation/graph.json',note:'what the twin checks an inst and a + edge against'},
     {n:`${N} questions · 1 POST · 3 POSTs after both gates · +0 on replay`,f:'jev-tape/spec/SPEC-v1-SPEED.md · wiki/pages/temporal-replay.md',note:'a batch is one HTTP call; replay does not call TypeSafe again'},
     {n:'pass · review · block · skip',f:'jev-tape/wiki/pages/context-screen.md · wiki/pages/three-lanes.md',note:'lane 3; "Replay must not re-ingest a recorded BLOCK as PASS"'},

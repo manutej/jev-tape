@@ -33,6 +33,13 @@
   #stage{display:flex;align-items:center}
   .note{font-size:13px;color:var(--amber);margin:8px 0 0;display:none}
   .note.on{display:block}
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  #stage{flex-direction:column;align-items:stretch}
+  .dlist{display:none;background:var(--tape);color:var(--ink);font-family:var(--mono);font-size:12px;border-top:6px solid var(--tape-2);padding:10px 12px;line-height:1.5}
+  .dlist b{font-family:var(--display);font-style:italic;font-weight:400;font-size:14px;color:var(--ink-2)}
+  .dlist div{white-space:pre-wrap}
+  @media(max-width:860px){.dlist{display:block}}
 </style>
 </head>
 <body>
@@ -41,7 +48,7 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 10 of 10 · witness tape</div>
+      <div class="q"><small>demo 10 of 10</small>When every check is code and every check passes, what is left for the tape to remember and for a human to sign?</div>
       <h1>Thirteen checks, one crash, zero repeated judgements, and a human at the last rung.</h1>
       <p class="lede">E1 ran <b>thirteen</b> checks over a <b>sixteen</b>-file toy bank and every one passed. Each check is an Activity: computed once, recorded once. Crash the worker at check <b>8</b> and replay: the first eight relight from the tape, the last five are computed, and nothing is judged twice, because nothing here is judged at all. The witness is code. Then the last rung: minting the claim <i>demonstrated</i> is a write, so a human signs it.</p>
     </div>
@@ -88,7 +95,7 @@
       </div>
     </div>
 
-    <div class="stage" id="stage" aria-label="Thirteen witness checks drawn as a ring around the toy bank, with the witness detail of the current check"></div>
+    <div class="stage" id="stage" aria-label="Thirteen witness checks drawn as a ring around the toy bank, with the witness detail of the current check"><div class="dlist" id="dlist"><b>WITNESS.json · nothing running</b></div></div>
   </section>
 
   <section class="section">
@@ -96,13 +103,13 @@
       <div>
         <h2>What the tape shows</h2>
         <p>Every cell here is an Activity with no POST mark. The witness is a Python script: it builds the pushout, enumerates the cocones, transports the edges, and reports booleans. A deterministic check does not need a judge, but it does need a record, because a crash between check 8 and check 9 must not run check 8 again. Temporal reuses recorded results; it does not recompute them.</p>
-        <p>Replay proves it on the ring. The first k nodes relight with a dashed <i>reused</i> ring and the replayed counter climbs; the rest light solid as they are computed for the first time. The POST counter never leaves zero. If the checks had been judge calls, the same shape would hold: a replay reuses the recorded answer map and asks nothing.</p>
+        <p>Replay shows it on the ring. The first k nodes relight with a dashed <i>reused</i> ring and the replayed counter climbs; the rest light solid as they are computed for the first time. The POST counter never leaves zero. If the checks had been judge calls, the same shape would hold: a replay reuses the recorded answer map and asks nothing.</p>
         <p>Then the rung. Thirteen green booleans are a fact; the word <i>demonstrated</i> on the claims ladder is a write. So the command parks on <code>humanVerdict</code>. Compose applies it and the applied cell reads <i>demonstrated ≠ proved</i>. The stronger word is not offered: <code>MintClaim("proved")</code> fails <code>assertLegalCommand</code> because five MUST-PROVE items are open.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>13/13 is a toy-scale demonstration by bounded enumeration.</b> The universal-property check is narrower than the pre-registered exhaustive bound; the script records that as a protocol deviation. "Demonstrated ≠ proved" is not modesty, it is the claims ladder: MUST-PROVE 1–5 remain open, and nothing on this page closes them.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin, and this page never asks it.</b> The checks are booleans read from a recorded file; the human verdict is three buttons. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>No request is made at all.</b> Other demos replay recorded judge answers when the pill is green and fall back to a twin otherwise; this page does neither, because the witness never builds a request. The checks are booleans read from a recorded file; the human verdict is three buttons. So there is no answer map to record, the pill stays on twin, and the POST counter stays at zero. No key, no network.</div>
       </div>
     </div>
   </section>
@@ -118,6 +125,7 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/e1.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
@@ -155,7 +163,7 @@
   /* ---------- stage: the ring ---------- */
   const W=860,H=480, stage=$('stage');
   const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${N} witness checks drawn as a ring around the toy bank`});
-  stage.appendChild(root);
+  const dlist=$('dlist'); stage.insertBefore(root,dlist);
   const CX=270,CY=244,R=150;
   const ring=svg('g',{class:'ring'}); root.appendChild(ring);
   ring.appendChild(svg('circle',{cx:CX,cy:CY,r:R,fill:'none',stroke:'var(--rule)','stroke-width':1.5}));
@@ -184,31 +192,32 @@
   const panel=svg('g',{}); root.appendChild(panel);
   panel.appendChild(svg('rect',{x:PX,y:24,width:W-PX-16,height:H-48,rx:8,fill:'var(--tape)'}));
   panel.appendChild(svg('rect',{x:PX,y:24,width:W-PX-16,height:6,rx:2,fill:'var(--tape-2)'}));
-  const pTitle=svg('text',{x:PX+14,y:52,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--ink-2)'},['WITNESS.json — nothing running']); panel.appendChild(pTitle);
+  const pTitle=svg('text',{x:PX+14,y:52,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--ink-2)'},['WITNESS.json · nothing running']); panel.appendChild(pTitle);
   const pKey=svg('text',{x:PX+14,y:74,'font-size':'10',class:'mono',fill:'var(--ink)'},['']); panel.appendChild(pKey);
   const pLines=svg('g',{}); panel.appendChild(pLines);
   const pFoot=svg('text',{x:PX+14,y:H-46,'font-size':'11',class:'mono',fill:'var(--ink-2)'},['']); panel.appendChild(pFoot);
   const pFoot2=svg('text',{x:PX+14,y:H-32,'font-size':'11',class:'mono',fill:'var(--ink-2)'},['']); panel.appendChild(pFoot2);
   function showDetail(c,mode){
-    pTitle.textContent=c?`check ${c.i+1} of ${N} · ${c.label}`:'WITNESS.json — nothing running';
+    pTitle.textContent=c?`check ${c.i+1} of ${N} · ${c.label}`:'WITNESS.json · nothing running';
     pKey.textContent=c?`checks.${c.key} = ${c.ok}`:'';
-    pLines.innerHTML=''; if(!c) return;
+    pLines.innerHTML=''; if(!c){dlist.innerHTML=`<b>${esc(pTitle.textContent)}</b>`; return;}
     c.detail.forEach((l,i)=>pLines.appendChild(svg('text',{x:PX+14,y:100+i*17,'font-size':'11',class:'mono',fill:'var(--ink)'},[l])));
     pFoot.textContent=mode==='reused'?'reused from Event History · not recomputed':'computed now · recorded as an Activity';
     pFoot2.textContent='post: false · the witness is code';
+    dlist.innerHTML=`<b>${esc(pTitle.textContent)}</b><div>${esc(pKey.textContent)}\n${c.detail.map(esc).join('\n')}\n${esc(pFoot.textContent)} · ${esc(pFoot2.textContent)}</div>`;
   }
   showDetail(null);
   const setArc=(k)=>arcDone.setAttribute('stroke-dashoffset',String(CIRC*(1-k/N)));
   const setNode=(i,cls)=>{const n=nodes[i]; n.g.classList.remove('on','pass','reused','dead'); if(cls) n.g.classList.add(cls); n.re.setAttribute('opacity',cls==='reused'?1:0);};
 
   /* ---------- run / crash / replay ---------- */
-  let running=false, crashedAt=0, doneCount=0;
+  let running=false, crashedAt=0, doneCount=0, gen=0;
   const counters=()=>{tick($('cPass'),doneCount,300); tick($('cRe'),tape.replayed,300); $('cPosts').textContent=tape.posts;};
   const record=(c)=>tape.record({kind:'activity',label:c.label,verdict:String(c.ok),post:false,detail:`${c.key}: ${c.detail[0]}`});
   async function play(from){
-    const crash=$('tCrash').checked?Math.max(1,Math.min(N,+$('crashAt').value||8)):0;
+    const crash=$('tCrash').checked?Math.max(1,Math.min(N,+$('crashAt').value||8)):0; const g=gen;
     for(let i=from;i<N;i++){const c=checks[i];
-      setNode(i,'on'); status.textContent=`check ${i+1} · computing`; showDetail(c,'now'); await wait(260);
+      setNode(i,'on'); status.textContent=`check ${i+1} · computing`; showDetail(c,'now'); await wait(260); if(g!==gen) return false;
       record(c); setNode(i,'pass'); doneCount=i+1; setArc(doneCount); counters();
       if(crash&&i+1===crash&&from===0){ // the worker dies right after this Activity is recorded
         await wait(200); tape.crash('worker crashed'); crashedAt=i+1; root.classList.add('dead'); status.textContent=`crashed after check ${crashedAt}`;
@@ -232,7 +241,8 @@
     for(let j=crashedAt;j<N;j++) setNode(j,null);
     const n=tape.replay();                        // re-emits the recorded Activities, no POST
     status.textContent='replay · reading history';
-    for(let i=0;i<crashedAt;i++){setNode(i,'reused'); showDetail(checks[i],'reused'); await wait(120);}
+    const g=gen;
+    for(let i=0;i<crashedAt;i++){setNode(i,'reused'); showDetail(checks[i],'reused'); await wait(120); if(g!==gen) return;}
     counters();
     const from=crashedAt; crashedAt=0; $('note').className='note';
     const ok=await play(from);
@@ -259,7 +269,7 @@
   $('hEscalate').addEventListener('click',()=>verdict('escalate'));
   $('hRefuse').addEventListener('click',()=>verdict('refuse'));
   $('reset').addEventListener('click',()=>{
-    tape.clear(); running=false; crashedAt=0; doneCount=0; root.classList.remove('dead');
+    gen++; tape.clear(); running=false; crashedAt=0; doneCount=0; root.classList.remove('dead');
     nodes.forEach((n,i)=>setNode(i,null)); setArc(0); status.textContent=''; showDetail(null);
     $('run').disabled=false; $('replay').disabled=true; $('note').className='note';
     $('rung').classList.remove('live'); ['hCompose','hEscalate','hRefuse'].forEach(id=>$(id).disabled=true); $('hVerdict').textContent='waiting for 13 green checks'; $('hVerdict').style.color='';

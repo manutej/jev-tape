@@ -28,6 +28,12 @@
   .seam b{color:var(--bone);font-weight:500}
   .seam code{color:var(--c-action)}
   .stage .pack{max-height:none}
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  .ulist{display:none;gap:6px;flex-wrap:wrap;padding:0 12px 12px}
+  .ulist button{font-family:var(--mono);font-size:12px;padding:5px 9px;border-radius:8px;border:1px solid var(--rule);background:var(--desk-3);color:var(--bone);border-left-width:4px}
+  .ulist button[aria-pressed=true]{border-color:var(--amber)}
+  @media(max-width:860px){.ulist{display:flex}}
 </style>
 </head>
 <body>
@@ -36,7 +42,7 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 08 of 10 · tape as module</div>
+      <div class="q"><small>demo 08 of 10</small>If the gate is itself a codebase, which of its six units may hold the judge, and can a regex over its imports check that no other one does?</div>
       <h1>The tape is itself a module of systems.</h1>
       <p class="lede">Run the wiring extractor over jev-tape's own source and you get <b>six units</b>, <b>35 ports</b>, <b>six edges</b>. The same pack format the experiments used for Fineract describes the tool that gates them: explicit <b>380</b> tokens, factored <b>280</b>, real counts. One <code>src</code> unit fetches and reads the key. Nothing in the workflow imports it. That seam is the three planes, drawn.</p>
     </div>
@@ -69,6 +75,7 @@
 
     <div class="stage" id="stage" aria-label="Six jev-tape units drawn as boxes with ports and edges">
       <div class="cap" id="cap"></div>
+      <div class="ulist" id="ulist" aria-label="Units (tap to light one)"></div>
     </div>
 
     <div class="paper-wrap">
@@ -92,13 +99,13 @@
       <div>
         <h2>What the tape shows</h2>
         <p>Every cell on this tape is <code>kind: code</code>. Extracting ports is a regex. Gluing two units along their shared symbols is a union of two tables with five identifications. Checking κ is a lookup: does any identified symbol carry two different signatures? None does, so κ stays silent. Three deterministic steps, zero POSTs, path 0.</p>
-        <p>The pack has a seam. Four units never fetch: <code>domain</code>, <code>colors</code>, <code>typesafe.contract</code>, and the workflow that would import them. One unit does: <code>typesafe.client</code>. It is the Activity, and the tape at the bottom of every demo is the record of its results. A workflow that imported the client would put the judge in replayable code, and a RED could come back GREEN on replay. The extractor makes that import visible as an edge, so its absence is checkable.</p>
+        <p>The pack has a seam. Three <code>src</code> units never fetch: <code>domain</code>, <code>colors</code>, <code>typesafe.contract</code>; a workflow may import any of them. One <code>src</code> unit does fetch: <code>typesafe.client</code>. It is the Activity, and the tape at the bottom of every demo is the record of its results. A workflow that imported the client would put the judge in replayable code, and a RED could come back GREEN on replay. The extractor makes that import visible as an edge, so its absence is checkable.</p>
         <p>Switch the paper between explicit and factored. Both re-expand to the same edge list; the factored one is 100 tokens shorter because six rows share one motif. The break-even line under the paper is the E2 rule applied to these six units.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>This extractor is regex-level.</b> It sees <code>export</code> statements and named imports, nothing else: no re-exports, no dynamic imports, no types used without import. That is the same deliberate subset E2 used. Six units is a toy. The token counts are real counts of a toy.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin, and this page never even asks it.</b> The point of a path-0 page is that nothing here needs a judge: the questions are answered by lookup. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>No request is made at all.</b> Other demos replay recorded judge answers when the pill is green and fall back to a twin otherwise; this page does neither, because path 0 never builds a request. Nothing here needs a judge: every question is answered by lookup, so there is no answer map to record, the pill stays on twin, and the POST counter stays at zero. No key, no network.</div>
       </div>
     </div>
   </section>
@@ -114,6 +121,7 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/jevPack.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
@@ -234,6 +242,10 @@
     g.addEventListener('focus',()=>{if(!pinned)focus(k);}); g.addEventListener('blur',()=>{if(!pinned)focus(null);});
   }
   idle();
+  // phone fallback: the boxes' text is small at 390px, so a tappable list of units repeats the tap targets
+  const ulist=document.getElementById('ulist');
+  for(const u of P.units){const b=document.createElement('button'); b.textContent=u.unit; b.style.borderLeftColor=family(u.unit); b.setAttribute('aria-pressed','false');
+    b.addEventListener('click',()=>{pinned=pinned===u.unit?null:u.unit; focus(pinned); [...ulist.children].forEach(x=>x.setAttribute('aria-pressed',String(x.textContent===pinned)));}); ulist.appendChild(b);}
 
   /* ---------- the pushout, as code ---------- */
   function pushout(a,b){
@@ -262,7 +274,7 @@
     // the composite
     const cx=LB.x-TAB.w+3-LA.w, cy=Math.min(LA.y+dy,LB.y)-14, cw=LA.w+TAB.w-3+LB.w+14, ch=Math.max(LA.h,LB.h)+28;
     const box=svg('rect',{x:cx-6,y:cy,width:cw,height:ch,rx:12,fill:'none',stroke:'var(--c-concept)','stroke-width':1.5,'stroke-dasharray':'5 4',opacity:0});
-    const lab=svg('text',{x:cx,y:cy-6,'font-size':'13',class:'mono',fill:'var(--c-concept)',opacity:0},['typesafe.client ⊔ typesafe.contract']);
+    const lab=svg('text',{x:cx,y:cy-4,'font-size':'13',class:'mono',fill:'var(--c-concept)',opacity:0},['typesafe.client ⊔ typesafe.contract']);
     junctionG.append(box,lab);
     // junction ticks on the five identified tabs
     po.ident.forEach(sym=>{const i=B.ports.indexOf(sym); const t=tabPos('typesafe.contract',i);
@@ -287,7 +299,7 @@
     glued=false; pinned=null; document.getElementById('run').disabled=false; focusAfterGlue(); idle();
   }
   document.getElementById('run').addEventListener('click',run);
-  document.getElementById('reset').addEventListener('click',()=>{tape.clear();unglue();});
+  document.getElementById('reset').addEventListener('click',()=>{if(running)return; tape.clear();unglue(); [...ulist.children].forEach(x=>x.setAttribute('aria-pressed','false'));});
 
   /* ---------- the paper: explicit vs factored ---------- */
   const pack=document.getElementById('pack');
@@ -314,11 +326,11 @@
     {n:`${P.units.length} units · ${nPorts} ports · ${nEdges} edges`,f:'demos/build-data.mjs over jev-tape/src/*.ts and scripts/*.ts → jevPack.units',note:'regex: export const|function|class|type|interface, and named imports'},
     {n:`explicit ${P.tokens.explicit} · factored ${P.tokens.factored} tokens`,f:'demos/build-data.mjs → jevPack.tokens',note:`tokenizer ${JEV.data.meta.tokenizer}; the 100-token gap is the two counters`},
     {n:`F ≈ ${F} tok · n* = ${nStar}`,f:'wiring-and-the-whole/experiments/e2-tokens/E2-RESULTS.md → n* = F/(e−m)',note:'F is an estimate (chars/3.6); e and m are averages of the real totals'},
-    {n:'lines and tokens per unit (72 · 9 · 86 · 62 · 82 · 29)',f:'jevPack.units[].lines, .tokens',note:'shown under each box'},
+    {n:`lines per unit (${P.units.map(u=>u.lines).join(' · ')}) · tokens per unit (${P.units.map(u=>u.tokens).join(' · ')})`,f:'demos/build-data.mjs → jevPack.units[].lines, .tokens',note:'shown under each box; tokens are cl100k counts of the unit source, not of the pack'},
     {n:'fetch · env key on typesafe.client, qualify-surface, smoke-key',f:'jev-tape/src/typesafe/client.ts · scripts/qualify-surface.ts · scripts/smoke-key.ts',note:'regex over the source for the fetch call and the env variable that names the key; the key itself is never read by this page'},
     {n:'five identified symbols · κ silent',f:'computed live from jevPack.units[typesafe.client].imports vs [typesafe.contract].ports',note:'κ rule as in wiring-and-the-whole/witness/run_witness.py step 9: two signatures for one symbol'},
     {n:'Operad names questions. TypeSafe answers them. Temporal remembers.',f:'jev-tape/wiki/pages/three-planes.md',note:'the seam drawn on the stage'},
-    {n:'path 0: code, no TypeSafe, no Temporal',f:'jev-tape/spec/SPEC-v1-SPEED.md',note:'why the POST counter is zero'},
+    {n:'path 0: code, no TypeSafe, no Temporal',f:'jev-tape/spec/SPEC-v1-SPEED.md',note:'why the POST counter is zero and why data/recorded.js has no entry for this page'},
   ]);
 })();
 </script>
