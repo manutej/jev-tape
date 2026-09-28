@@ -1,0 +1,982 @@
+[
+ {
+  "id": "wiki-lisp",
+  "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+  "claim": "This is the Wikipedia article on the Common Lisp programming language",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-lisp-f",
+  "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+  "claim": "This is the Wikipedia article on the Fortran programming language",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-noether",
+  "url": "https://en.wikipedia.org/wiki/Emmy_Noether",
+  "claim": "This is the Wikipedia article about the mathematician Emmy Noether",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-noether-f",
+  "url": "https://en.wikipedia.org/wiki/Emmy_Noether",
+  "claim": "This article says Emmy Noether was a painter, not a mathematician",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-turing",
+  "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+  "claim": "This is the Wikipedia article about Alan Turing",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-turing-f",
+  "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+  "claim": "This article says Alan Turing was born in 1990",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-periodic",
+  "url": "https://en.wikipedia.org/wiki/Periodic_table",
+  "claim": "This is the Wikipedia article on the periodic table of chemical elements",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-periodic-f",
+  "url": "https://en.wikipedia.org/wiki/Periodic_table",
+  "claim": "This is a Wikipedia article about a football club",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-rust",
+  "url": "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+  "claim": "This is the Wikipedia article on the Rust programming language",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-rust-f",
+  "url": "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+  "claim": "This article is about rust, the corrosion of iron",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "mdn-fetch",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+  "claim": "This MDN page documents the Fetch API",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "mdn-fetch-f",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+  "claim": "This MDN page documents the CSS Grid layout",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "mdn-map",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+  "claim": "This MDN page documents the JavaScript Array map method",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "mdn-map-f",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+  "claim": "This page says Array.prototype.map modifies the original array in place",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "mdn-flex",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+  "claim": "This MDN page is a guide to CSS flexible box layout",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "mdn-flex-f",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+  "claim": "This MDN page is about the WebGL API",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "rfc2324",
+  "url": "https://www.rfc-editor.org/info/rfc2324/",
+  "claim": "This page is about RFC 2324, the Hyper Text Coffee Pot Control Protocol",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "rfc2324-f",
+  "url": "https://www.rfc-editor.org/info/rfc2324/",
+  "claim": "This page is about RFC 791, the Internet Protocol",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "rfc791",
+  "url": "https://www.rfc-editor.org/info/rfc791/",
+  "claim": "This page is about RFC 791, the Internet Protocol specification",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "rfc791-f",
+  "url": "https://www.rfc-editor.org/info/rfc791/",
+  "claim": "This page is about a coffee pot protocol",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "rfc9110",
+  "url": "https://www.rfc-editor.org/info/rfc9110/",
+  "claim": "This page is about RFC 9110, HTTP Semantics",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "rfc9110-f",
+  "url": "https://www.rfc-editor.org/info/rfc9110/",
+  "claim": "This page says RFC 9110 is about email transport",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "gh-linux",
+  "url": "https://github.com/torvalds/linux",
+  "claim": "This is the GitHub repository page for torvalds/linux",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "gh-linux-f",
+  "url": "https://github.com/torvalds/linux",
+  "claim": "This is the GitHub repository page for microsoft/vscode",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "gh-vscode",
+  "url": "https://github.com/microsoft/vscode",
+  "claim": "This is the GitHub repository page for microsoft/vscode",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "gh-vscode-f",
+  "url": "https://github.com/microsoft/vscode",
+  "claim": "This page shows a 404 not found error",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "gh-go",
+  "url": "https://github.com/golang/go",
+  "claim": "This is the GitHub repository page for golang/go",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "gh-go-f",
+  "url": "https://github.com/golang/go",
+  "claim": "This is a GitHub pull request page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "hn-front",
+  "url": "https://news.ycombinator.com/",
+  "claim": "The Hacker News front page is showing a list of stories with points and comments",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "hn-front-f",
+  "url": "https://news.ycombinator.com/",
+  "claim": "This page is a login form asking for a password",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "hn-newest",
+  "url": "https://news.ycombinator.com/newest",
+  "claim": "This is the Hacker News newest submissions page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "hn-newest-f",
+  "url": "https://news.ycombinator.com/newest",
+  "claim": "This page shows a shopping cart with items",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "arxiv-list",
+  "url": "https://arxiv.org/list/cs.AI/recent",
+  "claim": "This is the arXiv listing of recent papers in the cs.AI category",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "arxiv-list-f",
+  "url": "https://arxiv.org/list/cs.AI/recent",
+  "claim": "This page is the abstract of a single paper about coffee",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "arxiv-dots",
+  "url": "https://arxiv.org/abs/2505.18329",
+  "claim": "This is an arXiv abstract page for a paper",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "arxiv-dots-f",
+  "url": "https://arxiv.org/abs/2505.18329",
+  "claim": "This page is a listing of recent papers in a category, not a single paper",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "pypi-requests",
+  "url": "https://pypi.org/project/requests/",
+  "claim": "This is the PyPI page for the requests package",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "pypi-requests-f",
+  "url": "https://pypi.org/project/requests/",
+  "claim": "This is the PyPI page for the numpy package",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "pypi-httpx",
+  "url": "https://pypi.org/project/httpx/",
+  "claim": "This is the PyPI page for the httpx package",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "pypi-httpx-f",
+  "url": "https://pypi.org/project/httpx/",
+  "claim": "This page says httpx is a JavaScript package on npm",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "w3-wcag",
+  "url": "https://www.w3.org/WAI/WCAG22/quickref/",
+  "claim": "This is the W3C quick reference for WCAG 2.2",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "w3-wcag-f",
+  "url": "https://www.w3.org/WAI/WCAG22/quickref/",
+  "claim": "This page is the HTML specification for the canvas element",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "python-home",
+  "url": "https://www.python.org/",
+  "claim": "This is the Python programming language home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "python-home-f",
+  "url": "https://www.python.org/",
+  "claim": "This is the Ruby programming language home page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "python-asyncio",
+  "url": "https://docs.python.org/3/library/asyncio.html",
+  "claim": "This is the Python documentation page for the asyncio module",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "python-asyncio-f",
+  "url": "https://docs.python.org/3/library/asyncio.html",
+  "claim": "This is the Python documentation page for the json module",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "go-doc",
+  "url": "https://go.dev/doc/",
+  "claim": "This is the Go documentation index page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "go-doc-f",
+  "url": "https://go.dev/doc/",
+  "claim": "This page is the Rust documentation index",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "node-home",
+  "url": "https://nodejs.org/en",
+  "claim": "This is the Node.js home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "node-home-f",
+  "url": "https://nodejs.org/en",
+  "claim": "This page is the Deno home page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "rust-home",
+  "url": "https://www.rust-lang.org/",
+  "claim": "This is the Rust programming language home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "rust-home-f",
+  "url": "https://www.rust-lang.org/",
+  "claim": "This page is a news site front page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "gnu-bash",
+  "url": "https://www.gnu.org/software/bash/",
+  "claim": "This is the GNU page for the Bash shell",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "gnu-bash-f",
+  "url": "https://www.gnu.org/software/bash/",
+  "claim": "This is the GNU page for the Emacs editor",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "kernel",
+  "url": "https://www.kernel.org/",
+  "claim": "This is the Linux kernel archives home page listing kernel releases",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "kernel-f",
+  "url": "https://www.kernel.org/",
+  "claim": "This page is the Windows download page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "debian",
+  "url": "https://www.debian.org/",
+  "claim": "This is the Debian home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "debian-f",
+  "url": "https://www.debian.org/",
+  "claim": "This is the Ubuntu home page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "httpbin-html",
+  "url": "https://httpbin.org/html",
+  "claim": "This page shows a passage of prose from Moby-Dick",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "httpbin-html-f",
+  "url": "https://httpbin.org/html",
+  "claim": "This page is a JSON response",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "httpbin-form",
+  "url": "https://httpbin.org/forms/post",
+  "claim": "This page shows an order form for a pizza with size and topping choices",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "httpbin-form-f",
+  "url": "https://httpbin.org/forms/post",
+  "claim": "This page shows a completed order confirmation",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-search",
+  "url": "https://en.wikipedia.org/wiki/Special:Search",
+  "claim": "This is the Wikipedia search page with a search box",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "wiki-search-f",
+  "url": "https://en.wikipedia.org/wiki/Special:Search",
+  "claim": "This is the Wikipedia article about Emmy Noether",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "iana",
+  "url": "https://www.iana.org/help/example-domains",
+  "claim": "This IANA page explains the reserved example domains such as example.com",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "iana-f",
+  "url": "https://www.iana.org/help/example-domains",
+  "claim": "This page is the IANA root zone database listing every top-level domain",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "example",
+  "url": "https://example.com/",
+  "claim": "This page is the Example Domain placeholder page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "example-f",
+  "url": "https://example.com/",
+  "claim": "This page is a login page asking for credentials",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "ietf",
+  "url": "https://www.ietf.org/",
+  "claim": "This is the IETF home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "ietf-f",
+  "url": "https://www.ietf.org/",
+  "claim": "This is the W3C home page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "apache",
+  "url": "https://www.apache.org/",
+  "claim": "This is the Apache Software Foundation home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "apache-f",
+  "url": "https://www.apache.org/",
+  "claim": "This is the Linux Foundation home page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "quotes",
+  "url": "https://quotes.toscrape.com/",
+  "claim": "This page lists quotes with authors and tags",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "quotes-f",
+  "url": "https://quotes.toscrape.com/",
+  "claim": "This page lists books with prices",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "books",
+  "url": "https://books.toscrape.com/",
+  "claim": "This page lists books with prices",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "books-f",
+  "url": "https://books.toscrape.com/",
+  "claim": "This page lists quotes with authors and tags",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "bbc",
+  "url": "https://www.bbc.com/news",
+  "claim": "This is the BBC News front page showing news headlines",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "bbc-f",
+  "url": "https://www.bbc.com/news",
+  "claim": "This page is a software package registry",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "weather",
+  "url": "https://www.weather.gov/",
+  "claim": "This is the US National Weather Service home page",
+  "expect": "passed",
+  "kind": "html"
+ },
+ {
+  "id": "weather-f",
+  "url": "https://www.weather.gov/",
+  "claim": "This is a stock market ticker page",
+  "expect": "failed",
+  "kind": "html"
+ },
+ {
+  "id": "pdf-rfc2324",
+  "kind": "pdf",
+  "url": "https://www.rfc-editor.org/rfc/pdfrfc/rfc2324.txt.pdf",
+  "claim": "This is a PDF file of RFC 2324",
+  "expect": "passed"
+ },
+ {
+  "id": "pdf-rfc2324-f",
+  "kind": "pdf",
+  "url": "https://www.rfc-editor.org/rfc/pdfrfc/rfc2324.txt.pdf",
+  "claim": "This is an HTML web page with navigation links",
+  "expect": "failed"
+ },
+ {
+  "id": "pdf-arxiv",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2505.18329",
+  "claim": "This is a PDF document from arXiv",
+  "expect": "passed"
+ },
+ {
+  "id": "pdf-arxiv-f",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2505.18329",
+  "claim": "This is the arXiv listing page for a category",
+  "expect": "failed"
+ },
+ {
+  "id": "json-httpbin",
+  "kind": "json",
+  "url": "https://httpbin.org/json",
+  "claim": "This response is a JSON document describing a slideshow",
+  "expect": "passed"
+ },
+ {
+  "id": "json-httpbin-f",
+  "kind": "json",
+  "url": "https://httpbin.org/json",
+  "claim": "This is an HTML page showing a photo gallery",
+  "expect": "failed"
+ },
+ {
+  "id": "json-gh-api",
+  "kind": "json",
+  "url": "https://api.github.com/repos/torvalds/linux",
+  "claim": "This is a JSON response from the GitHub API describing the torvalds/linux repository",
+  "expect": "passed"
+ },
+ {
+  "id": "json-gh-api-f",
+  "kind": "json",
+  "url": "https://api.github.com/repos/torvalds/linux",
+  "claim": "This is the GitHub web page for the repository with a file browser",
+  "expect": "failed"
+ },
+ {
+  "id": "json-placeholder",
+  "kind": "json",
+  "url": "https://jsonplaceholder.typicode.com/todos/1",
+  "claim": "This response is a JSON object with a todo item",
+  "expect": "passed"
+ },
+ {
+  "id": "json-placeholder-f",
+  "kind": "json",
+  "url": "https://jsonplaceholder.typicode.com/todos/1",
+  "claim": "This response is an XML document",
+  "expect": "failed"
+ },
+ {
+  "id": "json-npm",
+  "kind": "json",
+  "url": "https://registry.npmjs.org/react/latest",
+  "claim": "This is JSON metadata for the latest react package version from the npm registry",
+  "expect": "passed"
+ },
+ {
+  "id": "json-npm-f",
+  "kind": "json",
+  "url": "https://registry.npmjs.org/react/latest",
+  "claim": "This is the npm website page for react with a readme",
+  "expect": "failed"
+ },
+ {
+  "id": "img-png",
+  "kind": "image",
+  "url": "https://httpbin.org/image/png",
+  "claim": "This URL serves a PNG image, not a web page",
+  "expect": "passed"
+ },
+ {
+  "id": "img-png-f",
+  "kind": "image",
+  "url": "https://httpbin.org/image/png",
+  "claim": "This page shows an article with paragraphs of text",
+  "expect": "failed"
+ },
+ {
+  "id": "img-svg",
+  "kind": "image",
+  "url": "https://httpbin.org/image/svg",
+  "claim": "This URL serves an SVG image",
+  "expect": "passed"
+ },
+ {
+  "id": "img-svg-f",
+  "kind": "image",
+  "url": "https://httpbin.org/image/svg",
+  "claim": "This page is a JSON document",
+  "expect": "failed"
+ },
+ {
+  "id": "txt-rfc",
+  "kind": "text",
+  "url": "https://www.rfc-editor.org/rfc/rfc2324.txt",
+  "claim": "This is the plain-text version of RFC 2324, the coffee pot protocol",
+  "expect": "passed"
+ },
+ {
+  "id": "txt-rfc-f",
+  "kind": "text",
+  "url": "https://www.rfc-editor.org/rfc/rfc2324.txt",
+  "claim": "This is the plain text of RFC 791, the Internet Protocol",
+  "expect": "failed"
+ },
+ {
+  "id": "txt-robots",
+  "kind": "text",
+  "url": "https://www.python.org/robots.txt",
+  "claim": "This is a robots.txt file with crawler directives",
+  "expect": "passed"
+ },
+ {
+  "id": "txt-robots-f",
+  "kind": "text",
+  "url": "https://www.python.org/robots.txt",
+  "claim": "This is the Python home page with news and downloads",
+  "expect": "failed"
+ },
+ {
+  "id": "txt-readme",
+  "kind": "text",
+  "url": "https://raw.githubusercontent.com/torvalds/linux/master/README",
+  "claim": "This is the raw README text of the Linux kernel",
+  "expect": "passed"
+ },
+ {
+  "id": "txt-readme-f",
+  "kind": "text",
+  "url": "https://raw.githubusercontent.com/torvalds/linux/master/README",
+  "claim": "This is a JSON response",
+  "expect": "failed"
+ },
+ {
+  "id": "md-vibium",
+  "kind": "markdown",
+  "url": "https://raw.githubusercontent.com/VibiumDev/vibium/main/README.md",
+  "claim": "This is the raw Markdown README of Vibium, a browser automation tool",
+  "expect": "passed"
+ },
+ {
+  "id": "md-vibium-f",
+  "kind": "markdown",
+  "url": "https://raw.githubusercontent.com/VibiumDev/vibium/main/README.md",
+  "claim": "This is the README of a Python web framework",
+  "expect": "failed"
+ },
+ {
+  "id": "xml-httpbin",
+  "kind": "xml",
+  "url": "https://httpbin.org/xml",
+  "claim": "This response is an XML document",
+  "expect": "passed"
+ },
+ {
+  "id": "xml-httpbin-f",
+  "kind": "xml",
+  "url": "https://httpbin.org/xml",
+  "claim": "This response is a PNG image",
+  "expect": "failed"
+ },
+ {
+  "id": "xml-hnrss",
+  "kind": "feed",
+  "url": "https://hnrss.org/frontpage",
+  "claim": "This is an RSS feed of Hacker News front page stories",
+  "expect": "passed"
+ },
+ {
+  "id": "xml-hnrss-f",
+  "kind": "feed",
+  "url": "https://hnrss.org/frontpage",
+  "claim": "This is a JSON response of GitHub issues",
+  "expect": "failed"
+ },
+ {
+  "id": "csv-addresses",
+  "kind": "csv",
+  "url": "https://people.sc.fsu.edu/~jburkardt/data/csv/addresses.csv",
+  "claim": "This is a CSV file of addresses",
+  "expect": "passed"
+ },
+ {
+  "id": "csv-addresses-f",
+  "kind": "csv",
+  "url": "https://people.sc.fsu.edu/~jburkardt/data/csv/addresses.csv",
+  "claim": "This is a PDF document",
+  "expect": "failed"
+ },
+ {
+  "id": "err-gh-404",
+  "kind": "error",
+  "url": "https://github.com/this-repository-does-not-exist-xyz123/nothing",
+  "claim": "This GitHub page shows a 404 not found error",
+  "expect": "passed"
+ },
+ {
+  "id": "err-gh-404-f",
+  "kind": "error",
+  "url": "https://github.com/this-repository-does-not-exist-xyz123/nothing",
+  "claim": "This is the GitHub repository page for torvalds/linux",
+  "expect": "failed"
+ },
+ {
+  "id": "err-wiki-missing",
+  "kind": "error",
+  "url": "https://en.wikipedia.org/wiki/Asdfasdfasdfasdf_not_a_real_page_xyz",
+  "claim": "This Wikipedia page says the article does not exist",
+  "expect": "passed"
+ },
+ {
+  "id": "err-wiki-missing-f",
+  "kind": "error",
+  "url": "https://en.wikipedia.org/wiki/Asdfasdfasdfasdf_not_a_real_page_xyz",
+  "claim": "This is the Wikipedia article about Alan Turing",
+  "expect": "failed"
+ },
+ {
+  "id": "err-rfc-missing",
+  "kind": "error",
+  "url": "https://www.rfc-editor.org/info/rfc99999/",
+  "claim": "This RFC Editor page reports that the document was not found",
+  "expect": "passed"
+ },
+ {
+  "id": "err-rfc-missing-f",
+  "kind": "error",
+  "url": "https://www.rfc-editor.org/info/rfc99999/",
+  "claim": "This page is about RFC 2324",
+  "expect": "failed"
+ },
+ {
+  "id": "wall-gh-settings",
+  "kind": "login-wall",
+  "url": "https://github.com/settings/profile",
+  "claim": "This page is a GitHub sign-in form because the settings page requires login",
+  "expect": "passed"
+ },
+ {
+  "id": "wall-gh-settings-f",
+  "kind": "login-wall",
+  "url": "https://github.com/settings/profile",
+  "claim": "This page shows the user's profile settings form ready to edit",
+  "expect": "failed"
+ },
+ {
+  "id": "wall-wiki-prefs",
+  "kind": "login-wall",
+  "url": "https://en.wikipedia.org/wiki/Special:Preferences",
+  "claim": "This Wikipedia page says you must be logged in to see preferences",
+  "expect": "passed"
+ },
+ {
+  "id": "wall-wiki-prefs-f",
+  "kind": "login-wall",
+  "url": "https://en.wikipedia.org/wiki/Special:Preferences",
+  "claim": "This page shows the preferences form for a logged-in user",
+  "expect": "failed"
+ },
+ {
+  "id": "redirect-example",
+  "kind": "redirect",
+  "url": "https://httpbin.org/redirect-to?url=https%3A%2F%2Fexample.com%2F",
+  "claim": "After the redirect this is the Example Domain placeholder page",
+  "expect": "passed"
+ },
+ {
+  "id": "redirect-example-f",
+  "kind": "redirect",
+  "url": "https://httpbin.org/redirect-to?url=https%3A%2F%2Fexample.com%2F",
+  "claim": "This page is the httpbin home page",
+  "expect": "failed"
+ },
+ {
+  "id": "delay-3",
+  "kind": "delay",
+  "url": "https://httpbin.org/delay/3",
+  "claim": "This response is a JSON document describing the request",
+  "expect": "passed"
+ },
+ {
+  "id": "delay-3-f",
+  "kind": "delay",
+  "url": "https://httpbin.org/delay/3",
+  "claim": "This page is a login form",
+  "expect": "failed"
+ },
+ {
+  "id": "form-ddg",
+  "kind": "form",
+  "url": "https://duckduckgo.com/html/",
+  "claim": "This page is a DuckDuckGo search form",
+  "expect": "passed"
+ },
+ {
+  "id": "form-ddg-f",
+  "kind": "form",
+  "url": "https://duckduckgo.com/html/",
+  "claim": "This page is a list of search results for the word python",
+  "expect": "failed"
+ },
+ {
+  "id": "docs-python-tutorial",
+  "kind": "docs",
+  "url": "https://docs.python.org/3/tutorial/",
+  "claim": "This is the index of the official Python tutorial",
+  "expect": "passed"
+ },
+ {
+  "id": "docs-python-tutorial-f",
+  "kind": "docs",
+  "url": "https://docs.python.org/3/tutorial/",
+  "claim": "This is the Go language tutorial",
+  "expect": "failed"
+ },
+ {
+  "id": "docs-react",
+  "kind": "spa",
+  "url": "https://react.dev/",
+  "claim": "This is the React documentation home page",
+  "expect": "passed"
+ },
+ {
+  "id": "docs-react-f",
+  "kind": "spa",
+  "url": "https://react.dev/",
+  "claim": "This is the Vue.js home page",
+  "expect": "failed"
+ },
+ {
+  "id": "docs-vue",
+  "kind": "spa",
+  "url": "https://vuejs.org/",
+  "claim": "This is the Vue.js home page",
+  "expect": "passed"
+ },
+ {
+  "id": "docs-vue-f",
+  "kind": "spa",
+  "url": "https://vuejs.org/",
+  "claim": "This is the Angular home page",
+  "expect": "failed"
+ },
+ {
+  "id": "long-elements",
+  "kind": "long",
+  "url": "https://en.wikipedia.org/wiki/List_of_chemical_elements",
+  "claim": "This Wikipedia page is a list of chemical elements",
+  "expect": "passed"
+ },
+ {
+  "id": "long-elements-f",
+  "kind": "long",
+  "url": "https://en.wikipedia.org/wiki/List_of_chemical_elements",
+  "claim": "This Wikipedia page is a list of countries by population",
+  "expect": "failed"
+ },
+ {
+  "id": "ja-math",
+  "kind": "non-english",
+  "url": "https://ja.wikipedia.org/wiki/数学",
+  "claim": "This is the Japanese Wikipedia article on mathematics (数学)",
+  "expect": "passed"
+ },
+ {
+  "id": "ja-math-f",
+  "kind": "non-english",
+  "url": "https://ja.wikipedia.org/wiki/数学",
+  "claim": "This is the Japanese Wikipedia article on music",
+  "expect": "failed"
+ },
+ {
+  "id": "es-ada",
+  "kind": "non-english",
+  "url": "https://es.wikipedia.org/wiki/Ada_Lovelace",
+  "claim": "This is the Spanish Wikipedia article about Ada Lovelace",
+  "expect": "passed"
+ },
+ {
+  "id": "es-ada-f",
+  "kind": "non-english",
+  "url": "https://es.wikipedia.org/wiki/Ada_Lovelace",
+  "claim": "This is the Spanish Wikipedia article about Alan Turing",
+  "expect": "failed"
+ },
+ {
+  "id": "svg-logo",
+  "kind": "image",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg",
+  "claim": "This URL serves an SVG image of the SVG logo",
+  "expect": "passed"
+ },
+ {
+  "id": "svg-logo-f",
+  "kind": "image",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg",
+  "claim": "This page is a Wikipedia article about vector graphics",
+  "expect": "failed"
+ }
+]
