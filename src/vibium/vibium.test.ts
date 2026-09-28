@@ -253,6 +253,23 @@ test("LLM fallback: consulted on a Jev escalate, never on a Jev refusal or a C10
   assert.deepEqual(calls, []);
 });
 
+test("pickRef: one Choice over the map with an escape; a weak pick returns null", async () => {
+  const { pickRef, pickRequest } = await import("./pick.ts");
+  const map = snap("login-page").map as string;
+  const req = pickRequest("enter the username", map, { url: "u", title: "t" });
+  assert.deepEqual(Object.keys((req.questions.pick as { criteria: Record<string, string> }).criteria), ["@e1", "@e2", "@e3", "@e4", "none"]);
+  const strong = scripted([{ pick: choice("@e1", { "@e1": 0.96, "@e2": 0.02, "@e3": 0.01, "@e4": 0.0, none: 0.01 }) }]).judge;
+  const r = await pickRef("enter the username", map, { url: "u", title: "t" }, strong);
+  assert.equal(r.ref, "@e1");
+  assert.equal(r.line?.label, 'name="username"');
+  const weak = scripted([{ pick: choice("@e2", { "@e1": 0.4, "@e2": 0.45, "@e3": 0.1, "@e4": 0.0, none: 0.05 }) }]).judge;
+  const w = await pickRef("enter the username", map, { url: "u", title: "t" }, weak);
+  assert.equal(w.ref, null);
+  assert.ok(w.entropy > 0.5);
+  const none = scripted([{ pick: choice("none", { "@e1": 0.01, "@e2": 0.01, "@e3": 0.01, "@e4": 0.01, none: 0.96 }) }]).judge;
+  assert.equal((await pickRef("pay the invoice", map, { url: "u", title: "t" }, none)).ref, null);
+});
+
 test("host policy refuses navigation and commits off the allowlist without a POST", async () => {
   const fb = fakeBrowser(["login-page"]);
   const { judge, seen } = scripted([]);

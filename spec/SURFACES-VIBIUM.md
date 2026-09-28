@@ -135,6 +135,28 @@ Jev first. On a **verify** escalate, the text model (`llmFallback`, wired to `vi
 
 Whole task: about **6×** (B over A). The decisions alone: about **40×** with fresh POSTs, more from the tape. The gap that remains in B is the page itself. Variant A also plans the steps, which B does not: B is the shape for a known flow (a playbook), A for an unknown page. The per-decision gap on real pages is in §8b.
 
+## 8d. Real sites, gated and verified, no person and no model in the loop (2026-09-28)
+
+| site | step | gate | verify | note |
+| --- | --- | --- | --- | --- |
+| news.ycombinator.com | click "new" | auto, 435 ms (mutatesWorld 0.06) | true, verified 0.97 | whole step 1.6 s; page load 6.3 s |
+| en.wikipedia.org Special:Search | fill, press Enter | auto, 264 ms | true, but verified at **0.48** | exposed the missing peakedness rule; `outcome` now escalates above normalised entropy 0.6 |
+| github.com microsoft/vscode issues | fill @e34, press Enter | auto, 320 ms | **contradicted 0.64** | and it was right: the scripted fill never stuck in GitHub's search component, URL unchanged, 18,437 open. Model-only: `run` 20.9 s then `check` 29.1 s passed on the page it had typed itself |
+
+The GitHub row is the one to remember: the verify lane caught a silently failed action in 332 ms. With rule 0 it would now escalate (entropy 0.64) to `vibium check`, which is also correct; either way the loop knows.
+
+**Check only, or Run too.** The gate is already a Run-side fork (may this act), and verify is the Run loop's feedback after every commit, not only a final Check. `src/vibium/pick.ts` adds the next Run-side fork: which element on this page is the one the step needs, as one Choice over the map lines with `none` as the escape; a pick is used only when it is peaked (p ≥ 0.85). Page routing (login wall, form, listing, error, captcha, consent) is the fork after that. Planning an unknown page from a goal stays with the model.
+
+Measured live on github.com/microsoft/vscode/issues, 80 candidate elements in one Choice:
+
+| goal | pick | p | entropy | ms |
+| --- | --- | --- | --- | --- |
+| search the issues by typing a query | `@e34 [input] placeholder="Search Issues"` | 0.99 | 0.01 | 304 |
+| open the pull requests tab | `@e13 [a] "Pull requests"` | 1.00 | 0.00 | 163 |
+| pay for a GitHub subscription | `none` (escape) | 0.90 | 0.10 | 176 |
+
+One POST replaces the planner turn that would otherwise choose the element, and the escape option holds when nothing fits. n=3, one page: a lead, not a law.
+
 ## 9. Next cuts, in order
 
 1. First keyed run; record the gate's score indexing and the real p50 per POST in this file.
