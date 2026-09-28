@@ -12,4 +12,6 @@ A GREEN that lets code apply is a bounded error claim: a cut fitted on a fit spl
 
 Ormus routes map onto this tape without renaming: auto = GREEN, review = AMBER, block = RED, escalate_human = C10 park. C10 stays a park whatever the number.
 
+The offline half that produces `frozen.json` (cut, budget, pin, stability) is JEV-works `kit/gate/pipeline-cli.ts`; the runbook across both halves is jev-elder `fusion/WORKFLOW.md`. This tape reads `hi`, `maxError`, `answeredBy`, `unstable` and nothing else; a pin other than `answeredBy` refuses the object.
+
 Related: [[c10-human-gate]] [[ormus-jev]] [[three-lanes]] [[fire]] [[typesafe-activity]]
