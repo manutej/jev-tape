@@ -60,7 +60,7 @@ Local Grok can see your connected Gmail / GitHub MCP. This repo does not embed t
 4. `npm run qualify -- fixtures/example-availability.json`
 5. Read printed `model` + answers. The script will not send.
 
-Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFETY.md`](spec/KEY-SAFETY.md).
+Details: [`docs/LOCAL-GROK.md`](docs/LOCAL-GROK.md). Key safety: [`spec/KEY-SAFETY.md`](spec/KEY-SAFETY.md). Browser demo from your terminal: [`docs/LOCAL-DEMO.md`](docs/LOCAL-DEMO.md).
 
 | Allowed MCP | Forbidden until you explicitly flip a local flag |
 | --- | --- |

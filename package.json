@@ -13,6 +13,8 @@
     "serve": "node scripts/serve.mjs",
     "temporal": "node scripts/temporal-status.mjs",
     "vibium": "node --experimental-strip-types scripts/vibium-step.ts",
-    "bench": "node --experimental-strip-types scripts/vibium-bench.ts"
+    "bench": "node --experimental-strip-types scripts/vibium-bench.ts",
+    "pick": "node --experimental-strip-types scripts/vibium-pick.ts",
+    "demo": "bash scripts/demo.sh"
   }
 }
