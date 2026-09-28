@@ -83,3 +83,27 @@ export function validateRequest(req: SystemOneRequest): ContractError | null {
   }
   return null;
 }
+
+/**
+ * Validate a response at the network boundary before any code composes on it.
+ * Probabilities must sum to ~1, confidence must be a finite number in [0, 1], noul in [0, 1].
+ */
+export function validateResponse(res: SystemOneResponse, expectedIds: string[]): ContractError | null {
+  if (!res || typeof res !== "object" || !res.answers) return { kind: "malformed", message: "response has no answers map" };
+  for (const id of expectedIds) {
+    const a = res.answers[id];
+    if (!a) return { kind: "missing-answer", id, message: `${id}: no answer` };
+    if (a.type === "noul") {
+      if (!(Number.isFinite(a.noul) && a.noul >= 0 && a.noul <= 1)) return { kind: "bad-noul", id, message: `${id}: noul ${a.noul} not in [0,1]` };
+    } else if (a.type === "choice" || a.type === "score") {
+      if (!(Number.isFinite(a.confidence) && a.confidence >= 0 && a.confidence <= 1)) return { kind: "bad-confidence", id, message: `${id}: confidence ${a.confidence} not in [0,1]` };
+      const sum = Object.values(a.probabilities ?? {}).reduce((x, y) => x + y, 0);
+      if (Math.abs(sum - 1) > 0.05) return { kind: "bad-distribution", id, message: `${id}: probabilities sum to ${sum.toFixed(2)}` };
+      if (a.type === "choice" && !(a.choice in (a.probabilities ?? {}))) return { kind: "bad-choice", id, message: `${id}: choice ${a.choice} not among probabilities` };
+    } else {
+      return { kind: "bad-type", id, message: `${id}: unknown answer type` };
+    }
+  }
+  return null;
+}
+

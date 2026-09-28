@@ -17,3 +17,6 @@ runs/
 
 # vibium recordings (zips with screenshots)
 recordings/
+
+# local tape + dev server db
+.jev-tape/

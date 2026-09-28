@@ -2,6 +2,7 @@ import {
   TYPESAFE_ENDPOINT,
   TYPESAFE_PINNED_MODEL,
   validateRequest,
+  validateResponse,
   type SystemOneRequest,
   type SystemOneResponse,
 } from "./contract.ts";
@@ -50,6 +51,8 @@ export async function systemOne(
     throw new TypesafeError(`TypeSafe ${res.status}: ${text.slice(0, 400)}`, res.status, false);
   }
   const body = JSON.parse(text) as SystemOneResponse;
+  const badBody = validateResponse(body, Object.keys(req.questions));
+  if (badBody) throw new TypesafeError(`TypeSafe response: ${badBody.message}`, 422, true);
   if (body.model && body.model !== TYPESAFE_PINNED_MODEL) {
     throw new TypesafeError(
       `response.model must be ${TYPESAFE_PINNED_MODEL}, got ${body.model}`,

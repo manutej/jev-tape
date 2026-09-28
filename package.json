@@ -1,22 +1,49 @@
 {
   "name": "jev-tape",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Durable execution: TypeSafe qualifies, Temporal records. Run locally. Key stays in .env.",
   "scripts": {
     "test": "node --experimental-strip-types --test src/*.test.ts src/temporal/*.test.ts src/vibium/*.test.ts",
+    "typecheck": "tsc --noEmit",
     "check": "node scripts/check.mjs",
+    "temporal": "node scripts/temporal-status.mjs",
+    "temporal:dev": "mkdir -p .jev-tape && ${TEMPORAL_CLI:-temporal} server start-dev --db-filename .jev-tape/temporal.db --ui-port 8233",
+    "worker": "node --experimental-strip-types src/temporal/worker.ts",
+    "demo": "node --experimental-strip-types scripts/demo.ts",
+    "demo:crash": "node --experimental-strip-types scripts/demo.ts --crash",
+    "replay": "node --experimental-strip-types scripts/replay.ts",
     "live": "node --experimental-strip-types scripts/live-run.ts",
     "smoke": "node --experimental-strip-types scripts/smoke-key.ts",
     "qualify": "node --experimental-strip-types scripts/qualify-surface.ts",
     "serve": "node scripts/serve.mjs",
-    "temporal": "node scripts/temporal-status.mjs",
+    "harness": "node --experimental-strip-types scripts/harness.ts",
+    "pack:scan": "node scripts/pack-scan.mjs",
+    "ingest": "node --experimental-strip-types scripts/ingest.ts",
+    "mcp:fake": "node --experimental-strip-types scripts/mcp-fake-gmail.ts",
     "vibium": "node --experimental-strip-types scripts/vibium-step.ts",
+    "demo:vibium": "bash scripts/demo.sh",
     "bench": "node --experimental-strip-types scripts/vibium-bench.ts",
     "pick": "node --experimental-strip-types scripts/vibium-pick.ts",
-    "demo": "bash scripts/demo.sh",
     "corpus": "node --experimental-strip-types scripts/vibium-corpus.ts",
     "calibrate": "node --experimental-strip-types scripts/calibrate.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.1",
+    "@temporalio/activity": "^1.24.0",
+    "@temporalio/client": "^1.24.0",
+    "@temporalio/common": "^1.24.0",
+    "@temporalio/worker": "^1.24.0",
+    "@temporalio/workflow": "^1.24.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@temporalio/testing": "^1.24.0",
+    "@types/node": "^22.20.4",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.18"
   }
 }
