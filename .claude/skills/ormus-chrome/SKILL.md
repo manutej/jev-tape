@@ -49,8 +49,12 @@ at rest. Card lift 0.2s, button color 0.15s. Everything honors `prefers-reduced-
 Copy. Plain, confident sentences that lead with the answer. No em dashes, no "X, not Y", no
 aphorisms, no sales-speak. One quiet call to action per surface: "See the work", "Book a call".
 
-Marks. The flat gold mark for UI, the liquid-gold mark for heroes, the kintsugi mark for endings.
-Never redraw the swan as line art; if the mark files are not at hand, leave marks out.
+Marks and sigils. The flat gold mark for UI, the liquid-gold mark for heroes, the kintsugi mark for
+endings. Saturn and flame are the only sigils that decorate cards, cycled; the swan is the hero and the
+closing form ("the gold settles into the swan"); ouroboros, caduceus and compass keep to their own lore
+contexts (cycles, the messenger, navigation). Never redraw the swan as line art. The files are private
+brand assets: attach them to a published page as files, or vendor at build time; do not commit them
+to this repo. Without them the page keeps its block art and leaves the sigils out.
 
 ## Procedure
 

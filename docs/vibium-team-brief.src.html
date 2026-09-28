@@ -61,7 +61,15 @@
   .masthead .words { display: grid; gap: 1.25rem; }
   .masthead .art { display: none; }
   @media (min-width: 900px) { header.masthead { grid-template-columns: minmax(0, 1fr) 18rem; column-gap: 2rem; } .masthead .art { display: block; } }
+  .art { position: relative; }
   .art svg { display: block; width: 100%; height: auto; }
+  .art img.sigil { display: block; width: 100%; height: auto; max-width: 18rem; margin-left: auto; }
+  .art:has(img.sigil.is-loaded) svg { display: none; }
+  .card-sigil { position: absolute; top: .9rem; right: .9rem; width: 84px; height: 84px; object-fit: contain; opacity: .92; pointer-events: none; }
+  .steps .fusion-card { position: relative; }
+  .steps .fusion-card:has(.card-sigil) .with-icon { padding-right: 4.5rem; }
+  .closing-sigil { width: 140px; height: 140px; object-fit: contain; margin-bottom: .5rem; }
+  @media print { .card-sigil, .closing-sigil, .art img.sigil { display: none !important; } }
   .art .gold { fill: var(--ormus-gold); } .art .bright { fill: var(--ormus-gold-bright); } .art .inkb { fill: var(--ormus-ink); } .art .mutedb { fill: var(--ormus-ink-muted); } .art .rule { stroke: var(--ormus-hairline); stroke-width: 1; }
   .masthead .lede { font-family: var(--ormus-font-display); font-size: 1.4rem; line-height: 1.45; color: var(--ormus-ink-muted); max-width: 42ch; }
   .meta-row { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
@@ -279,6 +287,7 @@
       <p class="lede">Jev answers the two questions a browser loop asks most, in a quarter of a second, without a model turn. Vibium does the acting. Every experiment and every row is on this page, built from <code>results/registry.json</code>.</p>
     </div>
     <div class="art" aria-hidden="true">
+      <img class="sigil" src="assets/ormus/swan-wings.png" alt="" onload="this.classList.add('is-loaded')" onerror="this.remove()">
       <svg viewBox="0 0 320 320">
         <rect class="gold" x="24" y="-16" width="128" height="288" rx="3"/>
         <rect class="mutedb" x="176" y="96" width="48" height="24" rx="3"/>
@@ -354,10 +363,10 @@
       <p>The loop wraps <code>vibium --json</code>. Reads and tab edits never involve Jev. A commit verb pays one gate call before it runs; a step with an expectation pays one verify call after the page settles. Jev's "not sure" goes to a person for the gate and to the model for the verify.</p>
     </div>
     <div class="steps">
-      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-classify"/></svg><div><span class="mono-label mono-label--gold">Classify</span><h3>Verb classes in code</h3><p><code>map</code>, <code>text</code>, <code>url</code> and <code>fill</code> never call Jev. Only <code>click</code>, <code>press Enter</code> and <code>upload</code> reach the gate. A login costs two calls, not five.</p></div></div></article>
-      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-gate"/></svg><div><span class="mono-label">Gate</span><h3>May this run now?</h3><p>One call with the snapshot and the target: <code>mutatesWorld</code>, <code>reversible</code>, <code>spendsOrSends</code>, <code>blastRadius</code>. Peaked answers apply or refuse; mid-band answers escalate to policy or a person.</p></div></div></article>
-      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-verify"/></svg><div><span class="mono-label">Verify</span><h3>Did the page do it?</h3><p>One call after <code>wait load</code>: <code>outcome</code>, <code>errorShown</code>, <code>blocked</code>. Entropy above 0.6 escalates to <code>vibium check</code> with the same claim.</p></div></div></article>
-      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-tape"/></svg><div><span class="mono-label">Tape</span><h3>Answers replay for free</h3><p>Every answer is keyed by a hash of state and questions. A replayed flow makes zero calls. The recording zip is the proof and the calibration input.</p></div></div></article>
+      <article class="fusion-card"><img class="card-sigil" src="assets/ormus/saturn.png" alt="" onerror="this.remove()"><div class="with-icon"><svg class="ic"><use href="#i-classify"/></svg><div><span class="mono-label mono-label--gold">Classify</span><h3>Verb classes in code</h3><p><code>map</code>, <code>text</code>, <code>url</code> and <code>fill</code> never call Jev. Only <code>click</code>, <code>press Enter</code> and <code>upload</code> reach the gate. A login costs two calls, not five.</p></div></div></article>
+      <article class="fusion-card"><img class="card-sigil" src="assets/ormus/flame.png" alt="" onerror="this.remove()"><div class="with-icon"><svg class="ic"><use href="#i-gate"/></svg><div><span class="mono-label">Gate</span><h3>May this run now?</h3><p>One call with the snapshot and the target: <code>mutatesWorld</code>, <code>reversible</code>, <code>spendsOrSends</code>, <code>blastRadius</code>. Peaked answers apply or refuse; mid-band answers escalate to policy or a person.</p></div></div></article>
+      <article class="fusion-card"><img class="card-sigil" src="assets/ormus/saturn.png" alt="" onerror="this.remove()"><div class="with-icon"><svg class="ic"><use href="#i-verify"/></svg><div><span class="mono-label">Verify</span><h3>Did the page do it?</h3><p>One call after <code>wait load</code>: <code>outcome</code>, <code>errorShown</code>, <code>blocked</code>. Entropy above 0.6 escalates to <code>vibium check</code> with the same claim.</p></div></div></article>
+      <article class="fusion-card"><img class="card-sigil" src="assets/ormus/flame.png" alt="" onerror="this.remove()"><div class="with-icon"><svg class="ic"><use href="#i-tape"/></svg><div><span class="mono-label">Tape</span><h3>Answers replay for free</h3><p>Every answer is keyed by a hash of state and questions. A replayed flow makes zero calls. The recording zip is the proof and the calibration input.</p></div></div></article>
     </div>
 
     <figure class="fusion-card" style="margin-top:1.25rem">
@@ -661,6 +670,7 @@
   </section>
 
   <footer>
+    <img class="closing-sigil" src="assets/ormus/swan-glide.png" alt="" onerror="this.remove()">
     <div class="rule"></div>
     <span class="mono-label">Every number carries n, baseline, and whether thresholds were fitted</span>
     <span>Jev is TypeSafe System One, model pin jev-1.13.0. Vibium binary 26.8.21 built from HermeticOrmus/vibium at feat/linear-tasks. Model runs on xai grok-4.6. All measurements 2026-09-28.</span>
