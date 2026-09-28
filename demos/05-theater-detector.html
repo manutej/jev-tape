@@ -7,6 +7,10 @@
 <meta name="description" content="Ten operadic-interview trees. A code witness (COMPOSE) rejects the four that could never agree with themselves before any judge is asked; the six survivors go to one batched consistency question, recorded on the tape.">
 <link rel="stylesheet" href="assets/tape.css">
 <style>
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  .src{font-family:var(--mono);font-size:12px;color:var(--dim);margin:2px 0 6px}
+  .src b{font-weight:500;color:var(--green)}
   .seg.trees{display:flex;width:100%;margin:6px 0 10px}
   .seg.trees button{flex:1;min-width:0;padding:5px 1px;font-size:12px;line-height:1.15;font-family:var(--mono)}
   .seg.trees button i{display:block;font-style:normal;font-size:10px;opacity:.7}
@@ -38,9 +42,9 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 05 of 10 · theater detector</div>
+      <div class="q"><small>demo 05 of 10</small>If four of ten interview trees could never agree with themselves, why ask a model about them at all, and what free check finds them first?</div>
       <h1>Four of ten trees could never agree with themselves.</h1>
-      <p class="lede">The depth experiment split ten root questions into sub-questions and asked whether the sub-answers agreed with the root. Four trees came back inconsistent in every run that read them. That was not the models. Three of those trees end in a yes/no under a root that wants a list or a name, and the fourth never asks the step that produces the root. Code can see that from the gold answers alone, <b>before</b> any model is asked. This demo runs that check first, as Path 0, and sends only the survivors to the judge.</p>
+      <p class="lede">The depth experiment split ten root questions into sub-questions and asked whether the sub-answers agreed with the root. Three trees came back inconsistent in all four runs and a fourth in both sonnet runs, whichever model read them. That was not the models. Three of those trees end in a yes/no under a root that wants a list or a name, and the fourth never asks the step that produces the root. Code can see that from the gold answers alone, <b>before</b> any model is asked. This demo runs that check first, as Path 0, and sends only the survivors to the judge.</p>
     </div>
     <aside class="aside">
       <b>The intersection.</b> <em>wiring-and-the-whole</em> built an interview to catch model defects and caught its own harness instead. <em>jev-tape</em> says code computes what code can compute. A composition witness is code, so it runs before the judge, and its RED is one the judge cannot override.
@@ -53,12 +57,14 @@
       <p>Pick a tree. COMPOSE is code: it compares the answer type of the last sub-question with the root, then checks that the last sub is the step that produces the root. Only a tree that passes goes to the judge, with one closed question: did the recorded sub-answers agree with the root, yes or no.</p>
 
       <div class="seg trees" id="treeSeg" role="group" aria-label="Pick a tree"></div>
+      <label class="toggle"><input type="checkbox" id="tTwin"> <span>Ignore the recorded answers and let the twin answer</span></label>
 
       <div class="btnrow">
         <button class="btn primary" id="run">Run COMPOSE</button>
         <button class="btn" id="runAll">Run all ten</button>
         <button class="btn" id="reset">Rewind tape</button>
       </div>
+      <div class="src" id="src">answers: none yet</div>
 
       <div class="vr"><span class="vk">COMPOSE · code</span><span class="lamp OFF" id="lampC">OFF</span><span id="stampC"></span></div>
       <div class="vr"><span class="vk">OC gate · judge</span><span class="lamp OFF" id="lampO">OFF</span><span class="note" id="ocNote"></span></div>
@@ -80,13 +86,13 @@
       <div>
         <h2>What the tape shows</h2>
         <p>COMPOSE is a witness, so it is code. It reads gold strings and asks two things: is the last sub-answer the same kind of answer as the root, and is it the root. Neither needs a judge, so the tape records a code cell and posts nothing. When the witness fails, that is a local RED. The judge is never asked, and a Choice from the judge could not have overridden it.</p>
-        <p>A tree that passes goes to the judge with one closed question, consistent: yes or no. The twin answers from the E5.1 grades: on the six valid trees, every run was consistent and correct. "Run all ten" walks every tree, then sends the six survivors in a single request. One POST, six answers, recorded once.</p>
+        <p>A tree that passes goes to the judge with one closed question, consistent: yes or no. The twin answers from the E5.1 grades: on the six valid trees, every run was consistent and correct. The recorded judge, asked the same question about the default tree Q43, also said yes, but at P=0.68 with a confidence field of 0.36, where the twin says yes at 0.94. Code keeps that: 0.68 clears the top_prob_floor of 0.6, so the gate is GREEN, and the reasons list shows the margin. "Run all ten" walks every tree, then sends the six survivors in a single request. That request was never recorded, so the twin answers it and the pill says so. One POST, six answers, recorded once.</p>
         <p>The four rejected trees show what the raw run recorded instead. The three depth-9 trees were inconsistent in all four runs; the depth-10 tree in both sonnet runs. An inconsistency that does not depend on the model is a defect in the tree, not in the reader. That is how the harness caught itself, and it is a check that costs nothing.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>Consistency is not correctness.</b> A model can agree with itself and be wrong; E5 saw consistent-and-wrong pairs in both directions. The OC gate calibrates and localises defects. It is never ground truth, and the 6/6 here is measured on six trees of one corpus, written by the same author as the packs.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> It answers the consistency question from E5.1-GRADES.json (run B_sonnet_v2), deterministically, with the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge answers shown are recorded or twinned; this page never calls the judge.</b> When the pill at the top is green, the consistency answer is the one a real call returned once, on the default state (tree Q43), replayed from <code>data/recorded.js</code>. For any other tree, for "Run all ten", or when the toggle above says so, a deterministic twin answers from E5.1-GRADES.json (run B_sonnet_v2) with the same wire shape and contract checks as the real client. No key, no network, no live call from this page.</div>
       </div>
     </div>
   </section>
@@ -102,15 +108,36 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/e5.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
   const {Tape, twin, compose, esc, setLamp, stamp, svg, provenanceTable, topbar, segControl} = JEV;
   const E5 = JEV.data.e5, TREES = E5.trees, OCRUN = 'B_sonnet_v2', OC = E5.fixed.oc[OCRUN];
-  topbar(document.getElementById('topbar'), {title:'05 · Theater detector'});
+  const TITLE='05 · Theater detector', FILE='05-theater-detector.html';
+  topbar(document.getElementById('topbar'), {title:TITLE});
   const tape = new Tape({title:'Theater detector tape'});
   const $ = id => document.getElementById(id);
-  const lampC=$('lampC'), stampC=$('stampC'), lampO=$('lampO'), ocNote=$('ocNote'), reasons=$('reasons'), ladder=$('ladder');
+  const lampC=$('lampC'), stampC=$('stampC'), lampO=$('lampO'), ocNote=$('ocNote'), reasons=$('reasons'), ladder=$('ladder'), tTwin=$('tTwin'), srcEl=$('src');
+
+  /* ---------- recorded answers vs the twin ---------- */
+  const REC=JEV.data.recorded, recKeys=(REC&&REC.pages&&REC.pages[FILE])||[];
+  if(!recKeys.length){tTwin.disabled=true; tTwin.closest('label').title='no recorded answers on disk for this page: the twin answers anyway';}
+  // ask(): the same call the page always made, but the reader can force the twin; the result says which answered
+  function ask(req,resolvers){
+    const saved=JEV.data.recorded; if(tTwin.checked) JEV.data.recorded=null;
+    let res; try{res=twin.systemOne(req,resolvers);}finally{JEV.data.recorded=saved;}
+    if(!res.recorded) topbar(document.getElementById('topbar'),{title:TITLE});   // the pill goes back to grey
+    res.source=res.recorded?`recorded judge answers (${String(res.recordedAt).slice(0,10)})`:'twin';
+    res.twinWould=Object.fromEntries(Object.entries(req.questions).map(([id,q])=>[id,resolvers[id](req.state,q)]));
+    srcEl.innerHTML=res.recorded?`answers: <b>${esc(res.source)}</b> · model ${esc(res.model)}`:'answers: twin (deterministic, no call)';
+    return res;
+  }
+  const pOf=a=>{const p=a.probabilities&&a.probabilities[a.choice]; return typeof p==='number'?p:(typeof a.confidence==='number'?a.confidence:0);};
+  const twinP=t=>(t.probabilities&&t.probabilities[t.choice])||0;
+  const judgeLine=(res,id)=>{const a=res.answers[id], t=res.twinWould[id]; if(!res.recorded) return `<li>Twin answer: consistent ${a.choice} at P=${pOf(a).toFixed(2)}, read from the E5.1 grades, not a judgement.</li>`;
+    const conf=typeof a.confidence==='number'?` · confidence field ${a.confidence.toFixed(2)}`:'';
+    return `<li>${esc(res.source)}: consistent ${a.choice} at P=${pOf(a).toFixed(2)}${conf}; the twin would say ${t.choice} at ${twinP(t).toFixed(2)}. ${a.choice===t.choice?'Same choice, weaker margin':'Different choice'}: the page shows the judge’s answer and code decides what it is worth.</li>`;};
   const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
   const setPath=(...ps)=>{[...ladder.children].forEach(d=>d.classList.toggle('used',ps.includes(+d.dataset.p)));};
 
@@ -235,7 +262,7 @@
     if(s.compose===null){setLamp(lampC,'OFF');setLamp(lampO,'OFF');reasons.innerHTML='<li>Not checked yet.</li>';return;}
     setLamp(lampC,s.compose==='pass'?'GREEN':'RED'); stamp(stampC,s.compose==='pass'?'GREEN':'RED',s.compose==='pass'?'composes':'theater');
     reasons.innerHTML=`<li>${esc(w.why)}</li>`;
-    if(s.compose==='pass'){ if(s.oc){setLamp(lampO,'GREEN');ocNote.textContent=`consistent · correct (${OCRUN})`;} else {setLamp(lampO,'OFF');ocNote.textContent='survivor · not yet judged';} }
+    if(s.compose==='pass'){ if(s.oc){setLamp(lampO,s.oc==='consistent'?'GREEN':'RED');ocNote.textContent=`${s.oc} · E5.1 grade: ${ocRec(t)&&ocRec(t).direct_correct?'correct':'not correct'} (${OCRUN})`;} else {setLamp(lampO,'OFF');ocNote.textContent='survivor · not yet judged';} }
     else { setLamp(lampO,'OFF'); ocNote.textContent=`judge not asked · raw run: inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs`; }
     rows.forEach(r=>{r.g.style.transform=s.compose==='pass'?`translateY(${-r.dy}px)`:'';r.g.style.opacity=s.compose==='pass'?0:1;});
     edges.forEach(e=>e.style.opacity=s.compose==='pass'?0:1);
@@ -304,20 +331,22 @@
       await wait(250);
       const c=compose({},{localRed:['COMPOSE witness failed']});
       tape.record({kind:'gate',label:'gate',verdict:'RED',detail:'local RED from code; no TypeSafe POST was made'});
-      reasons.innerHTML+=c.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+`<li>Raw run recorded this tree inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs (${t.ocRawInconsistentIn.join(', ')}): the signature of a tree that cannot compose, whoever reads it.</li>`;
+      reasons.innerHTML+=c.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+`<li>Raw run recorded this tree inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs (${t.ocRawInconsistentIn.join(', ')}): ${t.ocRawInconsistentIn.length===nRuns?'the signature of a tree that cannot compose, whoever reads it.':'the stronger model saw the mismatch in both arms; the witness sees it without any model.'}</li>`;
       ocNote.textContent=`judge not asked · raw run: inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs`;
       busy(false); return;
     }
     await wait(300); setPath(0,1);
-    const res=twin.systemOne({model:JEV.PIN,state:{tree:`Q${t.i+1}`,root_gold:t.gold,sub_golds:t.subs.map(s=>s.gold)},questions:ocQuestion(t)},{[`consistent_Q${t.i+1}`]:ocResolver(t)});
-    const a=Object.values(res.answers)[0];
-    tape.record({kind:'activity',label:`OC gate Q${t.i+1}`,verdict:`consistent: ${a.choice}`,post:true,detail:`one POST, 1 question · ${ocDetail(t)} · model=${res.model} (twin)`});
+    const qid=`consistent_Q${t.i+1}`;
+    const res=ask({model:JEV.PIN,state:{tree:`Q${t.i+1}`,root_gold:t.gold,sub_golds:t.subs.map(s=>s.gold)},questions:ocQuestion(t)},{[qid]:ocResolver(t)});
+    const a=res.answers[qid];
+    tape.record({kind:'activity',label:`OC gate Q${t.i+1}`,verdict:`consistent: ${a.choice}`,post:true,detail:`one POST, 1 question · ${ocDetail(t)} · model=${res.model} · ${res.source}`});
     state[k].oc=a.choice==='yes'?'consistent':'inconsistent';
     await wait(400);
     const c=compose(res.answers,{theta:.7,floor:.6});
-    tape.record({kind:'gate',label:'composeAnswers',verdict:c.verdict,detail:c.reasons.join(' | ')});
-    setLamp(lampO,a.choice==='yes'?'GREEN':'RED'); ocNote.textContent=`consistent: ${a.choice} · P=${a.probabilities[a.choice].toFixed(2)} · ${ocRec(t).direct_correct?'correct':'not correct'} (${OCRUN})`;
-    reasons.innerHTML+=`<li>${esc(ocDetail(t))}</li>`+c.reasons.map(r=>`<li>${esc(r)}</li>`).join('');
+    const verdict=a.choice==='yes'&&c.verdict!=='RED'?(c.verdict==='AMBER'?'AMBER':'GREEN'):'RED';
+    tape.record({kind:'gate',label:'composeAnswers',verdict:verdict,detail:`${c.reasons.join(' | ')} · top probability ${pOf(a).toFixed(2)} vs top_prob_floor 0.6`});
+    setLamp(lampO,verdict); ocNote.textContent=`consistent: ${a.choice} · P=${pOf(a).toFixed(2)} · ${res.recorded?'recorded':'twin'} · E5.1 grade: ${ocRec(t).direct_correct?'correct':'not correct'} (${OCRUN})`;
+    reasons.innerHTML+=`<li>${esc(ocDetail(t))}</li>`+judgeLine(res,qid)+c.reasons.map(r=>`<li>${esc(r==='every axis clear'?`every axis clear: top probability ${pOf(a).toFixed(2)} ≥ top_prob_floor 0.6`:r)}</li>`).join('');
     updateStrip(); busy(false);
   }
   async function runAll(){
@@ -336,26 +365,32 @@
     await wait(300); setPath(0,1);
     const questions={}, resolvers={};
     survivors.forEach(k=>{Object.assign(questions,ocQuestion(TREES[k])); resolvers[`consistent_Q${TREES[k].i+1}`]=ocResolver(TREES[k]);});
-    const res=twin.systemOne({model:JEV.PIN,state:{trees:survivors.map(k=>`Q${TREES[k].i+1}`)},questions},resolvers);
+    const res=ask({model:JEV.PIN,state:{trees:survivors.map(k=>`Q${TREES[k].i+1}`)},questions},resolvers);
     const yes=Object.values(res.answers).filter(a=>a.choice==='yes').length;
-    tape.record({kind:'activity',label:`OC gate · ${survivors.length} trees`,verdict:`${yes}/${survivors.length} consistent`,post:true,detail:`one POST, ${survivors.length} questions · ${OCRUN} · model=${res.model} (twin)`});
+    tape.record({kind:'activity',label:`OC gate · ${survivors.length} trees`,verdict:`${yes}/${survivors.length} consistent`,post:true,detail:`one POST, ${survivors.length} questions · ${OCRUN} · model=${res.model} · ${res.source}`});
     survivors.forEach(k=>{state[k].oc=res.answers[`consistent_Q${TREES[k].i+1}`].choice==='yes'?'consistent':'inconsistent';});
     await wait(400);
     const c=compose(res.answers,{theta:.7,floor:.6});
-    tape.record({kind:'gate',label:'composeAnswers',verdict:c.verdict,detail:c.reasons.join(' | ')});
+    const verdict=yes===survivors.length&&c.verdict!=='RED'?c.verdict:'RED';
+    tape.record({kind:'gate',label:'composeAnswers',verdict:verdict,detail:c.reasons.join(' | ')});
     updateStrip(); showState(sel);
-    reasons.innerHTML=`<li>${TREES.length} trees checked by code: ${survivors.length} compose, ${theater} theater.</li><li>One POST for the ${survivors.length} survivors: ${yes}/${survivors.length} consistent (${OCRUN}).</li>`+c.reasons.map(r=>`<li>${esc(r)}</li>`).join('');
+    reasons.innerHTML=`<li>${TREES.length} trees checked by code: ${survivors.length} compose, ${theater} theater.</li><li>One POST for the ${survivors.length} survivors: ${yes}/${survivors.length} consistent (${OCRUN}).</li>`+(res.recorded?`<li>${esc(res.source)}.</li>`:`<li>This six-question request was not recorded, so the twin answered it from the E5.1 grades; the pill says twin.</li>`)+c.reasons.map(r=>`<li>${esc(r==='every axis clear'?'every axis clear: every top probability ≥ top_prob_floor 0.6':r)}</li>`).join('');
     busy(false);
   }
   $('run').addEventListener('click',runOne);
   $('runAll').addEventListener('click',runAll);
-  $('reset').addEventListener('click',()=>{if(running)return; tape.clear(); state.forEach(s=>{s.compose=null;s.oc=null;}); setPath(); renderTree(sel); showState(sel); reasons.innerHTML='<li>Tape rewound.</li>';});
+  $('reset').addEventListener('click',()=>{if(running)return; tape.clear(); state.forEach(s=>{s.compose=null;s.oc=null;}); setPath(); renderTree(sel); showState(sel); srcEl.textContent='answers: none yet'; reasons.innerHTML='<li>Tape rewound.</li>';});
 
   renderTree(0); showState(0);
 
   /* ---------- provenance ---------- */
   const nSubs=TREES.reduce((a,t)=>a+t.subs.length,0);
+  // the recorded judge map for this page, if on disk
+  const recRows=recKeys.map(k=>{const m=REC.answers[k]; if(!m||!m.answers)return null;
+    const txt=Object.entries(m.answers).map(([id,a])=>`${id}: ${a.choice} P=${pOf(a).toFixed(2)}${typeof a.confidence==='number'?' confidence '+a.confidence.toFixed(2):''}`).join(' · ');
+    return {n:`recorded judge answer: ${txt}`,f:`demos/data/recorded.js → answers["${k}"] (model ${m.model}, ${String(m.at).slice(0,10)})`,note:'one real call on the default state (tree Q43); replayed when the pill is green. The twin says yes at 0.94 for every valid tree'};}).filter(Boolean);
   provenanceTable($('prov'),[
+    ...recRows,
     {n:`${TREES.length} trees · ${nSubs} sub-questions · golds`,f:'experiments/e5-depth/questions.json → oc trees; manifest.json → n_oc_trees, n_oc_subquestions',note:'the state drawn on the stage'},
     {n:`COMPOSE-valid trees: depth ∈ {5, 6} → ${E5.fixed.oc[OCRUN].valid_trees} trees`,f:'experiments/e5-depth/e5_grade2.py → VALID_TREES ("COMPOSE-valid per QA-3")',note:'the harness\u2019s own list of trees that compose'},
     {n:`this page\u2019s COMPOSE verdict agrees with composeValid: ${agree}/${TREES.length}`,f:'computed live from questions.json golds; checked against e5_grade2.py VALID_TREES',note:agree===TREES.length?'asserted at load; a disagreement would print a console error':'DISAGREEMENT'},

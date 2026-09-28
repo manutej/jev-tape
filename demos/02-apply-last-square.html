@@ -7,6 +7,10 @@
 <meta name="description" content="A refactor drawn as a commuting square and run as the apply-last loop: two judged gates, one POST each, a crash while parked, a replay with zero new POSTs, and a human at the merge.">
 <link rel="stylesheet" href="assets/tape.css">
 <style>
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
+  .src{font-family:var(--mono);font-size:12px;color:var(--dim);margin:2px 0 6px}
+  .src b{font-weight:500;color:var(--green)}
   .verdict-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:10px 0 2px;min-height:44px}
   .verdict-row .who{font-size:12px;color:var(--dim);font-family:var(--mono);min-width:88px}
   .reasons{font-size:13px;color:var(--dim);margin:0;padding-left:18px}
@@ -45,7 +49,7 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 02 of 10 · apply-last square</div>
+      <div class="q"><small>demo 02 of 10</small>A merge is a write that cannot happen twice: what do two judged gates, a crash and a replay cost, and why does a person still hold the last button?</div>
       <h1>A refactor is a square, and the square is the gate.</h1>
       <p class="lede">In the witness, <b><code>loans.LoansService#log</code></b> was renamed to <b><code>#writeAudit</code></b> and the three public ports stayed fixed. The swap of accounts and savings commuted with that refactor. Draw it as a square: the top edge is the old unit glued to its repository, the bottom edge is the new unit glued the same way. If the two ways round the square agree, the merge is safe. This demo runs that square as the apply-last loop: <b>two judged gates, one POST each</b>, a crash while parked, a replay that costs nothing, and a human at the merge.</p>
     </div>
@@ -60,6 +64,7 @@
       <p>The state is the unit, its ports, and the rename map. The task gate asks whether the interface map is legal. The output gate asks whether the two routes round the square agree. Only then is the merge offered to a human.</p>
 
       <label class="toggle"><input type="checkbox" id="tBreak"> <span>Break a port (rename <code>#fetchOne</code> too)</span></label>
+      <label class="toggle"><input type="checkbox" id="tTwin"> <span>Ignore the recorded answers and let the twin answer</span></label>
 
       <div class="btnrow">
         <button class="btn primary" id="run">Run the loop</button>
@@ -67,6 +72,7 @@
         <button class="btn" id="replay" disabled>Replay</button>
         <button class="btn" id="reset">Rewind tape</button>
       </div>
+      <div class="src" id="src">answers: none yet</div>
 
       <div class="verdict-row"><span class="who">task gate</span><span class="lamp OFF" id="lamp1">OFF</span><span id="stamp1"></span></div>
       <div class="verdict-row"><span class="who">output gate</span><span class="lamp OFF" id="lamp2">OFF</span><span id="stamp2"></span></div>
@@ -105,12 +111,13 @@
         <h2>What the tape shows</h2>
         <p>Seven steps, and only two of them talk to the judge. <code>assertLegalCommand</code> is code: RefactorUnit is a legal command, and MergeToDefault is on the list of commands a human must release. <code>propose</code> is code too: the refactored unit is glued to its repository by the same pushout that glued the original, which is a gluing along shared names with no judgement in it.</p>
         <p>Each gate is one request. The task gate carries three questions about the rename map; the output gate carries three about the square. Each answer map is written to the tape once. When the worker crashes while parked, the tape keeps both. Replay relights the ring from history and makes zero new POSTs. The merge itself waits for a person, because a merge to the default branch is a write that cannot happen twice.</p>
-        <p>Flip the toggle to rename a port as well. The ports question falls to 0.10 and the task gate goes RED before the square is ever drawn. The judge's Choice still leans GREEN, and it does not matter: a Choice cannot override a failed gate.</p>
+        <p>Flip the toggle to rename a port as well. The twin's ports noul falls to 0.10 and the task gate goes RED before the square is ever drawn. The judge's Choice still leans GREEN, and it does not matter: a Choice cannot override a failed gate.</p>
+        <p>The recorded judge did something the twin would not. On the default state, with no port broken, it read <code>ports_preserved</code> at 0.39, just under the mid-band, and <code>rename_is_morphism</code> at 0.61, just over it, while choosing GREEN for <code>legal</code> at P=0.95. Code takes the noul, not the label: 0.39 fails the gate, so the first run with the green pill stops at the task gate and the reasons list says why. Low confidence is not ask again; it is a refusal or a Signal. To walk the crash, the replay and the human park, tick the twin toggle, which answers from the witness booleans.</p>
       </div>
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>A commuting square is not a passing test.</b> It says the refactored part glues to its neighbours the way the old part did, at the level of names and signatures. It says nothing about behaviour. The witness checked a rename on a 16-file toy; the same square on a real migration is the shape of the check, not its proof.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> The nouls are set from the witness booleans and the toggle, deterministically, with the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge answers shown are recorded or twinned; this page never calls the judge.</b> When the pill at the top is green, each gate's answer map is the one a real call returned once, on this default state, replayed from <code>data/recorded.js</code>. Otherwise, or when the toggle above says so, a deterministic twin sets the nouls from the witness booleans and the port toggle, with the same wire shape and contract checks as the real client. No key, no network, no live call from this page.</div>
       </div>
     </div>
   </section>
@@ -126,16 +133,39 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/e1.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
   const {Tape, twin, compose, esc, setLamp, stamp, tick, svg, provenanceTable, topbar} = JEV;
   const E1 = JEV.data.e1, W_ = E1.witness, JV = JEV.data.jev;
-  topbar(document.getElementById('topbar'), {title:'02 · Apply-last square'});
+  const TITLE='02 · Apply-last square', FILE='02-apply-last-square.html';
+  topbar(document.getElementById('topbar'), {title:TITLE});
   const tape = new Tape({title:'Apply-last tape'});
 
   const $ = id => document.getElementById(id);
-  const tBreak=$('tBreak'), runBtn=$('run'), crashBtn=$('crash'), replayBtn=$('replay');
+  const tBreak=$('tBreak'), runBtn=$('run'), crashBtn=$('crash'), replayBtn=$('replay'), tTwin=$('tTwin'), srcEl=$('src');
+
+  /* ---------- recorded answers vs the twin ---------- */
+  const REC=JEV.data.recorded, recKeys=(REC&&REC.pages&&REC.pages[FILE])||[];
+  if(!recKeys.length){tTwin.disabled=true; tTwin.closest('label').title='no recorded answers on disk for this page: the twin answers anyway';}
+  // ask(): the same call the page always made, but the reader can force the twin; the result says which answered
+  function ask(req,resolvers){
+    const saved=JEV.data.recorded; if(tTwin.checked) JEV.data.recorded=null;
+    let res; try{res=twin.systemOne(req,resolvers);}finally{JEV.data.recorded=saved;}
+    if(!res.recorded) topbar(document.getElementById('topbar'),{title:TITLE});   // the pill goes back to grey
+    res.source=res.recorded?`recorded judge answers (${String(res.recordedAt).slice(0,10)})`:'twin';
+    res.twinWould=Object.fromEntries(Object.entries(req.questions).map(([id,q])=>[id,resolvers[id](req.state,q)]));
+    return res;
+  }
+  const band=v=>v<=0.4?'low':v<0.6?'mid':'high';
+  const pOf=a=>{const p=a.probabilities&&a.probabilities[a.choice]; return typeof p==='number'?p:(typeof a.confidence==='number'?a.confidence:0);};
+  function disagreements(res){const out=[];for(const [id,a] of Object.entries(res.answers)){const t=res.twinWould[id];
+    if(a.type==='noul'){const tv=JEV.clamp(+t,0,1); if(band(a.noul)!==band(tv)) out.push(`${id}: judge ${(+a.noul).toFixed(2)}, twin would say ${tv.toFixed(2)}`);}
+    else if(a.type==='choice'&&t.choice!==a.choice) out.push(`${id}: judge chose ${a.choice} at P=${pOf(a).toFixed(2)}, twin would choose ${t.choice}`);}
+    return out;}
+  const srcLine=(res)=>res.recorded?`<li>${esc(res.source)}: ${(d=>d.length?'differs from the twin on '+esc(d.join('; '))+'. The page shows the judge’s answer; code decides what it is worth.':'agrees with the twin on every question (by noul band and by choice).')(disagreements(res))}</li>`:'<li>Twin answers: set from the witness booleans and the toggle, not a judgement.</li>';
+  const showSrc=(a,b)=>{const parts=[a,b].filter(Boolean); srcEl.innerHTML=parts.length?'answers: '+parts.map(r=>r.recorded?`<b>${esc(r.source)}</b>`:'twin').join(' · '):'answers: none yet';};
   const lamp1=$('lamp1'), lamp2=$('lamp2'), stamp1=$('stamp1'), stamp2=$('stamp2'), reasons=$('reasons'), park=$('park'), ladder=$('ladder'), qtable=$('qtable');
   const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
 
@@ -209,7 +239,7 @@
   const portTabs={TL:[],BL:[]};
   for(const k of ['TL','BL']){const n=NODE[k];ports.forEach((p,i)=>{const t=svg('rect',{x:n.x-n.w/2+10+i*16,y:n.y-29,width:10,height:6,rx:1.5,fill:'var(--c-action)'},[svg('title',{},[p])]);sq.appendChild(t);portTabs[k].push(t);});}
   sq.appendChild(svg('text',{x:NODE.TL.x-NODE.TL.w/2+10+ports.length*16+4,y:NODE.TL.y-24,'font-size':'10',class:'mono',fill:'var(--dim)'},[`ports: ${ports.join(', ')}`]));
-  const portNote=svg('text',{x:NODE.BL.x-NODE.BL.w/2+10+ports.length*16+4,y:NODE.BL.y-24,'font-size':'10',class:'mono',fill:'var(--dim)'},['ports fixed']); sq.appendChild(portNote);
+  const portNote=svg('text',{x:NODE.BL.x+14,y:NODE.BL.y-24,'font-size':'10',class:'mono',fill:'var(--dim)'},['ports fixed']); sq.appendChild(portNote);
   // edges
   const edge=(x1,y1,x2,y2)=>{const l=svg('line',{x1,y1,x2,y2,stroke:'var(--dim)','stroke-width':1.5,'marker-end':'url(#arr)'});sq.appendChild(l);return l;};
   const eTop=edge(NODE.TL.x+NODE.TL.w/2+2,160,NODE.TR.x-NODE.TR.w/2-2,160);
@@ -230,7 +260,7 @@
   function drawBreak(){
     const b=tBreak.checked;
     portTabs.BL[1].setAttribute('fill',b?'var(--red)':'var(--c-action)');
-    portNote.textContent=b?'fetchOne renamed: a port moved':'ports fixed'; portNote.setAttribute('fill',b?'var(--red)':'var(--dim)');
+    portNote.textContent=b?'a port moved':'ports fixed'; portNote.setAttribute('fill',b?'var(--red)':'var(--dim)');
     renameT2.textContent=b?'fetchOne → fetchById':'';
     eLeft.setAttribute('stroke',b?'var(--red)':'var(--dim)'); eLeft.setAttribute('stroke-dasharray',b?'4 4':'');
   }
@@ -259,10 +289,10 @@
   };
   const answers={task:null,out:null};
   function renderQ(){
-    const row=([id,q],a)=>{let v='—'; if(a){v=a.type==='noul'?`noul ${a.noul.toFixed(2)}`:`${a.choice} · P(${a.choice})=${a.probabilities[a.choice].toFixed(2)}`;}
+    const row=([id,q],a)=>{let v='—'; if(a){v=a.type==='noul'?`noul ${(+a.noul).toFixed(2)}`:`${a.choice} · P(${a.choice})=${pOf(a).toFixed(2)}`;}
       return `<tr><td>${id}<br><span style="color:var(--dim)">${q.type}</span></td><td>${esc(q.instructions)}</td><td class="ans">${esc(v)}</td></tr>`;};
-    qtable.innerHTML=`<tr class="gatehead"><td colspan="3">task gate · one request, ${Object.keys(qTask).length} questions</td></tr>`+Object.entries(qTask).map(e=>row(e,answers.task&&answers.task[e[0]])).join('')
-      +`<tr class="gatehead"><td colspan="3">output gate · one request, ${Object.keys(qOut).length} questions</td></tr>`+Object.entries(qOut).map(e=>row(e,answers.out&&answers.out[e[0]])).join('');
+    qtable.innerHTML=`<tr class="gatehead"><td colspan="3">task gate · one request, ${Object.keys(qTask).length} questions${answers.taskSrc?' · '+esc(answers.taskSrc):''}</td></tr>`+Object.entries(qTask).map(e=>row(e,answers.task&&answers.task[e[0]])).join('')
+      +`<tr class="gatehead"><td colspan="3">output gate · one request, ${Object.keys(qOut).length} questions${answers.outSrc?' · '+esc(answers.outSrc):''}</td></tr>`+Object.entries(qOut).map(e=>row(e,answers.out&&answers.out[e[0]])).join('');
   }
   renderQ();
 
@@ -280,8 +310,9 @@
     for(const k in nodeEls) nodeEls[k].g.style.opacity='';
     status.textContent='nothing proposed, nothing written'; status.setAttribute('fill','var(--dim)');
     setLamp(lamp1,'OFF'); setLamp(lamp2,'OFF'); stamp1.className=stamp2.className=''; stamp1.textContent=stamp2.textContent='';
-    park.hidden=true; crashBtn.disabled=true; replayBtn.disabled=true; setPath(); answers.task=answers.out=null; renderQ();
+    park.hidden=true; crashBtn.disabled=true; replayBtn.disabled=true; setPath(); answers.task=answers.out=null; answers.taskSrc=answers.outSrc=''; renderQ(); showSrc();
   }
+  let resT=null, resO=null;   // the two answer maps of the current run (what the tape holds)
 
   async function lightTo(k,style){ // light steps 0..k-1 in order
     for(let i=0;i<k;i++){setStep(i,style);setArc(i+1);await wait(style==='replay'?160:0);}
@@ -302,22 +333,30 @@
     setStep(0,'GREEN'); setArc(1); setPath(0); await wait(420);
     // 2 · Path 1: qualifyTask, one POST
     const reqT={model:JEV.PIN,state:{unit:'loans.LoansService',ports,rename:{[renamed]:renamed.replace('#log','#writeAudit'),...(tBreak.checked?{'loans.LoansService#fetchOne':'loans.LoansService#fetchById'}:{})}},questions:qTask};
-    const resT=twin.systemOne(reqT,rTask); answers.task=resT.answers; renderQ();
-    rec({kind:'activity',label:'qualifyTask',verdict:`${Object.keys(resT.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(qTask).length} questions · model=${resT.model} (twin)`});
+    resT=ask(reqT,rTask); resO=null; answers.task=resT.answers; answers.taskSrc=resT.source; renderQ(); showSrc(resT);
+    rec({kind:'activity',label:'qualifyTask',verdict:`${Object.keys(resT.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(qTask).length} questions · model=${resT.model} · ${resT.source}`});
     setStep(1,'GREEN'); setArc(2); setPath(0,1); await wait(480);
     // 3 · gate (code)
     const cT=compose(resT.answers,{theta:.7,floor:.6,noulGate:['ports_preserved']});
-    setLamp(lamp1,cT.verdict); stamp(stamp1,cT.verdict,cT.verdict==='GREEN'?'GREEN · map is legal':cT.verdict==='AMBER'?'AMBER · review the map':'RED · refuse the refactor');
+    setLamp(lamp1,cT.verdict); stamp(stamp1,cT.verdict,cT.verdict==='GREEN'?'GREEN · map legal':cT.verdict==='AMBER'?'AMBER · review':'RED · refuse');
     rec({kind:'gate',label:'composeAnswers',verdict:cT.verdict,detail:cT.reasons.join(' | ')});
     setStep(2,cT.verdict); setArc(3);
-    if(cT.verdict!=='GREEN'){
-      const extra=answers.task.legal.choice==='GREEN'?`<li>legal: the judge leaned ${answers.task.legal.choice} (P=${answers.task.legal.probabilities.GREEN.toFixed(2)}). A Choice cannot override a failed gate.</li>`:'';
-      say(cT.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+extra+'<li>The square is never drawn. Nothing proposed, nothing written. One POST on the tape.</li>');
-      status.textContent='refused at the task gate: a port moved'; status.setAttribute('fill','var(--red)');
+    if(cT.verdict==='RED'){
+      const lg=answers.task.legal, extra=lg.choice==='GREEN'?`<li>legal: the judge leaned ${lg.choice} (P=${pOf(lg).toFixed(2)}). A Choice cannot override a failed gate.</li>`:'';
+      say(cT.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+extra+srcLine(resT)+'<li>The square is never drawn. Nothing proposed, nothing written. One POST on the tape.</li>');
+      const pp=answers.task.ports_preserved;
+      status.textContent=tBreak.checked?'refused at the task gate: a port moved':`refused at the task gate: ports_preserved ${(+pp.noul).toFixed(2)} fails, ${resT.recorded?'as the recorded judge read it':'as the twin read it'}`; status.setAttribute('fill','var(--red)');
       nodeEls.BL.r.setAttribute('stroke','var(--red)'); nodeEls.TR.g.style.opacity=.35; nodeEls.BR.g.style.opacity=.35;
       phase='red'; runBtn.disabled=false; return;
     }
-    say(cT.reasons.map(r=>`<li>task: ${esc(r)}</li>`).join(''));
+    if(cT.verdict==='AMBER'){
+      say(cT.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+srcLine(resT)+'<li>AMBER at the task gate: nothing proposed, nothing written. The refactor parks for review before any square is built.</li>');
+      status.textContent='parked at the task gate: review the rename map'; status.setAttribute('fill','var(--amber)');
+      rec({kind:'human',label:'park: humanVerdict',verdict:'waiting',detail:'AMBER at the task gate: Signal humanVerdict before propose'});
+      nodeEls.TR.g.style.opacity=.35; nodeEls.BR.g.style.opacity=.35; setPath(0,1,3);
+      phase='red'; runBtn.disabled=false; return;
+    }
+    say(cT.reasons.map(r=>`<li>task: ${esc(r)}</li>`).join('')+srcLine(resT));
     await wait(420);
     // 4 · propose in memory (code: the pushout)
     rec({kind:'code',label:'propose in memory',verdict:'V2 ⊔ LoansRepository built',detail:'the refactored unit glued to its repository by the same pushout; nothing written'});
@@ -325,22 +364,27 @@
     nodeEls.BR.r.setAttribute('stroke','var(--amber)'); await wait(420);
     // 5 · qualifyOutput, one POST, and the two routes
     const reqO={model:JEV.PIN,state:{square:['LoansService','LoansService ⊔ LoansRepository','LoansServiceV2','LoansServiceV2 ⊔ LoansRepository'],witness:{step6:W_.checks.step6_system_map_square,ex425:W_.witnesses.step10_ex425}},questions:qOut};
-    const resO=twin.systemOne(reqO,rOut); answers.out=resO.answers; renderQ();
-    rec({kind:'activity',label:'qualifyOutput',verdict:`${Object.keys(resO.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(qOut).length} questions · model=${resO.model} (twin)`});
+    resO=ask(reqO,rOut); answers.out=resO.answers; answers.outSrc=resO.source; renderQ(); showSrc(resT,resO);
+    rec({kind:'activity',label:'qualifyOutput',verdict:`${Object.keys(resO.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(qOut).length} questions · model=${resO.model} · ${resO.source}`});
     setStep(4,'GREEN'); setArc(5);
     await traceRoutes();
     // 6 · gate
     const cO=compose(resO.answers,{theta:.7,floor:.6,noulGate:['square_commutes']});
-    setLamp(lamp2,cO.verdict); stamp(stamp2,cO.verdict,cO.verdict==='GREEN'?'GREEN · square commutes':'AMBER · review');
+    setLamp(lamp2,cO.verdict); stamp(stamp2,cO.verdict,cO.verdict==='GREEN'?'GREEN · commutes':cO.verdict==='AMBER'?'AMBER · review':'RED · disagree');
     rec({kind:'gate',label:'composeAnswers',verdict:cO.verdict,detail:cO.reasons.join(' | ')});
     setStep(5,cO.verdict); setArc(6);
     if(cO.verdict==='GREEN'){agreeT.setAttribute('opacity',1); nodeEls.BR.r.setAttribute('stroke','var(--green)');}
-    say(cT.reasons.map(r=>`<li>task: ${esc(r)}</li>`).join('')+cO.reasons.map(r=>`<li>output: ${esc(r)}</li>`).join(''));
+    say(cT.reasons.map(r=>`<li>task: ${esc(r)}</li>`).join('')+cO.reasons.map(r=>`<li>output: ${esc(r)}</li>`).join('')+srcLine(resO));
     await wait(380);
-    // 7 · C10 park
+    if(cO.verdict==='RED'){
+      nodeEls.BR.r.setAttribute('stroke','var(--red)'); status.textContent='refused at the output gate: the two routes disagree · nothing written'; status.setAttribute('fill','var(--red)');
+      say(reasons.innerHTML+'<li>RED at the output gate: the composite in memory is dropped. No merge is offered to anyone. Two POSTs on the tape.</li>');
+      phase='red'; runBtn.disabled=false; return;
+    }
+    // 7 · C10 park (GREEN: merge-to-default is human-gated anyway; AMBER: review before any write)
     setPath(0,1,3);
-    rec({kind:'human',label:'park: humanVerdict',verdict:'waiting',detail:'merge-to-default is human-gated even on GREEN. Signal humanVerdict {compose|escalate|refuse}'});
-    setStep(6,'AMBER'); status.textContent='parked on humanVerdict · the merge waits for a person'; status.setAttribute('fill','var(--amber)');
+    rec({kind:'human',label:'park: humanVerdict',verdict:'waiting',detail:cO.verdict==='GREEN'?'merge-to-default is human-gated even on GREEN. Signal humanVerdict {compose|escalate|refuse}':'AMBER at the output gate: Signal humanVerdict {compose|escalate|refuse} before any write'});
+    setStep(6,'AMBER'); status.textContent=cO.verdict==='GREEN'?'parked on humanVerdict · the merge waits for a person':'parked on humanVerdict · AMBER: a person reviews the square'; status.setAttribute('fill','var(--amber)');
     park.hidden=false; crashBtn.disabled=false; phase='parked'; runBtn.disabled=false;
   }
 
@@ -359,12 +403,15 @@
     crashG.classList.remove('on'); ring.style.opacity='';
     STEPS.forEach((_,i)=>setStep(i,'off')); setArc(0);
     await lightTo(6,'replay');
-    setStep(2,'GREEN'); setStep(5,'GREEN'); // the gates are code: recomputed from the reused answers
-    await traceRoutes(); agreeT.setAttribute('opacity',1); nodeEls.BR.r.setAttribute('stroke','var(--green)');
+    // the gates are code: recomputed from the reused answer maps, not re-asked
+    const cT=compose(resT.answers,{theta:.7,floor:.6,noulGate:['ports_preserved']}), cO=compose(resO.answers,{theta:.7,floor:.6,noulGate:['square_commutes']});
+    setStep(2,cT.verdict); setStep(5,cO.verdict); setLamp(lamp1,cT.verdict); setLamp(lamp2,cO.verdict);
+    rec({kind:'gate',label:'composeAnswers ×2',verdict:cO.verdict,detail:`recomputed from the reused maps: task ${cT.verdict}, output ${cO.verdict}`});
+    await traceRoutes(); if(cO.verdict==='GREEN'){agreeT.setAttribute('opacity',1); nodeEls.BR.r.setAttribute('stroke','var(--green)');}
     rec({kind:'human',label:'park: humanVerdict',verdict:'waiting again',detail:'replay reached the same park from history; 0 new POSTs'});
     setStep(6,'AMBER');
     status.textContent=`replayed ${n} activities from the tape · 0 new POSTs · parked again`; status.setAttribute('fill','var(--green)');
-    say(`<li>Replay re-emitted ${n} recorded answer maps. The POST counter did not move.</li><li>Both gates were recomputed by code from the reused answers and stayed GREEN.</li><li>The park is reached again. The human verdict is still owed.</li>`);
+    say(`<li>Replay re-emitted ${n} recorded answer maps (${esc(resT.source)}${resO.source!==resT.source?' · '+esc(resO.source):''}). The POST counter did not move.</li><li>Both gates were recomputed by code from the reused answers: task ${cT.verdict}, output ${cO.verdict}.</li><li>The park is reached again. The human verdict is still owed.</li>`);
     park.hidden=false; crashBtn.disabled=false; phase='parked';
   }
   function verdict(v){
@@ -390,11 +437,16 @@
   $('hCompose').addEventListener('click',()=>verdict('compose'));
   $('hEscalate').addEventListener('click',()=>verdict('escalate'));
   $('hRefuse').addEventListener('click',()=>verdict('refuse'));
-  $('reset').addEventListener('click',()=>{tape.clear();syncCounters();resetView();phase='idle';runBtn.disabled=false;say('<li>Tape rewound.</li>');});
+  $('reset').addEventListener('click',()=>{if(phase==='running')return;tape.clear();syncCounters();resetView();phase='idle';runBtn.disabled=false;say('<li>Tape rewound.</li>');});
 
   const ex=W_.witnesses.step10_ex425;
+  // the recorded judge maps for this page, if on disk
+  const recRows=recKeys.map(k=>{const m=REC.answers[k]; if(!m||!m.answers)return null; const A=m.answers;
+    const txt=Object.entries(A).map(([id,a])=>a.type==='noul'?`${id} ${(+a.noul).toFixed(2)}`:`${id} ${a.choice} P=${pOf(a).toFixed(2)}`).join(' · ');
+    return {n:`recorded judge answers (${'ports_preserved' in A?'task gate':'output gate'}): ${txt}`,f:`demos/data/recorded.js → answers["${k}"] (model ${m.model}, ${String(m.at).slice(0,10)})`,note:'one real call on the default state (no port broken); replayed when the pill is green'};}).filter(Boolean);
   provenanceTable($('prov'),[
-    {n:`step6_system_map_square=${W_.checks.step6_system_map_square} · step6_ports_preserved=${W_.checks.step6_ports_preserved}`,f:'witness/WITNESS.json → checks',note:'the two booleans behind the task gate nouls (0.94, 0.92 are twin values set from them)'},
+    {n:`step6_system_map_square=${W_.checks.step6_system_map_square} · step6_ports_preserved=${W_.checks.step6_ports_preserved}`,f:'witness/WITNESS.json → checks',note:'the two booleans behind the twin’s task gate nouls: 0.94 and 0.92 when true, 0.10 when the toggle breaks a port; 0.95 / 0.93 / 0.88 at the output gate'},
+    ...recRows,
     {n:`renamed: ${renamed} → #writeAudit`,f:'witness/WITNESS.json → witnesses.step6.renamed',note:'one internal symbol; the square drawn on the stage'},
     {n:`ports ${ports.join(', ')} (${ports.length} public methods)`,f:'witness/toybank/loans/LoansService.java',note:'the coloured tabs; the toggle renames the second one'},
     {n:`step10_ex425: lift_nontrivial_on=${ex.lift_nontrivial_on} · lift_is_morphism=${ex.lift_is_morphism} · accounts_ports_fixed=${ex.accounts_ports_fixed} · naturality=${ex.naturality_lift_sigma_commute}`,f:'witness/WITNESS.json → witnesses.step10_ex425',note:ex.note},

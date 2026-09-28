@@ -7,6 +7,8 @@
 <meta name="description" content="Two Money classes are glued along a junction you choose. The pushout and its collision lint run as code. The judge is never called and the POST counter stays at zero.">
 <link rel="stylesheet" href="assets/tape.css">
 <style>
+  .hero .q{font-family:var(--display);font-style:italic;font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--amber);max-width:34ch;margin-bottom:14px}
+  .hero .q small{display:block;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:6px}
   #stage{align-self:start}
   .controls .counters{grid-template-columns:2fr 1fr 1fr}
   .controls .counter{padding:8px 10px}
@@ -37,9 +39,9 @@
 
   <header class="hero">
     <div>
-      <div class="n">demo 03 of 10 · κ on path 0</div>
+      <div class="q"><small>demo 03 of 10</small>When two classes both called Money are glued together, why is the collision a job for code, and what does keeping the judge out of it cost?</div>
       <h1>Two Moneys walk into a pushout. No judge is called.</h1>
-      <p class="lede">The toy bank has two classes named <b><code>Money</code></b>. One keeps <b><code>long amountCents</code></b>, the other <b><code>double amount</code></b>, and the report module reads both. Gluing them along a junction is a pushout: a computable amalgamation that always exists. When two identified names carry different signatures, a lint called <b>κ</b> fires. All of that is arithmetic on names, so it runs as code. This page never sends a request, and the counter that proves it stays at <b>0</b>.</p>
+      <p class="lede">The toy bank has two classes named <b><code>Money</code></b>. One keeps <b><code>long amountCents</code></b>, the other <b><code>double amount</code></b>, and the report module reads both. Gluing them along a junction is a pushout: a computable amalgamation that always exists. When two identified names carry different signatures, a lint called <b>κ</b> fires. All of that is arithmetic on names, so it runs as code. This page never builds a request, and the counter that shows it stays at <b>0</b>.</p>
     </div>
     <aside class="aside">
       <b>The intersection.</b> <em>wiring-and-the-whole</em> says a collision is a diagnostic on the quotient map, not an obstruction. <em>jev-tape</em> says a deterministic check is path 0: no TypeSafe, no Temporal. A pushout with a lint is exactly that.
@@ -89,7 +91,7 @@
       <div>
         <h2>Counterpoint</h2>
         <div class="counterpoint"><b>κ is a lint on the quotient, not semantics.</b> It compares signatures of identified names. It does not know that cents and dollars differ when both are stored as <code>long</code>, and it would let that merge through in silence. A silent merge is not a correct one; κ only catches the contradictions that are visible in the types.</div>
-        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin, and it is never called.</b> This page loads the same twin runtime as the other demos, with the same wire shape and contract checks as the real client, and makes zero requests to it. No key, no network. The zero on the counter is a measurement of this page, not a claim about the real client.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>No judge answers are shown here, recorded or twinned; this page never calls the judge.</b> The other demos replay answers recorded from one real call when their pill is green and compute them with a deterministic twin otherwise. This page loads the same runtime and the same recorded file and builds no request at all, so its pill never turns green and no twin answer is computed. No key, no network, no live call. The zero on the counter counts requests built by this page, nothing more.</div>
       </div>
     </div>
   </section>
@@ -105,6 +107,7 @@
 <script src="data/meta.js"></script>
 <script src="data/jev.js"></script>
 <script src="data/e1.js"></script>
+<script src="data/recorded.js" onerror="this.remove()"></script>
 <script src="assets/tape.js"></script>
 <script>
 (function(){
