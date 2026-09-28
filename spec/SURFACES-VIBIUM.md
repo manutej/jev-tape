@@ -135,6 +135,10 @@ Jev first. On a **verify** escalate, the text model (`llmFallback`, wired to `vi
 
 Whole task: about **6×** (B over A). The decisions alone: about **40×** with fresh POSTs, more from the tape. The gap that remains in B is the page itself. Variant A also plans the steps, which B does not: B is the shape for a known flow (a playbook), A for an unknown page. The per-decision gap on real pages is in §8b.
 
+## 8c′. Cross-check against a computer-use style agent (2026-09-28)
+
+Claude computer use was not available in the session; a Sonnet screenshot-only proxy ran the same two experiments (details, blinding, and per-row table in `docs/COMPUTER-USE-CROSSCHECK.md`). Same eight pages, blind: Jev median **248 ms** vs Sonnet screenshot judge **2.8 s** read-and-decide (9.2 s agent wall), Jev 6/6 decided right + 2 escalates, judge 7/8 against the label (its miss is the Cloudflare-walled npm page, where it was right about the image). Same login, pixel-driven operator (screenshot, click x y, one key per press): **14.2 s** self-timed, 23.1 s wall, passed; Jev + policy 5.0 s; model-only 32.8 s.
+
 ## 8d. Real sites, gated and verified, no person and no model in the loop (2026-09-28)
 
 | site | step | gate | verify | note |
