@@ -153,7 +153,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pack .dimline{color:var(--ink-2)}
 
 /* ---------- THE TAPE (shared recorder, pinned to the bottom) ---------- */
-.tape-dock{position:fixed;left:0;right:0;bottom:0;z-index:50;height:var(--tape-h);background:linear-gradient(180deg,rgba(24,32,40,0) 0%,var(--desk) 22%);padding:16px var(--gutter) 12px}
+.tape-dock{position:fixed;left:0;right:0;bottom:0;z-index:50;height:calc(var(--tape-h) + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(24,32,40,0) 0%,var(--desk) 22%);padding:16px var(--gutter) calc(12px + env(safe-area-inset-bottom,0px))}
 .tape-dock .inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:stretch;height:100%}
 @media(max-width:640px){.tape-dock .inner{grid-template-columns:1fr}.tape-dock .head{display:none}}
 .tape-dock .head{font-size:12px;color:var(--dim);display:flex;flex-direction:column;justify-content:space-between}

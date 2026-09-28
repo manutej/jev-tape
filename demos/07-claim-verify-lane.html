@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claim Verify Lane — jev demo 07</title>
+<meta name="description" content="The claims ladder of wiring-and-the-whole walked rung by rung through lane 2: claim plus recorded evidence in, verified / contradicted / unsupported out, ten claims in one request, and the lane never writes the claim.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  .exits{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 10px}
+  .exits div{border:1px solid var(--rule);border-radius:8px;padding:7px 8px;font-size:12px;color:var(--dim);text-align:center}
+  .exits div b{display:block;font-family:var(--display);font-style:italic;font-size:15px;font-weight:400}
+  .exits .v b{color:var(--green)} .exits .c b{color:var(--red)} .exits .u b{color:var(--amber)}
+  .verdict-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:44px;margin:10px 0 2px}
+  .verdict-row .rn{font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .claimtext{font-size:14px;color:var(--bone);margin:0 0 6px;font-family:var(--display);font-style:italic;font-size:17px;line-height:1.3}
+  .reasons{font-size:13px;color:var(--dim);margin:6px 0 0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .counters{margin:10px 0 4px}
+  .counter.verified .v{color:var(--green)} .counter.contradicted .v{color:var(--red)} .counter.unsupported .v{color:var(--amber)}
+  .path-ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 0}
+  .path-ladder div{border:1px solid var(--rule);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dim);text-align:center}
+  .path-ladder div b{display:block;font-family:var(--mono);font-size:13px;color:var(--bone);font-weight:500}
+  .path-ladder div.used{border-color:var(--amber);color:var(--bone)}
+  .path-ladder div.used b{color:var(--amber)}
+  @media(max-width:520px){.path-ladder{grid-template-columns:1fr 1fr}}
+  .tape .cell.verified .v{color:var(--green-ink)} .tape .cell.contradicted .v{color:var(--red-ink)} .tape .cell.unsupported .v{color:var(--amber-ink)}
+  .stage .rung{cursor:pointer}
+  .stage .rung line,.stage .rung path{transition:stroke .3s,stroke-dasharray .3s,opacity .3s}
+  .stage .rail{transition:stroke-dasharray .3s}
+  .stage .card{transition:opacity .35s,transform .35s}
+  .stage .stampg{transform-box:fill-box;transform-origin:center;animation:sIn .34s cubic-bezier(.2,.9,.3,1.2) both}
+  @keyframes sIn{0%{transform:rotate(-6deg) scale(1.9);opacity:0}60%{transform:rotate(-6deg) scale(.95);opacity:1}100%{transform:rotate(-6deg) scale(1);opacity:1}}
+  @media(prefers-reduced-motion:reduce){.stage .stampg{animation:none}.stage .card{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 07 of 10 · claim verify lane</div>
+      <h1>A claim is a fork with three exits.</h1>
+      <p class="lede">The wiring repo keeps a claims ladder: what its experiments <b>may</b> say and what they <b>may not</b>. Every rung is a claim with evidence pointers, and every claim is a closed fork: <b>verified</b>, <b>contradicted</b>, or <b>unsupported</b>. That is lane 2. Claim text and recorded evidence go in, one of three words comes out, and the lane never writes the claim. This demo walks the ten rungs with one request and stamps each one.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> is disciplined about what it may claim: demonstrated is not proved, consistency is not correctness. <em>jev-tape</em> has a lane for exactly that discipline. Put the ladder in the lane and each rung gets a stamp it cannot give itself.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Claim verify instrument">
+    <div class="controls">
+      <h3>Walk the ladder</h3>
+      <p>Ten claims, each with the evidence the repo records for it. All ten questions travel in one request; the answer map is recorded once. Then the walk climbs rung by rung and lands a stamp. Tap a rung to read its evidence.</p>
+
+      <div class="exits">
+        <div class="v"><b>verified</b>evidence carries the claim</div>
+        <div class="c"><b>contradicted</b>the source says otherwise</div>
+        <div class="u"><b>unsupported</b>⊘ gate · not measured</div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Walk the ladder</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="verdict-row"><span class="rn" id="rungNo">rung 1 of 10</span><span id="stampEl"></span></div>
+      <p class="claimtext" id="claimText"></p>
+      <ul class="reasons" id="reasons"><li>Not yet judged. Tap a rung or walk the ladder.</li></ul>
+
+      <div class="counters">
+        <div class="counter verified"><div class="v" id="cV">0</div><div class="l">verified</div></div>
+        <div class="counter contradicted"><div class="v" id="cC">0</div><div class="l">contradicted</div></div>
+        <div class="counter unsupported"><div class="v" id="cU">0</div><div class="l">unsupported</div></div>
+      </div>
+
+      <div class="path-ladder" id="ladderP">
+        <div data-p="0"><b>path 0</b>code</div>
+        <div data-p="1"><b>path 1</b>one POST</div>
+        <div data-p="2"><b>path 2</b>rank, read</div>
+        <div data-p="3"><b>path 3</b>tape</div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="The claims ladder on the left, ten rungs; evidence cards for the selected rung on the right"></div>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>Lane 2 is a judge job because the option set is closed: three words, no fourth. It is not a code job because the match between a sentence and a quotation is not deterministic. So one request carries ten Choice questions, each with the claim and its evidence snippets as state, and the tape records the answer map once, with one POST.</p>
+        <p>The walk that follows is code reading the recorded answers. Each rung gets a code cell with its stamp; nothing is posted again. There is no apply cell at the end, because the lane does not write the claim. Whoever edits the README does that, on the human's side of the line.</p>
+        <p>Rungs above the highest verified rung are drawn dashed, and a contradicted rung is drawn broken. The ladder is only as high as its last verified rung. Here that is rung 7, exact parity through depth 10 after the legend fix, with three broken rungs beneath it that the repo itself refuses to stand on.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>The lane checks a claim against recorded evidence.</b> It does not re-run the experiment. A verified rung inherits every caveat in its source: toy scale, one corpus, one handler family, questions written by the same author as the packs. "Verified" means the evidence on file says what the claim says, not that the claim is true of the world.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> It returns the verdict the repo's own claims discipline records for each claim, with a peaked probability, deterministically, through the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 07 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> README, witness and experiments, and <code>manutej/jev-tape</code> wiki.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e1.js"></script>
+<script src="data/e2.js"></script>
+<script src="data/e3.js"></script>
+<script src="data/e5.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, twin, esc, stamp, tick, svg, provenanceTable, topbar} = JEV;
+  const D=JEV.data, E1=D.e1, E2=D.e2, E3=D.e3, E5=D.e5;
+  topbar(document.getElementById('topbar'), {title:'07 · Claim verify lane'});
+  const tape = new Tape({title:'Claim verify tape'});
+  const $ = id => document.getElementById(id);
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+  const ladderP=$('ladderP'); const setPath=(...ps)=>{[...ladderP.children].forEach(d=>d.classList.toggle('used',ps.includes(+d.dataset.p)));};
+
+  /* ---------- the state: ten claims with their recorded evidence ---------- */
+  const checks=Object.keys(E1.witness.checks), nChecks=checks.length, allPass=E1.witness.all_pass;
+  const sites=E2.results.sites, siteKeys=Object.keys(sites);
+  const savingsSum=siteKeys.reduce((a,k)=>a+sites[k].repo_wide_savings_est_tokens,0);
+  const eGtM=siteKeys.every(k=>sites[k].e_explicit_tokens>sites[k].m_factored_row_tokens);
+  const e3runs=E3.grades.runs, e3A=Object.keys(e3runs).filter(k=>k.startsWith('A_')).map(k=>e3runs[k].acc_wiring_pool_strict), e3B=Object.keys(e3runs).filter(k=>k.startsWith('B_')).map(k=>e3runs[k].acc_wiring_pool_strict);
+  const rng=a=>{const lo=Math.min(...a),hi=Math.max(...a);return lo===hi?String(lo):`${lo}–${hi}`;};
+  const sB=Object.values(E5.fixed.runs.B_sonnet_v2.per_depth_strict), sA=Object.values(E5.fixed.runs.A_sonnet_v1.per_depth_strict);
+  const at1=a=>a.filter(v=>v===1).length;
+  const theater=E5.trees.filter(t=>!t.composeValid).length;
+  const CLAIMS=[
+    {n:1,title:'E1 demonstrated the shapes on a toy',claim:'E1 demonstrated the cospan-doctrine shapes on a 16-file toy.',expect:'verified',evidence:[
+      {q:`all_pass = ${allPass}; ${nChecks} checks true: ${checks.slice(0,4).join(', ')}, …`,f:'witness/WITNESS.json → checks, all_pass'},
+      {q:'"Demonstrated at toy scale on C₀ SymTab. Not a proof of Code_X."',f:'README.md → experiments table, E1'}]},
+    {n:2,title:'E1 proves Code_X',claim:'E1 proves Code_X.',expect:'contradicted',evidence:[
+      {q:`code_c = "${E1.witness.code_c}"`,f:'witness/WITNESS.json → code_c'},
+      {q:'"Not a proof of Code_X." MUST-PROVE 1–5 are still open.',f:'README.md → E1 row; claims discipline'}]},
+    {n:3,title:'Factored is cheaper, losslessly',claim:'Factored serialization is cheaper than explicit edge lists at micro-scale, losslessly.',expect:'verified',evidence:[
+      {q:siteKeys.map(k=>`${k}: e ${sites[k].e_explicit_tokens} > m ${sites[k].m_factored_row_tokens}`).join(' · ')+` (e > m at all three: ${eGtM})`,f:'experiments/e2-tokens/E2-RESULTS.json → sites'},
+      {q:`gate_all_sites_byte_identical = ${E2.results.gate_all_sites_byte_identical}; overall ${E2.results.overall}`,f:'E2-RESULTS.json → gate_all_sites_byte_identical, overall'}]},
+    {n:4,title:'Repo-scale savings ≈ 43k tokens',claim:'Repo-scale savings of about 43k tokens.',expect:'unsupported',evidence:[
+      {q:`sum of repo_wide_savings_est_tokens = ${savingsSum.toLocaleString('en-US')} (${siteKeys.map(k=>sites[k].repo_wide_savings_est_tokens.toLocaleString('en-US')).join(' + ')})`,f:'E2-RESULTS.json → sites.*.repo_wide_savings_est_tokens'},
+      {q:'"order-of-magnitude claim only" … "unmeasured beyond these 3 sites". MAY NOT: repo-scale savings (unmeasured).',f:'experiments/e2-tokens/E2-RESULTS.md'}]},
+    {n:5,title:'No ≥5-pt tax at pilot scale',claim:'No ≥5-pt comprehension tax at pilot scale on one @CommandType family.',expect:'verified',evidence:[
+      {q:`wiring pool strict: A ${rng(e3A)} · B ${rng(e3B)}; pooled A ${E3.grades.pooled_A_wiring_strict}, B ${E3.grades.pooled_B_wiring_strict}`,f:'experiments/e3-ablation/E3-GRADES.json → runs, pooled_*'},
+      {q:`decision rule: "${E3.grades.decision_rule}" → ${E3.grades.verdict}`,f:'E3-GRADES.json → decision_rule, verdict'}]},
+    {n:6,title:'Factored is better than explicit',claim:'The factored form is better than the explicit form.',expect:'contradicted',evidence:[
+      {q:`A − B = ${E3.grades.A_minus_B_pts_strict} pts strict on 16 pool questions × 4 runs per arm`,f:'E3-GRADES.json → A_minus_B_pts_strict'},
+      {q:'"±1.5 pts is within noise — the claim is strictly ‘no ≥5-pt tax detected,’ not ‘B is better.’"',f:'experiments/e3-ablation/E3-RESULTS.md'}]},
+    {n:7,title:'Exact parity through depth 10',claim:'After the legend fix, a strong model reads both forms at exact parity through depth 10.',expect:'verified',evidence:[
+      {q:`B_sonnet_v2 per-depth strict: ${at1(sB)}/${sB.length} depths at 1.0 · A_sonnet_v1: ${at1(sA)}/${sA.length} at 1.0`,f:'experiments/e5-depth/E5.1-GRADES.json → runs.*.per_depth_strict'},
+      {q:`pooled B − A = ${E5.fixed.pooled_overall.B_minus_A_pts} pts, inside the 5-pt rule`,f:'E5.1-GRADES.json → pooled_overall'}]},
+    {n:8,title:'Noether’s theorem applies',claim:'Noether’s theorem applies.',expect:'contradicted',evidence:[
+      {q:'R2 "Noether demoted & split" … "No ‘Noether’ branding in formal claims."',f:'plans/CONSENSUS.md → R2'},
+      {q:'MAY NOT: "Noether’s theorem applies."',f:'README.md → claims discipline'}]},
+    {n:9,title:'CR@F95 Pareto-dominance',claim:'CR@F95 Pareto-dominance over interface-only baselines.',expect:'unsupported',evidence:[
+      {q:'"That full benchmark is not in this repo." E2 and E3/E5 are the cheap precursors.',f:'README.md → headline that is allowed'},
+      {q:'MAY NOT: "CR@F95, L3/L4, repo-scale savings, cross-corpus generality."',f:'README.md → claims discipline'}]},
+    {n:10,title:'OC v1 validated model reasoning',claim:'E5’s operadic-interview v1 validated model reasoning.',expect:'contradicted',evidence:[
+      {q:`${theater}/${E5.trees.length} trees have composeValid = false (decomposition theater)`,f:'experiments/e5-depth/questions.json → oc trees; e5_grade2.py → VALID_TREES'},
+      {q:'"It validated the harness. 4/10 trees were decomposition theater, caught label-free by universal inconsistency."',f:'README.md → MAY NOT'}]},
+  ];
+  const N=CLAIMS.length;
+  let answers=null, judged={}, sel=0, running=false;
+
+  /* ---------- stage: the ladder and the evidence cards ---------- */
+  const W=800,H=520, stage=$('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Ladder with ten rungs, rung 1 at the bottom. Verified rungs solid, contradicted rungs broken, unsupported rungs dashed with a gate glyph. Evidence cards for the selected rung on the right.'});
+  stage.appendChild(root);
+  const RL=64, RR=318, RUNG_TOP=64, RUNG_BOT=470, step=(RUNG_BOT-RUNG_TOP)/(N-1);
+  const ry=n=>RUNG_BOT-(n-1)*step;
+  root.appendChild(svg('text',{x:20,y:26,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['the claims ladder · rung 1 at the bottom']));
+  const railL=svg('line',{class:'rail',x1:RL,x2:RL,y1:ry(N)-24,y2:ry(1)+24,stroke:'var(--bone)','stroke-width':3,'stroke-linecap':'round'});
+  const railR=svg('line',{class:'rail',x1:RR,x2:RR,y1:ry(N)-24,y2:ry(1)+24,stroke:'var(--bone)','stroke-width':3,'stroke-linecap':'round'});
+  const railLd=svg('line',{x1:RL,x2:RL,y1:ry(N)-24,y2:ry(N)-24,stroke:'var(--dim)','stroke-width':3,'stroke-dasharray':'6 6',opacity:0});
+  const railRd=svg('line',{x1:RR,x2:RR,y1:ry(N)-24,y2:ry(N)-24,stroke:'var(--dim)','stroke-width':3,'stroke-dasharray':'6 6',opacity:0});
+  root.append(railL,railR,railLd,railRd);
+  const rungs=CLAIMS.map(c=>{
+    const y=ry(c.n), g=svg('g',{class:'rung'});
+    g.appendChild(svg('rect',{x:RL-8,y:y-20,width:RR-RL+16,height:36,fill:'transparent'}));
+    const line=svg('line',{x1:RL,x2:RR,y1:y,y2:y,stroke:'var(--bone)','stroke-width':3,'stroke-linecap':'round'});
+    const brk=svg('path',{d:`M${RL} ${y} L${(RL+RR)/2-16} ${y+4} M${(RL+RR)/2+16} ${y-4} L${RR} ${y}`,stroke:'var(--red)','stroke-width':3,'stroke-linecap':'round',fill:'none',opacity:0});
+    const num=svg('text',{x:RL-16,y:y+4,'font-size':'11','text-anchor':'end',class:'mono',fill:'var(--dim)'},[String(c.n)]);
+    const label=svg('text',{x:(RL+RR)/2,y:y-8,'font-size':'12','text-anchor':'middle',fill:'var(--bone)'},[c.title]);
+    const gate=svg('text',{x:RR+12,y:y+5,'font-size':'14',fill:'var(--amber)',opacity:0},['⊘']);
+    const cur=svg('rect',{x:RL-10,y:y-24,width:RR-RL+20,height:34,rx:8,fill:'none',stroke:'var(--amber)','stroke-width':1.2,opacity:0});
+    g.append(cur,line,brk,num,label,gate); root.appendChild(g);
+    g.addEventListener('click',()=>{if(running)return; sel=c.n-1; show(sel);});
+    return {g,line,brk,label,gate,cur};
+  });
+  const capt=svg('text',{x:20,y:H-12,'font-size':'13','font-family':'var(--display)','font-style':'italic',fill:'var(--dim)'},['']); root.appendChild(capt);
+  const CX=356, CW=W-CX-20;
+  const cardG=svg('g',{class:'card'}); root.appendChild(cardG);
+  let stampG=null;
+  const wrap=(s,n,max)=>{const out=[];let cur='';for(let w of String(s).split(/\s+/)){while(w.length>n){if(cur.trim()){out.push(cur.trim());cur='';}out.push(w.slice(0,n-1)+'-');w=w.slice(n-1);}if((cur+' '+w).trim().length>n){out.push(cur.trim());cur=w;}else cur=(cur+' '+w);}if(cur.trim())out.push(cur.trim());if(max&&out.length>max){out.length=max;out[max-1]=out[max-1].slice(0,n-2)+'…';}return out;};
+  const COLV={verified:'var(--green)',contradicted:'var(--red)',unsupported:'var(--amber)'};
+  function drawCards(k){
+    const c=CLAIMS[k], v=judged[c.n];
+    cardG.innerHTML=''; stampG=null;
+    cardG.appendChild(svg('text',{x:CX,y:52,'font-size':'11',class:'mono',fill:'var(--dim)'},[`rung ${c.n} · claim`]));
+    let y=74;
+    wrap(c.claim,52,3).forEach(ln=>{cardG.appendChild(svg('text',{x:CX,y:y,'font-size':'15','font-family':'var(--display)','font-style':'italic',fill:'var(--bone)'},[ln])); y+=20;});
+    y+=8;
+    cardG.appendChild(svg('text',{x:CX,y:y,'font-size':'11',class:'mono',fill:'var(--dim)'},['evidence on file'])); y+=10;
+    c.evidence.forEach((e,i)=>{
+      const lines=wrap(e.q,58,4), h=lines.length*15+40;
+      cardG.appendChild(svg('rect',{x:CX,y:y,width:CW,height:h,rx:6,fill:'var(--tape)'}));
+      cardG.appendChild(svg('rect',{x:CX,y:y,width:CW,height:5,rx:2,fill:'var(--tape-2)'}));
+      lines.forEach((ln,j)=>cardG.appendChild(svg('text',{x:CX+12,y:y+24+j*15,'font-size':'11',fill:'var(--ink)'},[ln])));
+      cardG.appendChild(svg('text',{x:CX+12,y:y+h-10,'font-size':'10',class:'mono',fill:'var(--ink-2)'},[e.f.length>66?e.f.slice(0,65)+'…':e.f]));
+      y+=h+10;
+    });
+    if(v){
+      const text=v==='unsupported'?'unsupported ⊘ gate':v, w=text.length*10+30;
+      stampG=svg('g',{class:'stampg'});
+      stampG.appendChild(svg('rect',{x:CX+CW-w-8,y:y+4,width:w,height:36,rx:6,fill:'var(--desk)',stroke:COLV[v],'stroke-width':2}));
+      stampG.appendChild(svg('text',{x:CX+CW-8-w/2,y:y+28,'font-size':'18','font-family':'var(--display)','font-style':'italic','text-anchor':'middle',fill:COLV[v]},[text]));
+      cardG.appendChild(stampG);
+    } else {
+      cardG.appendChild(svg('text',{x:CX,y:y+22,'font-size':'12','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},[answers?'recorded, not yet walked':'not yet judged']));
+    }
+  }
+  function drawLadder(){
+    let highest=0; CLAIMS.forEach(c=>{if(judged[c.n]==='verified')highest=c.n;});
+    rungs.forEach((r,i)=>{const c=CLAIMS[i], v=judged[c.n];
+      const above=c.n>highest && highest>0 || (!v && CLAIMS.slice(0,i).some(x=>judged[x.n]&&judged[x.n]!=='verified'));
+      r.brk.setAttribute('opacity',v==='contradicted'?1:0);
+      r.line.setAttribute('opacity',v==='contradicted'?0:1);
+      r.line.setAttribute('stroke',v==='verified'?'var(--green)':v==='unsupported'?'var(--amber)':'var(--bone)');
+      r.line.setAttribute('stroke-dasharray',v==='unsupported'||(!v&&above)?'8 7':'');
+      r.line.setAttribute('opacity',v==='contradicted'?0:(!v&&above?.55:1));
+      r.gate.setAttribute('opacity',v==='unsupported'?1:0);
+      r.label.setAttribute('fill',v?COLV[v]:'var(--bone)');
+      r.cur.setAttribute('opacity',i===sel?1:0);
+    });
+    const yTop=highest?ry(highest):ry(1)+24;
+    [railL,railR].forEach(l=>l.setAttribute('y1',yTop));
+    [railLd,railRd].forEach(l=>{l.setAttribute('y2',yTop); l.setAttribute('opacity',highest?1:0);});
+    const done=Object.keys(judged).length;
+    capt.textContent=done?`the ladder is only as high as its last verified rung: ${highest?'rung '+highest:'none yet'}`:'ten rungs, three exits each';
+  }
+  function show(k){ sel=k; drawCards(k); drawLadder();
+    const c=CLAIMS[k], v=judged[c.n];
+    $('rungNo').textContent=`rung ${c.n} of ${N}`; $('claimText').textContent=c.claim;
+    const st=$('stampEl'); if(v){stamp(st,v,v==='unsupported'?'unsupported ⊘ gate':v);} else {st.className='';st.textContent='';}
+    const a=answers&&answers['claim_'+c.n];
+    $('reasons').innerHTML=(v?`<li>${v}: P(${v}) = ${a.probabilities[v].toFixed(2)} on the evidence above.</li>`:`<li>${answers?'Answer recorded on the tape; the walk has not reached this rung.':'Not yet judged. Walk the ladder.'}</li>`)+c.evidence.map(e=>`<li><code>${esc(e.f)}</code></li>`).join('');
+  }
+  function counts(){const n={verified:0,contradicted:0,unsupported:0}; Object.values(judged).forEach(v=>n[v]++); tick($('cV'),n.verified); tick($('cC'),n.contradicted); tick($('cU'),n.unsupported); return n;}
+
+  /* ---------- the run: one POST, ten questions; then walk ---------- */
+  const questions={}, resolvers={};
+  CLAIMS.forEach(c=>{
+    questions['claim_'+c.n]={type:'choice',instructions:`Claim: "${c.claim}" Given only the evidence snippets on file, is the claim verified, contradicted, or unsupported?`,criteria:{verified:'the recorded evidence carries the claim as stated',contradicted:'the recorded evidence says otherwise',unsupported:'the evidence on file does not measure this claim (⊘ gate)'}};
+    resolvers['claim_'+c.n]=()=>{const p={verified:.04,contradicted:.04,unsupported:.04}; p[c.expect]=.92; return {choice:c.expect,probabilities:p};};
+  });
+  async function run(){
+    if(running)return; running=true; $('run').disabled=true;
+    judged={}; answers=null; counts(); setPath(); sel=0; show(0);
+    tape.record({kind:'code',label:'assertLegalCommand',verdict:'VerifyClaims ok',detail:'lane 2: claim + evidence → verified | contradicted | unsupported. Does not write the claim.'});
+    await wait(300); setPath(0);
+    const res=twin.systemOne({model:JEV.PIN,state:{claims:CLAIMS.map(c=>({n:c.n,claim:c.claim,evidence:c.evidence}))},questions},resolvers);
+    answers=res.answers; setPath(0,1);
+    tape.record({kind:'activity',label:'claim verify · 10 claims',verdict:`${Object.keys(answers).length} answers`,post:true,detail:`one POST, ${N} Choice questions · model=${res.model} (twin) · ≈ ${res.usage.input_tokens} tok in (chars/3.6)`});
+    await wait(400);
+    for(let k=0;k<N;k++){
+      const c=CLAIMS[k], a=answers['claim_'+c.n];
+      sel=k; drawCards(k); drawLadder();
+      await wait(260);
+      judged[c.n]=a.choice; show(k); counts();
+      tape.record({kind:'code',label:`rung ${c.n}`,verdict:a.choice,detail:`${c.title} · P(${a.choice}) = ${a.probabilities[a.choice].toFixed(2)} · read from the recorded answer map, no POST`});
+      await wait(520);
+    }
+    const n=counts();
+    tape.record({kind:'code',label:'no apply',verdict:'lane does not write',detail:`verified ${n.verified} · contradicted ${n.contradicted} · unsupported ${n.unsupported}. The claim text is the human's to edit.`});
+    running=false; $('run').disabled=false;
+  }
+  $('run').addEventListener('click',run);
+  $('reset').addEventListener('click',()=>{if(running)return; tape.clear(); judged={}; answers=null; counts(); setPath(); sel=0; show(0); $('reasons').innerHTML='<li>Tape rewound.</li>';});
+  show(0); counts();
+
+  /* ---------- provenance ---------- */
+  provenanceTable($('prov'),[
+    {n:`rung 1 · ${nChecks}/${nChecks} checks, all_pass = ${allPass}`,f:'wiring-and-the-whole/witness/WITNESS.json → checks, all_pass',note:'verified: toy scale, C₀ SymTab'},
+    {n:'rung 2 · "skeleton of Code_X" · "Not a proof of Code_X"',f:'witness/WITNESS.json → code_c · README.md → E1 row',note:'contradicted'},
+    {n:`rung 3 · e > m at ${siteKeys.length}/${siteKeys.length} sites, byte-identical = ${E2.results.gate_all_sites_byte_identical}`,f:'experiments/e2-tokens/E2-RESULTS.json → sites, gate_all_sites_byte_identical',note:'verified: micro-scale, three sites'},
+    {n:`rung 4 · ${savingsSum.toLocaleString('en-US')} tokens = sum of repo_wide_savings_est_tokens`,f:'E2-RESULTS.json → sites.*.repo_wide_savings_est_tokens · E2-RESULTS.md ("order-of-magnitude claim only")',note:'unsupported: the sum is computed live on this page; the source scopes it as unmeasured'},
+    {n:`rung 5 · A ${rng(e3A)} · B ${rng(e3B)} strict on the wiring pool; pooled ${E3.grades.pooled_A_wiring_strict} / ${E3.grades.pooled_B_wiring_strict}`,f:'experiments/e3-ablation/E3-GRADES.json → runs, pooled_A_wiring_strict, pooled_B_wiring_strict, decision_rule',note:'verified at pilot scale on one family'},
+    {n:`rung 6 · A − B = ${E3.grades.A_minus_B_pts_strict} pts, within noise`,f:'E3-GRADES.json → A_minus_B_pts_strict · E3-RESULTS.md',note:'contradicted: "not B is better"'},
+    {n:`rung 7 · sonnet ${at1(sB)}/${sB.length} and ${at1(sA)}/${sA.length} depths at 1.0 · pooled ${E5.fixed.pooled_overall.B_minus_A_pts} pts`,f:'experiments/e5-depth/E5.1-GRADES.json → runs.B_sonnet_v2, runs.A_sonnet_v1, pooled_overall',note:'verified after the legend fix'},
+    {n:'rung 8 · "No Noether branding in formal claims"',f:'plans/CONSENSUS.md → R2 · README.md → MAY NOT',note:'contradicted'},
+    {n:'rung 9 · "That full benchmark is not in this repo"',f:'README.md → headline that is allowed; MAY NOT',note:'unsupported'},
+    {n:`rung 10 · ${theater}/${E5.trees.length} trees composeValid = false`,f:'experiments/e5-depth/questions.json → oc trees · e5_grade2.py → VALID_TREES · README.md → MAY NOT',note:'contradicted: it validated the harness'},
+    {n:'lane 2: claim + evidence → verified | contradicted | unsupported',f:'jev-tape/wiki/pages/claim-verify.md · wiki/pages/three-lanes.md',note:'"Does not write the claim."'},
+    {n:'P(expected) = 0.92 · Choice ≥2 criteria · pin jev-1.13.0',f:'this page (twin resolver) · jev-tape/src/typesafe/contract.ts',note:'the twin returns the repo’s own recorded discipline with a peaked probability; ten questions in one request'},
+  ]);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Theater Detector — jev demo 05</title>
+<meta name="description" content="Ten operadic-interview trees. A code witness (COMPOSE) rejects the four that could never agree with themselves before any judge is asked; the six survivors go to one batched consistency question, recorded on the tape.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  .seg.trees{display:flex;width:100%;margin:6px 0 10px}
+  .seg.trees button{flex:1;min-width:0;padding:5px 1px;font-size:12px;line-height:1.15;font-family:var(--mono)}
+  .seg.trees button i{display:block;font-style:normal;font-size:10px;opacity:.7}
+  .vr{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:40px;margin:2px 0}
+  .vr .vk{font-size:12px;color:var(--dim);min-width:118px}
+  .vr .note{font-size:12px;color:var(--dim);font-family:var(--mono)}
+  .reasons{font-size:13px;color:var(--dim);margin:6px 0 0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .path-ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 0}
+  .path-ladder div{border:1px solid var(--rule);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dim);text-align:center}
+  .path-ladder div b{display:block;font-family:var(--mono);font-size:13px;color:var(--bone);font-weight:500}
+  .path-ladder div.used{border-color:var(--amber);color:var(--bone)}
+  .path-ladder div.used b{color:var(--amber)}
+  @media(max-width:520px){.path-ladder{grid-template-columns:1fr 1fr}}
+  .tape .cell.theater .v{color:var(--red-ink)} .tape .cell.composes .v{color:var(--green-ink)}
+  /* stage motion: rows fold into the root; the stamp lands */
+  .stage .row{transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .7s}
+  .stage .row.bounce{transition:transform .55s cubic-bezier(.2,1.7,.45,1),opacity .4s}
+  .stage .row.lift{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .stage .stampg{transform-box:fill-box;transform-origin:center;animation:sIn .34s cubic-bezier(.2,.9,.3,1.2) both}
+  @keyframes sIn{0%{transform:rotate(-8deg) scale(1.9);opacity:0}60%{transform:rotate(-8deg) scale(.95);opacity:1}100%{transform:rotate(-8deg) scale(1);opacity:1}}
+  .stage .tile rect{transition:fill .3s,stroke .3s}
+  @media(prefers-reduced-motion:reduce){.stage .row,.stage .row.bounce,.stage .row.lift{transition:none}.stage .stampg{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 05 of 10 · theater detector</div>
+      <h1>Four of ten trees could never agree with themselves.</h1>
+      <p class="lede">The depth experiment split ten root questions into sub-questions and asked whether the sub-answers agreed with the root. Four trees came back inconsistent in every run that read them. That was not the models. Three of those trees end in a yes/no under a root that wants a list or a name, and the fourth never asks the step that produces the root. Code can see that from the gold answers alone, <b>before</b> any model is asked. This demo runs that check first, as Path 0, and sends only the survivors to the judge.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> built an interview to catch model defects and caught its own harness instead. <em>jev-tape</em> says code computes what code can compute. A composition witness is code, so it runs before the judge, and its RED is one the judge cannot override.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Theater detector instrument">
+    <div class="controls">
+      <h3>Check a tree</h3>
+      <p>Pick a tree. COMPOSE is code: it compares the answer type of the last sub-question with the root, then checks that the last sub is the step that produces the root. Only a tree that passes goes to the judge, with one closed question: did the recorded sub-answers agree with the root, yes or no.</p>
+
+      <div class="seg trees" id="treeSeg" role="group" aria-label="Pick a tree"></div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Run COMPOSE</button>
+        <button class="btn" id="runAll">Run all ten</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="vr"><span class="vk">COMPOSE · code</span><span class="lamp OFF" id="lampC">OFF</span><span id="stampC"></span></div>
+      <div class="vr"><span class="vk">OC gate · judge</span><span class="lamp OFF" id="lampO">OFF</span><span class="note" id="ocNote"></span></div>
+      <ul class="reasons" id="reasons"><li>No run yet.</li></ul>
+
+      <div class="path-ladder" id="ladder">
+        <div data-p="0"><b>path 0</b>code</div>
+        <div data-p="1"><b>path 1</b>one POST</div>
+        <div data-p="2"><b>path 2</b>rank, read</div>
+        <div data-p="3"><b>path 3</b>tape</div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="The selected interview tree: root question at the top, sub-questions below, edges coloured by answer type"></div>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>COMPOSE is a witness, so it is code. It reads gold strings and asks two things: is the last sub-answer the same kind of answer as the root, and is it the root. Neither needs a judge, so the tape records a code cell and posts nothing. When the witness fails, that is a local RED. The judge is never asked, and a Choice from the judge could not have overridden it.</p>
+        <p>A tree that passes goes to the judge with one closed question, consistent: yes or no. The twin answers from the E5.1 grades: on the six valid trees, every run was consistent and correct. "Run all ten" walks every tree, then sends the six survivors in a single request. One POST, six answers, recorded once.</p>
+        <p>The four rejected trees show what the raw run recorded instead. The three depth-9 trees were inconsistent in all four runs; the depth-10 tree in both sonnet runs. An inconsistency that does not depend on the model is a defect in the tree, not in the reader. That is how the harness caught itself, and it is a check that costs nothing.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>Consistency is not correctness.</b> A model can agree with itself and be wrong; E5 saw consistent-and-wrong pairs in both directions. The OC gate calibrates and localises defects. It is never ground truth, and the 6/6 here is measured on six trees of one corpus, written by the same author as the packs.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> It answers the consistency question from E5.1-GRADES.json (run B_sonnet_v2), deterministically, with the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 05 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> experiments/e5-depth and <code>manutej/jev-tape</code> spec.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e5.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, twin, compose, esc, setLamp, stamp, svg, provenanceTable, topbar, segControl} = JEV;
+  const E5 = JEV.data.e5, TREES = E5.trees, OCRUN = 'B_sonnet_v2', OC = E5.fixed.oc[OCRUN];
+  topbar(document.getElementById('topbar'), {title:'05 · Theater detector'});
+  const tape = new Tape({title:'Theater detector tape'});
+  const $ = id => document.getElementById(id);
+  const lampC=$('lampC'), stampC=$('stampC'), lampO=$('lampO'), ocNote=$('ocNote'), reasons=$('reasons'), ladder=$('ladder');
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+  const setPath=(...ps)=>{[...ladder.children].forEach(d=>d.classList.toggle('used',ps.includes(+d.dataset.p)));};
+
+  /* ---------- Path 0: the COMPOSE witness, as code ---------- */
+  const cls = g => { g=String(g).trim(); if(/^(yes|no)$/i.test(g)) return 'yesno'; if(/^none$/i.test(g)) return 'none'; if(g.includes(',')) return 'list'; return 'name'; };
+  const names = g => String(g).split(',').map(s=>s.trim()).filter(Boolean);
+  const norm = g => names(g).map(s=>s.toLowerCase()).sort().join(',');
+  const kind = {yesno:'yes/no', none:'none', name:'name', list:'list'};
+  function composeWitness(t){
+    const last=t.subs[t.subs.length-1], rc=cls(t.gold), lc=cls(last.gold);
+    if(rc!==lc) return {ok:false, rc, lc, why:`type mismatch: the last sub-answer is a ${kind[lc]}, the root answer is a ${kind[rc]}`};
+    if(norm(last.gold)!==norm(t.gold)) return {ok:false, rc, lc, why:`no composition step: the last sub's ${kind[lc]} (${names(last.gold).length} names) is not the root ${kind[rc]} (${names(t.gold).length} names); nothing in the tree computes the root`};
+    return {ok:true, rc, lc, why:`the last sub-answer is the root answer (${kind[rc]} = ${kind[rc]})`};
+  }
+  const WIT = TREES.map(composeWitness);
+  const agree = TREES.filter((t,k)=>WIT[k].ok===!!t.composeValid).length;
+  if(agree!==TREES.length) console.error(`COMPOSE witness disagrees with composeValid on ${TREES.length-agree} trees`);
+  const nPass = WIT.filter(w=>w.ok).length;
+  // cross-check the raw-run signature: which runs listed this tree (1-based) as inconsistent
+  const rawIncons = t => Object.entries(E5.raw.oc).filter(([,o])=>o.inconsistent_qs.includes(t.i+1)).map(([n])=>n).sort();
+  const rawAgree = TREES.filter(t=>rawIncons(t).join()===[...t.ocRawInconsistentIn].sort().join()).length;
+  const nRuns = Object.keys(E5.raw.oc).length;
+  const ocRec = t => OC.raw.find(r=>r.q===t.i+1);
+
+  /* ---------- tree picker ---------- */
+  const segEl=$('treeSeg');
+  segEl.innerHTML=TREES.map((t,k)=>`<button data-v="${k}" aria-pressed="${k===0}">Q${t.i+1}<i>D${t.depth}</i></button>`).join('');
+  let sel=0;
+  const seg=segControl(segEl,(v)=>{sel=+v; renderTree(sel); showState(sel);});
+
+  /* ---------- stage ---------- */
+  const W=800,H=520, stage=$('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'The selected tree drawn as an outline: root card on top, one row per sub-question, edges coloured by answer type. A strip of ten tiles at the bottom tracks which trees passed COMPOSE.'});
+  stage.appendChild(root);
+  const COL={name:'var(--c-entity)',list:'var(--c-evidence)',yesno:'var(--c-idea)',none:'var(--dim)'};
+  root.appendChild(svg('defs',{},[
+    svg('pattern',{id:'hatch',width:8,height:8,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},[svg('rect',{x:0,y:0,width:3,height:8,fill:'var(--red)',opacity:.35})])
+  ]));
+  // legend of answer types
+  const leg=svg('g',{transform:'translate(0,0)'}); root.appendChild(leg);
+  let lx=W-20; for(const k of ['none','yesno','list','name']){ const label=kind[k]; const tw=label.length*6.4+18; lx-=tw; leg.appendChild(svg('rect',{x:lx,y:15,width:9,height:9,rx:2,fill:COL[k]})); leg.appendChild(svg('text',{x:lx+14,y:23,'font-size':'11',fill:'var(--dim)'},[label])); lx-=10; }
+  const title=svg('text',{x:20,y:24,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['']); root.appendChild(title);
+  const treeG=svg('g',{}); root.appendChild(treeG);
+  // summary strip
+  const stripG=svg('g',{}); root.appendChild(stripG);
+  const TY=448, TW=64, TH=34, TGAP=(W-40-10*TW)/9;
+  const tiles=TREES.map((t,k)=>{const x=20+k*(TW+TGAP);
+    const g=svg('g',{class:'tile',transform:`translate(${x},${TY})`});
+    const r=svg('rect',{x:0,y:0,width:TW,height:TH,rx:6,fill:'var(--desk-2)',stroke:'var(--rule)'});
+    const hz=svg('rect',{x:0,y:0,width:TW,height:TH,rx:6,fill:'url(#hatch)',opacity:0});
+    const q=svg('text',{x:8,y:14,'font-size':'11',class:'mono',fill:'var(--bone)'},[`Q${t.i+1}`]);
+    const d=svg('text',{x:8,y:27,'font-size':'10',class:'mono',fill:'var(--dim)'},[`D${t.depth}`]);
+    const dot=svg('circle',{cx:TW-11,cy:TH/2,r:5,fill:'var(--green)',opacity:0});
+    const cur=svg('rect',{x:-3,y:-3,width:TW+6,height:TH+6,rx:8,fill:'none',stroke:'var(--bone)','stroke-width':1.5,opacity:0});
+    g.append(r,hz,q,d,dot,cur); g.style.cursor='pointer'; g.addEventListener('click',()=>{if(!running)seg.set(String(k));});
+    stripG.appendChild(g); return {g,r,hz,dot,cur};});
+  const stripCap=svg('text',{x:20,y:H-12,'font-size':'14','font-family':'var(--display)','font-style':'italic',fill:'var(--bone)'},['']); stripG.appendChild(stripCap);
+  const stripCap2=svg('text',{x:W-20,y:H-12,'font-size':'11',class:'mono','text-anchor':'end',fill:'var(--dim)'},['']); stripG.appendChild(stripCap2);
+
+  const state=TREES.map(()=>({compose:null, oc:null}));
+  function updateStrip(){
+    const checked=state.filter(s=>s.compose!==null).length, passed=state.filter(s=>s.compose==='pass').length, judged=state.filter(s=>s.oc).length;
+    tiles.forEach((tl,k)=>{const s=state[k];
+      tl.r.setAttribute('fill', s.compose==='pass'?'rgba(61,220,132,.16)':s.compose==='theater'?'rgba(255,90,79,.10)':'var(--desk-2)');
+      tl.r.setAttribute('stroke', s.compose==='pass'?'var(--green)':s.compose==='theater'?'var(--red)':'var(--rule)');
+      tl.hz.setAttribute('opacity', s.compose==='theater'?1:0);
+      tl.dot.setAttribute('opacity', s.oc?1:0); tl.dot.setAttribute('fill', s.oc==='consistent'?'var(--green)':'var(--red)');
+      tl.cur.setAttribute('opacity', k===sel?1:0);
+    });
+    stripCap.textContent=`${TREES.length} trees → ${nPass} pass COMPOSE → ${OC.consistent_and_correct}/${OC.valid_trees} consistent-and-correct`;
+    stripCap2.textContent=checked?`checked ${checked} · passed ${passed} · judged ${judged}`:'nothing checked yet';
+  }
+
+  const wrap=(s,n,max)=>{const out=[];let cur='';for(let w of String(s).split(/\s+/)){while(w.length>n){if(cur.trim()){out.push(cur.trim());cur='';}out.push(w.slice(0,n-1)+'-');w=w.slice(n-1);}if((cur+' '+w).trim().length>n){out.push(cur.trim());cur=w;}else cur=(cur+' '+w);}if(cur.trim())out.push(cur.trim());if(max&&out.length>max){out.length=max;out[max-1]=out[max-1].slice(0,n-2)+'…';}return out;};
+  const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+  const RX=20,RY=40,RW=760,RH=78, SX=80,SY=150,SW=700,SH=56,SG=14;
+  let rows=[], rootRect=null, stampG=null, okText=null, edges=[], stackG=null;
+  function showStack(n){ if(stackG)stackG.remove(); stackG=svg('g',{});
+    for(let j=0;j<n;j++) stackG.appendChild(svg('rect',{x:RX+10+j*6,y:RY+RH+4+j*6,width:RW-20-j*12,height:6,rx:2,fill:'var(--desk-3)',stroke:'var(--rule)'}));
+    treeG.insertBefore(stackG,treeG.firstChild); }
+  let chipN=0;
+  function chip(x,y,w,gold,c){ // answer chip: type word + truncated gold, clipped to the chip
+    const id='chip'+(chipN++);
+    const g=svg('g',{},[svg('clipPath',{id},[svg('rect',{x:x,y:y,width:w-6,height:40})])]);
+    g.setAttribute('clip-path',`url(#${id})`);
+    g.appendChild(svg('rect',{x:x,y:y,width:w,height:40,rx:6,fill:'var(--desk-3)',stroke:COL[c],'stroke-width':1}));
+    g.appendChild(svg('rect',{x:x,y:y,width:4,height:40,rx:2,fill:COL[c]}));
+    g.appendChild(svg('text',{x:x+11,y:y+15,'font-size':'11',class:'mono',fill:COL[c]},[`gold · ${kind[c]}`]));
+    const t=svg('text',{x:x+11,y:y+31,'font-size':'10',class:'mono',fill:'var(--bone)'},[cut(gold, Math.floor((w-16)/6.6))]);
+    t.appendChild(svg('title',{},[gold])); g.appendChild(t); return g;
+  }
+  function renderTree(k){
+    const t=TREES[k], w=WIT[k];
+    treeG.innerHTML=''; rows=[]; edges=[]; stampG=null; okText=null; stackG=null;
+    title.textContent=`tree Q${t.i+1} · depth ${t.depth} · ${t.subs.length} sub-questions · root answer is a ${kind[w.rc]}`;
+    // root card
+    rootRect=svg('rect',{x:RX,y:RY,width:RW,height:RH,rx:8,fill:'var(--desk-2)',stroke:'var(--rule)','stroke-width':1.5});
+    treeG.appendChild(rootRect);
+    treeG.appendChild(svg('text',{x:RX+16,y:RY+20,'font-size':'11',class:'mono',fill:'var(--dim)'},[`root · Q${t.i+1}`]));
+    wrap(t.q.replace(/\s*\(\*Repository\*.*$/,''),74,2).forEach((ln,i)=>treeG.appendChild(svg('text',{x:RX+16,y:RY+40+i*16,'font-size':'12',fill:'var(--bone)'},[ln])));
+    treeG.appendChild(chip(RX+RW-226,RY+19,210,t.gold,w.rc));
+    // spine
+    const n=t.subs.length, lastMid=SY+(n-1)*(SH+SG)+SH/2;
+    const spine=svg('line',{x1:60,y1:RY+RH,x2:60,y2:lastMid,stroke:'var(--rule)','stroke-width':2}); treeG.appendChild(spine); edges.push(spine);
+    t.subs.forEach((s,j)=>{
+      const y=SY+j*(SH+SG), c=cls(s.gold), last=j===n-1;
+      const e=svg('path',{d:`M60 ${y+SH/2} H${SX}`,stroke:COL[c],'stroke-width':last?3:2,fill:'none'}); treeG.appendChild(e); edges.push(e);
+      const g=svg('g',{class:'row'});
+      g.appendChild(svg('rect',{x:SX,y:y,width:SW,height:SH,rx:7,fill:'var(--desk-2)',stroke:last?COL[c]:'var(--rule)','stroke-width':last?1.5:1}));
+      g.appendChild(svg('rect',{x:SX,y:y,width:4,height:SH,rx:2,fill:COL[c]}));
+      g.appendChild(svg('text',{x:SX+14,y:y+20,'font-size':'11',class:'mono',fill:'var(--dim)'},[s.q.slice(0,4)]));
+      if(last) g.appendChild(svg('text',{x:SX+14,y:y+SH-10,'font-size':'10',class:'mono',fill:COL[c]},['last']));
+      wrap(s.q.replace(/^OC-\w:\s*/,''),68,2).forEach((ln,i)=>g.appendChild(svg('text',{x:SX+54,y:y+22+i*15,'font-size':'11',fill:'var(--bone)'},[ln])));
+      g.appendChild(chip(SX+SW-216,y+8,206,s.gold,c));
+      treeG.appendChild(g); rows.push({g,dy:y-RY});
+    });
+    updateStrip();
+  }
+  function showState(k){ // reflect an already-checked tree in the lamps without re-running
+    const s=state[k], w=WIT[k], t=TREES[k];
+    stampC.className=''; stampC.textContent=''; ocNote.textContent='';
+    if(s.compose===null){setLamp(lampC,'OFF');setLamp(lampO,'OFF');reasons.innerHTML='<li>Not checked yet.</li>';return;}
+    setLamp(lampC,s.compose==='pass'?'GREEN':'RED'); stamp(stampC,s.compose==='pass'?'GREEN':'RED',s.compose==='pass'?'composes':'theater');
+    reasons.innerHTML=`<li>${esc(w.why)}</li>`;
+    if(s.compose==='pass'){ if(s.oc){setLamp(lampO,'GREEN');ocNote.textContent=`consistent · correct (${OCRUN})`;} else {setLamp(lampO,'OFF');ocNote.textContent='survivor · not yet judged';} }
+    else { setLamp(lampO,'OFF'); ocNote.textContent=`judge not asked · raw run: inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs`; }
+    rows.forEach(r=>{r.g.style.transform=s.compose==='pass'?`translateY(${-r.dy}px)`:'';r.g.style.opacity=s.compose==='pass'?0:1;});
+    edges.forEach(e=>e.style.opacity=s.compose==='pass'?0:1);
+    if(s.compose==='pass') showStack(t.subs.length); else if(stackG){stackG.remove();stackG=null;}
+    rootRect.setAttribute('stroke',s.compose==='pass'?'var(--green)':'var(--red)');
+    if(s.compose==='theater') landStamp(); else landOk(t);
+  }
+  function landStamp(){ if(stampG)stampG.remove();
+    stampG=svg('g',{class:'stampg'});
+    stampG.appendChild(svg('rect',{x:RX+RW-390,y:RY+RH-22,width:112,height:34,rx:6,fill:'var(--desk)',stroke:'var(--red)','stroke-width':2}));
+    stampG.appendChild(svg('text',{x:RX+RW-334,y:RY+RH+1,'font-size':'18','font-family':'var(--display)','font-style':'italic','text-anchor':'middle',fill:'var(--red)'},['theater']));
+    treeG.appendChild(stampG);
+  }
+  function landOk(t){ if(okText)okText.remove();
+    okText=svg('g',{});
+    okText.appendChild(svg('text',{x:RX+16,y:RY+RH+52,'font-size':'13','font-family':'var(--display)','font-style':'italic',fill:'var(--green)'},['the sub-answers fold into the root: composes']));
+    t.subs.forEach((s,j)=>{const c=cls(s.gold), y=RY+RH+80+j*22, last=j===t.subs.length-1;
+      okText.appendChild(svg('text',{x:RX+16,y:y,'font-size':'11',class:'mono',fill:'var(--dim)'},[s.q.slice(0,4)]));
+      okText.appendChild(svg('text',{x:RX+58,y:y,'font-size':'11',class:'mono',fill:COL[c]},[cut(s.gold,84)+(last?'  = root':'')]));
+    });
+    treeG.appendChild(okText);
+  }
+
+  /* ---------- the run ---------- */
+  const ocQuestion=(t)=>({[`consistent_Q${t.i+1}`]:{type:'choice',instructions:`Tree Q${t.i+1}: do the recorded sub-answers, taken together, agree with the recorded root answer?`,criteria:{yes:'the sub-answers compose to the root answer',no:'the sub-answers and the root answer disagree'}}});
+  const ocResolver=(t)=>()=>{const r=ocRec(t); return r&&r.consistent?{choice:'yes',probabilities:{yes:.94,no:.06}}:{choice:'no',probabilities:{yes:.08,no:.92}};};
+  const ocDetail=(t)=>{const r=ocRec(t); return r?`${OCRUN} raw q=${r.q}: consistent=${r.consistent}, direct_correct=${r.direct_correct}, all_subs_correct=${r.all_subs_correct}`:'no record';};
+
+  async function animateCompose(k, quick){
+    const t=TREES[k], w=WIT[k];
+    rows.forEach(r=>{r.g.className.baseVal='row';r.g.style.transform='';r.g.style.opacity=1;}); edges.forEach(e=>e.style.opacity=1);
+    if(stampG)stampG.remove(); if(okText)okText.remove(); if(stackG)stackG.remove(); stampG=okText=stackG=null; rootRect.setAttribute('stroke','var(--rule)');
+    await wait(quick?60:180);
+    if(w.ok){
+      for(let j=rows.length-1;j>=0;j--){const r=rows[j]; r.g.style.transform=`translateY(${-r.dy}px)`; r.g.style.opacity=0; await wait(quick?50:110);}
+      edges.forEach(e=>e.style.opacity=0);
+      await wait(quick?350:600);
+      rootRect.setAttribute('stroke','var(--green)'); showStack(t.subs.length); landOk(t);
+    } else {
+      rows.forEach(r=>{r.g.className.baseVal='row lift'; r.g.style.transform=`translateY(${-r.dy*.42}px)`;});
+      await wait(quick?250:400);
+      rows.forEach(r=>{r.g.className.baseVal='row bounce'; r.g.style.transform='';});
+      await wait(quick?200:320);
+      rootRect.setAttribute('stroke','var(--red)'); landStamp();
+      await wait(quick?200:300);
+    }
+  }
+  function recordCompose(k){
+    const t=TREES[k], w=WIT[k];
+    tape.record({kind:'code',label:`COMPOSE Q${t.i+1}`,verdict:w.ok?'composes':'theater',detail:`Path 0 witness · root ${kind[w.rc]} · last sub ${kind[w.lc]} · ${w.why}`});
+    state[k].compose=w.ok?'pass':'theater';
+  }
+
+  let running=false;
+  const busy=(b)=>{running=b; ['run','runAll'].forEach(id=>$(id).disabled=b);};
+  async function runOne(){
+    if(running)return; busy(true); setPath();
+    const k=sel, t=TREES[k], w=WIT[k];
+    state[k]={compose:null,oc:null}; showState(k); reasons.innerHTML='';
+    tape.record({kind:'code',label:'classify golds',verdict:`${kind[w.rc]} / ${kind[w.lc]}`,detail:`root gold → ${kind[w.rc]}; last sub gold → ${kind[w.lc]} (rule: yes|no → yes/no; none → none; comma → list; else name)`});
+    await animateCompose(k,false);
+    recordCompose(k); setPath(0);
+    setLamp(lampC,w.ok?'GREEN':'RED'); stamp(stampC,w.ok?'GREEN':'RED',w.ok?'composes':'theater');
+    reasons.innerHTML=`<li>${esc(w.why)}</li>`; updateStrip();
+    if(!w.ok){
+      await wait(250);
+      const c=compose({},{localRed:['COMPOSE witness failed']});
+      tape.record({kind:'gate',label:'gate',verdict:'RED',detail:'local RED from code; no TypeSafe POST was made'});
+      reasons.innerHTML+=c.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+`<li>Raw run recorded this tree inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs (${t.ocRawInconsistentIn.join(', ')}): the signature of a tree that cannot compose, whoever reads it.</li>`;
+      ocNote.textContent=`judge not asked · raw run: inconsistent in ${t.ocRawInconsistentIn.length} of ${nRuns} runs`;
+      busy(false); return;
+    }
+    await wait(300); setPath(0,1);
+    const res=twin.systemOne({model:JEV.PIN,state:{tree:`Q${t.i+1}`,root_gold:t.gold,sub_golds:t.subs.map(s=>s.gold)},questions:ocQuestion(t)},{[`consistent_Q${t.i+1}`]:ocResolver(t)});
+    const a=Object.values(res.answers)[0];
+    tape.record({kind:'activity',label:`OC gate Q${t.i+1}`,verdict:`consistent: ${a.choice}`,post:true,detail:`one POST, 1 question · ${ocDetail(t)} · model=${res.model} (twin)`});
+    state[k].oc=a.choice==='yes'?'consistent':'inconsistent';
+    await wait(400);
+    const c=compose(res.answers,{theta:.7,floor:.6});
+    tape.record({kind:'gate',label:'composeAnswers',verdict:c.verdict,detail:c.reasons.join(' | ')});
+    setLamp(lampO,a.choice==='yes'?'GREEN':'RED'); ocNote.textContent=`consistent: ${a.choice} · P=${a.probabilities[a.choice].toFixed(2)} · ${ocRec(t).direct_correct?'correct':'not correct'} (${OCRUN})`;
+    reasons.innerHTML+=`<li>${esc(ocDetail(t))}</li>`+c.reasons.map(r=>`<li>${esc(r)}</li>`).join('');
+    updateStrip(); busy(false);
+  }
+  async function runAll(){
+    if(running)return; busy(true); setPath();
+    state.forEach(s=>{s.compose=null;s.oc=null;}); updateStrip();
+    for(let k=0;k<TREES.length;k++){
+      seg.set(String(k)); await wait(120);
+      await animateCompose(k,true); recordCompose(k); updateStrip();
+      setLamp(lampC,WIT[k].ok?'GREEN':'RED'); stamp(stampC,WIT[k].ok?'GREEN':'RED',WIT[k].ok?'composes':'theater'); reasons.innerHTML=`<li>${esc(WIT[k].why)}</li>`;
+      await wait(120);
+    }
+    setPath(0);
+    const survivors=TREES.map((t,k)=>k).filter(k=>WIT[k].ok);
+    const theater=TREES.length-survivors.length;
+    tape.record({kind:'gate',label:'gate',verdict:'RED',detail:`${theater} local REDs from code; those trees never reach the judge`});
+    await wait(300); setPath(0,1);
+    const questions={}, resolvers={};
+    survivors.forEach(k=>{Object.assign(questions,ocQuestion(TREES[k])); resolvers[`consistent_Q${TREES[k].i+1}`]=ocResolver(TREES[k]);});
+    const res=twin.systemOne({model:JEV.PIN,state:{trees:survivors.map(k=>`Q${TREES[k].i+1}`)},questions},resolvers);
+    const yes=Object.values(res.answers).filter(a=>a.choice==='yes').length;
+    tape.record({kind:'activity',label:`OC gate · ${survivors.length} trees`,verdict:`${yes}/${survivors.length} consistent`,post:true,detail:`one POST, ${survivors.length} questions · ${OCRUN} · model=${res.model} (twin)`});
+    survivors.forEach(k=>{state[k].oc=res.answers[`consistent_Q${TREES[k].i+1}`].choice==='yes'?'consistent':'inconsistent';});
+    await wait(400);
+    const c=compose(res.answers,{theta:.7,floor:.6});
+    tape.record({kind:'gate',label:'composeAnswers',verdict:c.verdict,detail:c.reasons.join(' | ')});
+    updateStrip(); showState(sel);
+    reasons.innerHTML=`<li>${TREES.length} trees checked by code: ${survivors.length} compose, ${theater} theater.</li><li>One POST for the ${survivors.length} survivors: ${yes}/${survivors.length} consistent (${OCRUN}).</li>`+c.reasons.map(r=>`<li>${esc(r)}</li>`).join('');
+    busy(false);
+  }
+  $('run').addEventListener('click',runOne);
+  $('runAll').addEventListener('click',runAll);
+  $('reset').addEventListener('click',()=>{if(running)return; tape.clear(); state.forEach(s=>{s.compose=null;s.oc=null;}); setPath(); renderTree(sel); showState(sel); reasons.innerHTML='<li>Tape rewound.</li>';});
+
+  renderTree(0); showState(0);
+
+  /* ---------- provenance ---------- */
+  const nSubs=TREES.reduce((a,t)=>a+t.subs.length,0);
+  provenanceTable($('prov'),[
+    {n:`${TREES.length} trees · ${nSubs} sub-questions · golds`,f:'experiments/e5-depth/questions.json → oc trees; manifest.json → n_oc_trees, n_oc_subquestions',note:'the state drawn on the stage'},
+    {n:`COMPOSE-valid trees: depth ∈ {5, 6} → ${E5.fixed.oc[OCRUN].valid_trees} trees`,f:'experiments/e5-depth/e5_grade2.py → VALID_TREES ("COMPOSE-valid per QA-3")',note:'the harness\u2019s own list of trees that compose'},
+    {n:`this page\u2019s COMPOSE verdict agrees with composeValid: ${agree}/${TREES.length}`,f:'computed live from questions.json golds; checked against e5_grade2.py VALID_TREES',note:agree===TREES.length?'asserted at load; a disagreement would print a console error':'DISAGREEMENT'},
+    {n:`raw run: inconsistent_qs ${E5.raw.oc.A_haiku.inconsistent_qs.join(', ')} (haiku) · ${E5.raw.oc.A_sonnet.inconsistent_qs.join(', ')} (sonnet)`,f:'experiments/e5-depth/E5-GRADES.json → oc.*.inconsistent_qs (1-based)',note:`per-tree lists on this page agree with those keys for ${rawAgree}/${TREES.length} trees`},
+    {n:`${OC.consistent_and_correct}/${OC.valid_trees} consistent-and-correct`,f:`experiments/e5-depth/E5.1-GRADES.json → oc.${OCRUN}`,note:'what the twin answers from; the other three runs read the same 6/6'},
+    {n:'a COMPOSE-witness gate "would have rejected all 4 bad trees for free"',f:'experiments/e5-depth/E5-RESULTS.md → V2 spec (QA-3)',note:'the check this page runs as Path 0'},
+    {n:'closed fork: consistent ∈ {yes, no}',f:'jev-tape/wiki/pages/bounded-forks.md',note:'a fork with an open option set would be an LLM job, not a judge job'},
+    {n:'Choice ≥2 criteria · pin jev-1.13.0 · top_prob_floor 0.6',f:'jev-tape/src/typesafe/contract.ts · wiki/pages/dual-axis.md',note:'the twin enforces the same contract'},
+  ]);
+})();
+</script>
+</body>
+</html>

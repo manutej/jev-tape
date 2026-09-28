@@ -11,6 +11,15 @@ gate (screenshots) covers that.
 | page | checks | hero numbers traced | failing |
 |---|---|---|---|
 | `01-pack-gate.html` | 18/18 | 2 | — |
+| `02-apply-last-square.html` | 18/18 | 0 | — |
+| `03-kappa-path-zero.html` | 18/18 | 0 | — |
+| `04-rank-wide-read-narrow.html` | 18/18 | 1 | — |
+| `05-theater-detector.html` | 18/18 | 0 | — |
+| `06-depth-router.html` | 18/18 | 0 | — |
+| `07-claim-verify-lane.html` | 18/18 | 0 | — |
+| `08-tape-as-module.html` | 18/18 | 3 | — |
+| `09-two-clocks.html` | 18/18 | 0 | — |
+| `10-witness-tape.html` | 18/18 | 0 | — |
 
 ## The checks
 
