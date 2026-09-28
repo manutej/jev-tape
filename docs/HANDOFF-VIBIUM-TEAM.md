@@ -1,7 +1,8 @@
 # Handoff for the Vibium team: a typed judge in front of the browser
 
 Date 2026-09-28. Jev pin `jev-1.13.0`. Vibium 26.8.21 built from HermeticOrmus/vibium `feat/linear-tasks`.
-Model runs on xai grok-4.6. Page version of this brief, in the Ormus Fusion chrome: `docs/vibium-team-brief.html`
+Model runs on xai grok-4.6. **Source of truth: `docs/SOURCE-OF-TRUTH.md` and `results/registry.json`** (every number below traces there; other sessions add results through `results/incoming/`).
+Page version of this brief, in the Ormus Fusion chrome: `docs/vibium-team-brief.html`
 (published copy: https://claude.ai/artifact/WbfHE1ZKWmNGeR92iyx2d6).
 
 ## Executive summary
@@ -40,14 +41,37 @@ fit/test split; the 140-row, 18-kind catalog is built and not yet run at scale);
 computer use as a product (a Sonnet screenshot proxy stood in, blind); that `auto` is safe for routine
 commits without an operator policy.
 
+## The registry
+
+`results/registry.json` holds 12 experiments and 152 rows: 145 Jev calls, 87 verify verdicts decided with 0 wrong and 3 escalates, 138 labelled rows of which 134 right, 50 pages on 28 sites, 3 judges. Rebuild with `npm run brief`. Add results per `results/incoming/README.md`.
+
+| id | experiment | kind | n | stamp |
+| --- | --- | --- | --- | --- |
+| E1 | Gate questions on recorded targets | lab | 43 | ⚖ measured |
+| E2 | Verify pairs, recorded | lab | 4 | ◐ partial |
+| E3 | Login pairs, recorded | lab | 3 | ◐ partial |
+| E4 | Live login, fixture site | live | 2 | ⚖ measured |
+| E5 | Bench: same claim, Jev vs check | live | 8 | ⚖ measured |
+| E6 | Login three ways | live | 3 | ⚖ measured |
+| E7 | Real sites, no person, no model | live | 3 | ⚖ measured |
+| E8 | Element pick over 80 map lines | live | 3 | ⚖ measured |
+| E9 | Corpus, 80 rows, 3 parallel sessions | live | 80 | ⚖ measured |
+| E10 | Recording smoke | live | 2 | ✓ accept |
+| E11 | Cross-check: blind screenshot judge | proxy | 8 | ⚖ measured |
+| E12 | Cross-check: pixel operator login | proxy | 1 | ⚖ measured |
+
 ## Finalized results, by file
 
 ### manutej/jev-tape, branch `claude/nice-fermat-ky9qtz` (a60f2bb, contains main)
 
 | Path | What |
 | --- | --- |
-| `docs/vibium-team-brief.html` | This brief as a page (Ormus Fusion chrome): record of the 12 experiments, loop diagram, questions, stamped prospects and gates, and a searchable explorer of all 152 result rows |
-| `scripts/brief-data.js` | Builds the explorer's dataset from the result files (`node scripts/brief-data.js unused out.json`) |
+| `docs/SOURCE-OF-TRUTH.md` | What is canonical, the registry schema, how to add results |
+| `results/registry.json` | The registry: every experiment and row, with computed totals |
+| `results/raw/corpus-2026-09-28.rows.json` | Per-row corpus numbers, page text removed |
+| `results/incoming/README.md` | Schema and rules for other sessions' results |
+| `scripts/build-registry.mjs`, `scripts/build-brief.mjs` | `npm run registry`, `npm run brief` |
+| `docs/vibium-team-brief.src.html`, `docs/vibium-team-brief.html` | The page source with placeholders, and the built page: record, chips, loop diagram, questions, stamped prospects and gates, explorer of every row |
 | `docs/HANDOFF-2026-09-28.md` | Session state, all measurements, next steps in order, rails |
 | `spec/SURFACES-VIBIUM.md` | The design and every measurement, §1–§9; results §8a–§8e and §8c′ |
 | `docs/COMPUTER-USE-CROSSCHECK.md` | Blind screenshot judge and pixel operator beside Jev and `check`; blinding protocol |

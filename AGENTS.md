@@ -40,3 +40,7 @@ Forbidden unless the user explicitly says push or send and C10 has a human verdi
 ## Presenting HTML
 
 Pages under `docs/` may be plain, or wear the Ormus design chrome via the repo skill `.claude/skills/ormus-chrome/` (tokens, component layer, brand rules, page template, chart rules). It is one option, chosen when a page is for the firm, leadership, a client or a partner team; `docs/vibium-team-brief.html` is the worked example. To use it from any project, copy the skill folder to `~/.claude/skills/ormus-chrome/`.
+
+## Results
+
+Measured results are registered in `results/registry.json`, built by `npm run registry` from committed files only (never from `runs/`). `docs/SOURCE-OF-TRUTH.md` is the protocol; new results go in `results/incoming/` and the page `docs/vibium-team-brief.html` is rebuilt with `npm run brief`. Do not edit the registry or the built page by hand.

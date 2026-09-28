@@ -1,0 +1,3277 @@
+{
+ "at": "2026-09-28T18:58:08.398Z",
+ "catalog": "fixtures/vibium/catalog-pages.json",
+ "summary": {
+  "rows": 80,
+  "workers": 3,
+  "wallMs": 88008,
+  "posts": 74,
+  "replays": 0,
+  "decided": 73,
+  "right": 73,
+  "wrong": 0,
+  "inconclusive": 1,
+  "navFailed": 6,
+  "errors": 0,
+  "jevMedianMs": 178,
+  "navMedianMs": 1533,
+  "model": "jev-1.13.0"
+ },
+ "note": "per-row numbers from runs/corpus-2026-09-28.json with page text removed; the full states are in JEV-works kit/modules/items/browser-verify.corpus-2026-09-28.items.json",
+ "rows": [
+  {
+   "id": "wiki-lisp-f",
+   "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+   "claim": "This is the Wikipedia article on the Fortran programming language",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 23048,
+   "snapMs": 536,
+   "jevMs": 371,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "verified": 0,
+      "contradicted": 0.99,
+      "unsupported": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "none": 1,
+      "one_time_code": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "login_wall": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-lisp",
+   "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+   "claim": "This is the Wikipedia article on the Common Lisp programming language",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 23850,
+   "snapMs": 474,
+   "jevMs": 179,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "verified": 1,
+      "unsupported": 0,
+      "contradicted": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "login_wall": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-noether",
+   "url": "https://en.wikipedia.org/wiki/Emmy_Noether",
+   "claim": "This is the Wikipedia article about the mathematician Emmy Noether",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 23824,
+   "snapMs": 655,
+   "jevMs": 256,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "error_page": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "one_time_code": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-noether-f",
+   "url": "https://en.wikipedia.org/wiki/Emmy_Noether",
+   "claim": "This article says Emmy Noether was a painter, not a mathematician",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 1280,
+   "snapMs": 486,
+   "jevMs": 367,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 1,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 1,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "cookie_banner": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-turing",
+   "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+   "claim": "This is the Wikipedia article about Alan Turing",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 1253,
+   "snapMs": 683,
+   "jevMs": 225,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.1806963615767855,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.92,
+     "probabilities": {
+      "verified": 0.95,
+      "contradicted": 0.05,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "one_time_code": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-turing-f",
+   "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+   "claim": "This article says Alan Turing was born in 1990",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1339,
+   "snapMs": 691,
+   "jevMs": 171,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 1,
+      "verified": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.98,
+     "probabilities": {
+      "cookie_banner": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "login_wall": 0.02,
+      "error_page": 0,
+      "none": 0.98
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-rust",
+   "url": "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+   "claim": "This is the Wikipedia article on the Rust programming language",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1533,
+   "snapMs": 523,
+   "jevMs": 171,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.96,
+     "probabilities": {
+      "verified": 0.98,
+      "contradicted": 0.02,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "error_page": 0,
+      "login_wall": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-periodic",
+   "url": "https://en.wikipedia.org/wiki/Periodic_table",
+   "claim": "This is the Wikipedia article on the periodic table of chemical elements",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 1762,
+   "snapMs": 1233,
+   "jevMs": 204,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.97,
+     "probabilities": {
+      "unsupported": 0,
+      "verified": 0.98,
+      "contradicted": 0.02
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "error_page": 0,
+      "captcha": 0,
+      "none": 1,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-periodic-f",
+   "url": "https://en.wikipedia.org/wiki/Periodic_table",
+   "claim": "This is a Wikipedia article about a football club",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1896,
+   "snapMs": 1055,
+   "jevMs": 168,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.1018576417223533,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.97,
+     "probabilities": {
+      "unsupported": 0.01,
+      "contradicted": 0.98,
+      "verified": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "none": 1,
+      "cookie_banner": 0,
+      "one_time_code": 0,
+      "login_wall": 0,
+      "error_page": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-rust-f",
+   "url": "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+   "claim": "This article is about rust, the corrosion of iron",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1277,
+   "snapMs": 546,
+   "jevMs": 162,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.96,
+     "probabilities": {
+      "verified": 0,
+      "contradicted": 0.98,
+      "unsupported": 0.02
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "error_page": 0,
+      "none": 0.99,
+      "captcha": 0,
+      "login_wall": 0.01,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "mdn-fetch",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+   "claim": "This MDN page documents the Fetch API",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 3021,
+   "snapMs": 292,
+   "jevMs": 172,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "one_time_code": 0,
+      "login_wall": 0,
+      "error_page": 0,
+      "none": 1,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "mdn-fetch-f",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+   "claim": "This MDN page documents the CSS Grid layout",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 4036,
+   "snapMs": 236,
+   "jevMs": 208,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.2811828957817385,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.89,
+     "probabilities": {
+      "unsupported": 0.07,
+      "contradicted": 0.92,
+      "verified": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "mdn-map-f",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+   "claim": "This page says Array.prototype.map modifies the original array in place",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 1907,
+   "snapMs": 149,
+   "jevMs": 150,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 1,
+      "verified": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "captcha": 0,
+      "login_wall": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "mdn-flex",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+   "claim": "This MDN page is a guide to CSS flexible box layout",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 633,
+   "snapMs": 107,
+   "jevMs": 174,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0,
+      "verified": 0.99,
+      "contradicted": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "none": 1,
+      "cookie_banner": 0,
+      "one_time_code": 0,
+      "login_wall": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "mdn-map",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+   "claim": "This MDN page documents the JavaScript Array map method",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 3965,
+   "snapMs": 162,
+   "jevMs": 151,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "verified": 1,
+      "contradicted": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "one_time_code": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "login_wall": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "mdn-flex-f",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+   "claim": "This MDN page is about the WebGL API",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 379,
+   "snapMs": 126,
+   "jevMs": 232,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.97,
+     "probabilities": {
+      "unsupported": 0.02,
+      "contradicted": 0.98,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "error_page": 0,
+      "login_wall": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "rfc2324",
+   "url": "https://www.rfc-editor.org/info/rfc2324/",
+   "claim": "This page is about RFC 2324, the Hyper Text Coffee Pot Control Protocol",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 1632,
+   "snapMs": 84,
+   "jevMs": 147,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.97,
+     "probabilities": {
+      "unsupported": 0,
+      "verified": 0.98,
+      "contradicted": 0.02
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "cookie_banner": 0,
+      "error_page": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "none": 1,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "rfc2324-f",
+   "url": "https://www.rfc-editor.org/info/rfc2324/",
+   "claim": "This page is about RFC 791, the Internet Protocol",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1985,
+   "snapMs": 102,
+   "jevMs": 182,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.96,
+     "probabilities": {
+      "unsupported": 0.02,
+      "contradicted": 0.98,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 0.99,
+      "error_page": 0.01
+     }
+    }
+   }
+  },
+  {
+   "id": "rfc791",
+   "url": "https://www.rfc-editor.org/info/rfc791/",
+   "claim": "This page is about RFC 791, the Internet Protocol specification",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 1771,
+   "snapMs": 245,
+   "jevMs": 176,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.12264760695797416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.95,
+     "probabilities": {
+      "unsupported": 0,
+      "verified": 0.97,
+      "contradicted": 0.03
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "error_page": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "captcha": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "rfc791-f",
+   "url": "https://www.rfc-editor.org/info/rfc791/",
+   "claim": "This page is about a coffee pot protocol",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 641,
+   "snapMs": 244,
+   "jevMs": 167,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.97,
+     "probabilities": {
+      "contradicted": 0.98,
+      "verified": 0,
+      "unsupported": 0.02
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "error_page": 0,
+      "one_time_code": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "rfc9110",
+   "url": "https://www.rfc-editor.org/info/rfc9110/",
+   "claim": "This page is about RFC 9110, HTTP Semantics",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1931,
+   "snapMs": 3089,
+   "jevMs": 253,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.98,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0.02,
+      "verified": 0.98
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "rfc9110-f",
+   "url": "https://www.rfc-editor.org/info/rfc9110/",
+   "claim": "This page says RFC 9110 is about email transport",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 4615,
+   "snapMs": 1396,
+   "jevMs": 219,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 1,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "none": 1,
+      "captcha": 0,
+      "error_page": 0,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "gh-linux",
+   "url": "https://github.com/torvalds/linux",
+   "claim": "This is the GitHub repository page for torvalds/linux",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 5419,
+   "snapMs": 577,
+   "jevMs": 262,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.96,
+     "probabilities": {
+      "one_time_code": 0,
+      "captcha": 0,
+      "login_wall": 0.03,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "none": 0.97
+     }
+    }
+   }
+  },
+  {
+   "id": "gh-vscode-f",
+   "url": "https://github.com/microsoft/vscode",
+   "claim": "This page shows a 404 not found error",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 2099,
+   "snapMs": 224,
+   "jevMs": 201,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "contradicted": 1,
+      "verified": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.97,
+     "probabilities": {
+      "none": 0.98,
+      "error_page": 0.01,
+      "one_time_code": 0,
+      "login_wall": 0.01,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "gh-go",
+   "url": "https://github.com/golang/go",
+   "claim": "This is the GitHub repository page for golang/go",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 1535,
+   "snapMs": 163,
+   "jevMs": 322,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0.01,
+      "verified": 0.99
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.98,
+     "probabilities": {
+      "error_page": 0,
+      "captcha": 0,
+      "login_wall": 0.02,
+      "one_time_code": 0,
+      "none": 0.98,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "gh-linux-f",
+   "url": "https://github.com/torvalds/linux",
+   "claim": "This is the GitHub repository page for microsoft/vscode",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 6346,
+   "snapMs": 204,
+   "jevMs": 193,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "contradicted": 1,
+      "unsupported": 0,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.06
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.97,
+     "probabilities": {
+      "one_time_code": 0,
+      "none": 0.98,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "login_wall": 0.02,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "gh-go-f",
+   "url": "https://github.com/golang/go",
+   "claim": "This is a GitHub pull request page",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1517,
+   "snapMs": 370,
+   "jevMs": 196,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.26899191022241997,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.91,
+     "probabilities": {
+      "unsupported": 0.05,
+      "verified": 0.02,
+      "contradicted": 0.9299999999999999
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.98,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0.02,
+      "none": 0.98,
+      "captcha": 0,
+      "error_page": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "gh-vscode",
+   "url": "https://github.com/microsoft/vscode",
+   "claim": "This is the GitHub repository page for microsoft/vscode",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 6717,
+   "snapMs": 138,
+   "jevMs": 211,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.96,
+     "probabilities": {
+      "none": 0.97,
+      "error_page": 0,
+      "one_time_code": 0,
+      "login_wall": 0.03,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "hn-front",
+   "url": "https://news.ycombinator.com/",
+   "claim": "The Hacker News front page is showing a list of stories with points and comments",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1480,
+   "snapMs": 220,
+   "jevMs": 175,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.98,
+     "probabilities": {
+      "unsupported": 0.01,
+      "contradicted": 0,
+      "verified": 0.99
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "none": 1,
+      "login_wall": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "hn-front-f",
+   "url": "https://news.ycombinator.com/",
+   "claim": "This page is a login form asking for a password",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1163,
+   "snapMs": 81,
+   "jevMs": 178,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.25700339611545797,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.89,
+     "probabilities": {
+      "verified": 0.01,
+      "unsupported": 0.06,
+      "contradicted": 0.93
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.94,
+     "probabilities": {
+      "none": 0.95,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "login_wall": 0.05,
+      "one_time_code": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "hn-newest",
+   "url": "https://news.ycombinator.com/newest",
+   "claim": "This is the Hacker News newest submissions page",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 1092,
+   "snapMs": 85,
+   "jevMs": 231,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.12264760695797416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.95,
+     "probabilities": {
+      "verified": 0.97,
+      "contradicted": 0.03,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "login_wall": 0,
+      "error_page": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "hn-newest-f",
+   "url": "https://news.ycombinator.com/newest",
+   "claim": "This page shows a shopping cart with items",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1340,
+   "snapMs": 128,
+   "jevMs": 193,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.3847663931726611,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.77,
+     "probabilities": {
+      "verified": 0,
+      "unsupported": 0.15,
+      "contradicted": 0.85
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "none": 1,
+      "error_page": 0,
+      "one_time_code": 0,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "arxiv-list",
+   "url": "https://arxiv.org/list/cs.AI/recent",
+   "claim": "This is the arXiv listing of recent papers in the cs.AI category",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 1415,
+   "snapMs": 116,
+   "jevMs": 164,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.14002901188654504,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.96,
+     "probabilities": {
+      "contradicted": 0.02,
+      "verified": 0.97,
+      "unsupported": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "error_page": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "captcha": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "arxiv-list-f",
+   "url": "https://arxiv.org/list/cs.AI/recent",
+   "claim": "This page is the abstract of a single paper about coffee",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 1598,
+   "snapMs": 156,
+   "jevMs": 199,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "contradicted": 0.99,
+      "verified": 0,
+      "unsupported": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "pypi-requests",
+   "url": "https://pypi.org/project/requests/",
+   "claim": "This is the PyPI page for the requests package",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 261,
+   "snapMs": 165,
+   "verdict": "nav-failed",
+   "ok": null,
+   "error": "empty document: is verifying your browser..."
+  },
+  {
+   "id": "arxiv-dots",
+   "url": "https://arxiv.org/abs/2505.18329",
+   "claim": "This is an arXiv abstract page for a paper",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1547,
+   "snapMs": 90,
+   "jevMs": 169,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "pypi-requests-f",
+   "url": "https://pypi.org/project/requests/",
+   "claim": "This is the PyPI page for the numpy package",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 186,
+   "snapMs": 136,
+   "verdict": "nav-failed",
+   "ok": null,
+   "error": "empty document: is verifying your browser..."
+  },
+  {
+   "id": "pypi-httpx",
+   "url": "https://pypi.org/project/httpx/",
+   "claim": "This is the PyPI page for the httpx package",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 255,
+   "snapMs": 118,
+   "verdict": "nav-failed",
+   "ok": null,
+   "error": "empty document: "
+  },
+  {
+   "id": "arxiv-dots-f",
+   "url": "https://arxiv.org/abs/2505.18329",
+   "claim": "This page is a listing of recent papers in a category, not a single paper",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1071,
+   "snapMs": 93,
+   "jevMs": 192,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.96,
+     "probabilities": {
+      "verified": 0.02,
+      "contradicted": 0.98,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "error_page": 0,
+      "none": 1,
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "captcha": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "pypi-httpx-f",
+   "url": "https://pypi.org/project/httpx/",
+   "claim": "This page says httpx is a JavaScript package on npm",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 175,
+   "snapMs": 139,
+   "verdict": "nav-failed",
+   "ok": null,
+   "error": "empty document: is verifying your browser..."
+  },
+  {
+   "id": "w3-wcag-f",
+   "url": "https://www.w3.org/WAI/WCAG22/quickref/",
+   "claim": "This page is the HTML specification for the canvas element",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1304,
+   "snapMs": 267,
+   "jevMs": 174,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.20659474215035956,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.91,
+     "probabilities": {
+      "contradicted": 0.94,
+      "unsupported": 0.06,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "one_time_code": 0,
+      "captcha": 0,
+      "login_wall": 0,
+      "error_page": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "w3-wcag",
+   "url": "https://www.w3.org/WAI/WCAG22/quickref/",
+   "claim": "This is the W3C quick reference for WCAG 2.2",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1450,
+   "snapMs": 250,
+   "jevMs": 201,
+   "verdict": "inconclusive",
+   "ok": false,
+   "rule": 0,
+   "entropy": 0.780153086153287,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.35,
+     "probabilities": {
+      "contradicted": 0.57,
+      "verified": 0.37,
+      "unsupported": 0.06
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "login_wall": 0,
+      "error_page": 0.01,
+      "one_time_code": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 0.99
+     }
+    }
+   }
+  },
+  {
+   "id": "python-home",
+   "url": "https://www.python.org/",
+   "claim": "This is the Python programming language home page",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 2103,
+   "snapMs": 76,
+   "jevMs": 150,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "unsupported": 0,
+      "verified": 1
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "one_time_code": 0,
+      "cookie_banner": 0,
+      "captcha": 0,
+      "login_wall": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "python-home-f",
+   "url": "https://www.python.org/",
+   "claim": "This is the Ruby programming language home page",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1633,
+   "snapMs": 101,
+   "jevMs": 179,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "contradicted": 1,
+      "verified": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "cookie_banner": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "login_wall": 0,
+      "none": 1,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "python-asyncio",
+   "url": "https://docs.python.org/3/library/asyncio.html",
+   "claim": "This is the Python documentation page for the asyncio module",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1559,
+   "snapMs": 90,
+   "jevMs": 165,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0,
+      "verified": 1
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "error_page": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "python-asyncio-f",
+   "url": "https://docs.python.org/3/library/asyncio.html",
+   "claim": "This is the Python documentation page for the json module",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 1316,
+   "snapMs": 57,
+   "jevMs": 198,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0.01,
+      "contradicted": 0.99,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "none": 1,
+      "login_wall": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "node-home",
+   "url": "https://nodejs.org/en",
+   "claim": "This is the Node.js home page",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 1981,
+   "snapMs": 128,
+   "jevMs": 144,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "cookie_banner": 0,
+      "none": 1,
+      "login_wall": 0,
+      "captcha": 0,
+      "error_page": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "go-doc-f",
+   "url": "https://go.dev/doc/",
+   "claim": "This page is the Rust documentation index",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 2506,
+   "snapMs": 117,
+   "jevMs": 208,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.1018576417223533,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.98,
+     "probabilities": {
+      "verified": 0.01,
+      "contradicted": 0.98,
+      "unsupported": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "cookie_banner": 0,
+      "error_page": 0,
+      "captcha": 0,
+      "none": 1,
+      "login_wall": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "go-doc",
+   "url": "https://go.dev/doc/",
+   "claim": "This is the Go documentation index page",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 2528,
+   "snapMs": 119,
+   "jevMs": 254,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.98,
+     "probabilities": {
+      "verified": 0.98,
+      "unsupported": 0,
+      "contradicted": 0.02
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "login_wall": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "node-home-f",
+   "url": "https://nodejs.org/en",
+   "claim": "This page is the Deno home page",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 359,
+   "snapMs": 103,
+   "jevMs": 176,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "contradicted": 0.99,
+      "verified": 0.01,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "captcha": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "gnu-bash",
+   "url": "https://www.gnu.org/software/bash/",
+   "claim": "This is the GNU page for the Bash shell",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 608,
+   "snapMs": 69,
+   "verdict": "nav-failed",
+   "ok": null,
+   "error": "empty document: Too Many Requests"
+  },
+  {
+   "id": "gnu-bash-f",
+   "url": "https://www.gnu.org/software/bash/",
+   "claim": "This is the GNU page for the Emacs editor",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 482,
+   "snapMs": 78,
+   "verdict": "nav-failed",
+   "ok": null,
+   "error": "empty document: Too Many Requests"
+  },
+  {
+   "id": "rust-home",
+   "url": "https://www.rust-lang.org/",
+   "claim": "This is the Rust programming language home page",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1803,
+   "snapMs": 68,
+   "jevMs": 225,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.98,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0.01,
+      "verified": 0.99
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "none": 1,
+      "login_wall": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "rust-home-f",
+   "url": "https://www.rust-lang.org/",
+   "claim": "This page is a news site front page",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1939,
+   "snapMs": 105,
+   "jevMs": 171,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.15286935115005695,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.94,
+     "probabilities": {
+      "verified": 0,
+      "contradicted": 0.96,
+      "unsupported": 0.04
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "one_time_code": 0,
+      "none": 1,
+      "cookie_banner": 0,
+      "login_wall": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "kernel",
+   "url": "https://www.kernel.org/",
+   "claim": "This is the Linux kernel archives home page listing kernel releases",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 1028,
+   "snapMs": 85,
+   "jevMs": 166,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "verified": 1,
+      "contradicted": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "one_time_code": 0,
+      "captcha": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "kernel-f",
+   "url": "https://www.kernel.org/",
+   "claim": "This page is the Windows download page",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1297,
+   "snapMs": 55,
+   "jevMs": 146,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.98,
+     "probabilities": {
+      "contradicted": 0.99,
+      "verified": 0,
+      "unsupported": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "cookie_banner": 0,
+      "none": 1,
+      "login_wall": 0,
+      "captcha": 0,
+      "error_page": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "httpbin-html",
+   "url": "https://httpbin.org/html",
+   "claim": "This page shows a passage of prose from Moby-Dick",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 266,
+   "snapMs": 65,
+   "jevMs": 169,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.33165873780002064,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.86,
+     "probabilities": {
+      "contradicted": 0.04,
+      "verified": 0.91,
+      "unsupported": 0.05
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.98,
+     "probabilities": {
+      "cookie_banner": 0,
+      "none": 0.98,
+      "login_wall": 0,
+      "one_time_code": 0,
+      "captcha": 0,
+      "error_page": 0.02
+     }
+    }
+   }
+  },
+  {
+   "id": "httpbin-html-f",
+   "url": "https://httpbin.org/html",
+   "claim": "This page is a JSON response",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 657,
+   "snapMs": 146,
+   "jevMs": 165,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.96,
+     "probabilities": {
+      "verified": 0,
+      "unsupported": 0.02,
+      "contradicted": 0.98
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "cookie_banner": 0,
+      "login_wall": 0,
+      "none": 0.99,
+      "captcha": 0,
+      "one_time_code": 0,
+      "error_page": 0.01
+     }
+    }
+   }
+  },
+  {
+   "id": "debian",
+   "url": "https://www.debian.org/",
+   "claim": "This is the Debian home page",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 2633,
+   "snapMs": 102,
+   "jevMs": 164,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "verified": 1,
+      "contradicted": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "login_wall": 0,
+      "error_page": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "cookie_banner": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "debian-f",
+   "url": "https://www.debian.org/",
+   "claim": "This is the Ubuntu home page",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 2324,
+   "snapMs": 70,
+   "jevMs": 147,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.05097479332107252,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0.99,
+      "verified": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "error_page": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "httpbin-form-f",
+   "url": "https://httpbin.org/forms/post",
+   "claim": "This page shows a completed order confirmation",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 301,
+   "snapMs": 78,
+   "jevMs": 197,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.96,
+     "probabilities": {
+      "verified": 0,
+      "contradicted": 0.98,
+      "unsupported": 0.02
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "cookie_banner": 0,
+      "one_time_code": 0,
+      "captcha": 0,
+      "none": 1,
+      "error_page": 0,
+      "login_wall": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "httpbin-form",
+   "url": "https://httpbin.org/forms/post",
+   "claim": "This page shows an order form for a pizza with size and topping choices",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 518,
+   "snapMs": 60,
+   "jevMs": 188,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.1018576417223533,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.96,
+     "probabilities": {
+      "verified": 0.98,
+      "unsupported": 0.01,
+      "contradicted": 0.01
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0,
+      "none": 0.99,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "error_page": 0.01
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-search",
+   "url": "https://en.wikipedia.org/wiki/Special:Search",
+   "claim": "This is the Wikipedia search page with a search box",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 1188,
+   "snapMs": 233,
+   "jevMs": 160,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.97,
+     "probabilities": {
+      "verified": 0.98,
+      "contradicted": 0.02,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "error_page": 0,
+      "none": 1,
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "captcha": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "wiki-search-f",
+   "url": "https://en.wikipedia.org/wiki/Special:Search",
+   "claim": "This is the Wikipedia article about Emmy Noether",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 1237,
+   "snapMs": 204,
+   "jevMs": 145,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.4554859150035953,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.7,
+     "probabilities": {
+      "contradicted": 0.8,
+      "verified": 0,
+      "unsupported": 0.2
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.98,
+     "probabilities": {
+      "one_time_code": 0,
+      "captcha": 0,
+      "login_wall": 0,
+      "error_page": 0.01,
+      "cookie_banner": 0,
+      "none": 0.99
+     }
+    }
+   }
+  },
+  {
+   "id": "iana",
+   "url": "https://www.iana.org/help/example-domains",
+   "claim": "This IANA page explains the reserved example domains such as example.com",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 1375,
+   "snapMs": 79,
+   "jevMs": 203,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "verified": 1,
+      "contradicted": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "cookie_banner": 0,
+      "none": 1,
+      "error_page": 0,
+      "captcha": 0,
+      "login_wall": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "example",
+   "url": "https://example.com/",
+   "claim": "This page is the Example Domain placeholder page",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 511,
+   "snapMs": 52,
+   "jevMs": 205,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "verified": 1,
+      "unsupported": 0,
+      "contradicted": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.94,
+     "probabilities": {
+      "cookie_banner": 0,
+      "error_page": 0.05,
+      "none": 0.95,
+      "login_wall": 0,
+      "one_time_code": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "example-f",
+   "url": "https://example.com/",
+   "claim": "This page is a login page asking for credentials",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 378,
+   "snapMs": 51,
+   "jevMs": 181,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.12264760695797416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.95,
+     "probabilities": {
+      "verified": 0,
+      "contradicted": 0.97,
+      "unsupported": 0.03
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.97,
+     "probabilities": {
+      "cookie_banner": 0,
+      "none": 0.97,
+      "captcha": 0,
+      "error_page": 0.01,
+      "login_wall": 0.02,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "iana-f",
+   "url": "https://www.iana.org/help/example-domains",
+   "claim": "This page is the IANA root zone database listing every top-level domain",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 862,
+   "snapMs": 49,
+   "jevMs": 209,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.5016145675514594,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.63,
+     "probabilities": {
+      "verified": 0,
+      "unsupported": 0.24,
+      "contradicted": 0.76
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "error_page": 0.01,
+      "captcha": 0,
+      "login_wall": 0,
+      "none": 0.99,
+      "one_time_code": 0,
+      "cookie_banner": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "ietf-f",
+   "url": "https://www.ietf.org/",
+   "claim": "This is the W3C home page",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1328,
+   "snapMs": 125,
+   "jevMs": 183,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 1,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "one_time_code": 0,
+      "error_page": 0,
+      "login_wall": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "ietf",
+   "url": "https://www.ietf.org/",
+   "claim": "This is the IETF home page",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 1370,
+   "snapMs": 119,
+   "jevMs": 160,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.12264760695797416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.95,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0.03,
+      "verified": 0.97
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "captcha": 0,
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "apache",
+   "url": "https://www.apache.org/",
+   "claim": "This is the Apache Software Foundation home page",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 2149,
+   "snapMs": 176,
+   "jevMs": 171,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 1,
+     "probabilities": {
+      "contradicted": 0,
+      "verified": 1,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "one_time_code": 0,
+      "login_wall": 0,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "quotes",
+   "url": "https://quotes.toscrape.com/",
+   "claim": "This page lists quotes with authors and tags",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 1459,
+   "snapMs": 63,
+   "jevMs": 165,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "unsupported": 0,
+      "contradicted": 0,
+      "verified": 1
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.88,
+     "probabilities": {
+      "none": 0.9,
+      "cookie_banner": 0,
+      "one_time_code": 0,
+      "login_wall": 0.1,
+      "error_page": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "apache-f",
+   "url": "https://www.apache.org/",
+   "claim": "This is the Linux Foundation home page",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 1658,
+   "snapMs": 92,
+   "jevMs": 164,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.99,
+     "probabilities": {
+      "contradicted": 1,
+      "verified": 0,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "login_wall": 0,
+      "one_time_code": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "quotes-f",
+   "url": "https://quotes.toscrape.com/",
+   "claim": "This page lists books with prices",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 1282,
+   "snapMs": 55,
+   "jevMs": 155,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.54810208187521,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.56,
+     "probabilities": {
+      "unsupported": 0.29,
+      "contradicted": 0.71,
+      "verified": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 0.77,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0.19,
+      "captcha": 0,
+      "cookie_banner": 0,
+      "none": 0.81,
+      "error_page": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "books",
+   "url": "https://books.toscrape.com/",
+   "claim": "This page lists books with prices",
+   "expect": "passed",
+   "worker": 2,
+   "navMs": 2476,
+   "snapMs": 122,
+   "jevMs": 200,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "verified": 1,
+      "unsupported": 0,
+      "contradicted": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "error_page": 0,
+      "cookie_banner": 0,
+      "none": 1,
+      "login_wall": 0,
+      "one_time_code": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "books-f",
+   "url": "https://books.toscrape.com/",
+   "claim": "This page lists quotes with authors and tags",
+   "expect": "failed",
+   "worker": 1,
+   "navMs": 2727,
+   "snapMs": 78,
+   "jevMs": 183,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.4149655139758604,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.73,
+     "probabilities": {
+      "verified": 0,
+      "contradicted": 0.83,
+      "unsupported": 0.17
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "cookie_banner": 0,
+      "login_wall": 0,
+      "error_page": 0,
+      "one_time_code": 0,
+      "none": 1,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "bbc",
+   "url": "https://www.bbc.com/news",
+   "claim": "This is the BBC News front page showing news headlines",
+   "expect": "passed",
+   "worker": 0,
+   "navMs": 3683,
+   "snapMs": 428,
+   "jevMs": 167,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0.08923904665092416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.96,
+     "probabilities": {
+      "contradicted": 0.02,
+      "verified": 0.98,
+      "unsupported": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "error_page": 0,
+      "one_time_code": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "weather",
+   "url": "https://www.weather.gov/",
+   "claim": "This is the US National Weather Service home page",
+   "expect": "passed",
+   "worker": 1,
+   "navMs": 4237,
+   "snapMs": 159,
+   "jevMs": 169,
+   "verdict": "passed",
+   "ok": true,
+   "rule": 4,
+   "entropy": 0,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "verified",
+     "confidence": 0.99,
+     "probabilities": {
+      "verified": 1,
+      "unsupported": 0,
+      "contradicted": 0
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "none": 1,
+      "one_time_code": 0,
+      "cookie_banner": 0,
+      "error_page": 0,
+      "login_wall": 0,
+      "captcha": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "weather-f",
+   "url": "https://www.weather.gov/",
+   "claim": "This is a stock market ticker page",
+   "expect": "failed",
+   "worker": 0,
+   "navMs": 3113,
+   "snapMs": 107,
+   "jevMs": 164,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.12264760695797416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.95,
+     "probabilities": {
+      "unsupported": 0.03,
+      "verified": 0,
+      "contradicted": 0.97
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "one_time_code": 0,
+      "login_wall": 0,
+      "cookie_banner": 0,
+      "error_page": 0,
+      "captcha": 0,
+      "none": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "bbc-f",
+   "url": "https://www.bbc.com/news",
+   "claim": "This page is a software package registry",
+   "expect": "failed",
+   "worker": 2,
+   "navMs": 6991,
+   "snapMs": 69,
+   "jevMs": 156,
+   "verdict": "failed",
+   "ok": true,
+   "rule": 3,
+   "entropy": 0.12264760695797416,
+   "answers": {
+    "outcome": {
+     "type": "choice",
+     "choice": "contradicted",
+     "confidence": 0.95,
+     "probabilities": {
+      "contradicted": 0.97,
+      "verified": 0,
+      "unsupported": 0.03
+     }
+    },
+    "errorShown": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "blocked": {
+     "type": "choice",
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "captcha": 0,
+      "one_time_code": 0,
+      "login_wall": 0,
+      "error_page": 0,
+      "none": 1,
+      "cookie_banner": 0
+     }
+    }
+   }
+  }
+ ]
+}

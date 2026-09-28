@@ -1,0 +1,768 @@
+<title>Jev × Vibium Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Ormus Fusion chrome. Layout: a lab log with an executive front page. One column of reading width,
+     wide diagrams and tables in their own scroll boxes, one gold voice per surface. */
+  :root {
+    --ormus-midnight: #14213d; --ormus-deep: #0e1830;
+    --ormus-gold: #d29e3d; --ormus-gold-bright: #e0b258;
+    --ormus-ink: #eceae3; --ormus-ink-muted: #a5b0c4; --ormus-muted: #6d7891;
+    --ormus-hairline: rgba(236, 234, 227, 0.12); --ormus-on-gold: #1a1407;
+    --ormus-code-bg: #0b1226; --ormus-danger: #d44f4f;
+    --ormus-bg-elevated: rgba(255, 255, 255, 0.015); --ormus-bg-muted: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.05); --card-hairline-gold: rgba(210, 158, 61, 0.7);
+    --ghost-border: rgba(236, 234, 227, 0.25);
+    --canvas-edge-default: rgba(236, 234, 227, 0.08); --canvas-edge-gold: rgba(210, 158, 61, 0.3);
+    --print-gold: #8a6519;
+    --ormus-font-display: 'Cormorant Garamond', Georgia, serif;
+    --ormus-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --ormus-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    --ormus-ease-reveal: cubic-bezier(0.16, 1, 0.3, 1); --ormus-radius: 3px; --card-padding: 1.5rem;
+    --measure: 68ch;
+    color-scheme: dark;
+  }
+  html { background: var(--ormus-deep); scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--ormus-deep); color: var(--ormus-ink); font-family: var(--ormus-font-sans); font-size: 1rem; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .surface-firm { position: relative; isolation: isolate; min-height: 100%; }
+  .surface-firm::before { content: ''; position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(90% 60% at 85% -5%, rgba(210, 158, 61, 0.10), transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.82  0 0 0 0 0.62  0 0 0 0 0.24  0 0 0 0.07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>") repeat top left / 320px 320px,
+      linear-gradient(180deg, var(--ormus-midnight) 0%, var(--ormus-deep) 70%); }
+  .surface-firm::after { content: ''; position: fixed; inset: -6vh -3vw; z-index: -1; pointer-events: none; width: 2px; height: 2px; border-radius: 50%;
+    box-shadow: 78vw 2vh 0 0 rgba(210,158,61,.28), 64vw 69vh 0 0 rgba(210,158,61,.28), 92vw 82vh 0 0 rgba(210,158,61,.28), 36vw 17vh 0 0 rgba(210,158,61,.28), 8vw 85vh 0 0 rgba(210,158,61,.28), 85vw 93vh 0 0 rgba(210,158,61,.28), 16vw 72vh 0 0 rgba(210,158,61,.28), 24vw 46vh 0 0 rgba(210,158,61,.28), 31vw 76vh 0 0 rgba(210,158,61,.28), 95vw 11vh 0 0 rgba(210,158,61,.28), 11vw 16vh 0 0 rgba(210,158,61,.28), 79vw 68vh 0 0 rgba(210,158,61,.28), 32vw 38vh 0 0 rgba(210,158,61,.28), 64vw 24vh 0 0 rgba(210,158,61,.28), 54vw 81vh 0 0 rgba(210,158,61,.28), 20vw 20vh 0 0 rgba(210,158,61,.28), 58vw 39vh 0 0 rgba(210,158,61,.28), 72vw 14vh 0 0 rgba(210,158,61,.28), 46vw 92vh 0 0 rgba(210,158,61,.28), 75vw 37vh 0 .5px rgba(210,158,61,.45), 5vw 50vh 0 .5px rgba(210,158,61,.45), 54vw 34vh 0 .5px rgba(210,158,61,.45), 29vw 71vh 0 .5px rgba(210,158,61,.45), 82vw 42vh 0 .5px rgba(210,158,61,.45), 94vw 1vh 0 .5px rgba(210,158,61,.45), 42vw 60vh 0 .5px rgba(210,158,61,.45), 88vw 66vh 0 .5px rgba(210,158,61,.45);
+    animation: ormus-gold-dust-drift 60s ease-in-out infinite; }
+  @keyframes ormus-gold-dust-drift { 0% { transform: translate3d(0,0,0); opacity: .7 } 50% { transform: translate3d(2.4vw,-7vh,0); opacity: .75 } 100% { transform: translate3d(0,0,0); opacity: .7 } }
+  @media (prefers-reduced-motion: reduce) { .surface-firm::after { animation: none } }
+
+  .page { max-width: 66rem; margin: 0 auto; padding-block: 2.5rem 5rem; padding-inline: clamp(16px, 4vw, 40px); }
+  h1, h2, h3, h4 { font-family: var(--ormus-font-display); font-weight: 400; color: var(--ormus-ink); text-wrap: balance; margin: 0; }
+  h1 { font-weight: 300; letter-spacing: -0.01em; font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.1; max-width: 20ch; }
+  h2 { font-size: 2rem; line-height: 1.2; letter-spacing: -0.025em; }
+  h3 { font-size: 1.5rem; line-height: 1.3; margin-block: .25rem .5rem; }
+  h4 { font-size: 1.25rem; line-height: 1.3; }
+  p { margin: 0; max-width: var(--measure); }
+  p + p { margin-top: .9rem; }
+  a { color: var(--ormus-gold); text-decoration: none; border-bottom: 1px solid rgba(210,158,61,.35); }
+  a:hover, a:focus-visible { color: var(--ormus-gold-bright); border-bottom-color: var(--ormus-gold-bright); outline: none; }
+  :focus-visible { outline: 1px solid var(--ormus-gold); outline-offset: 3px; }
+  code, .mono { font-family: var(--ormus-font-mono); font-size: .85em; }
+  code { background: var(--ormus-code-bg); border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); padding: .05em .4em; color: var(--ormus-ink); white-space: nowrap; }
+  pre { background: var(--ormus-code-bg); border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); padding: .9rem 1.1rem; overflow-x: auto; font-family: var(--ormus-font-mono); font-size: .8rem; line-height: 1.65; color: var(--ormus-ink); margin: 0; }
+  .mono-label { font-family: var(--ormus-font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); }
+  .mono-label::before { content: '/ '; }
+  .mono-label--gold { color: var(--ormus-gold); }
+
+  /* Masthead with the cover composition */
+  header.masthead { display: grid; gap: 1.25rem; padding-bottom: 2rem; border-bottom: 1px solid var(--ormus-hairline); grid-template-columns: minmax(0, 1fr); align-items: end; }
+  .masthead .words { display: grid; gap: 1.25rem; }
+  .masthead .art { display: none; }
+  @media (min-width: 900px) { header.masthead { grid-template-columns: minmax(0, 1fr) 18rem; column-gap: 2rem; } .masthead .art { display: block; } }
+  .art svg { display: block; width: 100%; height: auto; }
+  .art .gold { fill: var(--ormus-gold); } .art .bright { fill: var(--ormus-gold-bright); } .art .inkb { fill: var(--ormus-ink); } .art .mutedb { fill: var(--ormus-ink-muted); } .art .rule { stroke: var(--ormus-hairline); stroke-width: 1; }
+  .masthead .lede { font-family: var(--ormus-font-display); font-size: 1.4rem; line-height: 1.45; color: var(--ormus-ink-muted); max-width: 42ch; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; padding: .9rem 0; border-bottom: 1px solid var(--ormus-hairline); position: sticky; top: env(safe-area-inset-top, 0px); background: var(--ormus-deep); z-index: 5; }
+  nav.jump a { font-family: var(--ormus-font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); border-bottom: 0; }
+  nav.jump a::before { content: '/ '; }
+  nav.jump a:hover { color: var(--ormus-gold); }
+  @media (scripting: enabled) { .fusion-reveal { clip-path: inset(0 0 100% 0); transform: translateY(56px); opacity: 0; } }
+  .fusion-reveal { transition: clip-path 1.1s var(--ormus-ease-reveal), transform 1.1s var(--ormus-ease-reveal), opacity .9s ease; }
+  .fusion-reveal.is-revealed { clip-path: inset(0 0 0 0); transform: translateY(0); opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .fusion-reveal { clip-path: none; transform: none; opacity: 1; transition: none; } }
+
+  section { padding-block: 3rem; border-bottom: 1px solid var(--ormus-hairline); scroll-margin-top: 4rem; }
+  section:last-of-type { border-bottom: 0; }
+  .section-head { display: grid; gap: .5rem; margin-bottom: 1.5rem; }
+  .section-head .arc { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .section-head .roman { font-family: var(--ormus-font-display); font-weight: 300; font-size: 2.6rem; line-height: 1; color: var(--ormus-gold); }
+
+  .headline { display: grid; gap: 1.5rem; }
+  .headline .claim { font-family: var(--ormus-font-display); font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.35; max-width: 34ch; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; }
+  .fusion-card { background: var(--ormus-bg-elevated); border: 1px solid var(--card-border); border-top-color: var(--card-hairline-gold); border-radius: var(--ormus-radius); padding: var(--card-padding); transition: transform .2s var(--ormus-ease-reveal), border-color .2s ease; min-width: 0; }
+  .fusion-card:hover { transform: translateY(-2px); border-color: rgba(210,158,61,.6); border-top-color: var(--card-hairline-gold); }
+  .tile .num { font-family: var(--ormus-font-display); font-weight: 300; font-size: 3rem; line-height: 1; margin-block: .5rem; font-variant-numeric: tabular-nums; }
+  .tile .num small { font-size: 1.2rem; color: var(--ormus-ink-muted); margin-left: .15em; }
+  .tile p { color: var(--ormus-ink-muted); font-size: .9rem; line-height: 1.6; }
+
+  /* Gold line icons */
+  .ic { width: 28px; height: 28px; stroke: var(--ormus-gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .ic--sm { width: 20px; height: 20px; }
+  .with-icon { display: flex; gap: .9rem; align-items: flex-start; }
+
+  /* The record */
+  .record { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .75rem 1.5rem; padding: 1.25rem 0; border-top: 1px solid var(--ormus-hairline); border-bottom: 1px solid var(--ormus-hairline); }
+  .record .k { font-family: var(--ormus-font-display); font-weight: 300; font-size: 2.4rem; line-height: 1; font-variant-numeric: tabular-nums; }
+  .record .k small { font-size: 1rem; color: var(--ormus-ink-muted); margin-left: .2em; font-family: var(--ormus-font-sans); }
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip { display: inline-flex; align-items: center; gap: .45rem; font-size: .85rem; line-height: 1.3; padding: .4rem .75rem; border: 1px solid var(--ghost-border); border-radius: var(--ormus-radius); color: var(--ormus-ink); background: transparent; cursor: pointer; font-family: var(--ormus-font-sans); transition: border-color .15s ease, color .15s ease; }
+  .chip:hover { border-color: var(--ormus-gold); color: var(--ormus-gold); }
+  .chip[aria-pressed="true"], .chip.is-on { border-color: var(--ormus-gold); color: var(--ormus-gold); background: rgba(210,158,61,.08); }
+  .chip .ic { width: 16px; height: 16px; }
+  .chip .n { font-family: var(--ormus-font-mono); font-size: .72rem; color: var(--ormus-ink-muted); }
+  .kind { font-family: var(--ormus-font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; padding: .1rem .4rem; border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); color: var(--ormus-ink-muted); white-space: nowrap; }
+  .kind--live { color: var(--ormus-ink); border-color: var(--ghost-border); }
+  .kind--proxy { color: var(--ormus-ink-muted); border-style: dashed; }
+  .stamp { font-family: var(--ormus-font-mono); font-size: .78rem; white-space: nowrap; color: var(--ormus-ink); }
+  .stamp b { font-weight: 400; color: var(--ormus-gold); margin-right: .35em; font-size: 1rem; }
+  .stamp--gate b { color: var(--ormus-ink-muted); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; line-height: 1.5; min-width: 44rem; }
+  th, td { text-align: left; vertical-align: top; padding: .65rem .85rem; border-bottom: 1px solid var(--ormus-hairline); }
+  th { font-family: var(--ormus-font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); font-weight: 400; background: var(--ormus-bg-muted); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.lead { color: var(--ormus-gold); }
+  td.file { font-family: var(--ormus-font-mono); font-size: .74rem; color: var(--ormus-ink-muted); }
+  tbody tr:hover td { background: var(--ormus-bg-muted); }
+
+  /* Loop diagram */
+  figure { margin: 0; display: grid; gap: .75rem; }
+  figure .fig-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1.5rem; align-items: baseline; }
+  figure .fig-head h3 { margin: 0; }
+  figure .note, figcaption { color: var(--ormus-ink-muted); font-size: .85rem; line-height: 1.6; max-width: 80ch; }
+  figure svg { width: 100%; height: auto; display: block; max-width: 100%; font-family: var(--ormus-font-sans); }
+  .scroll { overflow-x: auto; }
+  .scroll svg { min-width: 560px; }
+  .diagram svg { min-width: 1100px; font-size: 12px; }
+  .diagram .lane { fill: var(--ormus-ink); opacity: .035; }
+  .diagram .lane--jev { fill: var(--ormus-gold); opacity: .07; }
+  .diagram .lanelab { font-family: var(--ormus-font-mono); font-size: 10.5px; letter-spacing: .08em; fill: var(--ormus-ink-muted); }
+  .diagram .lanelab--jev { fill: var(--ormus-gold); }
+  .diagram .box { fill: var(--ormus-deep); stroke: var(--ormus-ink-muted); stroke-width: 1; }
+  .diagram .box--jev { stroke: var(--ormus-gold); stroke-width: 1.5; }
+  .diagram .box--person { stroke: var(--ormus-ink-muted); stroke-dasharray: 4 3; }
+  .diagram .box--model { stroke: var(--ormus-ink); }
+  .diagram .box--tape { stroke: var(--ormus-gold); stroke-dasharray: 4 3; }
+  .diagram text { fill: var(--ormus-ink); }
+  .diagram .t-mute { fill: var(--ormus-ink-muted); font-size: 11px; }
+  .diagram .t-gold { fill: var(--ormus-gold); }
+  .diagram .t-bold { font-weight: 600; }
+  .diagram .fl { stroke: var(--ormus-ink-muted); fill: none; stroke-width: 1.2; }
+  .diagram .fl--jev { stroke: var(--ormus-gold); }
+  .diagram .fl--person { stroke: var(--ormus-ink-muted); stroke-dasharray: 4 3; }
+  .diagram .fl--model { stroke: var(--ormus-ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .85rem; color: var(--ormus-ink-muted); }
+  .legend span { display: inline-flex; align-items: center; gap: .5rem; }
+  .legend i { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--ormus-ink-muted); }
+  .legend i.jev { border-top-color: var(--ormus-gold); }
+  .legend i.model { border-top-color: var(--ormus-ink); }
+  .legend i.person { border-top-style: dashed; }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1.25rem; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; }
+  .steps .fusion-card p { color: var(--ormus-ink-muted); font-size: .92rem; line-height: 1.65; }
+  .q { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: .25rem .9rem; padding: .7rem 0; border-top: 1px solid var(--ormus-hairline); }
+  .q:first-of-type { border-top: 0; }
+  .q .id { font-family: var(--ormus-font-mono); font-size: .8rem; color: var(--ormus-gold); }
+  .q .kd { color: var(--ormus-ink-muted); font-size: .72rem; font-family: var(--ormus-font-mono); }
+  .q .text { font-size: .95rem; }
+  .q .crit { color: var(--ormus-ink-muted); font-size: .84rem; line-height: 1.55; }
+  .crit b { color: var(--ormus-ink); font-weight: 500; }
+  @media (max-width: 560px) { .q { grid-template-columns: 1fr; } }
+
+  /* Charts */
+  .charts { display: grid; gap: 1.25rem; }
+  .ax { stroke: var(--ormus-hairline); stroke-width: 1; }
+  .tick { fill: var(--ormus-ink-muted); font-size: 11px; font-family: var(--ormus-font-mono); }
+  .rowlab { fill: var(--ormus-ink); font-size: 14px; }
+  .rowsub { fill: var(--ormus-ink-muted); font-size: 11px; font-family: var(--ormus-font-mono); }
+  .val { fill: var(--ormus-ink); font-size: 13px; font-family: var(--ormus-font-mono); font-weight: 500; }
+  .val-gold { fill: var(--ormus-gold); }
+  .ratio { fill: var(--ormus-gold); font-size: 15px; font-family: var(--ormus-font-display); }
+  .ratio-one { fill: var(--ormus-ink-muted); font-size: 13px; font-family: var(--ormus-font-mono); }
+  .m-gold { fill: var(--ormus-gold); } .m-ink { fill: var(--ormus-ink); } .m-muted { fill: var(--ormus-ink-muted); }
+  .bar { transition: fill .15s ease; }
+  .hit { fill: transparent; }
+  .hit:hover ~ .bar, .hit:focus ~ .bar { fill: var(--ormus-gold-bright); }
+
+  ul.plain { margin: 0; padding-left: 1.2rem; max-width: var(--measure); }
+  ul.plain li { margin-bottom: .5rem; }
+  ol.next { margin: 0; padding-left: 1.4rem; max-width: var(--measure); }
+  ol.next li { margin-bottom: .6rem; }
+  ol.next li::marker { font-family: var(--ormus-font-mono); color: var(--ormus-gold); font-size: .8rem; }
+  .counter { border-left: 2px solid var(--ormus-gold); padding: .2rem 0 .2rem 1rem; color: var(--ormus-ink-muted); font-size: .92rem; max-width: var(--measure); }
+  .counter b { color: var(--ormus-ink); font-weight: 500; }
+
+  /* Explorer */
+  .explorer { display: grid; gap: 1rem; }
+  .toolbar { display: grid; gap: .75rem; }
+  .search { display: flex; align-items: center; gap: .6rem; border: 1px solid var(--ghost-border); border-radius: var(--ormus-radius); padding: .5rem .8rem; background: var(--ormus-bg-muted); }
+  .search:focus-within { border-color: var(--ormus-gold); }
+  .search input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--ormus-ink); font-family: var(--ormus-font-sans); font-size: 1rem; outline: none; }
+  .search input::placeholder { color: var(--ormus-muted); }
+  .filters { display: grid; gap: .5rem; }
+  .filters .row { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+  .filters .row .mono-label { margin-right: .4rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: .5rem 2rem; font-family: var(--ormus-font-mono); font-size: .78rem; color: var(--ormus-ink-muted); }
+  .stats b { color: var(--ormus-ink); font-weight: 500; }
+  .stats .g { color: var(--ormus-gold); }
+  #results table { min-width: 60rem; font-size: .84rem; }
+  #results th button { all: unset; cursor: pointer; font: inherit; color: inherit; }
+  #results th button:hover { color: var(--ormus-gold); }
+  #results tbody tr { cursor: pointer; }
+  #results tr.detail td { background: var(--ormus-code-bg); cursor: default; }
+  #results tr.detail:hover td { background: var(--ormus-code-bg); }
+  .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .5rem 1.5rem; font-size: .84rem; }
+  .detail-grid .mono-label { display: block; margin-bottom: .1rem; }
+  .verdict { font-family: var(--ormus-font-mono); font-size: .78rem; white-space: nowrap; }
+  .verdict--passed::before { content: '✓ '; color: var(--ormus-gold); }
+  .verdict--failed::before { content: '✕ '; color: var(--ormus-ink); }
+  .verdict--escalate::before { content: '⊘ '; color: var(--ormus-ink-muted); }
+  .verdict--stopped::before { content: '· '; color: var(--ormus-muted); }
+  .verdict--none::before { content: '∅ '; color: var(--ormus-ink-muted); }
+  .verdict--contradicted::before { content: '✕ '; color: var(--ormus-ink); }
+  .verdict--verified::before { content: '✓ '; color: var(--ormus-gold); }
+  .verdict--unsupported::before { content: '? '; color: var(--ormus-ink-muted); }
+  .wrong { color: var(--ormus-danger); font-weight: 600; }
+  .empty { padding: 1.5rem; color: var(--ormus-ink-muted); }
+  .clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 28rem; }
+
+  .files { display: grid; gap: 1.5rem; }
+  .files ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+  .files li { display: grid; grid-template-columns: minmax(0, 1fr); gap: .1rem .75rem; font-size: .9rem; padding: .5rem 0; border-bottom: 1px solid var(--ormus-hairline); }
+  .files li:last-child { border-bottom: 0; }
+  .files li code { white-space: normal; overflow-wrap: anywhere; }
+  .files li span { color: var(--ormus-ink-muted); font-size: .85rem; line-height: 1.5; }
+  @media (min-width: 720px) { .files li { grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); } }
+
+  .fusion-btn { display: inline-flex; align-items: center; justify-content: center; padding: .5rem 1rem; font-weight: 500; font-size: 1rem; border-radius: var(--ormus-radius); transition: color .15s ease, border-color .15s ease, opacity .15s ease; cursor: pointer; text-decoration: none; border-bottom: 0; font-family: var(--ormus-font-sans); }
+  .fusion-btn--primary { background: var(--ormus-gold); color: var(--ormus-on-gold); border: 1px solid var(--ormus-gold); }
+  .fusion-btn--primary:hover { opacity: .9; color: var(--ormus-on-gold); }
+  .fusion-btn--ghost { border: 1px solid var(--ghost-border); color: var(--ormus-ink); background: transparent; }
+  .fusion-btn--ghost:hover { border-color: var(--ormus-gold); color: var(--ormus-gold); }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+  footer { padding-top: 2.5rem; display: grid; gap: .5rem; color: var(--ormus-ink-muted); font-size: .85rem; }
+  footer .rule { width: 3rem; height: 1px; background: var(--ormus-gold); margin-bottom: .75rem; }
+
+  @media print {
+    .surface-firm::before, .surface-firm::after, nav.jump, .fusion-btn { display: none !important; }
+    html, body, .surface-firm { background: white !important; color: #111 !important; }
+    :root { --ormus-ink: #111; --ormus-ink-muted: #444; --ormus-muted: #666; --ormus-gold: var(--print-gold); --ormus-gold-bright: var(--print-gold); --ormus-hairline: rgba(0,0,0,.15); --ormus-bg-elevated: transparent; --ormus-bg-muted: transparent; --ormus-code-bg: #f4f4f4; --ormus-deep: white; --card-border: rgba(0,0,0,.15); }
+  }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-classify" viewBox="0 0 24 24"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v4M12 10l-6 6M12 10l6 6M6 16v4M18 16v4"/></symbol>
+  <symbol id="i-gate" viewBox="0 0 24 24"><path d="M4 20V6M2 20h6M4 10h12"/><circle cx="18.5" cy="10" r="2.2"/><path d="M4 6l2-2"/></symbol>
+  <symbol id="i-verify" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-tape" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="7.5" cy="12" r="2.6"/><circle cx="16.5" cy="12" r="2.6"/><path d="M7.5 9.4h9M7.5 14.6h9"/></symbol>
+  <symbol id="i-park" viewBox="0 0 24 24"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M10 9v6M14 9v6"/></symbol>
+  <symbol id="i-model" viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
+  <symbol id="i-page" viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 4v5h5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+  <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2-2 6z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></symbol>
+  <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-6 10a1.5 1.5 0 0 0 1.3 2.2h13.4A1.5 1.5 0 0 0 20 19L14 9V3"/><path d="M7 15h10"/></symbol>
+  <symbol id="i-live" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4M3.5 3.5a12 12 0 0 0 0 17M20.5 3.5a12 12 0 0 1 0 17"/></symbol>
+</svg>
+
+<div class="surface-firm">
+<main class="page">
+
+  <header class="masthead">
+    <div class="words">
+      <div class="meta-row">
+        <span class="mono-label mono-label--gold">Handoff for the Vibium team</span>
+        <span class="mono-label">2026-09-28</span>
+        <span class="mono-label">jev-1.13.0 · vibium 26.8.21</span>
+      </div>
+      <h1 class="fusion-reveal">A typed judge in front of the browser</h1>
+      <p class="lede">Jev answers the two questions a browser loop asks most, in a quarter of a second, without a model turn. Vibium does the acting. Every experiment and every row is on this page, built from <code>results/registry.json</code>.</p>
+    </div>
+    <div class="art" aria-hidden="true">
+      <svg viewBox="0 0 320 320">
+        <rect class="gold" x="24" y="-16" width="128" height="288" rx="3"/>
+        <rect class="mutedb" x="176" y="96" width="48" height="24" rx="3"/>
+        <rect class="bright" x="176" y="128" width="72" height="144" rx="3"/>
+        <rect class="inkb" x="264" y="200" width="80" height="72" rx="3"/>
+        <line class="rule" x1="0" y1="80" x2="320" y2="80"/><line class="rule" x1="0" y1="128" x2="320" y2="128"/>
+        <line class="rule" x1="0" y1="176" x2="320" y2="176"/><line class="rule" x1="0" y1="224" x2="320" y2="224"/>
+      </svg>
+    </div>
+  </header>
+
+  <nav class="jump" aria-label="Sections">
+    <a href="#summary">Summary</a><a href="#record">The record</a><a href="#loop">The loop</a><a href="#questions">Questions</a><a href="#observed">Observed</a><a href="#prospects">Prospects</a><a href="#assay">Assay</a><a href="#explore">Explore</a><a href="#files">Files</a>
+  </nav>
+
+  <section id="summary">
+    <div class="headline">
+      <span class="mono-label">Executive summary</span>
+      <p class="claim">On literal browser decisions, Jev is 164× faster than the model loop and was wrong {{verifyWrong}} times in {{verifyDecided}} decided verdicts. The rest escalate to the model or a person by design.</p>
+      <div class="tiles">
+        <article class="fusion-card tile"><span class="mono-label">Per decision</span><div class="num">248<small>ms</small></div><p>Median Jev answer on eight real pages. The same claim through <code>vibium check</code> took 41.0 s.</p></article>
+        <article class="fusion-card tile"><span class="mono-label">Wrong verdicts</span><div class="num">{{verifyWrong}}<small>of {{verifyDecided}}</small></div><p>Bench 6 of 6, real sites 3 of 3, corpus 73 of 73 decided right. {{verifyEscalates}} escalated instead of guessing.</p></article>
+        <article class="fusion-card tile"><span class="mono-label">Whole login</span><div class="num">5.0<small>s</small></div><p>Gate plus verify with Jev, against 32.8 s for the model-only loop on the same site.</p></article>
+        <article class="fusion-card tile"><span class="mono-label">Experiments</span><div class="num">{{experiments}}<small>encoded</small></div><p>{{jevCalls}} Jev calls, {{rows}} encoded rows, {{pages}} pages on {{sites}} sites, {{judges}} judges. All searchable below.</p></article>
+      </div>
+      <p>The pattern: code classifies each Vibium verb, Jev answers one gate question before a commit verb and one verify question after the page settles, a tape replays answers it has seen, and anything that touches money, sending or deletion parks for a person before any call is made. The model stays in the loop for planning unknown pages and for the claims Jev escalates.</p>
+    </div>
+  </section>
+
+  <section id="record">
+    <div class="section-head">
+      <span class="mono-label">The record</span>
+      <h2>What was run, exactly</h2>
+      <p>{{experiments}} experiments so far: lab runs on recorded pages, live runs against real sites and a local fixture, and computer-use style proxies. Every number on this page comes from one of the files named in the last column; the registry that holds them is <code>results/registry.json</code>, built by <code>npm run registry</code>.</p>
+    </div>
+    <div class="record" role="list">
+      <div role="listitem"><div class="k">{{experiments}}</div><span class="mono-label">experiments</span></div>
+      <div role="listitem"><div class="k">{{jevCalls}}</div><span class="mono-label">Jev calls</span></div>
+      <div role="listitem"><div class="k">{{rows}}</div><span class="mono-label">rows encoded</span></div>
+      <div role="listitem"><div class="k">{{pages}}</div><span class="mono-label">pages</span></div>
+      <div role="listitem"><div class="k">{{sites}}</div><span class="mono-label">sites</span></div>
+      <div role="listitem"><div class="k">{{judges}}</div><span class="mono-label">judges compared</span></div>
+    </div>
+    <h4 style="margin-top:1.75rem">Example tasks</h4>
+    <p class="note" style="color:var(--ormus-ink-muted);font-size:.9rem;margin-bottom:.75rem">Each chip is a real row. Pick one to open it in the explorer.</p>
+    <div class="chips" id="taskChips">
+      <button class="chip" data-q="login-B-jev-policy"><svg class="ic"><use href="#i-gate"/></svg>Log in on the fixture site, Jev gating the submit</button>
+      <button class="chip" data-q="hn-click-new"><svg class="ic"><use href="#i-cursor"/></svg>Click "new" on Hacker News</button>
+      <button class="chip" data-q="wiki-search"><svg class="ic"><use href="#i-search"/></svg>Search a name on Wikipedia</button>
+      <button class="chip" data-q="gh-issue-filter"><svg class="ic"><use href="#i-verify"/></svg>Filter GitHub issues (the fill that never stuck)</button>
+      <button class="chip" data-q="npm-react"><svg class="ic"><use href="#i-page"/></svg>Is this the npm page for react?</button>
+      <button class="chip" data-q="wiki-ada-false"><svg class="ic"><use href="#i-page"/></svg>Does the article say Ada Lovelace invented JavaScript?</button>
+      <button class="chip" data-q="pick-search-box"><svg class="ic"><use href="#i-classify"/></svg>Pick the search box among 80 elements</button>
+      <button class="chip" data-q="pick-impossible"><svg class="ic"><use href="#i-park"/></svg>Pay for a subscription (Jev declined to pick)</button>
+      <button class="chip" data-q="login-page@e3"><svg class="ic"><use href="#i-gate"/></svg>May this Login button run? (gate questions)</button>
+      <button class="chip" data-q="rec-smoke-rfc-pdf"><svg class="ic"><use href="#i-tape"/></svg>Record a row; the "PDF" that was text/plain</button>
+      <button class="chip" data-q="pixel-operator-login"><svg class="ic"><use href="#i-camera"/></svg>Log in by screenshots and pixel clicks</button>
+      <button class="chip" data-q="E9"><svg class="ic"><use href="#i-live"/></svg>The 80-row corpus, 3 parallel sessions</button>
+    </div>
+    <div class="table-wrap" style="margin-top:1.75rem">
+      <table id="expTable">
+        <thead><tr><th>#</th><th>Experiment</th><th>Kind</th><th>n</th><th>What</th><th>Result</th><th>Stamp</th><th>File</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="note" style="color:var(--ormus-ink-muted);font-size:.85rem;margin-top:.75rem">Stamps follow the notebook grammar: ⚖ measured with a real number · ✓ accepted · ◐ partial, below the sample floor · ± refine · ? speculative · ⊘ gate, honestly unmeasured. A glyph and a word, never a color alone.</p>
+  </section>
+
+  <section id="loop">
+    <div class="section-head">
+      <span class="mono-label">How one step runs</span>
+      <h2>Two questions, one tape, four rails</h2>
+      <p>The loop wraps <code>vibium --json</code>. Reads and tab edits never involve Jev. A commit verb pays one gate call before it runs; a step with an expectation pays one verify call after the page settles. Jev's "not sure" goes to a person for the gate and to the model for the verify.</p>
+    </div>
+    <div class="steps">
+      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-classify"/></svg><div><span class="mono-label mono-label--gold">Classify</span><h3>Verb classes in code</h3><p><code>map</code>, <code>text</code>, <code>url</code> and <code>fill</code> never call Jev. Only <code>click</code>, <code>press Enter</code> and <code>upload</code> reach the gate. A login costs two calls, not five.</p></div></div></article>
+      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-gate"/></svg><div><span class="mono-label">Gate</span><h3>May this run now?</h3><p>One call with the snapshot and the target: <code>mutatesWorld</code>, <code>reversible</code>, <code>spendsOrSends</code>, <code>blastRadius</code>. Peaked answers apply or refuse; mid-band answers escalate to policy or a person.</p></div></div></article>
+      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-verify"/></svg><div><span class="mono-label">Verify</span><h3>Did the page do it?</h3><p>One call after <code>wait load</code>: <code>outcome</code>, <code>errorShown</code>, <code>blocked</code>. Entropy above 0.6 escalates to <code>vibium check</code> with the same claim.</p></div></div></article>
+      <article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-tape"/></svg><div><span class="mono-label">Tape</span><h3>Answers replay for free</h3><p>Every answer is keyed by a hash of state and questions. A replayed flow makes zero calls. The recording zip is the proof and the calibration input.</p></div></div></article>
+    </div>
+
+    <figure class="fusion-card" style="margin-top:1.25rem">
+      <div class="fig-head"><h3>One browser step, lane by lane</h3><span class="note">code · Jev · model · person</span></div>
+      <div class="legend"><span><i></i>code, about 13 ms per read</span><span><i class="jev"></i>Jev, one call, 186 to 503 ms measured</span><span><i class="model"></i>model, 15 to 142 s measured</span><span><i class="person"></i>person or operator policy</span></div>
+      <div class="scroll diagram">
+      <svg viewBox="0 0 1180 520" role="img" aria-label="Swimlane diagram. Code classifies the verb; reads, tab edits and navigation act with no Jev call; a commit verb passes host, ref, park and redaction checks in code, then one Jev gate call whose rules route to auto, refuse, or escalate; escalate goes to policy or a person, never the model; after acting, code settles the page and one Jev verify call decides true, false, or escalate; a verify escalate goes to the model and then to a person. Both calls are recorded on a tape so replay makes none.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a5b0c4"/></marker>
+          <marker id="arj" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#d29e3d"/></marker>
+          <marker id="arm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#eceae3"/></marker>
+        </defs>
+        <rect class="lane" x="0" y="22" width="1180" height="132"/>
+        <rect class="lane lane--jev" x="0" y="176" width="1180" height="120"/>
+        <rect class="lane" x="0" y="318" width="1180" height="80"/>
+        <rect class="lane" x="0" y="420" width="1180" height="80"/>
+        <text class="lanelab" x="10" y="40">CODE</text>
+        <text class="lanelab lanelab--jev" x="10" y="194">JEV</text>
+        <text class="lanelab" x="10" y="336">MODEL</text>
+        <text class="lanelab" x="10" y="438">PERSON</text>
+
+        <rect class="box" x="60" y="60" width="110" height="52" rx="3"/>
+        <text x="115" y="82" text-anchor="middle">action</text><text class="t-mute" x="115" y="98" text-anchor="middle">verb + args</text>
+        <line class="fl" x1="170" y1="86" x2="208" y2="86" marker-end="url(#ar)"/>
+        <rect class="box" x="210" y="60" width="96" height="52" rx="3"/>
+        <text x="258" y="82" text-anchor="middle">classify</text><text class="t-mute" x="258" y="98" text-anchor="middle">verb class</text>
+        <path class="fl" d="M306 74 L640 74" marker-end="url(#ar)"/>
+        <text class="t-mute" x="470" y="66" text-anchor="middle">read · tab-edit · nav → no Jev call (host allowlist for nav)</text>
+        <path class="fl" d="M306 100 L338 120" marker-end="url(#ar)"/>
+        <text class="t-mute" x="300" y="128" text-anchor="end">commit</text>
+        <rect class="box" x="340" y="104" width="190" height="44" rx="3"/>
+        <text class="t-mute" x="435" y="122" text-anchor="middle">host allowlist · @ref still in map</text>
+        <text class="t-mute" x="435" y="138" text-anchor="middle">park keyword · redact typed values</text>
+        <path class="fl fl--person" d="M370 148 L370 458 L520 458" marker-end="url(#ar)"/>
+        <text class="t-mute" x="378" y="300">pay / send / delete</text>
+        <text class="t-mute" x="378" y="314">→ no call, park for a person</text>
+        <path class="fl fl--jev" d="M470 148 L470 200" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="400" y="202" width="150" height="74" rx="3"/>
+        <text class="t-gold t-bold" x="475" y="221" text-anchor="middle">gate call</text>
+        <text class="t-mute" x="475" y="238" text-anchor="middle">mutatesWorld · reversible</text>
+        <text class="t-mute" x="475" y="253" text-anchor="middle">spendsOrSends · blastRadius</text>
+        <text class="t-mute" x="475" y="268" text-anchor="middle">state: url, title, action, target, text</text>
+        <line class="fl fl--jev" x1="550" y1="239" x2="578" y2="239" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="580" y="212" width="86" height="54" rx="3"/>
+        <text x="623" y="235" text-anchor="middle">rules</text><text class="t-mute" x="623" y="251" text-anchor="middle">in JSON</text>
+        <path class="fl fl--jev" d="M655 212 L655 114" marker-end="url(#arj)"/>
+        <text class="t-gold" x="600" y="170">auto</text>
+        <line class="fl" x1="666" y1="252" x2="698" y2="252" marker-end="url(#ar)"/>
+        <text x="722" y="256">refuse ✕ final</text>
+        <path class="fl fl--person" d="M623 266 L623 434" marker-end="url(#ar)"/>
+        <text class="t-mute" x="615" y="372" text-anchor="end">escalate → policy</text>
+        <text class="t-mute" x="615" y="386" text-anchor="end">or a person, not the model</text>
+        <rect class="box box--person" x="520" y="436" width="150" height="46" rx="3"/>
+        <text x="595" y="455" text-anchor="middle">operator policy</text><text class="t-mute" x="595" y="471" text-anchor="middle">compose · escalate · refuse</text>
+        <path class="fl fl--person" d="M670 448 L712 448 L712 114" marker-end="url(#ar)"/>
+        <text class="t-mute" x="718" y="300">compose</text>
+        <rect class="box" x="642" y="60" width="96" height="52" rx="3"/>
+        <text x="690" y="82" text-anchor="middle">act</text><text class="t-mute" x="690" y="98" text-anchor="middle">vibium verb</text>
+        <line class="fl" x1="738" y1="86" x2="776" y2="86" marker-end="url(#ar)"/>
+        <rect class="box" x="778" y="60" width="190" height="52" rx="3"/>
+        <text class="t-mute" x="873" y="78" text-anchor="middle">settle: wait load · snapshot</text>
+        <text class="t-mute" x="873" y="93" text-anchor="middle">labelDiff(before, after) · urlChanged</text>
+        <text class="t-mute" x="873" y="106" text-anchor="middle" font-size="10">only when the step has an expectation</text>
+        <path class="fl fl--jev" d="M873 112 L873 200" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="790" y="202" width="166" height="74" rx="3"/>
+        <text class="t-gold t-bold" x="873" y="221" text-anchor="middle">verify call</text>
+        <text class="t-mute" x="873" y="238" text-anchor="middle">outcome · errorShown · blocked</text>
+        <text class="t-mute" x="873" y="253" text-anchor="middle">or login-verify: 4 questions</text>
+        <text class="t-mute" x="873" y="268" text-anchor="middle">state: claim, urls, text, labels ±</text>
+        <line class="fl fl--jev" x1="956" y1="239" x2="984" y2="239" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="986" y="212" width="86" height="54" rx="3"/>
+        <text x="1029" y="235" text-anchor="middle">rules</text><text class="t-mute" x="1029" y="251" text-anchor="middle">entropy first</text>
+        <line class="fl fl--jev" x1="1072" y1="228" x2="1108" y2="228" marker-end="url(#arj)"/>
+        <text class="t-gold" x="1112" y="232">true ✓</text>
+        <line class="fl" x1="1072" y1="252" x2="1108" y2="252" marker-end="url(#ar)"/>
+        <text x="1112" y="256">false ✕</text>
+        <path class="fl fl--model" d="M1029 266 L1029 334" marker-end="url(#arm)"/>
+        <text class="t-mute" x="1036" y="304">escalate</text>
+        <rect class="box box--model" x="930" y="336" width="200" height="46" rx="3"/>
+        <text x="1030" y="355" text-anchor="middle">language model, same claim</text><text class="t-mute" x="1030" y="371" text-anchor="middle">passed → true · failed → false</text>
+        <path class="fl fl--person" d="M1030 382 L1030 434" marker-end="url(#ar)"/>
+        <text class="t-mute" x="1036" y="412">inconclusive</text>
+        <rect class="box box--person" x="930" y="436" width="200" height="46" rx="3"/>
+        <text x="1030" y="455" text-anchor="middle">person</text><text class="t-mute" x="1030" y="471" text-anchor="middle">the claim was not literal enough</text>
+        <rect class="box box--tape" x="60" y="212" width="300" height="54" rx="3"/>
+        <text class="t-gold t-bold" x="210" y="233" text-anchor="middle">tape</text>
+        <text class="t-mute" x="210" y="250" text-anchor="middle">same page + same questions → recorded answer, no call</text>
+        <text class="t-mute" x="210" y="262" text-anchor="middle" font-size="10">a replayed flow makes zero Jev calls</text>
+      </svg>
+      </div>
+      <figcaption>Left to right: reads, form fills and navigation never involve Jev. A commit pays one gate call before it runs. A step with a stated expectation pays one verify call after the page settles. A Jev refusal is never overridden, and anything that pays, sends or deletes waits for a person before any call is made.</figcaption>
+    </figure>
+    <p class="counter" style="margin-top:1.25rem"><b>Where this is the wrong tool.</b> An unfamiliar page with no step list still needs the model to plan. A claim that is not literal about one page ("is this a good deal") escalates every time. A site that renders nothing to text (canvas apps, image-only pages) gives Jev nothing to read; the screenshot judge wins there.</p>
+  </section>
+
+  <section id="questions">
+    <div class="section-head">
+      <span class="mono-label">The questions Jev is asked</span>
+      <h2>Every question is about one page</h2>
+      <p>Anything that needs comparing, counting or remembering is computed in code and handed over as a value. Text is verbatim from the packs in <code>packs/</code>.</p>
+    </div>
+    <div class="grid-2">
+      <div class="fusion-card">
+        <div class="with-icon"><svg class="ic ic--sm"><use href="#i-gate"/></svg><span class="mono-label mono-label--gold">before an action runs · gate</span></div>
+        <div class="q"><div><div class="id">mutatesWorld</div><div class="kd">yes/no</div></div><div><div class="text">Would this action change anything beyond the browser tab, such as submitting data, changing a record, sending a message, paying, or deleting?</div><div class="crit"><b>yes</b> the target submits, saves, sends, pays, deletes, or changes something the page describes as stored or sent · <b>no</b> it only navigates, opens, expands, filters, or reveals within the tab</div></div></div>
+        <div class="q"><div><div class="id">reversible</div><div class="kd">yes/no</div></div><div><div class="text">If this action turns out to be wrong, does the page offer a way to undo it without losing anything?</div><div class="crit"><b>yes</b> an undo, cancel, edit, or draft path is shown, or the action only opens or navigates · <b>no</b> the page describes it as final, or no undo path is visible</div></div></div>
+        <div class="q"><div><div class="id">spendsOrSends</div><div class="kd">yes/no</div></div><div><div class="text">Does this action spend money or send data to a party outside this page?</div><div class="crit"><b>yes</b> the target or surrounding text is about paying, ordering, sending, sharing, or publishing · <b>no</b> nothing is paid, sent, shared, or published</div></div></div>
+        <div class="q"><div><div class="id">blastRadius</div><div class="kd">scale 0 to 3</div></div><div><div class="text">How much is affected if this action does the wrong thing?</div><div class="crit">0 only what is on screen · 1 one record or form on this site · 2 a shared resource others depend on · 3 money, a message that leaves, or data that cannot be pulled back</div></div></div>
+        <pre style="margin-top:1rem">1  spendsOrSends = yes AND reversible = no          → refuse
+2  mutatesWorld = no                                → run it
+3  mutatesWorld = yes AND spendsOrSends = no
+   AND reversible = yes                             → run it
+   otherwise                                        → escalate</pre>
+      </div>
+      <div class="fusion-card">
+        <div class="with-icon"><svg class="ic ic--sm"><use href="#i-verify"/></svg><span class="mono-label">after the page settles · verify</span></div>
+        <div class="q"><div><div class="id">outcome</div><div class="kd">one of three</div></div><div><div class="text">Which of these does the page evidence say about the claim?</div><div class="crit"><b>verified</b> the text, title, address, or newly present elements state what the claim says · <b>contradicted</b> the page states the opposite, or shows the state the claim says has ended · <b>unsupported</b> neither</div></div></div>
+        <div class="q"><div><div class="id">errorShown</div><div class="kd">yes/no</div></div><div><div class="text">Does the page show an error or failure message about what was just attempted?</div></div></div>
+        <div class="q"><div><div class="id">blocked</div><div class="kd">one of six</div></div><div><div class="text">Which stop, if any, is the page showing instead of the expected result?</div><div class="crit">one-time code · captcha · cookie banner · login wall · error page · <b>none</b></div></div></div>
+        <div class="q"><div><div class="id">login-verify</div><div class="kd">4 questions</div></div><div><div class="text">signedInSignsShown · loginFormGone · credentialErrorShown · interstitial</div><div class="crit">the leaves of the operator interview in <code>handoffs/vibium/interview-login-verify.md</code></div></div></div>
+        <pre style="margin-top:1rem">0  outcome answer is spread out, not peaked        → escalate
+1  errorShown = yes                                → failed
+2  blocked by a code prompt, captcha,
+   login wall, or error page                       → escalate
+3  outcome = contradicted                          → failed
+4  outcome = verified AND errorShown = no          → confirmed
+   otherwise                                       → escalate</pre>
+      </div>
+    </div>
+    <p style="margin-top:1.25rem">A yes/no answer counts only when Jev is confident: yes at 0.85 or above, no at 0.15 or below. Rules run in order and the first that clearly applies wins; a rule that depends on an unsure answer is skipped, never assumed. Rule 0 on verify came from the Wikipedia row in the explorer: "verified" at 0.48 with the rest spread out, and the earlier rules accepted it.</p>
+  </section>
+
+  <section id="observed">
+    <div class="section-head">
+      <div class="arc"><span class="roman">II</span><h2>Observed: same page, same claim, three judges</h2></div>
+      <p>Eight public pages, one claim each, six true and two false. Every judge saw the same settled page. Jev read the page text and element map; the model ran its tool loop; the screenshot proxy read one frame, blind.</p>
+    </div>
+    <div class="charts">
+      <figure class="fusion-card">
+        <div class="fig-head"><h3>Time per decision</h3><span class="note">median, seconds, one scale for all three</span></div>
+        <div class="scroll">
+        <svg viewBox="0 0 640 176" role="img" aria-label="Bar chart on one linear scale. Jev 0.25 seconds, Sonnet screenshot proxy 2.8 seconds, vibium check 41 seconds.">
+          <line class="ax" x1="210" y1="150" x2="620" y2="150"/>
+          <text class="tick" x="210" y="167" text-anchor="middle">0</text><text class="tick" x="301.1" y="167" text-anchor="middle">10 s</text><text class="tick" x="392.2" y="167" text-anchor="middle">20 s</text><text class="tick" x="483.3" y="167" text-anchor="middle">30 s</text><text class="tick" x="574.4" y="167" text-anchor="middle">40 s</text>
+          <line class="ax" x1="301.1" y1="146" x2="301.1" y2="150"/><line class="ax" x1="392.2" y1="146" x2="392.2" y2="150"/><line class="ax" x1="483.3" y1="146" x2="483.3" y2="150"/><line class="ax" x1="574.4" y1="146" x2="574.4" y2="150"/>
+          <text class="rowlab" x="0" y="38">Jev, typed judge</text><text class="rowsub" x="0" y="54">jev-1.13.0 · page text + map</text>
+          <rect class="hit" x="210" y="22" width="410" height="34"><title>Jev: 248 ms median, range 219 to 309 ms, 8 pages</title></rect>
+          <rect class="bar m-gold" x="210" y="26" width="3" height="26"/><text class="val val-gold" x="221" y="44">0.25 s</text><text class="ratio-one" x="286" y="44">1×</text>
+          <text class="rowlab" x="0" y="84">Sonnet, screenshot</text><text class="rowsub" x="0" y="100">computer-use proxy, blind</text>
+          <rect class="hit" x="210" y="68" width="410" height="34"><title>Sonnet screenshot proxy: 2.8 s read-and-decide, 9.2 s per agent</title></rect>
+          <rect class="bar m-ink" x="210" y="72" width="25.5" height="26"/><text class="val" x="243" y="90">2.8 s</text><text class="ratio" x="298" y="91">11× slower</text>
+          <text class="rowlab" x="0" y="130">vibium check</text><text class="rowsub" x="0" y="146">grok-4.6 tool loop</text>
+          <rect class="hit" x="210" y="114" width="410" height="34"><title>vibium check: 41.0 s median, range 15.8 to 141.7 s</title></rect>
+          <rect class="bar m-muted" x="210" y="118" width="373.6" height="26"/><text class="val" x="400" y="136" style="fill:var(--ormus-deep)">41.0 s</text><text class="ratio" x="592" y="137">164×</text>
+        </svg>
+        </div>
+        <figcaption>Jev is the three-pixel gold mark at the left edge: a quarter of a second against 41 seconds on the same page and claim. n = 8; per-row values in the explorer under E5.</figcaption>
+      </figure>
+      <figure class="fusion-card">
+        <div class="fig-head"><h3>The same login, three ways</h3><span class="note">wall time, seconds, local fixture site</span></div>
+        <div class="scroll">
+        <svg viewBox="0 0 640 176" role="img" aria-label="Bar chart. Jev plus policy 5.0 seconds, Sonnet pixel operator 14.2 seconds, model only 32.8 seconds.">
+          <line class="ax" x1="210" y1="150" x2="620" y2="150"/>
+          <text class="tick" x="210" y="167" text-anchor="middle">0</text><text class="tick" x="327.1" y="167" text-anchor="middle">10 s</text><text class="tick" x="444.3" y="167" text-anchor="middle">20 s</text><text class="tick" x="561.4" y="167" text-anchor="middle">30 s</text>
+          <line class="ax" x1="327.1" y1="146" x2="327.1" y2="150"/><line class="ax" x1="444.3" y1="146" x2="444.3" y2="150"/><line class="ax" x1="561.4" y1="146" x2="561.4" y2="150"/>
+          <text class="rowlab" x="0" y="38">Jev + operator policy</text><text class="rowsub" x="0" y="54">scripted verbs, gate, verify</text>
+          <rect class="hit" x="210" y="22" width="410" height="34"><title>Jev + policy: 5.0 s, of which 0.7 s page load; gate 0.33 s, verify 0.50 s</title></rect>
+          <rect class="bar m-gold" x="210" y="26" width="58.6" height="26"/><text class="val val-gold" x="277" y="44">5.0 s</text><text class="ratio-one" x="332" y="44">1×</text>
+          <text class="rowlab" x="0" y="84">Sonnet pixel operator</text><text class="rowsub" x="0" y="100">screenshots, clicks, keys</text>
+          <rect class="hit" x="210" y="68" width="410" height="34"><title>Sonnet pixel operator: 14.2 s self-timed, 23.1 s agent wall; 3 screenshots, 1 click, 30 keys</title></rect>
+          <rect class="bar m-ink" x="210" y="72" width="166.3" height="26"/><text class="val" x="385" y="90">14.2 s</text><text class="ratio" x="440" y="91">2.8× slower</text>
+          <text class="rowlab" x="0" y="130">Model only</text><text class="rowsub" x="0" y="146">vibium run + check, grok-4.6</text>
+          <rect class="hit" x="210" y="114" width="410" height="34"><title>Model only: 32.8 s; run 14.8 s, check 17.3 s</title></rect>
+          <rect class="bar m-muted" x="210" y="118" width="384.2" height="26"/><text class="val" x="537" y="136" style="fill:var(--ormus-deep)">32.8 s</text><text class="ratio" x="603" y="137">6.6×</text>
+        </svg>
+        </div>
+        <figcaption>All three logged in. Page load is 0.6 to 0.7 s of each bar. Jev runs a known flow; the other two also plan it. Rows E6 and E12 in the explorer.</figcaption>
+      </figure>
+    </div>
+    <div class="grid-2" style="margin-top:1.25rem">
+      <div class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-live"/></svg><div><span class="mono-label">Corpus, E9</span><h3>73 of 73 decided right</h3><p style="color:var(--ormus-ink-muted);font-size:.92rem">80 rows, 40 pages with a true and a false claim each, three Vibium sessions in parallel, 88 s. Six rows stopped in code (a bot check, a 429 under load) before any Jev call. One escalated by the entropy rule. The lab verdict on <code>outcome</code>: JEV-SAFE, 98.6% against a 50% baseline, McNemar p = 2.9e-11, Brier 0.006.</p></div></div></div>
+      <div class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#i-verify"/></svg><div><span class="mono-label">Real sites, E7</span><h3>The GitHub row to remember</h3><p style="color:var(--ormus-ink-muted);font-size:.92rem">The scripted fill never took in GitHub's search box. Jev's verify said contradicted at 0.64 in 320 ms and was right. The model-only run typed its own way and passed the page it had typed itself. A typed verify catches silent failures the model loop does not see.</p></div></div></div>
+    </div>
+  </section>
+
+  <section id="prospects">
+    <div class="section-head">
+      <div class="arc"><span class="roman">III</span><h2>Prospects: seven bridges into Vibium, two shipped</h2></div>
+      <p>Ordered from what exists today to what needs Go changes upstream. Each carries its verdict stamp. The one that changes the cost of <code>vibium run</code> is number six.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Bridge</th><th>Where</th><th>Vibium changes</th><th>Stamp</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>CLI wrapper</td><td>jev-tape <code>src/vibium/</code></td><td>none</td><td><span class="stamp"><b>⚖</b>measured, shipped</span></td></tr>
+          <tr><td class="num">2</td><td>Skill</td><td>fork branch <code>feat/jev-typed-gate</code>: <code>skills/jev/SKILL.md</code></td><td>docs only</td><td><span class="stamp"><b>✓</b>written, local, docs-only PR</span></td></tr>
+          <tr><td class="num">3</td><td>Recording reader</td><td>jev-tape reads <code>record stop</code> zips; Haiku labels the last frame</td><td>none</td><td><span class="stamp"><b>±</b>refine: smoke passed, scale run pending</span></td></tr>
+          <tr><td class="num">4</td><td>MCP tools</td><td><code>jev_gate</code>, <code>jev_verify</code>, <code>jev_pick</code> beside <code>vibium mcp</code></td><td>none</td><td><span class="stamp"><b>?</b>speculative, about 200 lines</span></td></tr>
+          <tr><td class="num">5</td><td>Playbook gate</td><td><code>run inspect|walk</code> packs → Jev → <code>report linear</code></td><td>none</td><td><span class="stamp"><b>?</b>waits on upstream branches</span></td></tr>
+          <tr><td class="num">6</td><td>Loop hooks</td><td><code>clicker/internal/verifier/loop.go</code>: <code>--gate CMD</code>, <code>--verify CMD</code></td><td>Go, PR-sized</td><td><span class="stamp"><b>±</b>refine: the PR to write together</span></td></tr>
+          <tr><td class="num">7</td><td>Native provider</td><td><code>VIBIUM_AI_PROVIDER=typesafe</code> for literal claims in <code>check</code></td><td>Go, larger</td><td><span class="stamp stamp--gate"><b>⊘</b>gate: after 3 and 6 have numbers</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:1.25rem"><strong>What we ask of the Vibium team.</strong> Review bridge 6: two optional hooks in the verifier loop, one before every mutating tool call expecting <code>auto | park | refuse</code>, one after each step expecting <code>true | false | escalate</code>. jev-tape provides both commands. The model keeps planning; Jev gates every action it takes, and the loop's 24-action, 3-minute budget stops burning on forks a typed judge settles. Bridge 2 is a docs-only PR that can land first.</p>
+  </section>
+
+  <section id="assay">
+    <div class="section-head">
+      <div class="arc"><span class="roman">IV</span><h2>Assay: what was struck, what is still a gate</h2></div>
+      <p>The gates below are honest: each names the measurement that would strike it.</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <h3>Struck ⚖</h3>
+        <ul class="plain">
+          <li><span class="stamp"><b>⚖</b></span> 164× per decision on eight pages, at least as accurate as the model on this sample. E5.</li>
+          <li><span class="stamp"><b>⚖</b></span> 98.6% on 74 corpus rows against a 50% baseline, p = 2.9e-11, Brier 0.006. E9.</li>
+          <li><span class="stamp"><b>⚖</b></span> Blind screenshot judge 7 of 8 in 2.8 s; its miss was the Cloudflare wall where the image shows no npm page. E11. The first launch was not blind and is kept for comparison only.</li>
+          <li><span class="stamp"><b>⚖</b></span> Loop shape: at most two calls per applied step, zero on replay, twin-tested against a fake binary. <code>src/vibium/vibium.test.ts</code>.</li>
+          <li><span class="stamp"><b>⚖</b></span> A gate escalate handed to the model times out at 180 s with no verdict. E6-C. Model fallback is verify-only.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Gates ⊘</h3>
+        <ul class="plain">
+          <li><span class="stamp stamp--gate"><b>⊘</b></span> Accuracy out of sample. Claims were written with the pages known, thresholds hand-set, no fit/test split. Struck by: the 140-row, 18-kind catalog with blind claims and a hash split, then <code>npm run calibrate</code> against Haiku labels.</li>
+          <li><span class="stamp stamp--gate"><b>⊘</b></span> Claude computer use itself. A Sonnet proxy stood in. Struck by: the same eight pages and login from the desktop app, same blind protocol.</li>
+          <li><span class="stamp stamp--gate"><b>⊘</b></span> <code>errorShown</code> and <code>blocked</code> at scale. NO-INFORMATION on the corpus because every page was normal. Struck by: the error, login-wall and consent rows already in <code>catalog-100.json</code>.</li>
+          <li><span class="stamp stamp--gate"><b>⊘</b></span> Routine commits on <code>auto</code>. The gate escalated on the login submit both times and a person composed. Struck by: an operator policy for allowlisted hosts, measured on the action rows.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="explore">
+    <div class="section-head">
+      <div class="arc"><span class="roman">V</span><h2>Explore every result</h2></div>
+      <p>All {{rows}} rows, encoded in this page. Search by task, site, claim or id; filter by experiment, verdict, judge and kind; open a row for its probabilities, note and source file.</p>
+    </div>
+    <div class="explorer">
+      <div class="toolbar">
+        <label class="search"><svg class="ic ic--sm"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search tasks, sites, claims, ids…" autocomplete="off" aria-label="Search results"></label>
+        <div class="filters">
+          <div class="row" id="fExp"><span class="mono-label">Experiment</span></div>
+          <div class="row" id="fVerdict"><span class="mono-label">Jev verdict</span></div>
+          <div class="row" id="fJudge"><span class="mono-label">Judge present</span></div>
+          <div class="row" id="fKind"><span class="mono-label">Kind</span></div>
+        </div>
+        <div class="stats" id="stats"></div>
+      </div>
+      <div class="table-wrap" id="results"></div>
+    </div>
+  </section>
+
+  <section id="files">
+    <div class="section-head">
+      <span class="mono-label">File index</span>
+      <h2>Where everything is</h2>
+      <p>Two repositories on branch <code>claude/nice-fermat-ky9qtz</code>, plus one local branch on the Vibium fork. Nothing has been pushed to HermeticOrmus/vibium.</p>
+    </div>
+    <div class="files">
+      <div>
+        <h3>manutej/jev-tape <span class="mono-label">runtime · contains main</span></h3>
+        <ul>
+          <li><code>docs/HANDOFF-VIBIUM-TEAM.md</code><span>This brief as Markdown, with the same file index.</span></li>
+          <li><code>docs/vibium-team-brief.html</code><span>This page.</span></li>
+          <li><code>docs/HANDOFF-2026-09-28.md</code><span>Session state, measurements, next steps in order, rails.</span></li>
+          <li><code>spec/SURFACES-VIBIUM.md</code><span>The design and every measurement: §1 to §9, results in §8a to §8e and §8c′.</span></li>
+          <li><code>docs/COMPUTER-USE-CROSSCHECK.md</code><span>Blind screenshot judge and pixel operator beside Jev and <code>check</code>.</span></li>
+          <li><code>docs/VIBIUM-BRIDGES.md</code>, <code>docs/PARALLEL-SPEND.md</code>, <code>docs/LOCAL-DEMO.md</code><span>The bridges; the ten-agent corpus design; run it from a Mac.</span></li>
+          <li><code>src/vibium/{cli,decide,pack,tape,step,pick}.ts</code><span>The loop. 13 twins in <code>vibium.test.ts</code>.</span></li>
+          <li><code>packs/browser.action-gate.json</code>, <code>packs/browser.step-verify.json</code><span>The questions above, with compose rules and <code>notForJev</code> lines.</span></li>
+          <li><code>scripts/vibium-step.ts</code>, <code>vibium-bench.ts</code>, <code>vibium-pick.ts</code>, <code>vibium-corpus.ts</code>, <code>calibrate.ts</code><span><code>npm run vibium | bench | pick | corpus | calibrate</code>.</span></li>
+          <li><code>scripts/demo.sh</code>, <code>scripts/fixture-site.mjs</code>, <code>scripts/workflow-parallel-corpus.js</code><span><code>npm run demo:vibium</code>; the fixture site; ten drivers and ten blinded labellers.</span></li>
+          <li><code>fixtures/vibium/catalog-pages.json</code>, <code>catalog-100.json</code><span>80 rows measured; 140 rows across 18 kinds, ready.</span></li>
+          <li><code>.claude/skills/ormus-chrome/</code><span>The design chrome this page wears, as a repo skill with references.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>manutej/JEV-works <span class="mono-label">lab</span></h3>
+        <ul>
+          <li><code>kit/modules/contexts/browser.action-gate.json</code>, <code>browser.step-verify.json</code><span>Canonical question contexts, lint-clean under M1 to M7.</span></li>
+          <li><code>kit/results/browser-bench-check-vs-jev-2026-09-28.json</code><span>E5, per row.</span></li>
+          <li><code>kit/results/browser-step-verify-corpus-2026-09-28.json</code><span>E9 verdicts, McNemar, coverage.</span></li>
+          <li><code>kit/results/browser-crosscheck-computer-use-proxy-2026-09-28.json</code><span>E11 and E12, blind and non-blind, with the key.</span></li>
+          <li><code>kit/results/browser-action-gate-action-gate-2026-09-28.json</code>, <code>browser-step-verify-{step,login}-verify-2026-09-28.json</code><span>E1 to E3, label-free question quality.</span></li>
+          <li><code>kit/modules/items/browser-*.items.json</code><span>Gate targets, verify pairs, login pairs, the 74-row corpus items.</span></li>
+          <li><code>handoffs/vibium-browser.md</code>, <code>handoffs/vibium/*</code><span>Lab handoff; how the login task became a pack; the open use-case interview.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>manutej/vibium <span class="mono-label">fork · local branch feat/jev-typed-gate, not pushed</span></h3>
+        <ul><li><code>skills/jev/SKILL.md</code>, <code>docs/how-to-guides/jev.md</code><span>The docs-only PR, to push after the Mac test.</span></li></ul>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="fusion-btn fusion-btn--primary" href="https://github.com/manutej/jev-tape/tree/claude/nice-fermat-ky9qtz">See the runtime</a>
+      <a class="fusion-btn fusion-btn--ghost" href="https://github.com/manutej/JEV-works/tree/claude/nice-fermat-ky9qtz">See the lab results</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="rule"></div>
+    <span class="mono-label">Every number carries n, baseline, and whether thresholds were fitted</span>
+    <span>Jev is TypeSafe System One, model pin jev-1.13.0. Vibium binary 26.8.21 built from HermeticOrmus/vibium at feat/linear-tasks. Model runs on xai grok-4.6. All measurements 2026-09-28.</span>
+  </footer>
+
+</main>
+</div>
+
+<script id="data" type="application/json">/*__DATA__*/</script>
+<script>
+(function () {
+  var els = document.querySelectorAll('.fusion-reveal');
+  requestAnimationFrame(function () { requestAnimationFrame(function () { for (var i = 0; i < els.length; i++) els[i].classList.add('is-revealed'); }); });
+
+  var D = JSON.parse(document.getElementById('data').textContent);
+  var rows = D.rows, exps = D.experiments;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var ms = function (v) { return v == null ? '' : (v >= 1000 ? (v / 1000).toFixed(1) + ' s' : v + ' ms'); };
+  var pf = function (p) { return p == null ? '' : Number(p).toFixed(2); };
+
+  // Experiment table
+  var tb = document.querySelector('#expTable tbody');
+  tb.innerHTML = exps.map(function (e) {
+    return '<tr><td class="num lead">' + e.id + '</td><td>' + esc(e.title) + '</td><td><span class="kind kind--' + e.kind + '">' + e.kind + '</span></td><td class="num">' + e.n + '</td><td>' + esc(e.what) + '</td><td>' + esc(e.result) + '</td><td><span class="stamp' + (e.stamp === '⊘' ? ' stamp--gate' : '') + '"><b>' + e.stamp + '</b>' + esc(e.stampWord) + '</span></td><td class="file">' + esc(e.file) + '</td></tr>';
+  }).join('');
+
+  // Filters
+  var state = { q: '', exp: null, verdict: null, judge: null, kind: null, sort: null, open: null };
+  var expCounts = {}; rows.forEach(function (r) { expCounts[r.exp] = (expCounts[r.exp] || 0) + 1; }); expCounts.E11 = rows.filter(function (r) { return r.sonnet && r.exp === 'E5'; }).length;
+  var verdictOf = function (r) { if (!r.jev) return 'none'; var v = r.jev; if (v === 'none') return 'none'; if (/^(passed|failed|escalate|stopped|verified|contradicted|unsupported)$/.test(v)) return v; return 'answered'; };
+  function chipRow(id, label, items, key) {
+    var el = document.getElementById(id);
+    items.forEach(function (it) {
+      var b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      b.innerHTML = esc(it.label) + (it.n != null ? ' <span class="n">' + it.n + '</span>' : '');
+      b.addEventListener('click', function () { state[key] = state[key] === it.value ? null : it.value; state.open = null; render(); });
+      b.dataset.value = it.value; el.appendChild(b);
+    });
+  }
+  chipRow('fExp', 'Experiment', exps.map(function (e) { return { value: e.id, label: e.id + ' ' + e.title.split(':')[0].split(',')[0], n: expCounts[e.id] || 0 }; }), 'exp');
+  chipRow('fVerdict', 'Verdict', [['passed', 'passed'], ['failed', 'failed'], ['escalate', 'escalate'], ['stopped', 'stopped in code'], ['none', 'none'], ['answered', 'answered (gate / login)']].map(function (v) { return { value: v[0], label: v[1], n: rows.filter(function (r) { return verdictOf(r) === v[0]; }).length }; }), 'verdict');
+  chipRow('fJudge', 'Judge', [['jev', 'Jev'], ['model', 'vibium check / run'], ['sonnet', 'Sonnet proxy']].map(function (v) { return { value: v[0], label: v[1], n: rows.filter(function (r) { return r[v[0]] != null; }).length }; }), 'judge');
+  var kinds = {}; rows.forEach(function (r) { kinds[r.kind] = (kinds[r.kind] || 0) + 1; });
+  chipRow('fKind', 'Kind', Object.keys(kinds).sort().map(function (k) { return { value: k, label: k, n: kinds[k] }; }), 'kind');
+
+  function matches(r) {
+    if (state.exp) { if (state.exp === 'E11') { if (!(r.exp === 'E5' && r.sonnet)) return false; } else if (r.exp !== state.exp) return false; }
+    if (state.verdict && verdictOf(r) !== state.verdict) return false;
+    if (state.judge && r[state.judge] == null) return false;
+    if (state.kind && r.kind !== state.kind) return false;
+    if (state.q) { var hay = [r.id, r.task, r.site, r.claim, r.note, r.exp, r.expect, r.jev].join(' ').toLowerCase(); if (hay.indexOf(state.q) < 0) return false; }
+    return true;
+  }
+  function median(a) { if (!a.length) return null; a = a.slice().sort(function (x, y) { return x - y; }); var m = a.length >> 1; return a.length % 2 ? a[m] : Math.round((a[m - 1] + a[m]) / 2); }
+  function render() {
+    document.querySelectorAll('.filters .chip').forEach(function (b) { var key = b.parentNode.id === 'fExp' ? 'exp' : b.parentNode.id === 'fVerdict' ? 'verdict' : b.parentNode.id === 'fJudge' ? 'judge' : 'kind'; b.setAttribute('aria-pressed', state[key] === b.dataset.value ? 'true' : 'false'); });
+    var list = rows.filter(matches);
+    if (state.sort) { var k = state.sort.key, d = state.sort.dir; list = list.slice().sort(function (a, b) { var x = a[k] == null ? Infinity : a[k], y = b[k] == null ? Infinity : b[k]; return (x > y ? 1 : x < y ? -1 : 0) * d; }); }
+    var jevMs = list.filter(function (r) { return r.jevMs != null && r.jevMs < 5000; }).map(function (r) { return r.jevMs; });
+    var decided = list.filter(function (r) { return r.jevOk === true || r.jevOk === false; }), right = decided.filter(function (r) { return r.jevOk; }).length;
+    var escs = list.filter(function (r) { return r.jev === 'escalate'; }).length;
+    document.getElementById('stats').innerHTML = '<span>showing <b>' + list.length + '</b> of ' + rows.length + '</span>' + (jevMs.length ? '<span>Jev median <b class="g">' + ms(median(jevMs)) + '</b> over ' + jevMs.length + ' calls</span>' : '') + (decided.length ? '<span>decided right <b>' + right + '/' + decided.length + '</b></span>' : '') + (escs ? '<span>escalates <b>' + escs + '</b></span>' : '');
+    var box = document.getElementById('results');
+    if (!list.length) { box.innerHTML = '<div class="empty">No rows match. Clear a filter or the search.</div>'; return; }
+    var arrow = function (k) { return state.sort && state.sort.key === k ? (state.sort.dir > 0 ? ' ↑' : ' ↓') : ''; };
+    var h = '<table><thead><tr><th>exp</th><th>id</th><th>site</th><th>task</th><th>claim</th><th>expect</th><th>Jev</th><th>p</th><th><button type="button" data-sort="jevMs">Jev ms' + arrow('jevMs') + '</button></th><th>model</th><th><button type="button" data-sort="modelMs">model ms' + arrow('modelMs') + '</button></th><th>Sonnet</th></tr></thead><tbody>';
+    list.forEach(function (r, i) {
+      var v = verdictOf(r); var wrong = r.jevOk === false && r.exp !== 'E10';
+      h += '<tr tabindex="0" data-i="' + i + '" aria-expanded="' + (state.open === r.id) + '"><td class="lead mono">' + r.exp + '</td><td class="mono">' + esc(r.id) + '</td><td>' + esc(r.site) + '</td><td>' + esc(r.task) + '</td><td><div class="clamp">' + esc(r.claim) + '</div></td><td class="mono">' + esc(r.expect) + '</td><td><span class="verdict verdict--' + v + (wrong ? ' wrong' : '') + '">' + esc(v === 'answered' ? 'answered' : r.jev) + (wrong ? ' wrong' : '') + '</span></td><td class="num">' + pf(r.jevP) + '</td><td class="num">' + ms(r.jevMs) + '</td><td><span class="verdict verdict--' + (r.model || 'x') + '">' + esc(r.model || '') + '</span></td><td class="num">' + ms(r.modelMs) + '</td><td><span class="verdict verdict--' + (r.sonnet || 'x') + '">' + esc(r.sonnet || '') + (r.sonnetMs ? ' · ' + ms(r.sonnetMs) : '') + '</span></td></tr>';
+      if (state.open === r.id) {
+        h += '<tr class="detail"><td colspan="12"><div class="detail-grid">' +
+          '<div><span class="mono-label">Claim</span>' + esc(r.claim) + '</div>' +
+          '<div><span class="mono-label">Page</span>' + (r.url ? '<a href="' + esc(r.url) + '">' + esc(r.url) + '</a>' : esc(r.site)) + '</div>' +
+          '<div><span class="mono-label">Jev answer</span>' + esc(r.jev || 'no Jev call') + (r.jevP != null ? ' · p ' + pf(r.jevP) : '') + (r.entropy != null ? ' · entropy ' + pf(r.entropy) : '') + (r.jevMs != null ? ' · ' + ms(r.jevMs) : '') + '</div>' +
+          (r.model ? '<div><span class="mono-label">Model</span>' + esc(r.model) + (r.modelMs ? ' · ' + ms(r.modelMs) : '') + '</div>' : '') +
+          (r.sonnet ? '<div><span class="mono-label">Sonnet proxy</span>' + esc(r.sonnet) + (r.sonnetMs ? ' · ' + ms(r.sonnetMs) : '') + '</div>' : '') +
+          (r.note ? '<div><span class="mono-label">Note</span>' + esc(r.note) + '</div>' : '') +
+          (r.navMs != null ? '<div><span class="mono-label">Navigation</span>' + ms(r.navMs) + (r.worker != null ? ' · worker ' + r.worker : '') + '</div>' : '') +
+          '<div><span class="mono-label">Source</span>' + esc(r.file) + '</div></div></td></tr>';
+      }
+    });
+    h += '</tbody></table>';
+    box.innerHTML = h;
+    box.querySelectorAll('tbody tr[data-i]').forEach(function (tr) {
+      var r = list[Number(tr.dataset.i)];
+      var toggle = function () { state.open = state.open === r.id ? null : r.id; render(); };
+      tr.addEventListener('click', function (e) { if (e.target.closest('a')) return; toggle(); });
+      tr.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    });
+    box.querySelectorAll('th button[data-sort]').forEach(function (b) { b.addEventListener('click', function () { var k = b.dataset.sort; state.sort = state.sort && state.sort.key === k ? { key: k, dir: -state.sort.dir } : { key: k, dir: 1 }; render(); }); });
+  }
+  var qin = document.getElementById('q');
+  qin.addEventListener('input', function () { state.q = qin.value.trim().toLowerCase(); state.open = null; render(); });
+  document.querySelectorAll('#taskChips .chip').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.dataset.q; state.exp = null; state.verdict = null; state.judge = null; state.kind = null;
+      if (/^E\d+$/.test(t)) { state.q = ''; qin.value = ''; state.exp = t; state.open = null; }
+      else { state.q = t.toLowerCase(); qin.value = t; state.open = t; }
+      render(); document.getElementById('explore').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if (location.hash === '#explore') { /* deep link lands on the explorer with everything shown */ }
+  render();
+})();
+</script>
