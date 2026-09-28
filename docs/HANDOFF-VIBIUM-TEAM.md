@@ -60,12 +60,17 @@ commits without an operator policy.
 | E11 | Cross-check: blind screenshot judge | proxy | 8 | ⚖ measured |
 | E12 | Cross-check: pixel operator login | proxy | 1 | ⚖ measured |
 
+## Test it in place
+
+`docs/TEST-IN-PLACE.md`: clone, `npm ci`, `scripts/test-in-place.sh`. Ten checks, no key needed for the first six; the login on the fixture site is gated, verified and replayed with your own Vibium binary; then `npm run bench` and a corpus shard with recordings reproduce the headline numbers. Verified here on 2026-09-28: pass 10, fail 0.
+
 ## Finalized results, by file
 
 ### manutej/jev-tape, branch `claude/nice-fermat-ky9qtz` (a60f2bb, contains main)
 
 | Path | What |
 | --- | --- |
+| `docs/TEST-IN-PLACE.md`, `scripts/test-in-place.sh` | The Vibium team's runbook and acceptance script: fresh clone, own binary, ten checks (`pass 10 · fail 0`), then the bench and corpus |
 | `docs/SOURCE-OF-TRUTH.md` | What is canonical, the registry schema, how to add results |
 | `results/registry.json` | The registry: every experiment and row, with computed totals |
 | `results/raw/corpus-2026-09-28.rows.json` | Per-row corpus numbers, page text removed |
