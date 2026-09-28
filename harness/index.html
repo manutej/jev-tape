@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jev-tape live</title>
+<style>
+  :root {
+    --bg: #0e1116; --panel: #151a22; --panel-2: #1b2130; --line: #273041; --text: #e6e9ef; --muted: #8b95a7;
+    --green: #2fd07a; --amber: #f5b742; --red: #ff5c5c; --blue: #6aa5ff; --violet: #b18cff;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) { --bg: #f6f7f9; --panel: #ffffff; --panel-2: #f0f2f6; --line: #dfe3ea; --text: #14181f; --muted: #5d6675; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 var(--sans); }
+  a { color: var(--blue); text-decoration: none; } a:hover { text-decoration: underline; }
+  header { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 5; }
+  header h1 { font-size: 16px; margin: 0; letter-spacing: .02em; }
+  header h1 small { color: var(--muted); font-weight: 400; margin-left: 8px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .badge b { color: var(--text); font-weight: 600; }
+  .badge.live b { color: var(--green); } .badge.stub b { color: var(--amber); } .badge.closed b { color: var(--red); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .dot.on { background: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 25%, transparent); }
+  main { padding: 16px 20px 40px; display: grid; gap: 16px; max-width: 1500px; margin: 0 auto; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+  .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } .grid-3 { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 980px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  /* loop strip */
+  .loop { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .loop .step { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); font-family: var(--mono); font-size: 12px; position: relative; }
+  .loop .step .n { position: absolute; top: -8px; right: -6px; background: var(--blue); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 999px; min-width: 18px; text-align: center; }
+  .loop .arrow { color: var(--muted); }
+  .loop .step.code { border-color: color-mix(in srgb, var(--violet) 50%, var(--line)); } .loop .step.judge { border-color: color-mix(in srgb, var(--amber) 50%, var(--line)); } .loop .step.write { border-color: color-mix(in srgb, var(--green) 55%, var(--line)); }
+  .planes { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; color: var(--muted); font-size: 12px; }
+  .planes span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .planes .p-code::before { background: var(--violet); } .planes .p-judge::before { background: var(--amber); } .planes .p-write::before { background: var(--green); }
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .stat { background: var(--panel-2); border-radius: 8px; padding: 10px 12px; }
+  .stat .v { font-size: 24px; font-weight: 700; font-family: var(--mono); line-height: 1.1; } .stat .l { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+  .stat.green .v { color: var(--green); } .stat.amber .v { color: var(--amber); } .stat.red .v { color: var(--red); } .stat.blue .v { color: var(--blue); }
+  /* composer */
+  textarea { width: 100%; min-height: 150px; background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font: 12px/1.4 var(--mono); resize: vertical; }
+  input[type=text] { width: 100%; background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: 13px var(--sans); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+  button { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; font: 600 12px var(--sans); cursor: pointer; }
+  button:hover { border-color: var(--blue); } button.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  button.compose { color: var(--green); } button.escalate { color: var(--amber); } button.refuse { color: var(--red); }
+  button.sm { padding: 3px 8px; font-size: 11px; }
+  /* items */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  td.mono, .mono { font-family: var(--mono); font-size: 12px; }
+  tr.wf-head td { background: var(--panel-2); font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .light { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; padding: 2px 8px; border-radius: 999px; font: 700 11px var(--mono); letter-spacing: .04em; border: 1px solid var(--line); color: var(--muted); }
+  .light.GREEN { background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green); border-color: color-mix(in srgb, var(--green) 45%, transparent); }
+  .light.AMBER { background: color-mix(in srgb, var(--amber) 18%, transparent); color: var(--amber); border-color: color-mix(in srgb, var(--amber) 45%, transparent); }
+  .light.RED { background: color-mix(in srgb, var(--red) 18%, transparent); color: var(--red); border-color: color-mix(in srgb, var(--red) 45%, transparent); }
+  .light.wait { animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+  .status { font-family: var(--mono); font-size: 12px; }
+  .status.applied { color: var(--green); } .status.residual { color: var(--red); } .status.parked { color: var(--amber); } .status.running { color: var(--blue); }
+  .ms { font-family: var(--mono); font-size: 12px; } .ms b { color: var(--amber); }
+  .src { font-family: var(--mono); font-size: 11px; color: var(--muted); } .src.live { color: var(--green); } .src.stub { color: var(--amber); }
+  /* feed */
+  .feed { font-family: var(--mono); font-size: 12px; max-height: 420px; overflow: auto; display: flex; flex-direction: column-reverse; gap: 2px; }
+  .feed div { padding: 3px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .feed .t { color: var(--muted); margin-right: 8px; }
+  .feed .k { color: var(--blue); margin-right: 8px; }
+  .feed .GREEN { color: var(--green); } .feed .AMBER { color: var(--amber); } .feed .RED { color: var(--red); }
+  .feed .sys { color: var(--muted); font-style: italic; }
+  .tape { max-height: 300px; overflow: auto; }
+  .hint { color: var(--muted); font-size: 12px; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; font-size: 12px; font-family: var(--mono); }
+  .kv div:nth-child(odd) { color: var(--muted); }
+  .empty { color: var(--muted); font-size: 12px; padding: 14px 0; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>jev-tape <small>live tape</small></h1>
+  <span class="badge" id="b-judge"><span class="dot"></span>judge <b>…</b></span>
+  <span class="badge" id="b-pin">pin <b>…</b></span>
+  <span class="badge" id="b-temporal">temporal <b>…</b></span>
+  <span class="badge" id="b-queue">queue <b>…</b></span>
+  <span class="badge" id="b-worker"><span class="dot" id="worker-dot"></span>worker <b>…</b></span>
+  <span class="badge" id="b-stream"><span class="dot" id="stream-dot"></span>stream</span>
+  <a id="ui-link" href="#" target="_blank" class="badge">Temporal UI ↗</a>
+</header>
+<main>
+  <section class="panel">
+    <h2>The loop <span class="hint">counts = steps observed this session</span></h2>
+    <div class="loop" id="loop"></div>
+    <div class="planes"><span class="p-code">code gates (deterministic)</span><span class="p-judge">TypeSafe answers (Activity, one POST per gate)</span><span class="p-write">Temporal records (apply last, idempotent)</span></div>
+  </section>
+
+  <section class="grid-3">
+    <div class="panel">
+      <h2>Run</h2>
+      <div class="row" style="margin-top:0">
+        <button class="primary" id="run-pack">Run demo pack</button>
+        <button id="run-waiting">Start Waiting</button>
+        <button id="run-habit">Start Habit</button>
+      </div>
+      <div class="row"><input type="text" id="one" placeholder="Capture one line and run it… (end with ? for a mid-band park, [red] for a judge RED)"></div>
+      <div class="row"><button id="run-one">Capture →</button><span class="hint">Enter also runs it</span></div>
+      <details style="margin-top:10px"><summary>Edit the pack (JSON)</summary><textarea id="pack"></textarea></details>
+    </div>
+    <div class="panel">
+      <h2>Judge latency <span class="hint" id="lat-note">wall ms per POST</span></h2>
+      <div class="stats">
+        <div class="stat amber"><div class="v" id="s-posts">0</div><div class="l">TypeSafe POSTs</div></div>
+        <div class="stat amber"><div class="v" id="s-p50">–</div><div class="l">p50 ms</div></div>
+        <div class="stat amber"><div class="v" id="s-p95">–</div><div class="l">p95 ms</div></div>
+        <div class="stat blue"><div class="v" id="s-path0">0</div><div class="l">path 0 (0 POSTs)</div></div>
+        <div class="stat green"><div class="v" id="s-applied">0</div><div class="l">applied</div></div>
+        <div class="stat red"><div class="v" id="s-residual">0</div><div class="l">residual</div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Loaded</h2>
+      <div class="kv" id="loaded"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Items <span class="hint">one row per command · two gates · park buttons appear on AMBER</span></h2>
+    <table>
+      <thead><tr><th>#</th><th>command</th><th>payload</th><th>task gate</th><th>output gate</th><th>judge ms</th><th>source</th><th>status</th><th>C10 / notes</th></tr></thead>
+      <tbody id="items"><tr><td colspan="9" class="empty">Nothing running. Press “Run demo pack”.</td></tr></tbody>
+    </table>
+  </section>
+
+  <section class="grid-2">
+    <div class="panel"><h2>Step feed <span class="hint">newest first</span></h2><div class="feed" id="feed"></div></div>
+    <div class="panel"><h2>Tape <span class="hint" id="tape-path"></span></h2><div class="tape"><table><thead><tr><th>key</th><th>event</th><th>command</th><th>at</th></tr></thead><tbody id="tape"></tbody></table></div></div>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const DEMO = [
+  { name: "Capture", payload: { text: "Book dentist for October" } },
+  { name: "Capture", payload: { text: "Reply to Ana about the Oct 2 dry run" } },
+  { name: "Capture", payload: { text: "Should we move the offsite?" } },
+  { name: "Capture", payload: { text: "Renew domain" } },
+  { name: "CreateHabit", payload: { name: "Stretch" } },
+  { name: "Capture", payload: { text: "Draft Q4 plan outline" } },
+  { name: "Complete", payload: { itemKind: "Project", itemKey: "p-1" } },
+  { name: "Capture", payload: { text: "Order new keyboard" } },
+  { name: "Complete", payload: { itemKind: "NextAction", itemKey: "na-42" } },
+  { name: "Capture", payload: { text: "[red] wire money to unknown account" } },
+  { name: "Clarify", payload: { itemKey: "inbox-7", to: "ToNextAction" } },
+];
+$("#pack").value = JSON.stringify(DEMO, null, 2);
+
+const LOOP = [["assertLegalCommand","code"],["qualifyTask","judge"],["gate","code"],["propose","code"],["qualifyOutput","judge"],["gate","code"],["humanVerdict?","code"],["applyCommand","write"]];
+const loopCounts = {};
+function renderLoop() {
+  $("#loop").innerHTML = LOOP.map(([n, c], i) => `${i ? '<span class="arrow">→</span>' : ""}<span class="step ${c}">${n}${loopCounts[n] ? `<span class="n">${loopCounts[n]}</span>` : ""}</span>`).join("");
+}
+renderLoop();
+
+// ---------------------------------------------------------------- state
+const wfs = new Map();      // workflowId → { kind, commands, items: Map(key→item), status, link, done }
+const lat = [];             // judge ms
+let path0 = 0, posts = 0;
+const wf = (id) => { if (!wfs.has(id)) wfs.set(id, { kind: "?", commands: [], items: new Map(), link: "#" }); return wfs.get(id); };
+const item = (w, key) => { if (!w.items.has(key)) w.items.set(key, { key, task: null, output: null, ms: [], source: null, status: "running", notes: [] }); return w.items.get(key); };
+const pct = (arr, p) => { if (!arr.length) return "–"; const s = [...arr].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; };
+
+function renderStats() {
+  $("#s-posts").textContent = posts; $("#s-p50").textContent = pct(lat, .5); $("#s-p95").textContent = pct(lat, .95); $("#s-path0").textContent = path0;
+  let applied = 0, residual = 0;
+  for (const w of wfs.values()) for (const it of w.items.values()) { if (it.status === "applied") applied++; if (it.status === "residual") residual++; }
+  $("#s-applied").textContent = applied; $("#s-residual").textContent = residual;
+}
+const light = (l, waiting) => l ? `<span class="light ${l}">${l}</span>` : waiting ? `<span class="light wait">…</span>` : `<span class="light">—</span>`;
+function payloadText(cmd) { if (!cmd) return ""; const p = cmd.payload || {}; return p.text ?? p.itemKey ?? p.name ?? p.display_name ?? p.habitId ?? JSON.stringify(p); }
+function renderItems() {
+  const tb = $("#items"); const rows = [];
+  for (const [id, w] of [...wfs.entries()].reverse()) {
+    rows.push(`<tr class="wf-head"><td colspan="9">${w.kind} · <a href="${w.link}" target="_blank">${id}</a>${w.status ? ` · run ${w.status.run} · cursor ${w.status.cursor}/${w.status.total}` : ""}${w.done ? " · done" : ""}</td></tr>`);
+    const keys = [...w.items.keys()].sort((a, b) => { const na = +a.split(":").pop(), nb = +b.split(":").pop(); return (isNaN(na) || isNaN(nb)) ? a.localeCompare(b) : na - nb; });
+    for (const key of keys) {
+      const it = w.items.get(key); const idx = key.slice(id.length + 1); const cmd = w.commands[+idx];
+      const cmdName = cmd?.name ?? it.command ?? idx;
+      const parked = it.status === "parked";
+      const act = parked ? `<button class="sm compose" onclick="verdict('${id}','${key}','compose')">compose</button> <button class="sm escalate" onclick="verdict('${id}','${key}','escalate')">escalate</button> <button class="sm refuse" onclick="verdict('${id}','${key}','refuse')">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("");
+      if (it.status === "recorded") { rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td></tr>`); continue; }
+      rows.push(`<tr><td class="mono">${idx}</td><td class="mono">${cmdName}</td><td>${payloadText(cmd)}</td><td>${light(it.task, it.status === "running")}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td></tr>`);
+    }
+  }
+  tb.innerHTML = rows.join("") || `<tr><td colspan="9" class="empty">Nothing running. Press “Run demo pack”.</td></tr>`;
+}
+function feed(html) { const d = document.createElement("div"); d.innerHTML = html; $("#feed").prepend(d); if ($("#feed").children.length > 400) $("#feed").lastChild.remove(); }
+const hhmm = (iso) => (iso || "").slice(11, 23);
+
+function onMsg(m) {
+  switch (m.type) {
+    case "workflow": { const w = wf(m.workflowId); w.kind = m.kind; w.commands = m.commands || []; w.link = m.link; if (m.kind === "JevCorrectnessWorkflow") w.commands.forEach((_, i) => item(w, `${m.workflowId}:${i}`)); feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">started ${m.kind} ${m.workflowId}</span>`); break; }
+    case "path0": { const w = wf(m.workflowId); const it = item(w, m.key); it.status = "residual"; it.path0 = true; it.task = "RED"; it.notes.push(m.reasons.join("; ")); path0++; loopCounts.assertLegalCommand = (loopCounts.assertLegalCommand || 0) + 1; feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span><span class="RED">path 0 · RED</span> ${m.command}: ${m.reasons.join("; ")}`); break; }
+    case "step": {
+      const w = wf(m.workflowId); const it = item(w, m.key);
+      if (m.command) it.command = m.command;
+      loopCounts[m.kind] = (loopCounts[m.kind] || 0) + 1;
+      if (m.kind === "qualifyTask" || m.kind === "qualifyOutput") {
+        loopCounts.assertLegalCommand = m.kind === "qualifyTask" ? (loopCounts.assertLegalCommand || 0) + 1 : loopCounts.assertLegalCommand;
+        loopCounts.gate = (loopCounts.gate || 0) + 1; if (m.kind === "qualifyOutput") loopCounts.propose = (loopCounts.propose || 0) + 1;
+        it[m.kind === "qualifyTask" ? "task" : "output"] = m.light; it.source = m.source;
+        if (typeof m.ms === "number") { it.ms.push(m.ms); lat.push(m.ms); posts++; }
+        if (m.light === "RED") it.status = "residual"; else if (m.light === "AMBER") { it.status = "parked"; loopCounts["humanVerdict?"] = (loopCounts["humanVerdict?"] || 0) + (m.kind === "qualifyOutput" ? 1 : 0); }
+        else if (m.kind === "qualifyOutput" && it.task !== "AMBER") it.status = "running";
+        feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span>${m.kind} <span class="${m.light}">${m.light}</span> <b>${m.ms ?? "–"}ms</b> ${m.source} · ${(m.reasons || []).join("; ")}`);
+      } else if (m.kind === "applyCommand") { it.status = "applied"; it.notes.push(m.duplicate ? "idempotent: already on tape" : `${m.event} written`); feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span><span class="GREEN">applyCommand</span> ${m.event}${m.duplicate ? " (duplicate, skipped)" : ""}`); loadTape(); }
+      else if (m.kind === "recordEvent") { it.status = "recorded"; it.recorded = m.event; it.source = "code"; it.notes.push(`${m.event}${m.duplicate ? " (duplicate, skipped)" : " written"}`); feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").slice(1).join(":")}</span>${m.event}`); loadTape(); }
+      break;
+    }
+    case "status": { const w = wf(m.workflowId); w.status = m; for (const k of m.parked) { const it = item(w, k); if (it.status !== "applied") it.status = "parked"; } for (const k of m.applied) item(w, k).status = "applied"; for (const k of m.residual) { const it = item(w, k); it.status = "residual"; } break; }
+    case "human": { const w = wf(m.workflowId); const it = item(w, m.key); it.notes.push(`human: ${m.verdict}`); if (m.verdict !== "compose") it.status = "residual"; else it.status = "running"; feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span>humanVerdict → <b>${m.verdict}</b>`); break; }
+    case "resolve": feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">resolve signal → ${m.workflowId}</span>`); break;
+    case "done": { const w = wf(m.workflowId); w.done = true; const r = m.result || {}; for (const o of r.outcomes || []) { const it = item(w, o.idempotencyKey); it.status = o.status; for (const s of o.steps) { if (s.kind === "qualifyTask") { it.task = s.light; it.source = it.source || s.source; } if (s.kind === "qualifyOutput") it.output = s.light; } } feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">done ${m.kind} ${m.workflowId} ${r.runs ? `· ${r.runs} run(s)` : ""} ${r.applied ? `· applied ${r.applied.length} residual ${r.residual.length}` : ""}${r.nudges !== undefined ? `· nudges ${r.nudges}` : ""}${r.minted !== undefined ? `· minted ${r.minted}` : ""}</span>`); loadTape(); break; }
+    case "failed": feed(`<span class="t">${hhmm(m.at)}</span><span class="RED">failed ${m.workflowId}: ${m.message}</span>`); break;
+    case "error": feed(`<span class="RED">${m.message}</span>`); break;
+    case "hello": break;
+  }
+  renderLoop(); renderItems(); renderStats();
+}
+
+async function api(path, body) { const r = await fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body || {}) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; }
+window.verdict = (workflowId, key, verdict) => api("/verdict", { workflowId, key, verdict }).catch((e) => feed(`<span class="RED">${e.message}</span>`));
+$("#run-pack").onclick = () => { let commands; try { commands = JSON.parse($("#pack").value); } catch (e) { return feed(`<span class="RED">pack JSON: ${e.message}</span>`); } api("/start", { commands }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
+const runOne = () => { const text = $("#one").value.trim(); if (!text) return; $("#one").value = ""; api("/start", { commands: [{ name: "Capture", payload: { text } }] }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
+$("#run-one").onclick = runOne; $("#one").addEventListener("keydown", (e) => { if (e.key === "Enter") runOne(); });
+$("#run-waiting").onclick = () => api("/waiting", { display_name: "Ana", what: "confirm the Oct 2 dry run", nudgeEveryMs: 3000, maxNudges: 3 }).then((r) => feed(`<span class="sys">Waiting ${r.workflowId}: send resolve with <button class="sm" onclick="api('/resolve',{workflowId:'${r.workflowId}',note:'confirmed'})">resolve</button></span>`));
+$("#run-habit").onclick = () => api("/habit", { habitId: "stretch", everyMs: 1000, maxInstances: 3 });
+
+async function loadTape() { try { const rows = await (await fetch("/tape")).json(); $("#tape").innerHTML = rows.slice().reverse().slice(0, 60).map((r) => `<tr><td class="mono">${r.key}</td><td class="mono">${r.event}</td><td class="mono">${r.command}</td><td class="mono">${hhmm(r.at)}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">tape is empty</td></tr>`; } catch {} }
+async function loadInfo() {
+  const i = await (await fetch("/info")).json();
+  const bj = $("#b-judge"); bj.className = `badge ${i.judge}`; bj.innerHTML = `<span class="dot ${i.judge === "live" ? "on" : ""}"></span>judge <b>${i.judge === "live" ? "LIVE " + i.pin : i.judge === "stub" ? "STUB (not a verdict)" : "CLOSED (no key)"}</b>`;
+  $("#b-pin").innerHTML = `pin <b>${i.pin}</b>`; $("#b-temporal").innerHTML = `temporal <b>${i.temporal.address}</b> ${i.temporal.namespace}`; $("#b-queue").innerHTML = `queue <b>${i.taskQueue}</b>`;
+  $("#b-worker").innerHTML = `<span class="dot ${i.worker.inProcess ? "on" : ""}"></span>worker <b>${i.worker.inProcess ? i.worker.identity : "external"}</b>`;
+  $("#ui-link").href = i.temporal.ui + "/namespaces/" + i.temporal.namespace + "/workflows"; $("#tape-path").textContent = i.tapePath; $("#lat-note").textContent = i.judge === "live" ? "wall ms per POST to " + i.endpoint : i.judge === "stub" ? "stub answers: ms measures the loop, not Jev" : "no judge: gates fail closed";
+  $("#loaded").innerHTML = [["judge", i.judge], ["endpoint", i.endpoint], ["workflows", i.workflows.join(", ")], ["activities", i.activities.join(", ")], ["queue", i.taskQueue], ["tape", i.tapePath]].map(([k, v]) => `<div>${k}</div><div>${v}</div>`).join("");
+}
+function connect() {
+  const es = new EventSource("/events");
+  es.onopen = () => $("#stream-dot").classList.add("on");
+  es.onerror = () => { $("#stream-dot").classList.remove("on"); };
+  es.onmessage = (e) => onMsg(JSON.parse(e.data));
+}
+loadInfo(); loadTape(); connect();
+</script>
+</body>
+</html>

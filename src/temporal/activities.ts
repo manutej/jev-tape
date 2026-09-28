@@ -54,15 +54,50 @@ export function fileTape(path: string): Tape {
   };
 }
 
+/** One live observation from an Activity. The harness streams these; they are not the tape. */
+export interface StepEvent {
+  at: string;
+  workflowId: string;
+  runId: string;
+  key: string;
+  kind: "qualifyTask" | "qualifyOutput" | "applyCommand" | "recordEvent";
+  command?: string;
+  light?: Verdict["light"];
+  reasons?: string[];
+  source?: string;
+  model?: string;
+  ms?: number;
+  event?: string;
+  duplicate?: boolean;
+  attempt: number;
+}
+
 export interface ActivityDeps {
   judge: Judge;
   tape: Tape;
   /** Test/demo hook: crash the worker process after N applies to show recovery. */
   crashAfterApplies?: number;
+  /** Live observer. Called after each Activity completes. Never awaited, never affects the result. */
+  onStep?: (e: StepEvent) => void;
 }
 
 export function createActivities(deps: ActivityDeps) {
   let applies = 0;
+  const observe = (e: Omit<StepEvent, "at" | "workflowId" | "runId" | "attempt">) => {
+    if (!deps.onStep) return;
+    const info = Context.current().info;
+    try {
+      deps.onStep({
+        at: new Date().toISOString(),
+        workflowId: info.workflowExecution?.workflowId ?? "twin",
+        runId: info.workflowExecution?.runId ?? "",
+        attempt: info.attempt,
+        ...e,
+      });
+    } catch {
+      /* observers never break an Activity */
+    }
+  };
   return {
     async typesafeJudge(req: SystemOneRequest) {
       try {
@@ -72,11 +107,14 @@ export function createActivities(deps: ActivityDeps) {
       }
     },
 
-    async qualifyTask(cmd: Command, _key: string): Promise<Verdict> {
+    async qualifyTask(cmd: Command, key: string): Promise<Verdict> {
       Context.current().heartbeat("qualifyTask");
       try {
-        return await qualifyTaskWith(deps.judge, cmd);
+        const v = await qualifyTaskWith(deps.judge, cmd);
+        observe({ key, kind: "qualifyTask", command: cmd.name, light: v.light, reasons: v.reasons, source: v.source, model: v.model, ms: v.ms });
+        return v;
       } catch (err) {
+        observe({ key, kind: "qualifyTask", command: cmd.name, light: "RED", reasons: [String((err as Error).message).slice(0, 200)], source: "none" });
         toFailure(err);
       }
     },
@@ -84,8 +122,11 @@ export function createActivities(deps: ActivityDeps) {
     async qualifyOutput(cmd: Command, proposal: Proposal): Promise<Verdict> {
       Context.current().heartbeat("qualifyOutput");
       try {
-        return await qualifyOutputWith(deps.judge, cmd, proposal);
+        const v = await qualifyOutputWith(deps.judge, cmd, proposal);
+        observe({ key: proposal.idempotencyKey, kind: "qualifyOutput", command: cmd.name, light: v.light, reasons: v.reasons, source: v.source, model: v.model, ms: v.ms, event: proposal.event.name });
+        return v;
       } catch (err) {
+        observe({ key: proposal.idempotencyKey, kind: "qualifyOutput", command: cmd.name, light: "RED", reasons: [String((err as Error).message).slice(0, 200)], source: "none" });
         toFailure(err);
       }
     },
@@ -100,6 +141,7 @@ export function createActivities(deps: ActivityDeps) {
         at: new Date().toISOString(),
       });
       applies += res.applied ? 1 : 0;
+      observe({ key: proposal.idempotencyKey, kind: "applyCommand", command: cmd.name, light: "GREEN", event: proposal.event.name, duplicate: res.duplicate, source: "code" });
       if (deps.crashAfterApplies && applies >= deps.crashAfterApplies) {
         console.error(`[worker] simulated crash after ${applies} applies (pid ${process.pid})`);
         process.exit(137);
@@ -109,7 +151,9 @@ export function createActivities(deps: ActivityDeps) {
 
     /** Waiting/Habit/Someday side events that are not commands: record on the tape, idempotent by key. */
     async recordEvent(key: string, event: string, payload: Record<string, unknown>) {
-      return deps.tape.append({ key, command: "-", event, payload, at: new Date().toISOString() });
+      const res = await deps.tape.append({ key, command: "-", event, payload, at: new Date().toISOString() });
+      observe({ key, kind: "recordEvent", event, duplicate: res.duplicate, source: "code" });
+      return res;
     },
   };
 }

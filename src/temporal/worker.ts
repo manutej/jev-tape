@@ -19,6 +19,9 @@ export const workflowsPath = fileURLToPath(new URL("./workflows.ts", import.meta
 export interface WorkerOptions {
   tapePath?: string;
   crashAfterApplies?: number;
+  onStep?: (e: import("./activities.ts").StepEvent) => void;
+  /** Defaults to jev-tape. Tests isolate themselves with a unique queue. */
+  taskQueue?: string;
   judge?: ReturnType<typeof selectJudge>;
   maxConcurrentActivities?: number;
   maxConcurrentWorkflows?: number;
@@ -35,9 +38,14 @@ export async function createWorker(opts: WorkerOptions = {}) {
   const worker = await Worker.create({
     connection,
     namespace: target.namespace,
-    taskQueue: TASK_QUEUE,
+    taskQueue: opts.taskQueue ?? TASK_QUEUE,
     workflowsPath,
-    activities: createActivities({ judge, tape: fileTape(opts.tapePath ?? process.env.JEV_TAPE_PATH ?? DEFAULT_TAPE), crashAfterApplies: opts.crashAfterApplies }),
+    activities: createActivities({
+      judge,
+      tape: fileTape(opts.tapePath ?? process.env.JEV_TAPE_PATH ?? DEFAULT_TAPE),
+      crashAfterApplies: opts.crashAfterApplies,
+      onStep: opts.onStep,
+    }),
     maxConcurrentActivityTaskExecutions: opts.maxConcurrentActivities ?? Number(process.env.JEV_MAX_ACTIVITIES ?? 20),
     maxConcurrentWorkflowTaskExecutions: opts.maxConcurrentWorkflows ?? Number(process.env.JEV_MAX_WORKFLOWS ?? 20),
     identity: `jev-tape-${process.pid}`,

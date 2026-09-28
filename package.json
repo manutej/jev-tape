@@ -17,7 +17,8 @@
     "live": "node --experimental-strip-types scripts/live-run.ts",
     "smoke": "node --experimental-strip-types scripts/smoke-key.ts",
     "qualify": "node --experimental-strip-types scripts/qualify-surface.ts",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "harness": "node --experimental-strip-types scripts/harness.ts"
   },
   "dependencies": {
     "@temporalio/activity": "^1.24.0",

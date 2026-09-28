@@ -30,6 +30,25 @@ Timer plus a Signal, and `ContinueAsNew` at item 8.
 | `npm run demo:crash` | Worker process exits after 3 applies. New worker picks the workflow up. | Recovery from Event History with an idempotent tape: 0 duplicate rows |
 | `npm run replay` | Feeds each run's history to the workflow code with no Activities registered | Replay reuses recorded verdicts. TypeSafe is called 0 times |
 
+## The live harness
+
+```bash
+npm run harness          # http://localhost:4848  (worker in-process; --no-worker to use external workers)
+```
+
+One page, no build step (`harness/index.html`), fed by `scripts/harness.ts` over Server-Sent Events:
+
+- **Loaded**: judge (LIVE jev-1.13.0 / STUB / CLOSED), pin, endpoint, queue, workflows, activities, worker identity, tape path.
+- **The loop**: the eight steps with a live count of how many times each was observed.
+- **Items**: one row per command. Task gate and output gate light up as the Activities complete, with the judge's wall
+  time in ms per POST and the source. AMBER rows grow compose / escalate / refuse buttons that send the `humanVerdict` Signal.
+  Path-0 rows (illegal commands) are predicted with the same `localGate` code the workflow runs and show 0 POSTs.
+- **Judge latency**: POST count, p50, p95, path-0 count, applied, residual.
+- **Step feed** and **Tape**, newest first, plus deep links into the Temporal UI per workflow.
+
+Run the demo pack, type one Capture line, start a Waiting or Habit workflow. Everything the page shows comes from the
+Activities' step observer and the workflow's `status` query; nothing is invented client-side.
+
 ## Loop, as code
 
 `src/item.ts` is the loop. Both the twin (`src/engine.ts`) and the workflow (`src/temporal/workflows.ts`) call `runItem`
@@ -65,7 +84,7 @@ never match. `scripts/replay.ts` and the test both pass it.
 
 ## Deviations from spec/TEMPORAL.md, on purpose
 
-- `npm run worker`, `demo`, `demo:crash`, `replay` exist. The spec's "no `npm run worker`" predates a runnable server.
+- `npm run worker`, `demo`, `demo:crash`, `replay`, `harness` exist. The spec's "no `npm run worker`" predates a runnable server.
   `npm run live` is still the twin and never starts a worker.
 - New files: `src/loop.ts`, `src/item.ts`, `src/judge.ts`, `src/temporal/connection.ts`. Added to the spec table.
 - `JEV_JUDGE=stub` is an explicit opt-in. Default without a key is still fail closed.

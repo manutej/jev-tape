@@ -28,6 +28,7 @@ Illegal: apply then qualifyOutput; scoreFill as a gate; `jev-latest`; TypeSafe o
 | `src/temporal/connection.ts` | Where Temporal is. Env only. |
 | `scripts/demo.ts` | Three workflows through a real server. `--crash` kills and resumes a worker. |
 | `scripts/replay.ts` | Replays Event History with no judge. Must pass the real workflowId. |
+| `scripts/harness.ts` | Live tape over SSE: steps, parks, verdict buttons. Serves `harness/index.html`. |
 | `scripts/live-run.ts` | One Capture through startEngine. |
 | `scripts/smoke-key.ts` | Pin check. |
 | `scripts/qualify-surface.ts` | Fixture → System One. Never send. |
