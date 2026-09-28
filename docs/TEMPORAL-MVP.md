@@ -1,0 +1,71 @@
+# Temporal MVP — what runs, what it proves, how to show it
+
+Real Temporal server. Real workers. Real Event History. The judge is jev-1.13.0 when `TYPESAFE_API_KEY` is set.
+
+## 60-second show
+
+```bash
+npm install
+export TEMPORAL_CLI=/path/to/temporal      # or have `temporal` on PATH: https://temporal.download/cli
+npm run temporal:dev                        # terminal 1: server on :7233, UI on http://localhost:8233
+
+set -a && source .env && set +a             # terminal 2: TYPESAFE_API_KEY → live judge
+npm run demo                                # worker in-process, three workflows, prints the tape
+npm run demo:crash                          # worker dies after 3 applies; a fresh one resumes; 0 duplicates
+npm run replay -- <workflowId>              # replays Event History with no judge: 0 TypeSafe POSTs
+```
+
+Without a key: `JEV_JUDGE=stub npm run demo`. Every verdict is stamped `source: "stub"`. It is not a judgment.
+
+Open the UI link the demo prints. Each workflow shows the two gates as Activities, the C10 park as a
+Timer plus a Signal, and `ContinueAsNew` at item 8.
+
+## What the demo drives
+
+| Workflow | What happens | What it proves |
+| --- | --- | --- |
+| `JevCorrectnessWorkflow` | 11 commands. 7 apply. 4 residual: mid-band AMBER escalated, `CreateHabit` (path 0), `Complete` on a Project (path 0), judge RED. One `Complete` on a NextAction parks on C10 and is composed by Signal. | Two gates, apply last, C10 as a Workflow park, ContinueAsNew every 8, 0 POSTs for illegal commands |
+| `WaitingWorkflow` | `StartWaiting` → two timer nudges (`WaitingNudged`) → `resolve` Signal → `ResolveWaiting` parks (C10) → compose | Timers and Signals across the same run |
+| `HabitWorkflow` | Mints 3 `Instance`s on an interval | `CreateHabit` is never emitted; the habit only mints |
+| `npm run demo:crash` | Worker process exits after 3 applies. New worker picks the workflow up. | Recovery from Event History with an idempotent tape: 0 duplicate rows |
+| `npm run replay` | Feeds each run's history to the workflow code with no Activities registered | Replay reuses recorded verdicts. TypeSafe is called 0 times |
+
+## Loop, as code
+
+`src/item.ts` is the loop. Both the twin (`src/engine.ts`) and the workflow (`src/temporal/workflows.ts`) call `runItem`
+with their own ports. The workflow's ports are Activities and a Signal wait. Same names, same branches.
+
+```
+assertLegalCommand → qualifyTask → gate → propose in memory → qualifyOutput → gate → [humanVerdict] → applyCommand
+```
+
+- `src/loop.ts` — question packs, `composeAnswers` (dual axes θ / top_prob_floor, mid-band demote, local RED wins, C10 floor), `propose`
+- `src/judge.ts` — `live` (key) | `stub` (opt-in) | fail closed
+- `src/temporal/activities.ts` — the only IO. Retry: 5xx/429/529. Non-retryable: 401/422/missing key/wrong pin.
+- `src/temporal/workflows.ts` — no fetch, no env, no node: imports. `npm run check` enforces it.
+
+## Latency
+
+Every `qualifyTask` / `qualifyOutput` step carries `ms`, the wall time of the judge call, and the demo prints it per item.
+With the live judge that column is the number to watch: one POST per gate, many questions per POST.
+
+## Built to scale
+
+- **Workers are stateless.** Run `npm run worker` on N machines; they share task queue `jev-tape`. `JEV_MAX_ACTIVITIES` / `JEV_MAX_WORKFLOWS` size each one.
+- **History stays bounded.** ContinueAsNew every 8 items carries cursor, applied, residual, verdicts and outcomes.
+- **Every write is idempotent.** Key = `workflowId:index`. The file tape is a stand-in for a table with a unique index on that key.
+- **The judge is an Activity.** Retries, heartbeats and timeouts are Temporal's; the workflow never blocks on HTTP.
+- **Cloud is configuration.** `TEMPORAL_ADDRESS`, `TEMPORAL_NAMESPACE`, `TEMPORAL_API_KEY` (or `TEMPORAL_TLS_CERT`/`_KEY`). Nothing else changes.
+
+## Replay and the workflow id
+
+Idempotency keys and C10 park keys derive from `workflowInfo().workflowId`. A replay must be given the real id
+(`Worker.runReplayHistory(opts, history, workflowId)`); the SDK substitutes `"fake"` otherwise and the Signal keys
+never match. `scripts/replay.ts` and the test both pass it.
+
+## Deviations from spec/TEMPORAL.md, on purpose
+
+- `npm run worker`, `demo`, `demo:crash`, `replay` exist. The spec's "no `npm run worker`" predates a runnable server.
+  `npm run live` is still the twin and never starts a worker.
+- New files: `src/loop.ts`, `src/item.ts`, `src/judge.ts`, `src/temporal/connection.ts`. Added to the spec table.
+- `JEV_JUDGE=stub` is an explicit opt-in. Default without a key is still fail closed.
