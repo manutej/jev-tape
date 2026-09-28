@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "check": "node scripts/check.mjs",
     "temporal": "node scripts/temporal-status.mjs",
-    "temporal:dev": "${TEMPORAL_CLI:-temporal} server start-dev --db-filename .jev-tape/temporal.db --ui-port 8233",
+    "temporal:dev": "mkdir -p .jev-tape && ${TEMPORAL_CLI:-temporal} server start-dev --db-filename .jev-tape/temporal.db --ui-port 8233",
     "worker": "node --experimental-strip-types src/temporal/worker.ts",
     "demo": "node --experimental-strip-types scripts/demo.ts",
     "demo:crash": "node --experimental-strip-types scripts/demo.ts --crash",
