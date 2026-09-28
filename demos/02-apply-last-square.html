@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apply-Last Square — jev demo 02</title>
+<meta name="description" content="A refactor drawn as a commuting square and run as the apply-last loop: two judged gates, one POST each, a crash while parked, a replay with zero new POSTs, and a human at the merge.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  .verdict-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:10px 0 2px;min-height:44px}
+  .verdict-row .who{font-size:12px;color:var(--dim);font-family:var(--mono);min-width:88px}
+  .reasons{font-size:13px;color:var(--dim);margin:0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .path-ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+  .path-ladder div{border:1px solid var(--rule);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dim);text-align:center}
+  .path-ladder div b{display:block;font-family:var(--mono);font-size:13px;color:var(--bone);font-weight:500}
+  .path-ladder div.used{border-color:var(--amber);color:var(--bone)}
+  .path-ladder div.used b{color:var(--amber)}
+  @media(max-width:520px){.path-ladder{grid-template-columns:1fr 1fr}}
+  .park{border:1px dashed var(--amber);border-radius:10px;padding:10px 12px;margin:10px 0;background:rgba(255,183,74,.06)}
+  .park p{margin:0 0 6px;font-size:13px}
+  .park[hidden]{display:none}
+  .qtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;grid-column:1/-1;table-layout:fixed}
+  .qtable td{word-break:break-word;padding:6px 8px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+  .qtable td:first-child{width:30%;font-family:var(--mono);color:var(--dim)}
+  .qtable td:last-child{width:26%}
+  .qtable .ans{font-family:var(--mono)}
+  .qtable tr.gatehead td{font-family:var(--display);font-style:italic;font-size:14px;color:var(--bone);padding-top:12px}
+  #stage{align-self:start}
+  .controls .counters{grid-template-columns:repeat(3,1fr)}
+  .controls .counter{padding:8px 10px}
+  .controls .counter .v{font-size:26px}
+  .stage svg .lampring{transition:opacity .45s}
+  .stage svg .lamp-c{transition:fill .25s,stroke .25s}
+  .stage svg .route{transition:cx .55s cubic-bezier(.2,.8,.2,1),cy .55s cubic-bezier(.2,.8,.2,1),opacity .3s}
+  .stage svg .arc{transition:stroke-dasharray .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
+  .stage svg .agree{transition:opacity .4s,stroke .3s}
+  .stage svg .crashlines{opacity:0;transition:opacity .4s}
+  .stage svg .crashlines.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 02 of 10 · apply-last square</div>
+      <h1>A refactor is a square, and the square is the gate.</h1>
+      <p class="lede">In the witness, <b><code>loans.LoansService#log</code></b> was renamed to <b><code>#writeAudit</code></b> and the three public ports stayed fixed. The swap of accounts and savings commuted with that refactor. Draw it as a square: the top edge is the old unit glued to its repository, the bottom edge is the new unit glued the same way. If the two ways round the square agree, the merge is safe. This demo runs that square as the apply-last loop: <b>two judged gates, one POST each</b>, a crash while parked, a replay that costs nothing, and a human at the merge.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> checks a migration square: parts glued the same way before and after must give the same whole. <em>jev-tape</em> asks typed questions before a write. A merge is a write. The square is the question.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Apply-last square instrument">
+    <div class="controls">
+      <h3>Refactor LoansService</h3>
+      <p>The state is the unit, its ports, and the rename map. The task gate asks whether the interface map is legal. The output gate asks whether the two routes round the square agree. Only then is the merge offered to a human.</p>
+
+      <label class="toggle"><input type="checkbox" id="tBreak"> <span>Break a port (rename <code>#fetchOne</code> too)</span></label>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Run the loop</button>
+        <button class="btn danger" id="crash" disabled>Crash mid-loop</button>
+        <button class="btn" id="replay" disabled>Replay</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="verdict-row"><span class="who">task gate</span><span class="lamp OFF" id="lamp1">OFF</span><span id="stamp1"></span></div>
+      <div class="verdict-row"><span class="who">output gate</span><span class="lamp OFF" id="lamp2">OFF</span><span id="stamp2"></span></div>
+      <ul class="reasons" id="reasons"><li>No run yet.</li></ul>
+
+      <div class="park" id="park" hidden>
+        <p><b>Parked on <code>humanVerdict</code>.</b> The apply is merge-to-default, so C10 holds it even on GREEN. The worker can die here; the tape cannot.</p>
+        <div class="btnrow" style="margin:0">
+          <button class="btn primary" id="hCompose">compose</button>
+          <button class="btn" id="hEscalate">escalate</button>
+          <button class="btn danger" id="hRefuse">refuse</button>
+        </div>
+      </div>
+
+      <div class="counters">
+        <div class="counter" id="cPosts"><div class="v" data-v="0">0</div><div class="l">POSTs</div></div>
+        <div class="counter" id="cActs"><div class="v" data-v="0">0</div><div class="l">activities</div></div>
+        <div class="counter" id="cRep"><div class="v" data-v="0">0</div><div class="l">replayed</div></div>
+      </div>
+
+      <div class="path-ladder" id="ladder">
+        <div data-p="0"><b>path 0</b>code</div>
+        <div data-p="1"><b>path 1</b>one POST</div>
+        <div data-p="2"><b>path 2</b>rank, read</div>
+        <div data-p="3"><b>path 3</b>tape</div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="The migration square with the seven loop steps as a ring of lamps"></div>
+    <table class="qtable" id="qtable" aria-label="Questions and twin answers"></table>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>Seven steps, and only two of them talk to the judge. <code>assertLegalCommand</code> is code: RefactorUnit is a legal command, and MergeToDefault is on the list of commands a human must release. <code>propose</code> is code too: the refactored unit is glued to its repository by the same pushout that glued the original, which is a gluing along shared names with no judgement in it.</p>
+        <p>Each gate is one request. The task gate carries three questions about the rename map; the output gate carries three about the square. Each answer map is written to the tape once. When the worker crashes while parked, the tape keeps both. Replay relights the ring from history and makes zero new POSTs. The merge itself waits for a person, because a merge to the default branch is a write that cannot happen twice.</p>
+        <p>Flip the toggle to rename a port as well. The ports question falls to 0.10 and the task gate goes RED before the square is ever drawn. The judge's Choice still leans GREEN, and it does not matter: a Choice cannot override a failed gate.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>A commuting square is not a passing test.</b> It says the refactored part glues to its neighbours the way the old part did, at the level of names and signatures. It says nothing about behaviour. The witness checked a rename on a 16-file toy; the same square on a real migration is the shape of the check, not its proof.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> The nouls are set from the witness booleans and the toggle, deterministically, with the same wire shape and contract checks as the real client. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 02 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> witness and <code>manutej/jev-tape</code> spec.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e1.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, twin, compose, esc, setLamp, stamp, tick, svg, provenanceTable, topbar} = JEV;
+  const E1 = JEV.data.e1, W_ = E1.witness, JV = JEV.data.jev;
+  topbar(document.getElementById('topbar'), {title:'02 · Apply-last square'});
+  const tape = new Tape({title:'Apply-last tape'});
+
+  const $ = id => document.getElementById(id);
+  const tBreak=$('tBreak'), runBtn=$('run'), crashBtn=$('crash'), replayBtn=$('replay');
+  const lamp1=$('lamp1'), lamp2=$('lamp2'), stamp1=$('stamp1'), stamp2=$('stamp2'), reasons=$('reasons'), park=$('park'), ladder=$('ladder'), qtable=$('qtable');
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+
+  // the unit and its ports, read from the toybank source
+  const svcSrc=E1.toybank['loans/LoansService.java'];
+  const ports=[...svcSrc.matchAll(/public \w+ (\w+)\(/g)].map(m=>m[1]);   // fetchPage, fetchOne, refinance
+  const renamed=W_.witnesses.step6.renamed[0];                             // loans.LoansService#log
+  const HUMAN_GATED=[...JV.humanGated,'send','merge-to-default'];
+
+  /* ---------- stage: square + ring of seven lamps ---------- */
+  const W=800,H=476, stage=$('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Four nodes in a square: LoansService, LoansService glued to LoansRepository, LoansServiceV2, and V2 glued to LoansRepository. Seven lamps around it light in loop order.'});
+  stage.appendChild(root);
+  root.appendChild(svg('defs',{},[
+    svg('marker',{id:'arr',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'},[svg('path',{d:'M0 0L10 5L0 10z',fill:'var(--dim)'})]),
+    svg('pattern',{id:'crashpat',width:'12',height:'12',patternUnits:'userSpaceOnUse',patternTransform:'rotate(135)'},[svg('rect',{x:0,y:0,width:6,height:12,fill:'rgba(255,90,79,.14)'})])
+  ]));
+  const cx=400, cy=240, rx=300, ry=190;
+  const P=(deg)=>{const a=deg*Math.PI/180;return [cx+rx*Math.cos(a), cy+ry*Math.sin(a)];};
+  const STEPS=['assertLegal','qualifyTask','gate','propose','qualifyOutput','gate','applyCommand'];
+  const angles=STEPS.map((_,i)=>205+i*(360/7));
+  // status line
+  const status=svg('text',{x:20,y:24,'font-size':'12','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['nothing proposed, nothing written']); root.appendChild(status);
+  // the ring: dashed ellipse + lit arc (pathLength=7 so dasharray k lights k steps)
+  const [sx,sy]=P(205), [mx,my]=P(25);
+  const ringD=`M${sx} ${sy} A${rx} ${ry} 0 0 1 ${mx} ${my} A${rx} ${ry} 0 0 1 ${sx} ${sy}`;
+  const ring=svg('g',{class:'lampring'}); root.appendChild(ring);
+  ring.appendChild(svg('path',{d:ringD,fill:'none',stroke:'var(--rule)','stroke-dasharray':'3 5'}));
+  const arc=svg('path',{class:'arc',d:ringD,fill:'none',stroke:'var(--green)','stroke-width':2,pathLength:'7','stroke-dasharray':'0 7',opacity:.8}); ring.appendChild(arc);
+  const lamps=STEPS.map((name,i)=>{
+    const [x,y]=P(angles[i]);
+    const g=svg('g',{});
+    const halo=svg('circle',{cx:x,cy:y,r:16,fill:'var(--green)',opacity:0,class:'lamp-c'});
+    const c=svg('circle',{cx:x,cy:y,r:9,fill:'var(--desk-3)',stroke:'var(--rule)','stroke-width':1.5,class:'lamp-c'});
+    const rep=svg('circle',{cx:x,cy:y,r:13,fill:'none',stroke:'var(--green)','stroke-dasharray':'2 3',opacity:0,class:'lamp-c'});
+    const n=svg('text',{x:x,y:y+3.5,'font-size':'10','text-anchor':'middle',class:'mono',fill:'var(--bone)'},[String(i+1)]);
+    // label placement
+    let lx=x, ly=y, anchor='middle';
+    if(x<cx-60){lx=x-16;ly=y+4;anchor='end';}
+    else if(x>cx+60){lx=x+16;ly=y+4;anchor='start';}
+    else {ly=y<cy?y-18:y+24;}
+    const t=svg('text',{x:lx,y:ly,'font-size':'11','text-anchor':anchor,class:'mono',fill:'var(--dim)'},[name]);
+    g.append(halo,c,rep,n,t); ring.appendChild(g);
+    return {halo,c,rep,n,t};
+  });
+  function setStep(i,state){ // off | GREEN | AMBER | RED | replay
+    const L=lamps[i]; const col=state==='GREEN'||state==='replay'?'var(--green)':state==='AMBER'?'var(--amber)':state==='RED'?'var(--red)':null;
+    L.c.setAttribute('fill',col||'var(--desk-3)'); L.c.setAttribute('stroke',col||'var(--rule)');
+    L.n.setAttribute('fill',col?'var(--ink)':'var(--bone)');
+    L.halo.setAttribute('fill',col||'var(--green)'); L.halo.setAttribute('opacity',col?.22:0);
+    L.rep.setAttribute('opacity',state==='replay'?1:0);
+    L.t.setAttribute('fill',col?'var(--bone)':'var(--dim)');
+  }
+  const setArc=(k)=>arc.setAttribute('stroke-dasharray',`${k} 7`);
+
+  // the square
+  const sq=svg('g',{}); root.appendChild(sq);
+  const dotA=svg('circle',{cx:240,cy:160,r:6,fill:'var(--c-entity)',opacity:0,class:'route'});
+  const dotB=svg('circle',{cx:240,cy:160,r:6,fill:'var(--c-concept)',opacity:0,class:'route'});
+  sq.append(dotA,dotB);
+  const NODE={TL:{x:240,y:160,w:150,lines:['LoansService']},TR:{x:560,y:160,w:210,lines:['LoansService ⊔','LoansRepository']},BL:{x:240,y:320,w:150,lines:['LoansServiceV2']},BR:{x:560,y:320,w:210,lines:['LoansServiceV2 ⊔','LoansRepository']}};
+  const nodeEls={};
+  for(const [k,n] of Object.entries(NODE)){
+    const g=svg('g',{});
+    const r=svg('rect',{x:n.x-n.w/2,y:n.y-23,width:n.w,height:46,rx:7,fill:'var(--desk-2)',stroke:'var(--rule)','stroke-width':1.5,class:'agree'});
+    g.appendChild(r);
+    n.lines.forEach((ln,i)=>g.appendChild(svg('text',{x:n.x,y:n.lines.length===1?n.y+4:n.y-4+i*15,'font-size':'12','text-anchor':'middle',fill:'var(--bone)'},[ln])));
+    sq.appendChild(g); nodeEls[k]={g,r};
+  }
+  // ports as coloured tabs on the left nodes (methods are actions)
+  const portTabs={TL:[],BL:[]};
+  for(const k of ['TL','BL']){const n=NODE[k];ports.forEach((p,i)=>{const t=svg('rect',{x:n.x-n.w/2+10+i*16,y:n.y-29,width:10,height:6,rx:1.5,fill:'var(--c-action)'},[svg('title',{},[p])]);sq.appendChild(t);portTabs[k].push(t);});}
+  sq.appendChild(svg('text',{x:NODE.TL.x-NODE.TL.w/2+10+ports.length*16+4,y:NODE.TL.y-24,'font-size':'10',class:'mono',fill:'var(--dim)'},[`ports: ${ports.join(', ')}`]));
+  const portNote=svg('text',{x:NODE.BL.x-NODE.BL.w/2+10+ports.length*16+4,y:NODE.BL.y-24,'font-size':'10',class:'mono',fill:'var(--dim)'},['ports fixed']); sq.appendChild(portNote);
+  // edges
+  const edge=(x1,y1,x2,y2)=>{const l=svg('line',{x1,y1,x2,y2,stroke:'var(--dim)','stroke-width':1.5,'marker-end':'url(#arr)'});sq.appendChild(l);return l;};
+  const eTop=edge(NODE.TL.x+NODE.TL.w/2+2,160,NODE.TR.x-NODE.TR.w/2-2,160);
+  const eBot=edge(NODE.BL.x+NODE.BL.w/2+2,320,NODE.BR.x-NODE.BR.w/2-2,320);
+  const eLeft=edge(240,185,240,295);
+  const eRight=edge(560,185,560,295);
+  sq.appendChild(svg('text',{x:385,y:150,'font-size':'11','text-anchor':'middle','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['glue']));
+  sq.appendChild(svg('text',{x:385,y:340,'font-size':'11','text-anchor':'middle','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['glue']));
+  sq.appendChild(svg('text',{x:226,y:244,'font-size':'11','text-anchor':'end','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['refactor']));
+  sq.appendChild(svg('text',{x:574,y:244,'font-size':'11','text-anchor':'start','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['refactor']));
+  const renameT=svg('text',{x:400,y:236,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--dim)'},['log → writeAudit']); sq.appendChild(renameT);
+  const renameT2=svg('text',{x:400,y:251,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--red)'},['']); sq.appendChild(renameT2);
+  // the two routes round the square
+  const agreeT=svg('text',{x:560,y:358,'font-size':'12','text-anchor':'middle','font-style':'italic','font-family':'var(--display)',fill:'var(--green)',opacity:0,class:'agree'},['both routes agree']); sq.appendChild(agreeT);
+  // crash overlay
+  const crashG=svg('g',{class:'crashlines'},[svg('rect',{x:0,y:0,width:W,height:H,fill:'url(#crashpat)'}),svg('text',{x:W-20,y:H-16,'font-size':'12','text-anchor':'end',class:'mono',fill:'var(--red)'},['worker crashed · memory lost · tape kept'])]); root.appendChild(crashG);
+
+  function drawBreak(){
+    const b=tBreak.checked;
+    portTabs.BL[1].setAttribute('fill',b?'var(--red)':'var(--c-action)');
+    portNote.textContent=b?'fetchOne renamed: a port moved':'ports fixed'; portNote.setAttribute('fill',b?'var(--red)':'var(--dim)');
+    renameT2.textContent=b?'fetchOne → fetchById':'';
+    eLeft.setAttribute('stroke',b?'var(--red)':'var(--dim)'); eLeft.setAttribute('stroke-dasharray',b?'4 4':'');
+  }
+  tBreak.addEventListener('change',drawBreak); drawBreak();
+
+  /* ---------- questions, one map per gate ---------- */
+  const qTask={
+    ports_preserved:{type:'noul',instructions:'Does every public port of LoansService keep its name and signature under the rename map?'},
+    rename_is_morphism:{type:'noul',instructions:'Is the rename map a signature-preserving function on symbol names (a system map)?'},
+    legal:{type:'choice',instructions:'May this rename map be applied as a RefactorUnit?',criteria:{GREEN:'Interface map legal: ports fixed, one internal symbol renamed',AMBER:'A port may have moved: review',RED:'The map changes an interface'}}
+  };
+  const qOut={
+    square_commutes:{type:'noul',instructions:'Do glue-then-refactor and refactor-then-glue give the same composite (the square commutes)?'},
+    naturality_with_swap:{type:'noul',instructions:'Does the swap of accounts and savings commute with the refactor (Ex 4.25)?'},
+    ship:{type:'choice',instructions:'May the refactored composite be merged?',criteria:{GREEN:'Both routes agree: merge',AMBER:'Routes agree on ports only: review',RED:'Routes disagree'}}
+  };
+  const rTask={
+    ports_preserved:()=>tBreak.checked?0.10:(W_.checks.step6_ports_preserved?0.94:0.10),
+    rename_is_morphism:()=>W_.checks.step6_system_map_square?0.92:0.15,
+    legal:()=>tBreak.checked?{choice:'GREEN',probabilities:{GREEN:.52,AMBER:.33,RED:.15}}:{choice:'GREEN',probabilities:{GREEN:.90,AMBER:.07,RED:.03}}
+  };
+  const rOut={
+    square_commutes:()=>W_.checks.step6_system_map_square?0.95:0.1,
+    naturality_with_swap:()=>W_.checks.step10_ex425_squares_compose?0.93:0.1,
+    ship:()=>({choice:'GREEN',probabilities:{GREEN:.88,AMBER:.09,RED:.03}})
+  };
+  const answers={task:null,out:null};
+  function renderQ(){
+    const row=([id,q],a)=>{let v='—'; if(a){v=a.type==='noul'?`noul ${a.noul.toFixed(2)}`:`${a.choice} · P(${a.choice})=${a.probabilities[a.choice].toFixed(2)}`;}
+      return `<tr><td>${id}<br><span style="color:var(--dim)">${q.type}</span></td><td>${esc(q.instructions)}</td><td class="ans">${esc(v)}</td></tr>`;};
+    qtable.innerHTML=`<tr class="gatehead"><td colspan="3">task gate · one request, ${Object.keys(qTask).length} questions</td></tr>`+Object.entries(qTask).map(e=>row(e,answers.task&&answers.task[e[0]])).join('')
+      +`<tr class="gatehead"><td colspan="3">output gate · one request, ${Object.keys(qOut).length} questions</td></tr>`+Object.entries(qOut).map(e=>row(e,answers.out&&answers.out[e[0]])).join('');
+  }
+  renderQ();
+
+  /* ---------- counters, ladder, tape helpers ---------- */
+  const syncCounters=()=>{tick($('cPosts').querySelector('.v'),tape.posts,400);tick($('cActs').querySelector('.v'),tape.activities,400);tick($('cRep').querySelector('.v'),tape.replayed,400);$('cPosts').classList.toggle('hot',tape.posts>0);$('cRep').classList.toggle('zero',tape.replayed>0);};
+  const rec=(ev)=>{const e=tape.record(ev);syncCounters();return e;};
+  const setPath=(...ps)=>{[...ladder.children].forEach(d=>d.classList.toggle('used',ps.includes(+d.dataset.p)));};
+  const say=(html)=>{reasons.innerHTML=html;};
+
+  let phase='idle'; // idle | running | parked | crashed | done | red
+  function resetView(){
+    STEPS.forEach((_,i)=>setStep(i,'off')); setArc(0); ring.style.opacity=''; crashG.classList.remove('on');
+    dotA.setAttribute('opacity',0); dotB.setAttribute('opacity',0); dotA.setAttribute('cx',NODE.TL.x); dotA.setAttribute('cy',160); dotB.setAttribute('cx',NODE.TL.x); dotB.setAttribute('cy',160);
+    agreeT.setAttribute('opacity',0); nodeEls.BR.r.setAttribute('stroke','var(--rule)'); nodeEls.BL.r.setAttribute('stroke','var(--rule)');
+    for(const k in nodeEls) nodeEls[k].g.style.opacity='';
+    status.textContent='nothing proposed, nothing written'; status.setAttribute('fill','var(--dim)');
+    setLamp(lamp1,'OFF'); setLamp(lamp2,'OFF'); stamp1.className=stamp2.className=''; stamp1.textContent=stamp2.textContent='';
+    park.hidden=true; crashBtn.disabled=true; replayBtn.disabled=true; setPath(); answers.task=answers.out=null; renderQ();
+  }
+
+  async function lightTo(k,style){ // light steps 0..k-1 in order
+    for(let i=0;i<k;i++){setStep(i,style);setArc(i+1);await wait(style==='replay'?160:0);}
+  }
+  async function traceRoutes(){
+    dotA.setAttribute('opacity',1); dotB.setAttribute('opacity',1); await wait(80);
+    dotA.setAttribute('cx',NODE.TR.x); dotB.setAttribute('cy',320); await wait(600);
+    dotA.setAttribute('cy',320); dotB.setAttribute('cx',NODE.BR.x); await wait(650);
+    dotA.setAttribute('cx',NODE.BR.x); dotB.setAttribute('cx',NODE.BR.x);
+  }
+
+  async function run(){
+    if(phase==='running')return; phase='running'; runBtn.disabled=true;
+    resetView(); tape.clear(); syncCounters();
+    say('');
+    // 1 · Path 0: assertLegalCommand
+    rec({kind:'code',label:'assertLegalCommand',verdict:'RefactorUnit legal',detail:`deterministic; MergeToDefault is human-gated (C10: ${HUMAN_GATED.join(', ')})`});
+    setStep(0,'GREEN'); setArc(1); setPath(0); await wait(420);
+    // 2 · Path 1: qualifyTask, one POST
+    const reqT={model:JEV.PIN,state:{unit:'loans.LoansService',ports,rename:{[renamed]:renamed.replace('#log','#writeAudit'),...(tBreak.checked?{'loans.LoansService#fetchOne':'loans.LoansService#fetchById'}:{})}},questions:qTask};
+    const resT=twin.systemOne(reqT,rTask); answers.task=resT.answers; renderQ();
+    rec({kind:'activity',label:'qualifyTask',verdict:`${Object.keys(resT.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(qTask).length} questions · model=${resT.model} (twin)`});
+    setStep(1,'GREEN'); setArc(2); setPath(0,1); await wait(480);
+    // 3 · gate (code)
+    const cT=compose(resT.answers,{theta:.7,floor:.6,noulGate:['ports_preserved']});
+    setLamp(lamp1,cT.verdict); stamp(stamp1,cT.verdict,cT.verdict==='GREEN'?'GREEN · map is legal':cT.verdict==='AMBER'?'AMBER · review the map':'RED · refuse the refactor');
+    rec({kind:'gate',label:'composeAnswers',verdict:cT.verdict,detail:cT.reasons.join(' | ')});
+    setStep(2,cT.verdict); setArc(3);
+    if(cT.verdict!=='GREEN'){
+      const extra=answers.task.legal.choice==='GREEN'?`<li>legal: the judge leaned ${answers.task.legal.choice} (P=${answers.task.legal.probabilities.GREEN.toFixed(2)}). A Choice cannot override a failed gate.</li>`:'';
+      say(cT.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+extra+'<li>The square is never drawn. Nothing proposed, nothing written. One POST on the tape.</li>');
+      status.textContent='refused at the task gate: a port moved'; status.setAttribute('fill','var(--red)');
+      nodeEls.BL.r.setAttribute('stroke','var(--red)'); nodeEls.TR.g.style.opacity=.35; nodeEls.BR.g.style.opacity=.35;
+      phase='red'; runBtn.disabled=false; return;
+    }
+    say(cT.reasons.map(r=>`<li>task: ${esc(r)}</li>`).join(''));
+    await wait(420);
+    // 4 · propose in memory (code: the pushout)
+    rec({kind:'code',label:'propose in memory',verdict:'V2 ⊔ LoansRepository built',detail:'the refactored unit glued to its repository by the same pushout; nothing written'});
+    setStep(3,'GREEN'); setArc(4); status.textContent='proposed in memory · nothing written'; status.setAttribute('fill','var(--amber)');
+    nodeEls.BR.r.setAttribute('stroke','var(--amber)'); await wait(420);
+    // 5 · qualifyOutput, one POST, and the two routes
+    const reqO={model:JEV.PIN,state:{square:['LoansService','LoansService ⊔ LoansRepository','LoansServiceV2','LoansServiceV2 ⊔ LoansRepository'],witness:{step6:W_.checks.step6_system_map_square,ex425:W_.witnesses.step10_ex425}},questions:qOut};
+    const resO=twin.systemOne(reqO,rOut); answers.out=resO.answers; renderQ();
+    rec({kind:'activity',label:'qualifyOutput',verdict:`${Object.keys(resO.answers).length} answers`,post:true,detail:`one POST, ${Object.keys(qOut).length} questions · model=${resO.model} (twin)`});
+    setStep(4,'GREEN'); setArc(5);
+    await traceRoutes();
+    // 6 · gate
+    const cO=compose(resO.answers,{theta:.7,floor:.6,noulGate:['square_commutes']});
+    setLamp(lamp2,cO.verdict); stamp(stamp2,cO.verdict,cO.verdict==='GREEN'?'GREEN · square commutes':'AMBER · review');
+    rec({kind:'gate',label:'composeAnswers',verdict:cO.verdict,detail:cO.reasons.join(' | ')});
+    setStep(5,cO.verdict); setArc(6);
+    if(cO.verdict==='GREEN'){agreeT.setAttribute('opacity',1); nodeEls.BR.r.setAttribute('stroke','var(--green)');}
+    say(cT.reasons.map(r=>`<li>task: ${esc(r)}</li>`).join('')+cO.reasons.map(r=>`<li>output: ${esc(r)}</li>`).join(''));
+    await wait(380);
+    // 7 · C10 park
+    setPath(0,1,3);
+    rec({kind:'human',label:'park: humanVerdict',verdict:'waiting',detail:'merge-to-default is human-gated even on GREEN. Signal humanVerdict {compose|escalate|refuse}'});
+    setStep(6,'AMBER'); status.textContent='parked on humanVerdict · the merge waits for a person'; status.setAttribute('fill','var(--amber)');
+    park.hidden=false; crashBtn.disabled=false; phase='parked'; runBtn.disabled=false;
+  }
+
+  function crash(){
+    if(phase!=='parked')return;
+    tape.crash('worker crashed while parked'); syncCounters();
+    ring.style.opacity=.28; crashG.classList.add('on'); park.hidden=true; crashBtn.disabled=true; replayBtn.disabled=false;
+    agreeT.setAttribute('opacity',0); dotA.setAttribute('opacity',0); dotB.setAttribute('opacity',0);
+    status.textContent='crashed · memory lost · both answer maps are on the tape'; status.setAttribute('fill','var(--red)');
+    say('<li>The worker died while parked. The composite in memory is gone.</li><li>Two answer maps are on the tape. Replay reads them; it does not ask again.</li>');
+    phase='crashed';
+  }
+  async function replay(){
+    if(phase!=='crashed')return; phase='running'; replayBtn.disabled=true;
+    const n=tape.replay(); syncCounters();
+    crashG.classList.remove('on'); ring.style.opacity='';
+    STEPS.forEach((_,i)=>setStep(i,'off')); setArc(0);
+    await lightTo(6,'replay');
+    setStep(2,'GREEN'); setStep(5,'GREEN'); // the gates are code: recomputed from the reused answers
+    await traceRoutes(); agreeT.setAttribute('opacity',1); nodeEls.BR.r.setAttribute('stroke','var(--green)');
+    rec({kind:'human',label:'park: humanVerdict',verdict:'waiting again',detail:'replay reached the same park from history; 0 new POSTs'});
+    setStep(6,'AMBER');
+    status.textContent=`replayed ${n} activities from the tape · 0 new POSTs · parked again`; status.setAttribute('fill','var(--green)');
+    say(`<li>Replay re-emitted ${n} recorded answer maps. The POST counter did not move.</li><li>Both gates were recomputed by code from the reused answers and stayed GREEN.</li><li>The park is reached again. The human verdict is still owed.</li>`);
+    park.hidden=false; crashBtn.disabled=false; phase='parked';
+  }
+  function verdict(v){
+    if(phase!=='parked')return; park.hidden=true; crashBtn.disabled=true; phase='done';
+    if(v==='compose'){
+      rec({kind:'apply',label:'applyCommand: merge',verdict:'applied last',detail:'first domain write, after both gates GREEN and a human compose'});
+      setStep(6,'GREEN'); setArc(7); status.textContent='merged · the first and only write'; status.setAttribute('fill','var(--green)');
+      say('<li>compose: the merge is the first domain write and it happens once.</li>');
+    }else if(v==='escalate'){
+      rec({kind:'human',label:'humanVerdict: escalate',verdict:'escalated',detail:'nothing applied; a second reviewer is asked'});
+      setStep(6,'AMBER'); status.textContent='escalated · nothing written'; status.setAttribute('fill','var(--amber)');
+      say('<li>escalate: nothing is applied. Someone else looks at the square.</li>');
+    }else{
+      rec({kind:'human',label:'humanVerdict: refuse',verdict:'refused',detail:'nothing applied; both gates were GREEN and it did not matter'});
+      setStep(6,'RED'); status.textContent='refused by a human · nothing written'; status.setAttribute('fill','var(--red)');
+      say('<li>refuse: two GREEN gates do not release a merge. A person does.</li>');
+    }
+  }
+
+  runBtn.addEventListener('click',run);
+  crashBtn.addEventListener('click',crash);
+  replayBtn.addEventListener('click',replay);
+  $('hCompose').addEventListener('click',()=>verdict('compose'));
+  $('hEscalate').addEventListener('click',()=>verdict('escalate'));
+  $('hRefuse').addEventListener('click',()=>verdict('refuse'));
+  $('reset').addEventListener('click',()=>{tape.clear();syncCounters();resetView();phase='idle';runBtn.disabled=false;say('<li>Tape rewound.</li>');});
+
+  const ex=W_.witnesses.step10_ex425;
+  provenanceTable($('prov'),[
+    {n:`step6_system_map_square=${W_.checks.step6_system_map_square} · step6_ports_preserved=${W_.checks.step6_ports_preserved}`,f:'witness/WITNESS.json → checks',note:'the two booleans behind the task gate nouls (0.94, 0.92 are twin values set from them)'},
+    {n:`renamed: ${renamed} → #writeAudit`,f:'witness/WITNESS.json → witnesses.step6.renamed',note:'one internal symbol; the square drawn on the stage'},
+    {n:`ports ${ports.join(', ')} (${ports.length} public methods)`,f:'witness/toybank/loans/LoansService.java',note:'the coloured tabs; the toggle renames the second one'},
+    {n:`step10_ex425: lift_nontrivial_on=${ex.lift_nontrivial_on} · lift_is_morphism=${ex.lift_is_morphism} · accounts_ports_fixed=${ex.accounts_ports_fixed} · naturality=${ex.naturality_lift_sigma_commute}`,f:'witness/WITNESS.json → witnesses.step10_ex425',note:ex.note},
+    {n:JV.loop,f:'jev-tape/spec/SPEC-v1-TAPE.md',note:'the seven lamps, in this order'},
+    {n:`C10 set: ${HUMAN_GATED.join(', ')}`,f:'jev-tape/src/domain.ts → HUMAN_GATED_COMMANDS · AGENTS.md',note:'why the merge parks even on GREEN'},
+    {n:'replay does not call TypeSafe again',f:'jev-tape/wiki/pages/temporal-replay.md',note:'the Replay button: 0 new POSTs'},
+    {n:'noul mid-band 0.4–0.6 · Choice ≥2 criteria · pin jev-1.13.0',f:'jev-tape/src/typesafe/contract.ts',note:'the twin enforces the same contract'}
+  ]);
+})();
+</script>
+</body>
+</html>

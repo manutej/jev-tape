@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rank Wide Read Narrow — jev demo 04</title>
+<meta name="description" content="Thirty real Fineract handlers scored in one judge request, then a threshold in code picks the few an expensive model actually reads. Path 2, recorded on the tape.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  #stage{align-self:start}
+  .controls .counters{grid-template-columns:1fr 1fr}
+  .controls .counter{padding:8px 10px}
+  .controls .counter .v{font-size:26px}
+  .controls .counter .v small{font-family:var(--mono);font-size:11px;color:var(--dim);margin-left:4px}
+  .path-ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+  .path-ladder div{border:1px solid var(--rule);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dim);text-align:center}
+  .path-ladder div b{display:block;font-family:var(--mono);font-size:13px;color:var(--bone);font-weight:500}
+  .path-ladder div.used{border-color:var(--amber);color:var(--bone)}
+  .path-ladder div.used b{color:var(--amber)}
+  @media(max-width:520px){.path-ladder{grid-template-columns:1fr 1fr}}
+  .levels{list-style:none;margin:8px 0 0;padding:0;font-size:12px;color:var(--dim)}
+  .levels li{display:flex;gap:8px;align-items:baseline;padding:2px 0}
+  .levels b{font-family:var(--mono);font-weight:500;color:var(--bone);min-width:12px}
+  .levels i{display:inline-block;width:10px;height:10px;border-radius:2px;flex:none;position:relative;top:1px}
+  .reasons{font-size:13px;color:var(--dim);margin:8px 0 0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .qtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;grid-column:1/-1;table-layout:fixed}
+  .qtable td,.qtable th{word-break:break-word;padding:6px 8px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+  .qtable th{font-weight:500;color:var(--dim);font-size:12px}
+  .qtable td:first-child{font-family:var(--mono);color:var(--bone);width:36%}
+  .qtable td:last-child{width:22%}
+  .qtable .ans{font-family:var(--mono)}
+  .qtable tr.rest td{color:var(--dim);font-style:italic;font-family:var(--display);font-size:14px}
+  .stage svg .tile{transition:transform .75s cubic-bezier(.2,.8,.2,1)}
+  .stage svg .tile rect.bg{transition:stroke .3s}
+  .stage svg .cell{transition:fill .3s}
+  .stage svg .fade{transition:opacity .35s}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 04 of 10 · rank wide, read narrow</div>
+      <h1>Thirty handlers, one request, four worth reading.</h1>
+      <p class="lede">The ablation froze <b>30</b> real Fineract command handlers. Twenty-six follow one convention so closely that a motif line regenerates them. Four carry an extra dependency and edge, and a few more lean on a missing annotation or a constants class. Scoring all thirty is one judge request, not thirty. Reading the few that scored low is the expensive part, so it happens after the shortlist is on the tape. The explicit pack is <b>2,089</b> tokens; the motif plus the shortlist is far less.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> factors a family of units into a motif and its deviants. <em>jev-tape</em> ranks wide with one POST and reads narrow with the expensive model. The deviants are the shortlist.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Rank wide, read narrow instrument">
+    <div class="controls">
+      <h3>Rank 30 handlers, read a few</h3>
+      <p>One Score question per handler, five labelled levels, thirty ids in one <code>questions</code> map. The twin scores each from its wiring. Then a threshold, which is code, decides who gets read.</p>
+
+      <label class="slider">read every handler scored below <b id="thV">4</b>
+        <input type="range" id="th" min="1" max="5" step="1" value="4" aria-label="score threshold">
+      </label>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Rank, then read</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="counters">
+        <div class="counter" id="cA"><div class="v" data-v="0">0</div><div class="l">explicit pack, everything (real cl100k)</div></div>
+        <div class="counter" id="cM"><div class="v" data-v="0">0</div><div class="l">motif + shortlist rows (≈ chars/3.6)</div></div>
+        <div class="counter" id="cN"><div class="v" data-v="0">0</div><div class="l">recorded shortlist (handlers)</div></div>
+        <div class="counter" id="cP"><div class="v" data-v="0">0</div><div class="l">POSTs</div></div>
+      </div>
+      <ul class="reasons" id="reasons"><li>No run yet.</li></ul>
+
+      <ul class="levels" id="levels"></ul>
+
+      <div class="path-ladder" id="ladder">
+        <div data-p="0"><b>path 0</b>code</div>
+        <div data-p="1"><b>path 1</b>one POST</div>
+        <div data-p="2"><b>path 2</b>rank, read</div>
+        <div data-p="3"><b>path 3</b>tape</div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Thirty handler tiles that sort into rank order, and a tray for the ones the model reads"></div>
+    <table class="qtable" id="qtable" aria-label="The shortlist from the answer map"></table>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>Three cells matter. The first is one Activity with one POST: thirty Score questions in a single request, thirty answers in a single map. The second is code: the threshold reads the recorded map and cuts a shortlist. The third is the expensive read, an Activity that is not a judge call, and it starts only after the shortlist is on the tape. If the worker dies during the read, replay finds the shortlist and does not rank again.</p>
+        <p>The twin's rule is the ablation's own convention check. A handler with more than one dependency or edge scores 1; that reproduces the four deviants the manifest lists. No <code>entity</code> scores 2, a constants-class annotation scores 3, and the rest score 4: the motif line regenerates them byte for byte. Move the threshold and the shortlist changes with no new POST. The rank was recorded once.</p>
+        <p>The token meter is honest about what is real. The explicit pack's <b>2,089</b> is a measured cl100k count. The motif-plus-shortlist figure is an estimate from character counts, labelled as such, because this page does not carry a tokenizer.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>A low score is a difference, not a defect.</b> The score checks how far a handler sits from the family convention. It does not know whether the extra dependency is a bug or the one place the convention was wrong. The options note for the symmetry auditor says it plainly: the one service that differs is the review item. Deciding what the difference means is a fork with an open option set, which is an LLM job, not a Jev job.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin.</b> Scores come from the handler's wiring, deterministically, with the same wire shape and contract checks as the real client: five levels, one request, one answer map. No key, no network. A live TypeSafe call is a claim this page does not make.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 04 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> experiments/e3-ablation and <code>manutej/jev-tape</code> spec.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e3.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, twin, esc, tick, svg, provenanceTable, topbar} = JEV;
+  const E3 = JEV.data.e3, JV = JEV.data.jev;
+  topbar(document.getElementById('topbar'), {title:'04 · Rank wide, read narrow'});
+  const tape = new Tape({title:'Rank-then-read tape'});
+  const $ = id => document.getElementById(id);
+  const th=$('th'), thV=$('thV'), runBtn=$('run'), reasons=$('reasons'), ladder=$('ladder'), qtable=$('qtable');
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+
+  /* ---------- the state: 30 real handlers ---------- */
+  const H=E3.graph.map((g,i)=>({i,cls:g.cls,short:g.cls.replace(/CommandHandler$/,''),entity:g.entity,deps:Object.keys(g.deps).length,edges:g.edges.length}));
+  const LEVELS=['not a handler','extra dependency and edge (deviant)','annotation missing (- fills)','annotation via constants','fully convention-determined'];
+  const colourOf=s=>s===4?'var(--green)':s>=2?'var(--amber)':s===1?'var(--red)':'var(--dim)';
+  $('levels').innerHTML=LEVELS.map((l,s)=>`<li><i style="background:${colourOf(s)}"></i><b>${s}</b><span>${esc(l)}</span></li>`).reverse().join('');
+  // the twin's rule (the ablation's convention check)
+  const scoreOf=h=>(h.deps>1||h.edges>1)?1:h.entity==null?2:/Constants/.test(h.entity)?3:4;
+  const est=s=>Math.round(s.length/3.6);
+  // token pieces: the motif header of pack B (up to the first inst) and each handler's explicit block from pack A
+  const motifHeader=E3.packB.slice(0,E3.packB.indexOf('\ninst ')+1);
+  const blocksA=E3.packA.split(/\n\s*\n/).filter(Boolean);
+  const blockOf=cls=>blocksA.find(b=>b.startsWith('unit '+cls))||'';
+  const motifTok=est(motifHeader);
+
+  /* ---------- stage ---------- */
+  const W=800, COLS=6, TW=122, TH=50, GX=128, GY=56, X0=19, Y0=46;
+  const gridRows=Math.ceil(H.length/COLS), gridBottom=Y0+gridRows*GY-6;
+  const gateY=gridBottom+24, trayTop=gateY+14;
+  const stage=$('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} 100`,role:'img','aria-label':'Thirty handler tiles in a grid. After ranking they sort by score; a gate line marks the threshold and the tiles below it move into a tray labelled the LLM reads these.'});
+  stage.appendChild(root);
+  const title=svg('text',{x:X0,y:28,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['30 handlers in file order · not yet scored']); root.appendChild(title);
+  const gate=svg('g',{class:'fade',opacity:0}); root.appendChild(gate);
+  gate.appendChild(svg('line',{x1:X0,x2:W-X0,y1:gateY,y2:gateY,stroke:'var(--amber)','stroke-width':1.5,'stroke-dasharray':'6 5'}));
+  const gateL=svg('text',{x:X0,y:gateY-7,'font-size':'11',class:'mono',fill:'var(--amber)'},['']); gate.appendChild(gateL);
+  const gateR=svg('text',{x:W-X0,y:gateY-7,'font-size':'11','text-anchor':'end',class:'mono',fill:'var(--amber)'},['']); gate.appendChild(gateR);
+  const trayBox=svg('rect',{x:X0-6,y:trayTop,width:W-2*X0+12,height:10,rx:8,fill:'none',stroke:'var(--rule)','stroke-dasharray':'3 5'}); gate.appendChild(trayBox);
+  const trayL=svg('text',{x:X0+6,y:trayTop+18,'font-size':'12','font-style':'italic','font-family':'var(--display)',fill:'var(--bone)'},['the LLM reads these']); gate.appendChild(trayL);
+  const tilesG=svg('g',{}); root.appendChild(tilesG);
+  const words=s=>s.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g,'$1 $2').split(' ');
+  function wrapName(s,n=17){const out=[];let cur='';for(const w of words(s)){if(cur&&(cur+' '+w).length>n){out.push(cur);cur=w;}else cur=cur?cur+' '+w:w;}if(cur)out.push(cur);if(out.length>2){out.length=2;out[1]=out[1].slice(0,n-1)+'…';}return out;}
+  const gridPos=i=>[X0+(i%COLS)*GX, Y0+Math.floor(i/COLS)*GY];
+  const trayPos=j=>[X0+(j%COLS)*GX, trayTop+28+Math.floor(j/COLS)*GY];
+  const tiles=H.map(h=>{
+    const g=svg('g',{class:'tile'},[svg('title',{},[h.cls])]);
+    const bg=svg('rect',{class:'bg',x:0,y:0,width:TW,height:TH,rx:6,fill:'var(--desk-2)',stroke:'var(--rule)','stroke-width':1.2}); g.appendChild(bg);
+    wrapName(h.short).forEach((ln,k)=>g.appendChild(svg('text',{x:8,y:16+k*12,'font-size':'10',fill:'var(--bone)'},[ln])));
+    const num=svg('text',{x:TW-8,y:45,'font-size':'11','text-anchor':'end',class:'mono',fill:'var(--dim)'},['']); g.appendChild(num);
+    const cells=[0,1,2,3].map(k=>{const c=svg('rect',{class:'cell',x:8+k*24,y:38,width:20,height:6,rx:1.5,fill:'var(--desk-3)'});g.appendChild(c);return c;});
+    const [x,y]=gridPos(h.i); g.setAttribute('transform',`translate(${x},${y})`); tilesG.appendChild(g);
+    return {h,g,bg,num,cells,score:null};
+  });
+  function paintTile(t){
+    const s=t.score, col=s==null?null:colourOf(s);
+    t.bg.setAttribute('stroke',col||'var(--rule)'); t.num.textContent=s==null?'':String(s); t.num.setAttribute('fill',col||'var(--dim)');
+    t.cells.forEach((c,k)=>c.setAttribute('fill',s!=null&&k<s?col:'var(--desk-3)'));
+  }
+  const move=(t,[x,y])=>t.g.setAttribute('transform',`translate(${x},${y})`);
+  function setHeight(trayN){const rows=Math.max(2,Math.ceil(trayN/COLS));const h=trayTop+28+rows*GY+4;root.setAttribute('viewBox',`0 0 ${W} ${h}`);trayBox.setAttribute('height',h-trayTop-10);}
+  setHeight(0);
+
+  /* ---------- questions: thirty Score questions in one map ---------- */
+  const questions=Object.fromEntries(H.map(h=>[`score_${h.cls}`,{type:'score',instructions:`How far does ${h.cls} sit from the CommandHandler convention (unit, one dep, one edge, entity+action literal)?`,criteria:LEVELS}]));
+  const resolvers=Object.fromEntries(H.map(h=>[`score_${h.cls}`,()=>({score:scoreOf(h)})]));
+  let answers=null, ranked=null, phase='idle';
+  const T=()=>+th.value;
+  const shortlist=()=>ranked?ranked.filter(t=>t.score<T()):[];
+
+  const setPath=(...ps)=>{[...ladder.children].forEach(d=>d.classList.toggle('used',ps.includes(+d.dataset.p)));};
+  const syncCounters=(n,mTok)=>{tick($('cA').querySelector('.v'),E3.tokens.A,500,v=>Math.round(v).toLocaleString());tick($('cM').querySelector('.v'),mTok,500,v=>'≈ '+Math.round(v).toLocaleString());tick($('cN').querySelector('.v'),n,400);tick($('cP').querySelector('.v'),tape.posts,300);$('cP').classList.toggle('hot',tape.posts>0);$('cN').classList.toggle('hot',n>0);};
+  syncCounters(0,0);
+  function renderQ(){
+    if(!answers){qtable.innerHTML='';return;}
+    const sl=shortlist(), rest=ranked.length-sl.length;
+    qtable.innerHTML=`<thead><tr><th>question id</th><th>twin answer</th><th>level</th></tr></thead><tbody>`+sl.map(t=>{const a=answers[`score_${t.h.cls}`];return `<tr><td>score_${esc(t.h.cls)}</td><td class="ans">score ${a.score} · P=${a.probabilities[String(a.score)].toFixed(2)} · deps ${t.h.deps} · edges ${t.h.edges}</td><td>${esc(LEVELS[a.score])}</td></tr>`;}).join('')
+      +`<tr class="rest"><td colspan="3">${rest} more answers in the same map scored ${T()} or higher: covered by the motif line, never read.</td></tr></tbody>`;
+  }
+  function layoutRead(animateTray=true){
+    const sl=shortlist(); const inTray=new Set(sl);
+    setHeight(sl.length);
+    ranked.forEach((t,r)=>{if(!inTray.has(t))move(t,gridPos(r));});
+    sl.forEach((t,j)=>move(t,trayPos(j)));
+    gateL.textContent=`gate · read what scores below ${T()}`; gateR.textContent=`${sl.length} of ${H.length} go below the line`;
+    trayL.textContent=sl.length?`the LLM reads these (${sl.length})`:'nothing to read: the motif covers all 30';
+    const mTok=motifTok+sl.reduce((a,t)=>a+est(blockOf(t.h.cls)),0);
+    syncCounters(sl.length,mTok); renderQ();
+    return {sl,mTok};
+  }
+
+  async function run(){
+    if(phase==='running')return; phase='running'; runBtn.disabled=true;
+    tape.clear(); gate.setAttribute('opacity',0); tiles.forEach(t=>{t.score=null;paintTile(t);}); setPath();
+    // path 0
+    tape.record({kind:'code',label:'assertLegalCommand',verdict:'ReadHandlers legal',detail:'deterministic; no write follows the read'});
+    setPath(0); await wait(300);
+    // path 2, step 1: rank wide, one POST
+    const req={model:JEV.PIN,state:{pack:'e3-ablation/graph.json',handlers:H.map(h=>({cls:h.cls,entity:h.entity,deps:h.deps,edges:h.edges}))},questions};
+    const res=twin.systemOne(req,resolvers); answers=res.answers;
+    tape.record({kind:'activity',label:`rank ${H.length} handlers`,verdict:`${Object.keys(res.answers).length} scores`,post:true,detail:`one POST, ${Object.keys(questions).length} Score questions, ${LEVELS.length} levels each · model=${res.model} (twin)`});
+    tiles.forEach(t=>{t.score=answers[`score_${t.h.cls}`].score;});
+    ranked=tiles.slice().sort((a,b)=>b.score-a.score||a.h.i-b.h.i);
+    title.textContent=`ranked by score · one request, ${H.length} answers`;
+    setPath(0,2);
+    for(const [k,t] of tiles.entries()){paintTile(t);await wait(14);}
+    await wait(150);
+    ranked.forEach((t,r)=>move(t,gridPos(r)));
+    const cnt=[0,1,2,3,4].map(s=>ranked.filter(t=>t.score===s).length);
+    reasons.innerHTML=`<li>Scores: ${cnt.map((c,s)=>c?`${c}×${s}`:null).filter(Boolean).join(' · ')}.</li>`;
+    await wait(900);
+    // step 2: the threshold is code, the shortlist is recorded
+    gate.setAttribute('opacity',1);
+    const {sl,mTok}=layoutRead();
+    tape.record({kind:'code',label:`threshold < ${T()}`,verdict:`shortlist ${sl.length}`,detail:`recorded before the LLM: ${sl.map(t=>t.h.short).join(', ')||'none'}`});
+    reasons.innerHTML+=`<li>Shortlist recorded: ${sl.length} handler${sl.length===1?'':'s'} scored below ${T()}.</li>`;
+    await wait(850);
+    // step 3: the expensive read, an Activity that is not a judge call
+    if(sl.length){
+      tape.record({kind:'activity',label:`LLM reads ${sl.length}`,verdict:`≈ ${mTok.toLocaleString()} tok`,post:false,detail:`the expensive call, after the shortlist is on the tape; motif header ≈ ${motifTok} + ${sl.length} explicit block(s), chars/3.6`});
+      reasons.innerHTML+=`<li>The expensive model reads ${sl.length} explicit block${sl.length===1?'':'s'} plus the motif header, ≈ ${mTok.toLocaleString()} tokens instead of ${E3.tokens.A.toLocaleString()}.</li>`;
+    }else{
+      tape.record({kind:'code',label:'LLM reads 0',verdict:'nothing to read',detail:'the motif covers every handler at this threshold'});
+      reasons.innerHTML+=`<li>Nothing to read. Raise the threshold to see the deviants.</li>`;
+    }
+    reasons.innerHTML+=`<li>POSTs: ${tape.posts}. Move the slider: the shortlist changes, the POST count does not.</li>`;
+    phase='read'; runBtn.disabled=false;
+  }
+  th.addEventListener('input',()=>{thV.textContent=th.value;});
+  th.addEventListener('change',()=>{
+    if(phase!=='read')return;
+    const {sl,mTok}=layoutRead();
+    tape.record({kind:'code',label:`threshold < ${T()}`,verdict:`shortlist ${sl.length}`,detail:'code over the recorded answer map; no new POST'});
+    reasons.innerHTML=`<li>Threshold moved to ${T()}: ${sl.length} handler${sl.length===1?'':'s'} below the line, ≈ ${mTok.toLocaleString()} tokens to read.</li>${mTok>E3.tokens.A?`<li>That is more than the explicit pack (${E3.tokens.A.toLocaleString()}). Reading everything is not reading narrow.</li>`:''}<li>POSTs: ${tape.posts}. The rank was recorded once.</li>`;
+  });
+  runBtn.addEventListener('click',run);
+  $('reset').addEventListener('click',()=>{
+    tape.clear(); answers=null; ranked=null; phase='idle'; setPath(); gate.setAttribute('opacity',0);
+    tiles.forEach(t=>{t.score=null;paintTile(t);move(t,gridPos(t.h.i));}); setHeight(0);
+    title.textContent='30 handlers in file order · not yet scored'; syncCounters(0,0); renderQ(); reasons.innerHTML='<li>Tape rewound.</li>';
+  });
+
+  // the twin's rule must reproduce the manifest's deviants exactly
+  const dev=H.filter(h=>scoreOf(h)===1).map(h=>h.cls).sort(), manDev=E3.manifest.deviants.slice().sort();
+  const devMatch=JSON.stringify(dev)===JSON.stringify(manDev);
+  provenanceTable($('prov'),[
+    {n:`deviants: ${manDev.join(', ')}`,f:'experiments/e3-ablation/manifest.json → deviants',note:`the four that score 1; the twin's rule reproduces this list exactly: ${devMatch}`},
+    {n:`A ${E3.tokens.A.toLocaleString()} · B ${E3.tokens.B.toLocaleString()} · C ${E3.tokens.C.toLocaleString()} tokens (cl100k_base)`,f:'experiments/e3-ablation/manifest.json → tokens',note:'the "everything" counter is A; B is the full factored pack for comparison'},
+    {n:`${H.length} handlers · deps and edges per handler`,f:'experiments/e3-ablation/graph.json',note:'the tiles, in file order before the run'},
+    {n:`motif header ≈ ${motifTok} tok · explicit blocks per handler`,f:'experiments/e3-ablation/packB.txt (header up to the first inst) · packA.txt (blocks split on blank lines)',note:'estimates: chars/3.6, labelled ≈ on the page'},
+    {n:'path 2 · rank then read · shortlist POST recorded · record shortlist before LLM',f:'jev-tape/spec/SPEC-v1-SPEED.md → Four paths',note:'the three cells on the tape'},
+    {n:'A 13-question pack is one HTTP call, not 13.',f:'jev-tape/spec/SPEC-v1-SPEED.md → Acceptance (speed)',note:'here: 30 questions, one call'},
+    {n:'Score or classify many candidates with TypeSafe. Spend LLM / tool / human compute only on the shortlist.',f:'jev-tape/wiki/pages/rank-wide-read-narrow.md',note:'the shape of this page'},
+    {n:`Score needs ${JV.contract.scoreLevels[0]}–${JV.contract.scoreLevels[1]} labelled levels (here ${LEVELS.length})`,f:'jev-tape/src/typesafe/contract.ts',note:'the twin validates the request the same way'},
+    {n:'the one service of 37 that differs is the review item',f:'wiring-and-the-whole/options/OPTIONS.md → Option 4',note:'why a low score is a review item, not an error'},
+    {n:'A fork with an open option set is an LLM job, not a Jev job.',f:'jev-tape/wiki/pages/bounded-forks.md',note:'why the read is an LLM Activity, not a judge call'}
+  ]);
+})();
+</script>
+</body>
+</html>

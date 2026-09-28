@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kappa Path Zero — jev demo 03</title>
+<meta name="description" content="Two Money classes are glued along a junction you choose. The pushout and its collision lint run as code. The judge is never called and the POST counter stays at zero.">
+<link rel="stylesheet" href="assets/tape.css">
+<style>
+  #stage{align-self:start}
+  .controls .counters{grid-template-columns:2fr 1fr 1fr}
+  .controls .counter{padding:8px 10px}
+  .controls .counter .v{font-size:26px}
+  .controls .counter.zero .v{font-size:44px}
+  .askrow{margin:12px 0 4px}
+  .askrow .cap{display:block;font-family:var(--mono);font-size:12px;color:var(--red);margin-top:6px}
+  .kline{display:flex;align-items:center;gap:12px;min-height:44px;margin:8px 0 2px}
+  .reasons{font-size:13px;color:var(--dim);margin:0;padding-left:18px}
+  .reasons li{margin:2px 0}
+  .routes{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;grid-column:1/-1;table-layout:fixed}
+  .routes th,.routes td{text-align:left;padding:7px 8px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;word-break:break-word}
+  .routes th{font-weight:500;color:var(--dim);font-size:12px}
+  .routes td:first-child{font-family:var(--mono)}
+  .routes tr.here td{color:var(--bone);background:rgba(61,220,132,.08)}
+  .routes tr.here td:first-child{color:var(--green)}
+  .routes tr.here td:first-child::before{content:"▸ ";}
+  .routes .acc{font-family:var(--display);font-style:italic;font-size:15px;color:var(--bone);padding-top:12px}
+  .stage svg .fly{transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .4s}
+  .stage svg .pop{transition:transform .35s cubic-bezier(.2,.9,.3,1.3),opacity .2s;transform-box:fill-box;transform-origin:center}
+  .stage svg .fade{transition:opacity .4s}
+  .stage svg .jline{transition:opacity .3s}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar" id="topbar"></nav>
+
+  <header class="hero">
+    <div>
+      <div class="n">demo 03 of 10 · κ on path 0</div>
+      <h1>Two Moneys walk into a pushout. No judge is called.</h1>
+      <p class="lede">The toy bank has two classes named <b><code>Money</code></b>. One keeps <b><code>long amountCents</code></b>, the other <b><code>double amount</code></b>, and the report module reads both. Gluing them along a junction is a pushout: a computable amalgamation that always exists. When two identified names carry different signatures, a lint called <b>κ</b> fires. All of that is arithmetic on names, so it runs as code. This page never sends a request, and the counter that proves it stays at <b>0</b>.</p>
+    </div>
+    <aside class="aside">
+      <b>The intersection.</b> <em>wiring-and-the-whole</em> says a collision is a diagnostic on the quotient map, not an obstruction. <em>jev-tape</em> says a deterministic check is path 0: no TypeSafe, no Temporal. A pushout with a lint is exactly that.
+    </aside>
+  </header>
+
+  <section class="instrument" aria-label="Kappa on path 0 instrument">
+    <div class="controls">
+      <h3>Glue the two Moneys</h3>
+      <p>Choose which symbols to identify along the junction, then glue. The pushout is computed here with the same rule the witness uses: union the identified pairs, then read each class. If a class holds two signatures, κ fires.</p>
+
+      <label class="toggle"><input type="checkbox" id="tAmount" checked> <span>identify <code>amountCents ~ amount</code></span></label>
+      <label class="toggle"><input type="checkbox" id="tCurrency"> <span>identify <code>currency ~ currencyCode</code></span></label>
+
+      <div class="btnrow">
+        <button class="btn primary" id="run">Glue</button>
+        <button class="btn" id="reset">Rewind tape</button>
+      </div>
+
+      <div class="kline"><span class="lamp OFF" id="lamp">OFF</span><span id="stamp"></span></div>
+      <ul class="reasons" id="reasons"><li>No glue yet.</li></ul>
+
+      <div class="counters">
+        <div class="counter zero" id="cPosts"><div class="v" data-v="0">0</div><div class="l">POSTs to the judge</div></div>
+        <div class="counter" id="cCode"><div class="v" data-v="0">0</div><div class="l">code cells</div></div>
+        <div class="counter" id="cKappa"><div class="v" data-v="0">0</div><div class="l">κ collisions</div></div>
+      </div>
+
+      <div class="askrow">
+        <button class="btn" id="ask" disabled aria-describedby="askcap">Ask the judge anyway?</button>
+        <span class="cap" id="askcap">Illegal: Temporal around path 0. Sequential TypeSafe.</span>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Two Money classes as paper cards, a junction between them, and the glued result"></div>
+    <table class="routes" id="routes" aria-label="The four speed paths, with path 0 highlighted"></table>
+  </section>
+
+  <section class="section">
+    <div class="cols">
+      <div>
+        <h2>What the tape shows</h2>
+        <p>Every cell on this tape is a code cell. Parsing two files, building the junction, computing the pushout, and running the κ lint are all deterministic functions of the source text. The routing table says what that means: path 0 is code, no TypeSafe, no Temporal. Nothing here is a question for a judge, so nothing here is recorded as an Activity, and the POST counter never leaves zero.</p>
+        <p>Identify <code>amountCents</code> with <code>amount</code> and κ fires with the two signatures the witness recorded: a field of type <code>long</code> and a field of type <code>double</code>. Identify <code>currency</code> with <code>currencyCode</code> and both sides are <code>String</code>, so the merge is silent and correct. Identify nothing and the glue along an empty junction is the disjoint union: four fields, no collision.</p>
+        <p>The disabled button is the point. Wrapping a deterministic check in a judge call, or in a Workflow, is listed as illegal in the speed spec. Path 0 items never appear in TypeSafe logs.</p>
+      </div>
+      <div>
+        <h2>Counterpoint</h2>
+        <div class="counterpoint"><b>κ is a lint on the quotient, not semantics.</b> It compares signatures of identified names. It does not know that cents and dollars differ when both are stored as <code>long</code>, and it would let that merge through in silence. A silent merge is not a correct one; κ only catches the contradictions that are visible in the types.</div>
+        <div class="counterpoint" style="margin-top:10px"><b>The judge here is a twin, and it is never called.</b> This page loads the same twin runtime as the other demos, with the same wire shape and contract checks as the real client, and makes zero requests to it. No key, no network. The zero on the counter is a measurement of this page, not a claim about the real client.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trace">
+    <h2>Where the numbers come from</h2>
+    <div id="prov"></div>
+  </section>
+
+  <footer class="foot">jev demo 03 · <a href="index.html">all ten demos</a> · built from <code>manutej/wiring-and-the-whole</code> witness and <code>manutej/jev-tape</code> spec.</footer>
+</div>
+
+<script src="data/meta.js"></script>
+<script src="data/jev.js"></script>
+<script src="data/e1.js"></script>
+<script src="assets/tape.js"></script>
+<script>
+(function(){
+  const {Tape, esc, setLamp, stamp, tick, svg, provenanceTable, topbar} = JEV;
+  const E1 = JEV.data.e1, W_ = E1.witness, JV = JEV.data.jev;
+  topbar(document.getElementById('topbar'), {title:'03 · κ on path 0'});
+  const tape = new Tape({title:'Path 0 tape'});
+  const $ = id => document.getElementById(id);
+  const tAmount=$('tAmount'), tCurrency=$('tCurrency'), runBtn=$('run'), lamp=$('lamp'), stampEl=$('stamp'), reasons=$('reasons');
+  const wait=(ms)=>new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?0:ms));
+
+  /* ---------- parse the two Money classes from the toybank source (same regex family as run_witness.py) ---------- */
+  const FILES={L:'accounts/Money.java',R:'loans/Money.java'};
+  const PKG={L:'accounts',R:'loans'};
+  function parse(side){
+    const src=E1.toybank[FILES[side]]; const cls=src.match(/class (\w+)/)[1];
+    const fields=[...src.matchAll(/public (\w+) (\w+);/g)].map(m=>({name:m[2],type:m[1],q:`${PKG[side]}.${cls}#${m[2]}`,sig:`('field', '${m[1]}')`}));
+    return {cls,fields,obj:Object.fromEntries(fields.map(f=>[f.q,f.sig]))};
+  }
+  const X=parse('L'), Y=parse('R');
+  const report=E1.toybank['report/ReportModule.java'];
+  const reportRefs=(report.match(/refs:\s*(.+)/)||[,''])[1].trim().split(/\s+/);
+  const isNum=t=>/^(long|double|int|float|short|byte)$/.test(t);
+  const tcol=t=>isNum(t)?'var(--c-idea)':'var(--c-entity)';
+
+  /* ---------- pushout: union–find on identified pairs, κ when a class holds two signatures ---------- */
+  function pushout(J,f,X,g,Y){
+    const p=new Map(); const find=x=>{if(!p.has(x))p.set(x,x);let r=x;while(p.get(r)!==r)r=p.get(r);while(p.get(x)!==r){const n=p.get(x);p.set(x,r);x=n;}return r;};
+    const union=(a,b)=>p.set(find(a),find(b));
+    for(const j of Object.keys(J)) union('L:'+f[j],'R:'+g[j]);
+    const elems=[...Object.keys(X).map(a=>'L:'+a),...Object.keys(Y).map(b=>'R:'+b)];
+    const classes=new Map(); for(const e of elems){const r=find(e);if(!classes.has(r))classes.set(r,[]);classes.get(r).push(e);}
+    const Z={}, ix={}, iy={}, kappa=[];
+    for(const members of classes.values()){
+      const sigs=new Set(members.map(m=>m.startsWith('L:')?X[m.slice(2)]:Y[m.slice(2)]));
+      if(sigs.size>1) kappa.push({identified:members,signatures:[...sigs].sort()});
+      const zname=members.map(m=>m.slice(2)).sort()[0];
+      Z[zname]=members[0].startsWith('L:')?X[members[0].slice(2)]:Y[members[0].slice(2)];
+      for(const m of members)(m.startsWith('L:')?ix:iy)[m.slice(2)]=zname;
+    }
+    const comm=Object.keys(J).every(j=>ix[f[j]]===iy[g[j]]);
+    return {Z,ix,iy,kappa,comm,classes:[...classes.values()]};
+  }
+  const PAIRS=[{id:'p#0',l:X.fields[0],r:Y.fields[0],toggle:tAmount},{id:'p#1',l:X.fields[1],r:Y.fields[1],toggle:tCurrency}];
+  const junction=()=>{const J={},f={},g={};PAIRS.filter(p=>p.toggle.checked).forEach((p,i)=>{const k='p#'+i;J[k]=p.l.sig;f[k]=p.l.q;g[k]=p.r.q;});return {J,f,g};};
+
+  // check the live rule against the witness's recorded step 9 (the same junction: amountCents ~ amount)
+  const w9=W_.witnesses.step9.kappa[0];
+  const live9=pushout({'p#0':X.fields[0].sig},{'p#0':X.fields[0].q},X.obj,{'p#0':Y.fields[0].q},Y.obj);
+  const matches9=live9.kappa.length===1&&JSON.stringify(live9.kappa[0].signatures)===JSON.stringify(w9.signatures)&&live9.kappa[0].identified.slice().sort().join()===w9.identified.slice().sort().join();
+
+  /* ---------- stage ---------- */
+  const W=800,H=440, stage=$('stage');
+  const root=svg('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Left card: accounts Money with long amountCents and String currency. Right card: loans Money with double amount and String currencyCode. Between them the junction. Below, the glued Money.'});
+  stage.appendChild(root);
+  const CARD={L:{x:24,y:44,w:250,h:130,title:FILES.L},R:{x:526,y:44,w:250,h:130,title:FILES.R}};
+  const ROW_Y=[100,130];
+  const paper=(x,y,w,h)=>{const g=svg('g',{});g.appendChild(svg('rect',{x,y,width:w,height:h,rx:6,fill:'var(--tape)'}));g.appendChild(svg('rect',{x,y,width:w,height:6,rx:2,fill:'var(--tape-2)'}));return g;};
+  const layers={paper:svg('g',{}),junction:svg('g',{}),rows:svg('g',{}),over:svg('g',{})};
+  Object.values(layers).forEach(l=>root.appendChild(l));
+  for(const s of ['L','R']){const c=CARD[s];const cls=s==='L'?X:Y;
+    layers.paper.appendChild(paper(c.x,c.y,c.w,c.h));
+    layers.paper.appendChild(svg('text',{x:c.x,y:c.y-12,'font-size':'11',class:'mono',fill:'var(--dim)'},[c.title]));
+    layers.paper.appendChild(svg('text',{x:c.x+14,y:c.y+30,'font-size':'12',class:'mono',fill:'var(--ink-2)'},[`public class ${cls.cls}`]));
+  }
+  // a field row: type chip + name. Returns a group positioned by transform so it can fly.
+  function rowEl(field,side){
+    const g=svg('g',{class:'fly'});
+    const chipW=field.type.length*7.4+12;
+    g.appendChild(svg('rect',{x:-6,y:-11,width:226,height:22,rx:4,fill:'var(--tape)'}));
+    g.appendChild(svg('rect',{x:0,y:-10,width:chipW,height:18,rx:3,fill:tcol(field.type),opacity:.28}));
+    g.appendChild(svg('rect',{x:0,y:-10,width:chipW,height:18,rx:3,fill:'none',stroke:tcol(field.type),'stroke-width':1}));
+    g.appendChild(svg('text',{x:chipW/2,y:3,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--ink)'},[field.type]));
+    g.appendChild(svg('text',{x:chipW+8,y:4,'font-size':'12',class:'mono',fill:'var(--ink)'},[field.name]));
+    g.dataset.side=side; return g;
+  }
+  const rowPos=(side,i)=>({x:CARD[side].x+14,y:ROW_Y[i]});
+  const srcRows={L:[],R:[]};
+  for(const s of ['L','R']){const cls=s==='L'?X:Y;cls.fields.forEach((f,i)=>{const r=rowEl(f,s);const p=rowPos(s,i);r.setAttribute('transform',`translate(${p.x},${p.y})`);layers.rows.appendChild(r);srcRows[s].push(r);});}
+  // junction column
+  layers.junction.appendChild(svg('text',{x:400,y:66,'font-size':'13','text-anchor':'middle','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['J, the junction']));
+  const jLines=PAIRS.map((p,i)=>{const y=ROW_Y[i];const g=svg('g',{class:'jline',opacity:0});
+    g.appendChild(svg('line',{x1:CARD.L.x+CARD.L.w,y1:y,x2:CARD.R.x,y2:y,stroke:'var(--dim)','stroke-dasharray':'4 4','stroke-width':1.5}));
+    g.appendChild(svg('circle',{cx:CARD.L.x+CARD.L.w,cy:y,r:3.5,fill:'var(--dim)'}));g.appendChild(svg('circle',{cx:CARD.R.x,cy:y,r:3.5,fill:'var(--dim)'}));
+    g.appendChild(svg('text',{x:400,y:y-7,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--dim)'},[`${p.l.name} ~ ${p.r.name}`]));
+    layers.junction.appendChild(g);return g;});
+  const jEmpty=svg('text',{x:400,y:122,'font-size':'11','text-anchor':'middle',class:'mono',fill:'var(--dim)'},['J = ∅ (disjoint union)']); layers.junction.appendChild(jEmpty);
+  function drawJunction(){PAIRS.forEach((p,i)=>jLines[i].setAttribute('opacity',p.toggle.checked?1:0));jEmpty.setAttribute('opacity',PAIRS.some(p=>p.toggle.checked)?0:1);}
+  [tAmount,tCurrency].forEach(t=>t.addEventListener('change',()=>{drawJunction();if(glued)resetView();}));
+  drawJunction();
+  // report module card (why both Moneys are in scope)
+  const rp=paper(14,230,212,116); layers.paper.appendChild(rp);
+  layers.paper.appendChild(svg('text',{x:14,y:218,'font-size':'11',class:'mono',fill:'var(--dim)'},['report/ReportModule.java']));
+  layers.paper.appendChild(svg('text',{x:26,y:256,'font-size':'10',class:'mono',fill:'var(--ink-2)'},['class ReportModule']));
+  layers.paper.appendChild(svg('text',{x:26,y:274,'font-size':'10',class:'mono',fill:'var(--ink-2)'},['// refs:']));
+  reportRefs.forEach((r,i)=>{const [cls,sym]=r.split('#');layers.paper.appendChild(svg('text',{x:26,y:289+i*30,'font-size':'10',class:'mono',fill:'var(--ink)'},[cls]));layers.paper.appendChild(svg('text',{x:38,y:303+i*30,'font-size':'10',class:'mono',fill:'var(--ink)'},['#'+sym]));});
+  // merged card (the pushout Z)
+  const MC={x:244,y:215,w:346,h:190};
+  const merged=svg('g',{class:'fade',opacity:0}); layers.paper.appendChild(merged);
+  merged.appendChild(paper(MC.x,MC.y,MC.w,MC.h));
+  const mTitle=svg('text',{x:MC.x,y:MC.y-12,'font-size':'11',class:'mono',fill:'var(--dim)'},['Z = Money ⊔_J Money (the pushout)']); merged.appendChild(mTitle);
+  const mClass=svg('text',{x:MC.x+14,y:MC.y+30,'font-size':'12',class:'mono',fill:'var(--ink-2)'},['public class Money']); merged.appendChild(mClass);
+  const MROW_Y=i=>MC.y+60+i*34;
+  // verdict panel, right of the merged card
+  const vp=svg('g',{},[]); layers.over.appendChild(vp);
+  vp.appendChild(svg('text',{x:612,y:232,'font-size':'13','font-style':'italic','font-family':'var(--display)',fill:'var(--dim)'},['κ lint']));
+  const vLamp=svg('circle',{cx:620,cy:256,r:8,fill:'var(--desk-3)',stroke:'var(--rule)',class:'fade'}); vp.appendChild(vLamp);
+  const vText=svg('text',{x:636,y:260,'font-size':'12',class:'mono',fill:'var(--dim)'},['not run']); vp.appendChild(vText);
+  const vSub=svg('text',{x:612,y:284,'font-size':'11',class:'mono',fill:'var(--dim)'},['']); vp.appendChild(vSub);
+  const vSub2=svg('text',{x:612,y:300,'font-size':'11',class:'mono',fill:'var(--dim)'},['']); vp.appendChild(vSub2);
+  vp.appendChild(svg('text',{x:612,y:340,'font-size':'11',class:'mono',fill:'var(--dim)'},['POSTs']));
+  const vPosts=svg('text',{x:612,y:378,'font-size':'40','font-family':'var(--display)',fill:'var(--green)'},['0']); vp.appendChild(vPosts);
+  vp.appendChild(svg('text',{x:642,y:378,'font-size':'11',class:'mono',fill:'var(--dim)'},['path 0']));
+  const caption=svg('text',{x:400,y:428,'font-size':'12','text-anchor':'middle',class:'mono fade',fill:'var(--red)',opacity:0},['']); layers.over.appendChild(caption);
+  let flying=[], glued=false;
+
+  function resetView(){
+    glued=false; flying.forEach(f=>f.remove()); flying=[]; merged.setAttribute('opacity',0); caption.setAttribute('opacity',0);
+    srcRows.L.concat(srcRows.R).forEach(r=>r.setAttribute('opacity',1));
+    vLamp.setAttribute('fill','var(--desk-3)'); vLamp.setAttribute('stroke','var(--rule)'); vText.textContent='not run'; vText.setAttribute('fill','var(--dim)'); vSub.textContent=''; vSub2.textContent='';
+    setLamp(lamp,'OFF'); stampEl.className=''; stampEl.textContent='';
+  }
+  const syncCounters=()=>{tick($('cPosts').querySelector('.v'),tape.posts,300);tick($('cCode').querySelector('.v'),tape.events.filter(e=>e.kind==='code').length,300);vPosts.textContent=String(tape.posts);};
+  const rec=(ev)=>{const e=tape.record(ev);syncCounters();return e;};
+
+  async function run(){
+    if(runBtn.disabled)return; runBtn.disabled=true; resetView(); reasons.innerHTML='';
+    const {J,f,g}=junction();
+    rec({kind:'code',label:'parse Money.java ×2',verdict:`${X.fields.length+Y.fields.length} symbols`,detail:`${FILES.L}: ${X.fields.map(x=>x.type+' '+x.name).join(', ')} · ${FILES.R}: ${Y.fields.map(x=>x.type+' '+x.name).join(', ')}`});
+    await wait(300);
+    rec({kind:'code',label:'junction J',verdict:`|J| = ${Object.keys(J).length}`,detail:Object.keys(J).length?Object.keys(J).map(k=>`${k}: ${f[k]} ~ ${g[k]}`).join(' · '):'empty junction: the glue is a disjoint union'});
+    await wait(300);
+    const P=pushout(J,f,X.obj,g,Y.obj);
+    rec({kind:'code',label:'pushout Z',verdict:`|Z| = ${Object.keys(P.Z).length} · commutes=${P.comm}`,detail:'union–find on the identified pairs; the same rule as witness/run_witness.py pushout()'});
+    // fly the rows into the merged card
+    merged.setAttribute('opacity',1);
+    srcRows.L.concat(srcRows.R).forEach(r=>r.setAttribute('opacity',.35));
+    const classRows=[];
+    P.classes.forEach((members,i)=>{
+      members.forEach(m=>{const side=m[0], q=m.slice(2); const cls=side==='L'?X:Y; const fi=cls.fields.findIndex(x=>x.q===q); const fld=cls.fields[fi];
+        const el=rowEl(fld,side); const p0=rowPos(side,fi); el.setAttribute('transform',`translate(${p0.x},${p0.y})`); layers.rows.appendChild(el); flying.push(el);
+        classRows.push({el,i,members:members.length,idx:members.indexOf(m),fld});});
+    });
+    root.getBoundingClientRect(); // flush, so the transition runs from the source position
+    await wait(30);
+    classRows.forEach(c=>c.el.setAttribute('transform',`translate(${MC.x+14},${MROW_Y(c.i)})`));
+    await wait(760);
+    // κ lint
+    const nK=P.kappa.length;
+    rec({kind:'code',label:'κ lint',verdict:nK?`κ fires: ${nK} collision`:'no collision',detail:nK?P.kappa.map(k=>`${k.identified.join(' ~ ')} : ${k.signatures.join(' ≠ ')}`).join(' · '):'every identified pair carries one signature'});
+    tick($('cKappa').querySelector('.v'),nK,300);
+    if(nK){
+      // split the colliding rows and flash κ
+      P.classes.forEach((members,i)=>{if(new Set(members.map(m=>m[0]==='L'?X.obj[m.slice(2)]:Y.obj[m.slice(2)])).size<2)return;
+        classRows.filter(c=>c.i===i).forEach(c=>{const dy=c.idx===0?-11:11;c.el.setAttribute('transform',`translate(${MC.x+14},${MROW_Y(i)+dy})`);c.el.querySelector('rect').setAttribute('stroke','var(--red)');c.el.querySelector('rect').setAttribute('stroke-width','1.5');});
+        const k=svg('g',{class:'pop',opacity:0,transform:'scale(.2)'},[svg('circle',{cx:MC.x+MC.w-34,cy:MROW_Y(i),r:14,fill:'var(--red)'}),svg('text',{x:MC.x+MC.w-34,y:MROW_Y(i)+5,'font-size':'15','text-anchor':'middle','font-family':'var(--display)','font-style':'italic',fill:'var(--ink)'},['κ'])]);
+        layers.over.appendChild(k); flying.push(k); root.getBoundingClientRect(); requestAnimationFrame(()=>{k.setAttribute('opacity',1);k.setAttribute('transform','scale(1)');});
+      });
+      const k0=P.kappa[0];
+      caption.textContent=`κ: one Money symbol with contradictory signatures {long} ≠ {double}`; caption.setAttribute('fill','var(--red)'); caption.setAttribute('opacity',1);
+      vLamp.setAttribute('fill','var(--red)'); vLamp.setAttribute('stroke','var(--red)'); vText.textContent=`${nK} collision`; vText.setAttribute('fill','var(--red)');
+      vSub.textContent=k0.signatures[0]; vSub2.textContent=`≠ ${k0.signatures[1]}`;
+      setLamp(lamp,'RED'); stamp(stampEl,'RED','RED · local, from code');
+      reasons.innerHTML=`<li>${esc(k0.identified.join(' ~ '))} carry ${esc(k0.signatures.join(' and '))}.</li><li>${esc(W_.witnesses.step9.silent_merge_would_have)}</li><li>This RED is local. No judge saw it, and a judge could not override it.</li>`;
+    }else{
+      const n=Object.keys(J).length;
+      caption.textContent=n?`no κ: ${Object.keys(J).map(k=>f[k].split('#')[1]+' ~ '+g[k].split('#')[1]).join(', ')} agree on signature`:'no κ: nothing identified, four fields kept apart'; caption.setAttribute('fill','var(--green)'); caption.setAttribute('opacity',1);
+      vLamp.setAttribute('fill','var(--green)'); vLamp.setAttribute('stroke','var(--green)'); vText.textContent='no collision'; vText.setAttribute('fill','var(--green)');
+      vSub.textContent=`|Z| = ${Object.keys(P.Z).length}`; vSub2.textContent=n?'one signature each':'disjoint union';
+      setLamp(lamp,'GREEN'); stamp(stampEl,'GREEN','GREEN · glued by code');
+      reasons.innerHTML=n?`<li>Every identified pair carries one signature, so the quotient is silent.</li><li>κ does not know whether the two ${esc(X.fields[1].type)}s mean the same thing. It only knows the types agree.</li>`:`<li>Nothing identified: the pushout along an empty junction is the disjoint union (the monoidal unit, witness step 10).</li><li>Both Moneys survive, ${X.fields.length+Y.fields.length} fields, no collision.</li>`;
+    }
+    await wait(200);
+    rec({kind:'code',label:'route',verdict:'path 0 · no POST',detail:'deterministic result; not an Activity, not in TypeSafe logs'});
+    glued=true; runBtn.disabled=false;
+  }
+  runBtn.addEventListener('click',run);
+  $('reset').addEventListener('click',()=>{tape.clear();syncCounters();tick($('cKappa').querySelector('.v'),0,200);resetView();reasons.innerHTML='<li>Tape rewound.</li>';});
+
+  /* ---------- routing table ---------- */
+  $('routes').innerHTML=`<thead><tr><th>path</th><th>when</th><th>TypeSafe</th><th>Temporal</th></tr></thead><tbody>`+
+    JV.paths.map(p=>`<tr class="${p.n===0?'here':''}"><td>${p.n} ${esc(p.name)}</td><td>${esc(p.when)}</td><td>${esc(p.typesafe)}</td><td>${esc(p.temporal)}</td></tr>`).join('')+
+    `<tr><td colspan="4" class="acc">Path 0 items never appear in TypeSafe logs.</td></tr></tbody>`;
+
+  provenanceTable($('prov'),[
+    {n:`κ: ${w9.identified.join(' ~ ')} → ${w9.signatures.join(' vs ')}`,f:'witness/WITNESS.json → witnesses.step9.kappa',note:`live pushout on this page reproduces it: ${matches9}`},
+    {n:W_.witnesses.step9.silent_merge_would_have,f:'witness/WITNESS.json → witnesses.step9.silent_merge_would_have',note:'the caption under the merged card'},
+    {n:`long amountCents · String currency`,f:'witness/toybank/accounts/Money.java',note:'left card, parsed from the source text'},
+    {n:`double amount · String currencyCode`,f:'witness/toybank/loans/Money.java',note:'right card, parsed from the source text'},
+    {n:`refs: ${reportRefs.join(' ')}`,f:'witness/toybank/report/ReportModule.java',note:'why both Moneys are in one scope'},
+    {n:'pushout = union–find on identified pairs; κ when a class holds >1 signature',f:'witness/run_witness.py → pushout()',note:'the rule re-implemented inline on this page'},
+    {n:`step5_no_false_kappa=${W_.checks.step5_no_false_kappa} · step10_monoidal_unit_disjoint_union=${W_.checks.step10_monoidal_unit_disjoint_union}`,f:'witness/WITNESS.json → checks',note:'the no-κ and empty-junction cases'},
+    {n:'path 0 · code · no · no',f:'jev-tape/spec/SPEC-v1-SPEED.md → Four paths',note:'the highlighted row of the routing table'},
+    {n:'Path 0 items never appear in TypeSafe logs.',f:'jev-tape/spec/SPEC-v1-SPEED.md → Acceptance (speed)',note:'the sentence under the table'},
+    {n:'Illegal: Temporal around path 0. Sequential TypeSafe.',f:'jev-tape/spec/SPEC-v1-SPEED.md',note:'the caption on the disabled button'},
+    {n:'Compute / determinism → Code',f:'jev-tape/wiki/pages/anti-jobs.md',note:'why this page has no judge call'}
+  ]);
+})();
+</script>
+</body>
+</html>
