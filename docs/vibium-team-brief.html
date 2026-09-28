@@ -69,7 +69,9 @@
   .steps .fusion-card { position: relative; }
   .steps .fusion-card:has(.card-sigil) .with-icon { padding-right: 4.5rem; }
   .closing-sigil { width: 140px; height: 140px; object-fit: contain; margin-bottom: .5rem; }
-  @media print { .card-sigil, .closing-sigil, .art img.sigil { display: none !important; } }
+  .mark { display: block; height: 64px; width: auto; margin-bottom: .25rem; }
+  .closing-mark { display: block; height: 120px; width: auto; margin-bottom: .75rem; }
+  @media print { .card-sigil, .closing-sigil, .art img.sigil { display: none !important; } .mark, .closing-mark { filter: none; } }
   .art .gold { fill: var(--ormus-gold); } .art .bright { fill: var(--ormus-gold-bright); } .art .inkb { fill: var(--ormus-ink); } .art .mutedb { fill: var(--ormus-ink-muted); } .art .rule { stroke: var(--ormus-hairline); stroke-width: 1; }
   .masthead .lede { font-family: var(--ormus-font-display); font-size: 1.4rem; line-height: 1.45; color: var(--ormus-ink-muted); max-width: 42ch; }
   .meta-row { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
@@ -278,6 +280,7 @@
 
   <header class="masthead">
     <div class="words">
+      <img class="mark" src="assets/ormus/kintsugi-mark.png" alt="Ormus" onerror="this.remove()">
       <div class="meta-row">
         <span class="mono-label mono-label--gold">Handoff for the Vibium team</span>
         <span class="mono-label">2026-09-28</span>
@@ -670,7 +673,7 @@
   </section>
 
   <footer>
-    <img class="closing-sigil" src="assets/ormus/swan-glide.png" alt="" onerror="this.remove()">
+    <img class="closing-mark" src="assets/ormus/kintsugi-mark.png" alt="Ormus" onerror="this.remove()">
     <div class="rule"></div>
     <span class="mono-label">Every number carries n, baseline, and whether thresholds were fitted</span>
     <span>Jev is TypeSafe System One, model pin jev-1.13.0. Vibium binary 26.8.21 built from HermeticOrmus/vibium at feat/linear-tasks. Model runs on xai grok-4.6. All measurements 2026-09-28.</span>
