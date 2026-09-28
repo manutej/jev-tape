@@ -80,6 +80,8 @@ npm run vibium -- ... --replay             # same flow from the tape, 0 POSTs
 
 In a root container Chrome needs `VIBIUM_CHROME_ARGS="--no-sandbox"`; behind a TLS-inspecting proxy add `--ignore-certificate-errors`. Neither is needed on a laptop.
 
+Launch flags go on the daemon, once. The CLI forwards `--headless` (and `--engine`, `--channel`) to the daemon as a `browser_start` before every verb that carries them (`cmd/clicker/daemon_client.go`), so passing the flag on every call is not free once a browser is up: the first live run paid an 18 s "snapshot" and lost its `@refs` between `map` and `fill`. `ensureDaemon()` starts the session's daemon with the flags if it is not running; `vibium()` never adds them. Four reads in `snapshot()` run in sequence, and `map` is last so the refs it mints are the ones the next verb resolves.
+
 ## 9. Next cuts, in order
 
 1. First keyed run; record the gate's score indexing and the real p50 per POST in this file.

@@ -148,6 +148,17 @@ export async function step(action: Action, ctx: StepContext): Promise<StepResult
     return finish();
   }
 
+  // `go` without an expectation needs no page snapshot: the page it leaves is not evidence for anything.
+  if (verbClass === "nav" && action.verb === "go" && !action.expect) {
+    if (!hostAllowed(policy, action.args[0] ?? null)) {
+      result.route = "refused-host";
+      return finish();
+    }
+    result.route = "nav";
+    await act();
+    return finish();
+  }
+
   const ts = performance.now();
   const before = await snapshot(ctx.vibium);
   ms.snapshot = Math.round(performance.now() - ts);

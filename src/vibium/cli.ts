@@ -48,11 +48,17 @@ function run(bin: string, args: string[], env: NodeJS.ProcessEnv, timeoutMs: num
   });
 }
 
-/** One vibium call. Throws VibiumError on `ok:false` or unparseable output. */
+/**
+ * One vibium call. Throws VibiumError on `ok:false` or unparseable output.
+ *
+ * `--headless` is never passed here. The CLI forwards launch flags to the daemon as a `browser_start`
+ * before every verb that carries them, and that call is not free once a browser is up. Launch options
+ * belong to ensureDaemon(), once per session.
+ */
 export async function vibium<T = string>(args: string[], opts: VibiumOpts = {}): Promise<T> {
   const bin = opts.bin ?? process.env.VIBIUM_BIN ?? "vibium";
   const session = opts.session ?? process.env.VIBIUM_SESSION ?? "jev-tape";
-  const full = ["--json", "--session", session, ...(opts.headless ? ["--headless"] : []), ...args];
+  const full = ["--json", "--session", session, ...args];
   const out = await run(bin, full, opts.env ?? process.env, opts.timeoutMs ?? 120_000);
   let env: VibiumEnvelope<T>;
   try {
@@ -64,6 +70,22 @@ export async function vibium<T = string>(args: string[], opts: VibiumOpts = {}):
   return env.result as T;
 }
 
+/**
+ * Start the session's daemon once, with the launch options, if it is not already running.
+ * Every later verb then reaches the same browser with no launch flags attached.
+ */
+export async function ensureDaemon(opts: VibiumOpts = {}): Promise<{ started: boolean }> {
+  const status = await vibium<{ running?: boolean }>(["daemon", "status"], opts).catch(() => ({ running: false }));
+  if (status && status.running) return { started: false };
+  const bin = opts.bin ?? process.env.VIBIUM_BIN ?? "vibium";
+  const session = opts.session ?? process.env.VIBIUM_SESSION ?? "jev-tape";
+  const args = ["--json", "--session", session, ...(opts.headless ? ["--headless"] : []), "daemon", "start"];
+  const out = await run(bin, args, opts.env ?? process.env, opts.timeoutMs ?? 120_000);
+  const env = JSON.parse(out) as VibiumEnvelope;
+  if (!env.ok) throw new VibiumError("daemon start", env.error ?? "unknown error");
+  return { started: true };
+}
+
 /** What one page looks like to the tape: four reads, no model. */
 export interface Snapshot {
   url: string;
@@ -73,13 +95,15 @@ export interface Snapshot {
   takenAt: string;
 }
 
+/**
+ * Sequential on purpose: concurrent CLI calls against a cold daemon race to launch the browser, and
+ * `map` must be the last read so the @refs it assigns are the ones the next verb uses.
+ */
 export async function snapshot(opts: VibiumOpts = {}): Promise<Snapshot> {
-  const [url, title, text, map] = await Promise.all([
-    vibium<string>(["url"], opts),
-    vibium<string>(["title"], opts),
-    vibium<string>(["text"], opts),
-    vibium<string>(["map"], opts),
-  ]);
+  const url = await vibium<string>(["url"], opts);
+  const title = await vibium<string>(["title"], opts);
+  const text = await vibium<string>(["text"], opts);
+  const map = await vibium<string>(["map"], opts);
   return { url, title, text, map: map === "No interactive elements found" ? "" : map, takenAt: new Date().toISOString() };
 }
 

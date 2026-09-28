@@ -27,7 +27,7 @@ import { systemOne } from "../src/typesafe/client.ts";
 import { loadPack } from "../src/vibium/pack.ts";
 import { step, type Action, type StepResult } from "../src/vibium/step.ts";
 import { Tape, tapedJudge, type Judge } from "../src/vibium/tape.ts";
-import { vibium } from "../src/vibium/cli.ts";
+import { ensureDaemon, vibium } from "../src/vibium/cli.ts";
 
 const argv = process.argv.slice(2);
 const flag = (name: string) => argv.includes(name);
@@ -86,6 +86,9 @@ const corpus: unknown[] = corpusPath && existsSync(corpusPath) ? (JSON.parse(rea
 
 let last: StepResult | undefined;
 const t0 = performance.now();
+const tLaunch = performance.now();
+const daemon = await ensureDaemon(vopts);
+console.log(JSON.stringify({ daemon: daemon.started ? "started" : "reused", headless: vopts.headless, ms: Math.round(performance.now() - tLaunch) }));
 try {
   for (const a of actions) {
     last = await step(a, {
