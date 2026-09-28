@@ -109,6 +109,11 @@
         <button id="run-waiting">Start Waiting</button>
         <button id="run-habit">Start Habit</button>
       </div>
+      <div class="row">
+        <label class="hint">lane size <input type="number" id="lane" value="25" min="1" style="width:64px;background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 6px"></label>
+        <label class="hint">park timeout s <input type="number" id="park" value="30" min="0" style="width:64px;background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 6px"></label>
+        <span class="hint">lanes run in parallel; 0 = parks wait forever</span>
+      </div>
       <div class="row"><input type="text" id="one" placeholder="Capture one line and run it… (end with ? for a mid-band park, [red] for a judge RED)"></div>
       <div class="row"><button id="run-one">Capture →</button><span class="hint">Enter also runs it</span></div>
       <details style="margin-top:10px"><summary>Edit the pack (JSON)</summary><textarea id="pack"></textarea></details>
@@ -159,6 +164,15 @@ const DEMO = [
   { name: "Clarify", payload: { itemKey: "inbox-7", to: "ToNextAction" } },
 ];
 $("#pack").value = JSON.stringify(DEMO, null, 2);
+// A local pack (.jev-tape/pack.json or JEV_PACK) replaces the built-in demo pack when present.
+fetch("/pack").then((r) => r.json()).then((p) => {
+  if (p.error) return feed(`<span class="RED">pack file ${p.path}: ${p.error}</span>`);
+  if (!Array.isArray(p.commands) || !p.commands.length) return;
+  $("#pack").value = JSON.stringify(p.commands, null, 2);
+  $("#run-pack").textContent = `Run pack (${p.commands.length} from file)`;
+  $("#run-pack").title = p.path;
+  feed(`<span class="sys">loaded ${p.commands.length} commands from ${p.path}</span>`);
+}).catch(() => {});
 
 const LOOP = [["assertLegalCommand","code"],["qualifyTask","judge"],["gate","code"],["propose","code"],["qualifyOutput","judge"],["gate","code"],["humanVerdict?","code"],["applyCommand","write"]];
 const loopCounts = {};
@@ -224,6 +238,7 @@ function onMsg(m) {
     }
     case "status": { const w = wf(m.workflowId); w.status = m; for (const k of m.parked) { const it = item(w, k); if (it.status !== "applied") it.status = "parked"; } for (const k of m.applied) item(w, k).status = "applied"; for (const k of m.residual) { const it = item(w, k); it.status = "residual"; } break; }
     case "human": { const w = wf(m.workflowId); const it = item(w, m.key); it.notes.push(`human: ${m.verdict}`); if (m.verdict !== "compose") it.status = "residual"; else it.status = "running"; feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span>humanVerdict → <b>${m.verdict}</b>`); break; }
+    case "batch": feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">batch: ${m.total} commands in ${m.workflowIds.length} lane(s) of ≤${m.laneSize}${m.parkTimeoutMs ? `, parks escalate after ${m.parkTimeoutMs / 1000}s` : ", parks wait"}</span>`); break;
     case "resolve": feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">resolve signal → ${m.workflowId}</span>`); break;
     case "done": { const w = wf(m.workflowId); w.done = true; const r = m.result || {}; for (const o of r.outcomes || []) { const it = item(w, o.idempotencyKey); it.status = o.status; for (const s of o.steps) { if (s.kind === "qualifyTask") { it.task = s.light; it.source = it.source || s.source; } if (s.kind === "qualifyOutput") it.output = s.light; } } feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">done ${m.kind} ${m.workflowId} ${r.runs ? `· ${r.runs} run(s)` : ""} ${r.applied ? `· applied ${r.applied.length} residual ${r.residual.length}` : ""}${r.nudges !== undefined ? `· nudges ${r.nudges}` : ""}${r.minted !== undefined ? `· minted ${r.minted}` : ""}</span>`); loadTape(); break; }
     case "failed": feed(`<span class="t">${hhmm(m.at)}</span><span class="RED">failed ${m.workflowId}: ${m.message}</span>`); break;
@@ -235,7 +250,7 @@ function onMsg(m) {
 
 async function api(path, body) { const r = await fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body || {}) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; }
 window.verdict = (workflowId, key, verdict) => api("/verdict", { workflowId, key, verdict }).catch((e) => feed(`<span class="RED">${e.message}</span>`));
-$("#run-pack").onclick = () => { let commands; try { commands = JSON.parse($("#pack").value); } catch (e) { return feed(`<span class="RED">pack JSON: ${e.message}</span>`); } api("/start", { commands }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
+$("#run-pack").onclick = () => { let commands; try { commands = JSON.parse($("#pack").value); } catch (e) { return feed(`<span class="RED">pack JSON: ${e.message}</span>`); } const laneSize = Number($("#lane").value) || commands.length; const park = Number($("#park").value); api("/start", { commands, laneSize, parkTimeoutMs: park > 0 ? park * 1000 : undefined }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
 const runOne = () => { const text = $("#one").value.trim(); if (!text) return; $("#one").value = ""; api("/start", { commands: [{ name: "Capture", payload: { text } }] }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
 $("#run-one").onclick = runOne; $("#one").addEventListener("keydown", (e) => { if (e.key === "Enter") runOne(); });
 $("#run-waiting").onclick = () => api("/waiting", { display_name: "Ana", what: "confirm the Oct 2 dry run", nudgeEveryMs: 3000, maxNudges: 3 }).then((r) => feed(`<span class="sys">Waiting ${r.workflowId}: send resolve with <button class="sm" onclick="api('/resolve',{workflowId:'${r.workflowId}',note:'confirmed'})">resolve</button></span>`));

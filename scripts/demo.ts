@@ -6,6 +6,7 @@
  *   npm run demo -- --crash        worker in a child process that dies after 3 applies, then a fresh
  *                                  worker picks the same workflow up. No item is applied twice.
  *   npm run demo -- --no-worker    you already run `npm run worker` (one or many) elsewhere
+ *   npm run demo -- --pack FILE    use a local pack of commands (JSON array) instead of the built-in one
  *
  * What it drives:
  *   1. JevCorrectnessWorkflow with 11 commands → ContinueAsNew at 8, one C10 park answered by Signal,
@@ -16,6 +17,7 @@
  */
 import { Client, Connection } from "@temporalio/client";
 import { spawn, type ChildProcess } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { Command } from "../src/domain.ts";
 import { fileTape } from "../src/temporal/activities.ts";
@@ -31,7 +33,10 @@ import {
   statusQuery,
 } from "../src/temporal/workflows.ts";
 
-const args = new Set(process.argv.slice(2));
+const argv = process.argv.slice(2);
+const args = new Set(argv);
+const packArg = argv[argv.indexOf("--pack") + 1];
+const packPath = argv.includes("--pack") && packArg ? packArg : process.env.JEV_PACK;
 const crash = args.has("--crash");
 const noWorker = args.has("--no-worker");
 const tapePath = process.env.JEV_TAPE_PATH ?? DEFAULT_TAPE;
@@ -79,7 +84,7 @@ async function main() {
   }
 
   // ---------------------------------------------------------------- 1. worklist
-  const commands: Command[] = [
+  const commands: Command[] = packPath ? (JSON.parse(readFileSync(packPath, "utf8")) as Command[]) : [
     { name: "Capture", payload: { text: "Book dentist for October" } },
     { name: "Capture", payload: { text: "Reply to Ana about the Oct 2 dry run" } },
     { name: "Capture", payload: { text: "Should we move the offsite?" } }, // '?' → mid-band → AMBER park
@@ -98,7 +103,7 @@ async function main() {
     workflowId: wfId,
     args: [{ commands, parkTimeoutMs: 120_000 }],
   });
-  log(`started JevCorrectnessWorkflow ${wfId} with ${commands.length} commands`);
+  log(`started JevCorrectnessWorkflow ${wfId} with ${commands.length} commands${packPath ? ` from ${packPath}` : ""}`);
   log(`  ${ui}/namespaces/${target.namespace}/workflows/${wfId}`);
 
   // Answer C10 parks as they appear. In production this is a person in a UI; here it is a loop.

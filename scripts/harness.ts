@@ -12,7 +12,7 @@
  */
 import { Client, Connection, type WorkflowHandle } from "@temporalio/client";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { Command } from "../src/domain.ts";
 import { localGate } from "../src/loop.ts";
@@ -39,10 +39,12 @@ export interface Harness {
   close(): Promise<void>;
 }
 
-export async function createHarness(opts: { port?: number; worker?: boolean; tapePath?: string; taskQueue?: string } = {}): Promise<Harness> {
+export async function createHarness(opts: { port?: number; worker?: boolean; tapePath?: string; taskQueue?: string; packPath?: string } = {}): Promise<Harness> {
   const port = opts.port ?? Number(process.env.JEV_HARNESS_PORT ?? 4848);
   const taskQueue = opts.taskQueue ?? TASK_QUEUE;
   const tapePath = opts.tapePath ?? process.env.JEV_TAPE_PATH ?? DEFAULT_TAPE;
+  // A local pack of real commands. Gitignored by default (.jev-tape/). JEV_PACK overrides the path.
+  const packPath = opts.packPath ?? process.env.JEV_PACK ?? new URL("../.jev-tape/pack.json", import.meta.url).pathname;
   const target = temporalTarget();
   const ui = uiUrl();
   const html = readFileSync(fileURLToPath(new URL("../harness/index.html", import.meta.url)), "utf8");
@@ -157,6 +159,15 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
         req.on("close", () => clients.delete(res));
         return;
       }
+      if (req.method === "GET" && url.pathname === "/pack") {
+        if (!existsSync(packPath)) return json(res, 200, { path: packPath, commands: null });
+        try {
+          const commands = JSON.parse(readFileSync(packPath, "utf8"));
+          return json(res, 200, { path: packPath, commands });
+        } catch (e) {
+          return json(res, 200, { path: packPath, commands: null, error: (e as Error).message });
+        }
+      }
       if (req.method === "GET" && url.pathname === "/tape") {
         const rows = await fileTape(tapePath).entries();
         return json(res, 200, rows.slice(-200));
@@ -165,14 +176,21 @@ export async function createHarness(opts: { port?: number; worker?: boolean; tap
         const body = await readBody(req);
         const commands = body.commands as Command[];
         if (!Array.isArray(commands) || commands.length === 0) return json(res, 400, { error: "commands[] required" });
-        const workflowId = `jev-worklist-${Date.now().toString(36)}`;
-        const handle = await client.workflow.start(JevCorrectnessWorkflow, {
-          taskQueue,
-          workflowId,
-          args: [{ commands, parkTimeoutMs: body.parkTimeoutMs ?? undefined }],
-        });
-        track(handle, "JevCorrectnessWorkflow", commands);
-        return json(res, 200, { workflowId });
+        // Lanes: a big pack becomes N worklists that run in parallel across every worker on the queue.
+        // A park only blocks its own lane. Each lane still ContinueAsNews every 8.
+        const laneSize = Math.max(1, Math.min(Number(body.laneSize) || commands.length, commands.length));
+        const parkTimeoutMs = body.parkTimeoutMs ? Number(body.parkTimeoutMs) : undefined;
+        const stamp = Date.now().toString(36);
+        const workflowIds: string[] = [];
+        for (let i = 0, lane = 0; i < commands.length; i += laneSize, lane++) {
+          const slice = commands.slice(i, i + laneSize);
+          const workflowId = laneSize < commands.length ? `jev-worklist-${stamp}-L${String(lane).padStart(2, "0")}` : `jev-worklist-${stamp}`;
+          const handle = await client.workflow.start(JevCorrectnessWorkflow, { taskQueue, workflowId, args: [{ commands: slice, parkTimeoutMs }] });
+          track(handle, "JevCorrectnessWorkflow", slice);
+          workflowIds.push(workflowId);
+        }
+        broadcast({ type: "batch", workflowIds, total: commands.length, laneSize, parkTimeoutMs });
+        return json(res, 200, { workflowIds, workflowId: workflowIds[0] });
       }
       if (req.method === "POST" && url.pathname === "/waiting") {
         const body = await readBody(req);

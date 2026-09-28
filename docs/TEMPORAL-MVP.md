@@ -46,7 +46,18 @@ One page, no build step (`harness/index.html`), fed by `scripts/harness.ts` over
 - **Judge latency**: POST count, p50, p95, path-0 count, applied, residual.
 - **Step feed** and **Tape**, newest first, plus deep links into the Temporal UI per workflow.
 
-Run the demo pack, type one Capture line, start a Waiting or Habit workflow. Everything the page shows comes from the
+Run the demo pack, type one Capture line, start a Waiting or Habit workflow.
+
+**Your own pack.** Put a JSON array of commands at `.jev-tape/pack.json` (gitignored) or point `JEV_PACK` at one.
+The harness loads it in place of the built-in pack; `npm run demo -- --pack FILE` does the same. Keep addresses,
+phone numbers and codes out of the text: the payload is the state the judge sees. `npm run pack:scan -- FILE` checks
+(`--fix` redacts in place).
+
+**Big packs.** Two controls on the Run panel:
+- *lane size* splits the pack into N worklists that run in parallel across every worker on the queue. A park only
+  blocks its own lane. Each lane still ContinueAsNews every 8 items.
+- *park timeout* auto-escalates an AMBER item after N seconds so a 500-item run never stalls on a human. Set 0 to make
+  parks wait forever (the durable default). Everything the page shows comes from the
 Activities' step observer and the workflow's `status` query; nothing is invented client-side.
 
 ## Loop, as code
