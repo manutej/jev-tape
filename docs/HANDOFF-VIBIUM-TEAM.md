@@ -70,6 +70,8 @@ commits without an operator policy.
 
 | Path | What |
 | --- | --- |
+| `docs/judges-comparison.html` (source `.src.html`, `npm run judges`) | The comparison page: Jev vs Sonnet screenshot proxy vs Vibium with the model alone, what each judge saw, what was timed, every sample, and the repeat runs |
+| `results/raw/judges-comparison.json`, `bench-repeat-2026-09-29.json`, `sonnet-judge-runs.json`, `corpus-rec-2026-09-29.rows.json` | The comparison data and the repeat runs (bench day 2, Sonnet blind day 2, corpus day 2 with recordings) |
 | `docs/TEST-IN-PLACE.md`, `scripts/test-in-place.sh` | The Vibium team's runbook and acceptance script: fresh clone, own binary, ten checks (`pass 10 · fail 0`), then the bench and corpus |
 | `docs/SOURCE-OF-TRUTH.md` | What is canonical, the registry schema, how to add results |
 | `results/registry.json` | The registry: every experiment and row, with computed totals |

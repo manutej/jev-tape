@@ -29,7 +29,8 @@
     "corpus": "node --experimental-strip-types scripts/vibium-corpus.ts",
     "calibrate": "node --experimental-strip-types scripts/calibrate.ts",
     "registry": "node scripts/build-registry.mjs",
-    "brief": "node scripts/build-registry.mjs && node scripts/build-brief.mjs"
+    "brief": "node scripts/build-registry.mjs && node scripts/build-brief.mjs",
+    "judges": "node scripts/build-judges.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.1",

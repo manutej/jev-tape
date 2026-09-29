@@ -1,0 +1,280 @@
+<title>Three Judges Compared</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Ormus Fusion chrome. Layout: a method page. Three columns for the three judges, then one column of evidence. */
+  :root {
+    --ormus-midnight: #14213d; --ormus-deep: #0e1830; --ormus-gold: #d29e3d; --ormus-gold-bright: #e0b258;
+    --ormus-ink: #eceae3; --ormus-ink-muted: #a5b0c4; --ormus-muted: #6d7891; --ormus-hairline: rgba(236, 234, 227, 0.12);
+    --ormus-on-gold: #1a1407; --ormus-code-bg: #0b1226; --ormus-danger: #d44f4f;
+    --ormus-bg-elevated: rgba(255, 255, 255, 0.015); --ormus-bg-muted: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.05); --card-hairline-gold: rgba(210, 158, 61, 0.7); --ghost-border: rgba(236, 234, 227, 0.25);
+    --canvas-edge-default: rgba(236, 234, 227, 0.08); --print-gold: #8a6519;
+    --ormus-font-display: 'Cormorant Garamond', Georgia, serif; --ormus-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; --ormus-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    --ormus-ease-reveal: cubic-bezier(0.16, 1, 0.3, 1); --ormus-radius: 3px; --card-padding: 1.5rem; --measure: 68ch; color-scheme: dark;
+  }
+  html { background: var(--ormus-deep); scroll-behavior: smooth; } @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--ormus-deep); color: var(--ormus-ink); font-family: var(--ormus-font-sans); font-size: 1rem; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .surface-firm { position: relative; isolation: isolate; min-height: 100%; }
+  .surface-firm::before { content: ''; position: fixed; inset: 0; z-index: -2; background: radial-gradient(90% 60% at 85% -5%, rgba(210, 158, 61, 0.10), transparent 55%), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.82  0 0 0 0 0.62  0 0 0 0 0.24  0 0 0 0.07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>") repeat top left / 320px 320px, linear-gradient(180deg, var(--ormus-midnight) 0%, var(--ormus-deep) 70%); }
+  .page { max-width: 66rem; margin: 0 auto; padding-block: 2.5rem 5rem; padding-inline: clamp(16px, 4vw, 40px); }
+  h1, h2, h3, h4 { font-family: var(--ormus-font-display); font-weight: 400; color: var(--ormus-ink); text-wrap: balance; margin: 0; }
+  h1 { font-weight: 300; letter-spacing: -0.01em; font-size: clamp(2.25rem, 5vw, 3.4rem); line-height: 1.1; max-width: 22ch; }
+  h2 { font-size: 2rem; line-height: 1.2; letter-spacing: -0.025em; } h3 { font-size: 1.45rem; line-height: 1.3; margin-block: .25rem .5rem; } h4 { font-size: 1.2rem; }
+  p { margin: 0; max-width: var(--measure); } p + p { margin-top: .9rem; }
+  a { color: var(--ormus-gold); text-decoration: none; border-bottom: 1px solid rgba(210,158,61,.35); } a:hover { color: var(--ormus-gold-bright); }
+  :focus-visible { outline: 1px solid var(--ormus-gold); outline-offset: 3px; }
+  code { font-family: var(--ormus-font-mono); font-size: .85em; background: var(--ormus-code-bg); border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); padding: .05em .4em; white-space: nowrap; }
+  .mono-label { font-family: var(--ormus-font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); } .mono-label::before { content: '/ '; } .mono-label--gold { color: var(--ormus-gold); }
+  header.masthead { display: grid; gap: 1.25rem; padding-bottom: 2rem; border-bottom: 1px solid var(--ormus-hairline); }
+  .masthead .lede { font-family: var(--ormus-font-display); font-size: 1.4rem; line-height: 1.45; color: var(--ormus-ink-muted); max-width: 44ch; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
+  section { padding-block: 3rem; border-bottom: 1px solid var(--ormus-hairline); } section:last-of-type { border-bottom: 0; }
+  .section-head { display: grid; gap: .5rem; margin-bottom: 1.5rem; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; }
+  .fusion-card { background: var(--ormus-bg-elevated); border: 1px solid var(--card-border); border-top-color: var(--card-hairline-gold); border-radius: var(--ormus-radius); padding: var(--card-padding); transition: transform .2s var(--ormus-ease-reveal), border-color .2s ease; min-width: 0; }
+  .fusion-card:hover { transform: translateY(-2px); border-color: rgba(210,158,61,.6); border-top-color: var(--card-hairline-gold); }
+  .tile .num { font-family: var(--ormus-font-display); font-weight: 300; font-size: 3rem; line-height: 1; margin-block: .5rem; font-variant-numeric: tabular-nums; } .tile .num small { font-size: 1.2rem; color: var(--ormus-ink-muted); margin-left: .15em; }
+  .tile p { color: var(--ormus-ink-muted); font-size: .9rem; line-height: 1.6; }
+  .ic { width: 28px; height: 28px; stroke: var(--ormus-gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .with-icon { display: flex; gap: .9rem; align-items: flex-start; }
+  .judges { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+  .judges .fusion-card p { color: var(--ormus-ink-muted); font-size: .9rem; line-height: 1.6; }
+  .judges dt { font-family: var(--ormus-font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); margin-top: .8rem; } .judges dd { margin: .15rem 0 0; font-size: .9rem; color: var(--ormus-ink); line-height: 1.55; } .judges dl { margin: 0; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .4rem; vertical-align: middle; } .sw-gold { background: var(--ormus-gold); } .sw-ink { background: var(--ormus-ink); } .sw-muted { background: var(--ormus-ink-muted); }
+  .steps { counter-reset: s; display: grid; gap: .6rem; max-width: var(--measure); padding-left: 0; list-style: none; margin: 0; }
+  .steps li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: .5rem; align-items: baseline; }
+  .steps li::before { counter-increment: s; content: counter(s); font-family: var(--ormus-font-display); font-weight: 300; font-size: 1.6rem; color: var(--ormus-gold); line-height: 1; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--ormus-hairline); border-radius: var(--ormus-radius); }
+  table { border-collapse: collapse; width: 100%; font-size: .86rem; line-height: 1.5; min-width: 48rem; }
+  th, td { text-align: left; vertical-align: top; padding: .6rem .8rem; border-bottom: 1px solid var(--ormus-hairline); }
+  th { font-family: var(--ormus-font-mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); font-weight: 400; background: var(--ormus-bg-muted); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; } td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--ormus-font-mono); font-size: .8rem; } td.lead { color: var(--ormus-gold); } tbody tr:hover td { background: var(--ormus-bg-muted); }
+  .verdict { font-family: var(--ormus-font-mono); font-size: .78rem; white-space: nowrap; }
+  .v-passed::before { content: '✓ '; color: var(--ormus-gold); } .v-failed::before { content: '✕ '; color: var(--ormus-ink); } .v-escalate::before, .v-inconclusive::before { content: '⊘ '; color: var(--ormus-ink-muted); }
+  .wrong { color: var(--ormus-danger); font-weight: 600; }
+  figure { margin: 0; display: grid; gap: .75rem; } figure .fig-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1.5rem; align-items: baseline; } figure .fig-head h3 { margin: 0; }
+  figcaption, .note { color: var(--ormus-ink-muted); font-size: .85rem; line-height: 1.6; max-width: 80ch; }
+  figure svg { width: 100%; height: auto; display: block; font-family: var(--ormus-font-sans); } .scroll { overflow-x: auto; } .scroll svg { min-width: 600px; }
+  .ax { stroke: var(--ormus-hairline); stroke-width: 1; } .grid { stroke: var(--canvas-edge-default); stroke-width: 1; }
+  .tick { fill: var(--ormus-ink-muted); font-size: 11px; font-family: var(--ormus-font-mono); } .rowlab { fill: var(--ormus-ink); font-size: 14px; } .rowsub { fill: var(--ormus-ink-muted); font-size: 11px; font-family: var(--ormus-font-mono); }
+  .val { fill: var(--ormus-ink); font-size: 12px; font-family: var(--ormus-font-mono); font-weight: 500; } .val-gold { fill: var(--ormus-gold); } .ratio { fill: var(--ormus-gold); font-size: 15px; font-family: var(--ormus-font-display); }
+  .m-gold { fill: var(--ormus-gold); } .m-ink { fill: var(--ormus-ink); } .m-muted { fill: var(--ormus-ink-muted); } .m-dim { fill: var(--ormus-muted); }
+  .dot { stroke: var(--ormus-deep); stroke-width: 1.5; opacity: .9; } .dot:hover { fill: var(--ormus-gold-bright); opacity: 1; }
+  .medline { stroke: var(--ormus-gold); stroke-width: 2; }
+  .toggle { display: inline-flex; border: 1px solid var(--ghost-border); border-radius: var(--ormus-radius); overflow: hidden; }
+  .toggle button { all: unset; cursor: pointer; padding: .3rem .7rem; font-family: var(--ormus-font-mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ormus-ink-muted); }
+  .toggle button[aria-pressed="true"] { background: rgba(210,158,61,.12); color: var(--ormus-gold); } .toggle button:hover { color: var(--ormus-gold); }
+  .agree { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1rem; }
+  .agree .big { font-family: var(--ormus-font-display); font-weight: 300; font-size: 2.6rem; line-height: 1; font-variant-numeric: tabular-nums; margin-block: .4rem; }
+  .stamp { font-family: var(--ormus-font-mono); font-size: .78rem; white-space: nowrap; } .stamp b { font-weight: 400; color: var(--ormus-gold); margin-right: .35em; font-size: 1rem; } .stamp--gate b { color: var(--ormus-ink-muted); }
+  ul.plain { margin: 0; padding-left: 1.2rem; max-width: var(--measure); } ul.plain li { margin-bottom: .5rem; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1.25rem; }
+  .counter { border-left: 2px solid var(--ormus-gold); padding: .2rem 0 .2rem 1rem; color: var(--ormus-ink-muted); font-size: .92rem; max-width: var(--measure); } .counter b { color: var(--ormus-ink); font-weight: 500; }
+  footer { padding-top: 2.5rem; display: grid; gap: .5rem; color: var(--ormus-ink-muted); font-size: .85rem; } footer .rule { width: 3rem; height: 1px; background: var(--ormus-gold); margin-bottom: .75rem; }
+  .stage { display: grid; gap: .35rem; } .stage .bar { display: flex; height: 22px; border-radius: var(--ormus-radius); overflow: hidden; background: var(--ormus-bg-muted); } .stage .seg { height: 100%; } .stage .legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .8rem; color: var(--ormus-ink-muted); font-family: var(--ormus-font-mono); }
+  .stage .legend i { display: inline-block; width: 10px; height: 10px; margin-right: .35rem; vertical-align: middle; }
+  @media print { .surface-firm::before { display: none !important; } html, body, .surface-firm { background: white !important; color: #111 !important; } :root { --ormus-ink: #111; --ormus-ink-muted: #444; --ormus-muted: #666; --ormus-gold: var(--print-gold); --ormus-gold-bright: var(--print-gold); --ormus-hairline: rgba(0,0,0,.15); --ormus-bg-elevated: transparent; --ormus-bg-muted: transparent; --ormus-code-bg: #f4f4f4; --ormus-deep: white; --card-border: rgba(0,0,0,.15); } }
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-page" viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+  <symbol id="i-model" viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 4v5h5"/></symbol>
+  <symbol id="i-verify" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+</svg>
+
+<div class="surface-firm"><main class="page">
+
+  <header class="masthead">
+    <div class="meta-row"><span class="mono-label mono-label--gold">Method and repeatability</span><span class="mono-label">Jev · Sonnet · Vibium with the model alone</span><span class="mono-label" id="dates"></span></div>
+    <h1>Same page, same claim, three judges, twice</h1>
+    <p class="lede">How the speed comparison was run, what each judge was shown, what the clock measured, and whether a second run gives the same answers. Every number here comes from a committed file named beside it.</p>
+  </header>
+
+  <section id="headline">
+    <div class="tiles" id="tiles"></div>
+    <p style="margin-top:1.25rem" id="headline-text"></p>
+  </section>
+
+  <section id="method">
+    <div class="section-head"><span class="mono-label">Method</span><h2>What each judge saw, and what the clock timed</h2>
+      <p>One settled page, one claim, three judges. The page was loaded once by Vibium and left alone; the judges differ only in what they were handed and how they answer. The catalog holds eight public pages with one claim each, six true and two false by construction.</p></div>
+    <div class="judges" id="judges"></div>
+    <h3 style="margin-top:1.75rem">The protocol, step by step</h3>
+    <ol class="steps">
+      <li><span>Vibium opens the page headless and waits for load. Nothing is clicked. The same daemon session serves every judge on that page.</span></li>
+      <li><span>Jev gets one typed request: the page text excerpt, the element-map labels, the url and title, and the claim as a question with three answers. The runner times the fetch round trip. Answers below the peakedness floor escalate instead of deciding.</span></li>
+      <li><span>Vibium's <code>check</code> gets the claim and the live browser. It runs its own tool loop with the model until it answers or its budget ends. The runner times the process.</span></li>
+      <li><span>A screenshot of the same page is saved, copied under a neutral name in a directory holding only images, and handed to a fresh Sonnet agent with the claim and nothing else. The agent stamps the clock before opening the image and after deciding. Its lifetime from spawn to hand-back is kept as a second, slower number.</span></li>
+      <li><span>Every verdict is scored against the catalog label. A judge that declines to decide is counted as an escalate, never as right or wrong.</span></li>
+      <li><span>The whole thing is run again on another day. Verdict agreement between runs and the timing spread are reported per judge.</span></li>
+    </ol>
+    <p class="counter" style="margin-top:1.5rem"><b>What the proxy is not.</b> Claude computer use was not available in the session, so the screenshot judge stands in for the vision half of it: one frame, no desktop, no planner. Its numbers say how fast a vision model reads and judges a page, not how the computer-use product performs end to end.</p>
+  </section>
+
+  <section id="results">
+    <div class="section-head"><span class="mono-label">Results</span><h2>Per page, per judge, per run</h2>
+      <p>Verdicts and times for every page and every run. A verdict in gold is a match with the label; ⊘ is an escalate or an inconclusive answer.</p></div>
+    <div class="table-wrap" id="pageTable"></div>
+    <figure class="fusion-card" style="margin-top:1.5rem">
+      <div class="fig-head"><h3>Time per decision, every sample</h3><div class="toggle" role="group" aria-label="Timing basis for the screenshot judge"><button type="button" data-basis="self" aria-pressed="true">Sonnet self-timed</button><button type="button" data-basis="wall" aria-pressed="false">Sonnet agent wall</button></div></div>
+      <div class="scroll" id="dots"></div>
+      <figcaption id="dots-caption"></figcaption>
+    </figure>
+  </section>
+
+  <section id="repeat">
+    <div class="section-head"><span class="mono-label">Repeatability</span><h2>Does a second run give the same answers?</h2>
+      <p>Agreement is counted on rows both runs judged. Times are medians per run with the 10th and 90th percentiles.</p></div>
+    <div class="agree" id="agree"></div>
+    <div class="table-wrap" style="margin-top:1.25rem" id="runTable"></div>
+    <p class="note" style="margin-top:.75rem" id="repeat-note"></p>
+  </section>
+
+  <section id="login">
+    <div class="section-head"><span class="mono-label">Whole task</span><h2>The same login, three ways, stage by stage</h2>
+      <p>A known flow on the local fixture site: open, fill two fields, submit, confirm the secure area. Jev gates the submit and verifies the landing; the pixel operator sees only screenshots and clicks coordinates; the model plans, acts and verifies with Vibium's own loop.</p></div>
+    <div id="loginBars" style="display:grid;gap:1.25rem"></div>
+  </section>
+
+  <section id="claims">
+    <div class="section-head"><span class="mono-label">Reading the numbers</span><h2>What holds, what does not</h2></div>
+    <div class="grid-2">
+      <div><h3>Holds</h3><ul class="plain" id="holds"></ul></div>
+      <div><h3>Does not</h3><ul class="plain">
+        <li><span class="stamp stamp--gate"><b>⊘</b></span> Accuracy out of sample. The claims were written with the pages known and thresholds are hand-set. The 140-row catalog with blind claims is the measurement that strikes this.</li>
+        <li><span class="stamp stamp--gate"><b>⊘</b></span> Anything about Claude computer use as a product, or about Sonnet driving a browser at scale; one login by pixel operator is a single sample.</li>
+        <li><span class="stamp stamp--gate"><b>⊘</b></span> Model-loop time on a fast day. The check times include the model's own variance and one 142 s outlier on the Cloudflare-walled page; the second run shows how much of that repeats.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="files">
+    <div class="section-head"><span class="mono-label">Files</span><h2>Where the numbers live</h2></div>
+    <ul class="plain" id="files-list"></ul>
+    <p class="note" style="margin-top:1rem">Rebuild this page with <code>npm run judges</code>; it reads only committed files. The registry at <code>results/registry.json</code> carries the same rows under E5, E6, E9, E11, E12 and E13.</p>
+  </section>
+
+  <footer><div class="rule"></div><span class="mono-label">Every number carries n, baseline, and whether thresholds were fitted</span><span id="foot"></span></footer>
+</main></div>
+
+<script id="data" type="application/json">/*__DATA__*/</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('data').textContent);
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var ms = function (v) { return v == null ? '' : (v >= 1000 ? (v / 1000).toFixed(1) + ' s' : v + ' ms'); };
+  var pct = function (a, b) { return b ? Math.round(100 * a / b) + '%' : ''; };
+  var S = D.stats, R = D.repeat;
+  var dates = [].concat(D.benchRuns.map(function (r) { return r.date; }), D.sonnetRuns.map(function (r) { return r.date; })).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort();
+  document.getElementById('dates').textContent = dates.join(' · ');
+  document.getElementById('foot').textContent = 'Jev ' + D.judges.jev.model + '. Model loop ' + D.judges.check.model + '. Screenshot judge ' + D.judges.sonnet.model + '. Runs on ' + dates.join(' and ') + '.';
+
+  // Headline tiles
+  var ratioCheck = S.check.median && S.jev.median ? Math.round(S.check.median / S.jev.median) : null;
+  var ratioSonnet = S.sonnetSelf.median && S.jev.median ? Math.round(S.sonnetSelf.median / S.jev.median) : null;
+  var tiles = [
+    { l: 'Jev per decision', n: ms(S.jev.median), s: S.jev.n + ' samples over ' + D.benchRuns.length + ' run' + (D.benchRuns.length > 1 ? 's' : '') + ', ' + ms(S.jev.p10) + ' to ' + ms(S.jev.p90) + ' (p10 to p90)' },
+    { l: 'Sonnet, one frame', n: ms(S.sonnetSelf.median), s: 'self-timed read and decide; ' + ms(S.sonnetWall.median) + ' as an agent. ' + S.sonnetSelf.n + ' samples, blind' },
+    { l: 'Model alone', n: ms(S.check.median), s: 'vibium check, ' + S.check.n + ' samples, ' + ms(S.check.min) + ' to ' + ms(S.check.max) },
+    { l: 'Jev vs model alone', n: (ratioCheck || '') + '×', s: 'median to median; ' + (ratioSonnet || '') + '× against the screenshot judge' },
+  ];
+  document.getElementById('tiles').innerHTML = tiles.map(function (t) { return '<article class="fusion-card tile"><span class="mono-label">' + esc(t.l) + '</span><div class="num">' + esc(t.n) + '</div><p>' + esc(t.s) + '</p></article>'; }).join('');
+  var agreeBits = [];
+  if (R.jevBench) agreeBits.push('Jev agreed with itself on ' + R.jevBench.same + ' of ' + R.jevBench.both + ' bench pages');
+  if (R.jevCorpus) agreeBits.push(R.jevCorpus.same + ' of ' + R.jevCorpus.both + ' corpus rows');
+  if (R.sonnetBlind) agreeBits.push('the screenshot judge on ' + R.sonnetBlind.same + ' of ' + R.sonnetBlind.both);
+  if (R.checkBench) agreeBits.push('the model loop on ' + R.checkBench.same + ' of ' + R.checkBench.both);
+  document.getElementById('headline-text').textContent = 'Across the runs, ' + agreeBits.join('; ') + '. The order of the three judges did not change between days: a typed request over page text answers in a quarter of a second, a vision model reading one frame in a few seconds, and a model driving its own tool loop in tens of seconds.';
+
+  // Judge cards
+  var jmeta = [['jev', 'sw-gold', 'i-page'], ['sonnet', 'sw-ink', 'i-camera'], ['check', 'sw-muted', 'i-model']];
+  document.getElementById('judges').innerHTML = jmeta.map(function (m) { var j = D.judges[m[0]]; return '<article class="fusion-card"><div class="with-icon"><svg class="ic"><use href="#' + m[2] + '"/></svg><div><span class="mono-label">' + (m[0] === 'jev' ? '<span class="sw sw-gold"></span>' : '<span class="sw ' + m[1] + '"></span>') + esc(j.model) + '</span><h3>' + esc(j.name) + '</h3><dl><dt>Sees</dt><dd>' + esc(j.sees) + '</dd><dt>Timed</dt><dd>' + esc(j.timed) + '</dd><dt>Answers</dt><dd>' + esc(j.answers) + '</dd></dl></div></div></article>'; }).join('');
+
+  // Per page table
+  var pages = D.pages;
+  var vcell = function (v, ok) { if (v == null) return ''; return '<span class="verdict v-' + esc(v) + (ok === false ? ' wrong' : '') + '">' + esc(v) + (ok === false ? ' wrong' : '') + '</span>'; };
+  var head = '<tr><th>page</th><th>claim</th><th>label</th>' + D.benchRuns.map(function (r) { return '<th>Jev ' + r.run.replace('bench-', 'run ') + '</th>'; }).join('') + D.sonnetRuns.filter(function (r) { return r.blind; }).map(function (r) { return '<th>Sonnet ' + r.run.replace('blind-', 'run ') + '</th>'; }).join('') + D.benchRuns.map(function (r) { return '<th>check ' + r.run.replace('bench-', 'run ') + '</th>'; }).join('') + '</tr>';
+  var body = pages.map(function (p) {
+    var cells = '<td class="lead">' + esc(p.id) + '</td><td style="max-width:22rem">' + esc(p.claim) + '</td><td class="num">' + esc(p.expect) + '</td>';
+    D.benchRuns.forEach(function (r) { var x = r.rows.find(function (z) { return z.id === p.id; }); cells += '<td>' + vcell(x.jev.verdict, x.jev.ok) + '<br><span class="num">' + ms(x.jev.ms) + (x.jev.pVerified != null ? ' · p ' + x.jev.pVerified.toFixed(2) : '') + '</span></td>'; });
+    D.sonnetRuns.filter(function (r) { return r.blind; }).forEach(function (r) { var x = r.rows.find(function (z) { return z.id === p.id; }); cells += '<td>' + vcell(x.verdict, x.ok) + '<br><span class="num">' + ms(x.ms) + ' · ' + ms(x.wallMs) + ' wall</span></td>'; });
+    D.benchRuns.forEach(function (r) { var x = r.rows.find(function (z) { return z.id === p.id; }); cells += '<td>' + vcell(x.check.verdict, x.check.ok) + '<br><span class="num">' + ms(x.check.ms) + '</span></td>'; });
+    return '<tr>' + cells + '</tr>';
+  }).join('');
+  document.getElementById('pageTable').innerHTML = '<table><thead>' + head + '</thead><tbody>' + body + '</tbody></table>';
+
+  // Dot strips on a log axis
+  var basis = 'self';
+  function drawDots() {
+    var rows = [
+      { lab: 'Jev, typed judge', sub: 'bench, ' + D.benchRuns.length + ' run' + (D.benchRuns.length > 1 ? 's' : ''), cls: 'm-gold', s: D.samples.jev },
+      { lab: 'Jev, corpus', sub: D.corpusRuns.map(function (r) { return r.run; }).join(' + ') + ', ' + D.samples.jevCorpus.length + ' calls', cls: 'm-gold', s: D.samples.jevCorpus },
+      { lab: 'Sonnet, one frame', sub: basis === 'self' ? 'self-timed read and decide' : 'agent wall, spawn to hand-back', cls: 'm-ink', s: basis === 'self' ? D.samples.sonnetSelf : D.samples.sonnetWall },
+      { lab: 'vibium check', sub: 'model alone, tool loop', cls: 'm-muted', s: D.samples.check },
+    ];
+    var W = 720, L = 190, Rr = 700, H = 40 + rows.length * 46 + 30;
+    var lo = 2, hi = 5.3; // log10 ms: 100 ms to 200 s
+    var x = function (v) { return L + (Math.log10(Math.max(v, 100)) - lo) / (hi - lo) * (Rr - L); };
+    var ticks = [[100, '100 ms'], [1000, '1 s'], [10000, '10 s'], [100000, '100 s']];
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Every timing sample per judge on a log scale">';
+    ticks.forEach(function (t) { svg += '<line class="grid" x1="' + x(t[0]) + '" y1="30" x2="' + x(t[0]) + '" y2="' + (H - 28) + '"/><text class="tick" x="' + x(t[0]) + '" y="' + (H - 12) + '" text-anchor="middle">' + t[1] + '</text>'; });
+    rows.forEach(function (r, i) {
+      var y = 52 + i * 46, vals = r.s.map(function (z) { return z.ms; }).sort(function (a, b) { return a - b; });
+      if (!vals.length) return;
+      var m = vals[vals.length >> 1];
+      svg += '<text class="rowlab" x="0" y="' + (y - 2) + '">' + esc(r.lab) + '</text><text class="rowsub" x="0" y="' + (y + 14) + '">' + esc(r.sub) + '</text>';
+      svg += '<line class="ax" x1="' + L + '" y1="' + y + '" x2="' + Rr + '" y2="' + y + '"/>';
+      r.s.forEach(function (z, k) { var jit = ((k * 7919) % 11 - 5) * 1.4; svg += '<circle class="dot ' + r.cls + '" cx="' + x(z.ms).toFixed(1) + '" cy="' + (y + jit).toFixed(1) + '" r="4.5"><title>' + esc(z.id + ' · ' + z.run + ' · ' + ms(z.ms)) + '</title></circle>'; });
+      svg += '<line class="medline" x1="' + x(m) + '" y1="' + (y - 12) + '" x2="' + x(m) + '" y2="' + (y + 12) + '"/><text class="val val-gold" x="' + (x(m) + 6) + '" y="' + (y - 14) + '">median ' + ms(Math.round(m)) + '</text>';
+    });
+    svg += '</svg>';
+    document.getElementById('dots').innerHTML = svg;
+    document.getElementById('dots-caption').textContent = 'Each dot is one decision; the gold line is the median of that row. Log scale, so equal distances are equal ratios: the gap from Jev to the model loop is a little over two decades. Hover a dot for the page, run and time.';
+  }
+  document.querySelectorAll('.toggle button').forEach(function (b) { b.addEventListener('click', function () { basis = b.dataset.basis; document.querySelectorAll('.toggle button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); }); drawDots(); }); });
+  drawDots();
+
+  // Agreement panel
+  var ag = [];
+  if (R.jevBench) ag.push({ l: 'Jev, bench pages', v: R.jevBench, s: 'verdicts identical between ' + D.benchRuns.map(function (r) { return r.date; }).join(' and ') });
+  if (R.jevCorpus) ag.push({ l: 'Jev, corpus rows', v: R.jevCorpus, s: 'rows both runs judged; six were stopped by a bot check or a 429 in the first run' });
+  if (R.sonnetBlind) ag.push({ l: 'Sonnet, blind', v: R.sonnetBlind, s: 'fresh agents, same images, same claim-only prompt' });
+  if (R.checkBench) ag.push({ l: 'vibium check', v: R.checkBench, s: 'the model loop, same pages, same claims' });
+  document.getElementById('agree').innerHTML = ag.map(function (a) { var full = a.v.same === a.v.both; return '<article class="fusion-card"><span class="mono-label">' + esc(a.l) + '</span><div class="big">' + a.v.same + '<small style="font-size:1rem;color:var(--ormus-ink-muted)"> of ' + a.v.both + '</small></div><span class="stamp"><b>' + (full ? '⚖' : '±') + '</b>' + (full ? 'identical' : 'differs on ' + a.v.diffs.map(function (d) { return d.id + ' (' + d.a + ' → ' + d.b + ')'; }).join(', ')) + '</span><p class="note" style="margin-top:.5rem">' + esc(a.s) + '</p></article>'; }).join('');
+  var rt = '<table><thead><tr><th>judge</th><th>run</th><th>n</th><th>median</th><th>p10</th><th>p90</th><th>decided right</th><th>escalates</th></tr></thead><tbody>';
+  D.perRun.jev.forEach(function (r, i) { var rr = D.right.jev[i]; rt += '<tr><td class="lead">Jev, bench</td><td class="num">' + esc(r.run) + '</td><td class="num">' + r.n + '</td><td class="num">' + ms(r.median) + '</td><td class="num">' + ms(r.p10) + '</td><td class="num">' + ms(r.p90) + '</td><td class="num">' + rr.right + '/' + rr.decided + '</td><td class="num">' + rr.escalates + '</td></tr>'; });
+  D.perRun.jevCorpus.forEach(function (r, i) { var c = D.corpusRuns[i]; rt += '<tr><td class="lead">Jev, corpus</td><td class="num">' + esc(r.run) + '</td><td class="num">' + r.n + '</td><td class="num">' + ms(r.median) + '</td><td class="num">' + ms(r.p10) + '</td><td class="num">' + ms(r.p90) + '</td><td class="num">' + c.right + '/' + c.decided + '</td><td class="num">' + c.escalates + '</td></tr>'; });
+  D.perRun.sonnetSelf.forEach(function (r, i) { var rr = D.right.sonnet[i], w = D.perRun.sonnetWall[i]; rt += '<tr><td>Sonnet, one frame' + (r.blind ? '' : ' <span class="mono-label">not blind</span>') + '</td><td class="num">' + esc(r.run) + '</td><td class="num">' + r.n + '</td><td class="num">' + ms(r.median) + ' <span style="color:var(--ormus-ink-muted)">(' + ms(w.median) + ' wall)</span></td><td class="num">' + ms(r.p10) + '</td><td class="num">' + ms(r.p90) + '</td><td class="num">' + rr.right + '/' + rr.decided + '</td><td class="num">' + rr.inconclusive + '</td></tr>'; });
+  D.perRun.check.forEach(function (r, i) { var rr = D.right.check[i]; rt += '<tr><td>vibium check</td><td class="num">' + esc(r.run) + '</td><td class="num">' + r.n + '</td><td class="num">' + ms(r.median) + '</td><td class="num">' + ms(r.p10) + '</td><td class="num">' + ms(r.p90) + '</td><td class="num">' + rr.right + '/' + rr.decided + '</td><td class="num">0</td></tr>'; });
+  rt += '</tbody></table>';
+  document.getElementById('runTable').innerHTML = rt;
+  document.getElementById('repeat-note').textContent = 'The non-blind Sonnet run is shown for comparison only: its file names carried the answer for two rows and it is not counted in agreement. Jev timing differs between runs with network and load, not with the answer; the corpus rows ran three sessions in parallel.';
+
+  // Login stage bars
+  var maxMs = Math.max.apply(null, D.login.map(function (l) { return l.totalMs; }));
+  var segColors = ['var(--ormus-gold)', 'var(--ormus-ink)', 'var(--ormus-ink-muted)', 'var(--ormus-muted)'];
+  document.getElementById('loginBars').innerHTML = D.login.map(function (l) {
+    var w = 100 * l.totalMs / maxMs;
+    return '<div class="fusion-card stage"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem 1.5rem;align-items:baseline"><h4>' + esc(l.variant) + '</h4><span class="num" style="font-family:var(--ormus-font-mono);font-size:.85rem;color:var(--ormus-gold)">' + ms(l.totalMs) + (l.wallMs ? ' <span style="color:var(--ormus-ink-muted)">(' + ms(l.wallMs) + ' agent wall)</span>' : '') + '</span></div>' +
+      '<div class="bar" style="width:' + w + '%;min-width:60px">' + l.stages.map(function (s, i) { return '<div class="seg" style="width:' + (100 * s.ms / l.totalMs) + '%;background:' + segColors[i % 4] + '" title="' + esc(s.name + ' ' + ms(s.ms)) + '"></div>'; }).join('') + '</div>' +
+      '<div class="legend">' + l.stages.map(function (s, i) { return '<span><i style="background:' + segColors[i % 4] + '"></i>' + esc(s.name) + ' ' + ms(s.ms) + '</span>'; }).join('') + '</div>' +
+      '<p class="note">' + esc(l.outcome) + ' · ' + esc(l.file) + '</p></div>';
+  }).join('');
+
+  // Holds
+  var holds = [];
+  holds.push('<span class="stamp"><b>⚖</b></span> On these pages a typed judge over page text answers in ' + ms(S.jev.median) + ' (median of ' + S.jev.n + '), a vision model reading one frame in ' + ms(S.sonnetSelf.median) + ', and the model-only loop in ' + ms(S.check.median) + '. The ratios hold across runs.');
+  if (R.jevBench && R.jevCorpus) holds.push('<span class="stamp"><b>⚖</b></span> Jev is deterministic enough to repeat: ' + R.jevBench.same + '/' + R.jevBench.both + ' bench verdicts and ' + R.jevCorpus.same + '/' + R.jevCorpus.both + ' corpus verdicts identical on a second day.');
+  if (R.sonnetBlind) holds.push('<span class="stamp"><b>⚖</b></span> The blind screenshot judge repeats too: ' + R.sonnetBlind.same + '/' + R.sonnetBlind.both + ' identical, with its one miss (the Cloudflare wall) reproduced both times.');
+  holds.push('<span class="stamp"><b>⚖</b></span> On the login, the typed loop is ' + (D.login[2].totalMs / D.login[0].totalMs).toFixed(1) + '× faster than the model-only loop and ' + (D.login[1].totalMs / D.login[0].totalMs).toFixed(1) + '× faster than the pixel operator; the remaining time is mostly the page itself.');
+  document.getElementById('holds').innerHTML = holds.map(function (h) { return '<li>' + h + '</li>'; }).join('');
+
+  // Files
+  var files = [].concat(D.benchRuns.map(function (r) { return r.file + ' (' + r.run + ')'; }), ['jev-tape results/raw/sonnet-judge-runs.json (all three screenshot-judge runs with the key)'], D.corpusRuns.map(function (r) { return r.file + ' (' + r.run + ')'; }), ['jev-tape results/raw/judges-comparison.json (this page\'s data, built by scripts/build-judges.mjs)', 'jev-tape spec/SURFACES-VIBIUM.md §8b, §8c (the bench and the login three ways)', 'jev-tape docs/COMPUTER-USE-CROSSCHECK.md (the proxy and the blinding protocol)']);
+  document.getElementById('files-list').innerHTML = files.map(function (f) { return '<li><code>' + esc(f) + '</code></li>'; }).join('');
+})();
+</script>

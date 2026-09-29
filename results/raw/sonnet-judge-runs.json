@@ -1,0 +1,245 @@
+{
+ "at": [
+  "2026-09-28",
+  "2026-09-29"
+ ],
+ "model": "claude-sonnet (Agent tool, model sonnet)",
+ "viewport": "780x493 headless, captured by vibium screenshot",
+ "protocol": "one fresh agent per image; prompt = image path + claim only; t0/t1 self-timed around the Read and the decision; wall = agent lifetime from spawn to hand-back",
+ "key": [
+  {
+   "blind": "p1",
+   "id": "hn",
+   "claim": "The Hacker News front page is showing a list of stories with points and comments",
+   "expect": "passed"
+  },
+  {
+   "blind": "p2",
+   "id": "wiki-ada-false",
+   "claim": "This article says Ada Lovelace invented JavaScript",
+   "expect": "failed"
+  },
+  {
+   "blind": "p3",
+   "id": "mdn-flex",
+   "claim": "This MDN page documents CSS flexible box layout",
+   "expect": "passed"
+  },
+  {
+   "blind": "p4",
+   "id": "wiki-lisp",
+   "claim": "This is the Wikipedia article on the Common Lisp programming language",
+   "expect": "passed"
+  },
+  {
+   "blind": "p5",
+   "id": "gh-linux",
+   "claim": "This is the GitHub repository page for torvalds/linux",
+   "expect": "passed"
+  },
+  {
+   "blind": "p6",
+   "id": "wiki-python-false",
+   "claim": "This article says Python was created by Linus Torvalds",
+   "expect": "failed"
+  },
+  {
+   "blind": "p7",
+   "id": "npm-react",
+   "claim": "This is the npm registry page for the package named react",
+   "expect": "passed"
+  },
+  {
+   "blind": "p8",
+   "id": "rfc2324",
+   "claim": "This page is about RFC 2324, the Hyper Text Coffee Pot Control Protocol",
+   "expect": "passed"
+  }
+ ],
+ "runs": [
+  {
+   "run": "nonblind-1",
+   "date": "2026-09-28",
+   "blind": false,
+   "note": "first launch, NOT blind: filenames carried -false and rows.json (with expect) sat in the same directory; recorded, not reported as the result",
+   "results": [
+    {
+     "id": "npm-react",
+     "verdict": "inconclusive",
+     "ms": 2621,
+     "wallMs": 10117
+    },
+    {
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ms": 2295,
+     "wallMs": 8834
+    },
+    {
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ms": 2284,
+     "wallMs": 9511
+    },
+    {
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ms": 2851,
+     "wallMs": 9715
+    },
+    {
+     "id": "wiki-ada-false",
+     "verdict": "failed",
+     "ms": 2611,
+     "wallMs": 8818
+    },
+    {
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ms": 2400,
+     "wallMs": 9138
+    },
+    {
+     "id": "wiki-python-false",
+     "verdict": "failed",
+     "ms": 2679,
+     "wallMs": 9796
+    },
+    {
+     "id": "hn",
+     "verdict": "passed",
+     "ms": 2533,
+     "wallMs": 9061
+    }
+   ]
+  },
+  {
+   "run": "blind-2",
+   "date": "2026-09-28",
+   "blind": true,
+   "note": "blind run: neutral names p1..p8 in a directory holding only images, deterministic shuffle, prompt = image path + claim only",
+   "results": [
+    {
+     "blind": "p1",
+     "id": "hn",
+     "verdict": "passed",
+     "ms": 4089,
+     "wallMs": 10863
+    },
+    {
+     "blind": "p2",
+     "id": "wiki-ada-false",
+     "verdict": "failed",
+     "ms": 3125,
+     "wallMs": 9235
+    },
+    {
+     "blind": "p3",
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ms": 2673,
+     "wallMs": 9631
+    },
+    {
+     "blind": "p4",
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ms": 2805,
+     "wallMs": 9217
+    },
+    {
+     "blind": "p5",
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ms": 2781,
+     "wallMs": 8468
+    },
+    {
+     "blind": "p6",
+     "id": "wiki-python-false",
+     "verdict": "failed",
+     "ms": 2876,
+     "wallMs": 9004
+    },
+    {
+     "blind": "p7",
+     "id": "npm-react",
+     "verdict": "failed",
+     "ms": 2512,
+     "wallMs": 8871
+    },
+    {
+     "blind": "p8",
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ms": 2148,
+     "wallMs": 9543
+    }
+   ]
+  },
+  {
+   "run": "blind-3",
+   "date": "2026-09-29",
+   "blind": true,
+   "note": "blind repeat on 2026-09-29: same p1..p8 images, same claim-only prompts, fresh Sonnet agents",
+   "results": [
+    {
+     "blind": "p1",
+     "id": "hn",
+     "verdict": "passed",
+     "ms": 3080,
+     "wallMs": 10796
+    },
+    {
+     "blind": "p2",
+     "id": "wiki-ada-false",
+     "verdict": "failed",
+     "ms": 2249,
+     "wallMs": 8447
+    },
+    {
+     "blind": "p3",
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ms": 1824,
+     "wallMs": 7589
+    },
+    {
+     "blind": "p4",
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ms": 1620,
+     "wallMs": 7601
+    },
+    {
+     "blind": "p5",
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ms": 1984,
+     "wallMs": 8259
+    },
+    {
+     "blind": "p6",
+     "id": "wiki-python-false",
+     "verdict": "failed",
+     "ms": 1714,
+     "wallMs": 8104
+    },
+    {
+     "blind": "p7",
+     "id": "npm-react",
+     "verdict": "failed",
+     "ms": 2074,
+     "wallMs": 7289
+    },
+    {
+     "blind": "p8",
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ms": 3737,
+     "wallMs": 10045
+    }
+   ]
+  }
+ ]
+}

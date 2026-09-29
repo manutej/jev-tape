@@ -1,0 +1,3059 @@
+{
+ "builtAt": "2026-09-29",
+ "ids": [
+  "npm-react",
+  "rfc2324",
+  "wiki-lisp",
+  "mdn-flex",
+  "wiki-ada-false",
+  "gh-linux",
+  "wiki-python-false",
+  "hn"
+ ],
+ "pages": [
+  {
+   "id": "npm-react",
+   "url": "https://www.npmjs.com/package/react",
+   "claim": "This is the npm registry page for the package named react",
+   "expect": "passed"
+  },
+  {
+   "id": "rfc2324",
+   "url": "https://www.rfc-editor.org/info/rfc2324/",
+   "claim": "This page is about RFC 2324, the Hyper Text Coffee Pot Control Protocol",
+   "expect": "passed"
+  },
+  {
+   "id": "wiki-lisp",
+   "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+   "claim": "This is the Wikipedia article on the Common Lisp programming language",
+   "expect": "passed"
+  },
+  {
+   "id": "mdn-flex",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+   "claim": "This MDN page documents CSS flexible box layout",
+   "expect": "passed"
+  },
+  {
+   "id": "wiki-ada-false",
+   "url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
+   "claim": "This article says Ada Lovelace invented JavaScript",
+   "expect": "failed"
+  },
+  {
+   "id": "gh-linux",
+   "url": "https://github.com/torvalds/linux",
+   "claim": "This is the GitHub repository page for torvalds/linux",
+   "expect": "passed"
+  },
+  {
+   "id": "wiki-python-false",
+   "url": "https://en.wikipedia.org/wiki/Python_(programming_language)",
+   "claim": "This article says Python was created by Linus Torvalds",
+   "expect": "failed"
+  },
+  {
+   "id": "hn",
+   "url": "https://news.ycombinator.com/",
+   "claim": "The Hacker News front page is showing a list of stories with points and comments",
+   "expect": "passed"
+  }
+ ],
+ "benchRuns": [
+  {
+   "run": "bench-1",
+   "date": "2026-09-28",
+   "file": "JEV-works kit/results/browser-bench-check-vs-jev-2026-09-28.json",
+   "model": "jev-1.13.0",
+   "checkModel": "xai/grok-4.6",
+   "rows": [
+    {
+     "id": "npm-react",
+     "url": "https://www.npmjs.com/package/react",
+     "claim": "This is the npm registry page for the package named react",
+     "expect": "passed",
+     "navMs": 2527,
+     "snapMs": 128,
+     "jev": {
+      "verdict": "escalate",
+      "ok": null,
+      "ms": 309,
+      "pVerified": 0.02,
+      "blocked": "captcha",
+      "inputTokens": 820
+     },
+     "check": {
+      "verdict": "failed",
+      "ok": false,
+      "ms": 141701,
+      "summary": "The current page is a Cloudflare bot-verification interstitial, not the npm registry listing for the react package. The URL path is /package/react, but the rend"
+     }
+    },
+    {
+     "id": "rfc2324",
+     "url": "https://www.rfc-editor.org/info/rfc2324/",
+     "claim": "This page is about RFC 2324, the Hyper Text Coffee Pot Control Protocol",
+     "expect": "passed",
+     "navMs": 1940,
+     "snapMs": 73,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 248,
+      "pVerified": 0.99,
+      "blocked": "none",
+      "inputTokens": 1857
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 25198,
+      "summary": "The current page is the RFC Editor document for RFC 2324, titled Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0). The URL, page title, main heading, and bod"
+     }
+    },
+    {
+     "id": "wiki-lisp",
+     "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+     "claim": "This is the Wikipedia article on the Common Lisp programming language",
+     "expect": "passed",
+     "navMs": 1500,
+     "snapMs": 193,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 250,
+      "pVerified": 0.99,
+      "blocked": "none",
+      "inputTokens": 1922
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 40976,
+      "summary": "The current page is the English Wikipedia article on Common Lisp: the URL is https://en.wikipedia.org/wiki/Common_Lisp, the main heading is “Common Lisp”, and t"
+     }
+    },
+    {
+     "id": "mdn-flex",
+     "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+     "claim": "This MDN page documents CSS flexible box layout",
+     "expect": "passed",
+     "navMs": 3624,
+     "snapMs": 79,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 277,
+      "pVerified": 1,
+      "blocked": "none",
+      "inputTokens": 1663
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 17352,
+      "summary": "The current MDN page is documentation for CSS flexible box layout: its URL is /docs/Web/CSS/Guides/Flexible_box_layout, the h1 is “CSS flexible box layout”, and"
+     }
+    },
+    {
+     "id": "wiki-ada-false",
+     "url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
+     "claim": "This article says Ada Lovelace invented JavaScript",
+     "expect": "failed",
+     "navMs": 1344,
+     "snapMs": 261,
+     "jev": {
+      "verdict": "escalate",
+      "ok": null,
+      "ms": 241,
+      "pVerified": 0,
+      "blocked": "none",
+      "inputTokens": 1935
+     },
+     "check": {
+      "verdict": "failed",
+      "ok": true,
+      "ms": 53328,
+      "summary": "The Wikipedia article on Ada Lovelace does not say she invented JavaScript. It describes her 19th-century work on Babbage’s analytical engine and related comput"
+     }
+    },
+    {
+     "id": "gh-linux",
+     "url": "https://github.com/torvalds/linux",
+     "claim": "This is the GitHub repository page for torvalds/linux",
+     "expect": "passed",
+     "navMs": 3745,
+     "snapMs": 98,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 219,
+      "pVerified": 1,
+      "blocked": "none",
+      "inputTokens": 2020
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 15815,
+      "summary": "The current page is the public GitHub repository for torvalds/linux (Linux kernel source tree). The URL, owner/repo header, about text, and file listing all mat"
+     }
+    },
+    {
+     "id": "wiki-python-false",
+     "url": "https://en.wikipedia.org/wiki/Python_(programming_language)",
+     "claim": "This article says Python was created by Linus Torvalds",
+     "expect": "failed",
+     "navMs": 1344,
+     "snapMs": 311,
+     "jev": {
+      "verdict": "failed",
+      "ok": true,
+      "ms": 246,
+      "pVerified": 0,
+      "blocked": "none",
+      "inputTokens": 1913
+     },
+     "check": {
+      "verdict": "failed",
+      "ok": true,
+      "ms": 45784,
+      "summary": "The Wikipedia article on Python (programming language) attributes the language to Guido van Rossum, not Linus Torvalds. The infobox lists “Designed by Guido van"
+     }
+    },
+    {
+     "id": "hn",
+     "url": "https://news.ycombinator.com/",
+     "claim": "The Hacker News front page is showing a list of stories with points and comments",
+     "expect": "passed",
+     "navMs": 1502,
+     "snapMs": 84,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 236,
+      "pVerified": 0.96,
+      "blocked": "none",
+      "inputTokens": 1854
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 18234,
+      "summary": "The Hacker News front page at https://news.ycombinator.com/ displays a numbered list of stories, each with a points count and a comments (or discuss) link."
+     }
+    }
+   ]
+  }
+ ],
+ "sonnetRuns": [
+  {
+   "run": "nonblind-1",
+   "date": "2026-09-28",
+   "blind": false,
+   "note": "first launch, NOT blind: filenames carried -false and rows.json (with expect) sat in the same directory; recorded, not reported as the result",
+   "rows": [
+    {
+     "id": "npm-react",
+     "verdict": "inconclusive",
+     "ok": null,
+     "ms": 2621,
+     "wallMs": 10117
+    },
+    {
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2295,
+     "wallMs": 8834
+    },
+    {
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2284,
+     "wallMs": 9511
+    },
+    {
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2851,
+     "wallMs": 9715
+    },
+    {
+     "id": "wiki-ada-false",
+     "verdict": "failed",
+     "ok": true,
+     "ms": 2611,
+     "wallMs": 8818
+    },
+    {
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2400,
+     "wallMs": 9138
+    },
+    {
+     "id": "wiki-python-false",
+     "verdict": "failed",
+     "ok": true,
+     "ms": 2679,
+     "wallMs": 9796
+    },
+    {
+     "id": "hn",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2533,
+     "wallMs": 9061
+    }
+   ]
+  },
+  {
+   "run": "blind-2",
+   "date": "2026-09-28",
+   "blind": true,
+   "note": "blind run: neutral names p1..p8 in a directory holding only images, deterministic shuffle, prompt = image path + claim only",
+   "rows": [
+    {
+     "id": "hn",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 4089,
+     "wallMs": 10863
+    },
+    {
+     "id": "wiki-ada-false",
+     "verdict": "failed",
+     "ok": true,
+     "ms": 3125,
+     "wallMs": 9235
+    },
+    {
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2673,
+     "wallMs": 9631
+    },
+    {
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2805,
+     "wallMs": 9217
+    },
+    {
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2781,
+     "wallMs": 8468
+    },
+    {
+     "id": "wiki-python-false",
+     "verdict": "failed",
+     "ok": true,
+     "ms": 2876,
+     "wallMs": 9004
+    },
+    {
+     "id": "npm-react",
+     "verdict": "failed",
+     "ok": false,
+     "ms": 2512,
+     "wallMs": 8871
+    },
+    {
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 2148,
+     "wallMs": 9543
+    }
+   ]
+  },
+  {
+   "run": "blind-3",
+   "date": "2026-09-29",
+   "blind": true,
+   "note": "blind repeat on 2026-09-29: same p1..p8 images, same claim-only prompts, fresh Sonnet agents",
+   "rows": [
+    {
+     "id": "hn",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 3080,
+     "wallMs": 10796
+    },
+    {
+     "id": "wiki-ada-false",
+     "verdict": "failed",
+     "ok": true,
+     "ms": 2249,
+     "wallMs": 8447
+    },
+    {
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 1824,
+     "wallMs": 7589
+    },
+    {
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 1620,
+     "wallMs": 7601
+    },
+    {
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 1984,
+     "wallMs": 8259
+    },
+    {
+     "id": "wiki-python-false",
+     "verdict": "failed",
+     "ok": true,
+     "ms": 1714,
+     "wallMs": 8104
+    },
+    {
+     "id": "npm-react",
+     "verdict": "failed",
+     "ok": false,
+     "ms": 2074,
+     "wallMs": 7289
+    },
+    {
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ok": true,
+     "ms": 3737,
+     "wallMs": 10045
+    }
+   ]
+  }
+ ],
+ "corpusRuns": [
+  {
+   "run": "corpus-1",
+   "date": "2026-09-28",
+   "file": "jev-tape results/raw/corpus-2026-09-28.rows.json",
+   "note": "3 parallel sessions, no recordings",
+   "wallMs": 88008,
+   "rows": [
+    {
+     "id": "wiki-lisp-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 371,
+     "navMs": 23048,
+     "pVerified": 0
+    },
+    {
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 179,
+     "navMs": 23850,
+     "pVerified": 1
+    },
+    {
+     "id": "wiki-noether",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 256,
+     "navMs": 23824,
+     "pVerified": 1
+    },
+    {
+     "id": "wiki-noether-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 367,
+     "navMs": 1280,
+     "pVerified": 0
+    },
+    {
+     "id": "wiki-turing",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 225,
+     "navMs": 1253,
+     "pVerified": 0.95
+    },
+    {
+     "id": "wiki-turing-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 171,
+     "navMs": 1339,
+     "pVerified": 0
+    },
+    {
+     "id": "wiki-rust",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 171,
+     "navMs": 1533,
+     "pVerified": 0.98
+    },
+    {
+     "id": "wiki-periodic",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 204,
+     "navMs": 1762,
+     "pVerified": 0.98
+    },
+    {
+     "id": "wiki-periodic-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 168,
+     "navMs": 1896,
+     "pVerified": 0.01
+    },
+    {
+     "id": "wiki-rust-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 162,
+     "navMs": 1277,
+     "pVerified": 0
+    },
+    {
+     "id": "mdn-fetch",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 172,
+     "navMs": 3021,
+     "pVerified": 1
+    },
+    {
+     "id": "mdn-fetch-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 208,
+     "navMs": 4036,
+     "pVerified": 0.01
+    },
+    {
+     "id": "mdn-map-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 150,
+     "navMs": 1907,
+     "pVerified": 0
+    },
+    {
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 174,
+     "navMs": 633,
+     "pVerified": 0.99
+    },
+    {
+     "id": "mdn-map",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 151,
+     "navMs": 3965,
+     "pVerified": 1
+    },
+    {
+     "id": "mdn-flex-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 232,
+     "navMs": 379,
+     "pVerified": 0
+    },
+    {
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 1632,
+     "pVerified": 0.98
+    },
+    {
+     "id": "rfc2324-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 182,
+     "navMs": 1985,
+     "pVerified": 0
+    },
+    {
+     "id": "rfc791",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 176,
+     "navMs": 1771,
+     "pVerified": 0.97
+    },
+    {
+     "id": "rfc791-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 167,
+     "navMs": 641,
+     "pVerified": 0
+    },
+    {
+     "id": "rfc9110",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 253,
+     "navMs": 1931,
+     "pVerified": 0.98
+    },
+    {
+     "id": "rfc9110-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 219,
+     "navMs": 4615,
+     "pVerified": 0
+    },
+    {
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 262,
+     "navMs": 5419,
+     "pVerified": 1
+    },
+    {
+     "id": "gh-vscode-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 201,
+     "navMs": 2099,
+     "pVerified": 0
+    },
+    {
+     "id": "gh-go",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 322,
+     "navMs": 1535,
+     "pVerified": 0.99
+    },
+    {
+     "id": "gh-linux-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 193,
+     "navMs": 6346,
+     "pVerified": 0
+    },
+    {
+     "id": "gh-go-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 196,
+     "navMs": 1517,
+     "pVerified": 0.02
+    },
+    {
+     "id": "gh-vscode",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 211,
+     "navMs": 6717,
+     "pVerified": 1
+    },
+    {
+     "id": "hn-front",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 175,
+     "navMs": 1480,
+     "pVerified": 0.99
+    },
+    {
+     "id": "hn-front-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 178,
+     "navMs": 1163,
+     "pVerified": 0.01
+    },
+    {
+     "id": "hn-newest",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 231,
+     "navMs": 1092,
+     "pVerified": 0.97
+    },
+    {
+     "id": "hn-newest-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 193,
+     "navMs": 1340,
+     "pVerified": 0
+    },
+    {
+     "id": "arxiv-list",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 164,
+     "navMs": 1415,
+     "pVerified": 0.97
+    },
+    {
+     "id": "arxiv-list-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 199,
+     "navMs": 1598,
+     "pVerified": 0
+    },
+    {
+     "id": "pypi-requests",
+     "verdict": "stopped",
+     "ok": null,
+     "navMs": 261
+    },
+    {
+     "id": "arxiv-dots",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 169,
+     "navMs": 1547,
+     "pVerified": 1
+    },
+    {
+     "id": "pypi-requests-f",
+     "verdict": "stopped",
+     "ok": null,
+     "navMs": 186
+    },
+    {
+     "id": "pypi-httpx",
+     "verdict": "stopped",
+     "ok": null,
+     "navMs": 255
+    },
+    {
+     "id": "arxiv-dots-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 192,
+     "navMs": 1071,
+     "pVerified": 0.02
+    },
+    {
+     "id": "pypi-httpx-f",
+     "verdict": "stopped",
+     "ok": null,
+     "navMs": 175
+    },
+    {
+     "id": "w3-wcag-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 174,
+     "navMs": 1304,
+     "pVerified": 0
+    },
+    {
+     "id": "w3-wcag",
+     "verdict": "escalate",
+     "ok": null,
+     "jevMs": 201,
+     "navMs": 1450,
+     "pVerified": 0.37
+    },
+    {
+     "id": "python-home",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 150,
+     "navMs": 2103,
+     "pVerified": 1
+    },
+    {
+     "id": "python-home-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 179,
+     "navMs": 1633,
+     "pVerified": 0
+    },
+    {
+     "id": "python-asyncio",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 165,
+     "navMs": 1559,
+     "pVerified": 1
+    },
+    {
+     "id": "python-asyncio-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 198,
+     "navMs": 1316,
+     "pVerified": 0
+    },
+    {
+     "id": "node-home",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 144,
+     "navMs": 1981,
+     "pVerified": 1
+    },
+    {
+     "id": "go-doc-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 208,
+     "navMs": 2506,
+     "pVerified": 0.01
+    },
+    {
+     "id": "go-doc",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 254,
+     "navMs": 2528,
+     "pVerified": 0.98
+    },
+    {
+     "id": "node-home-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 176,
+     "navMs": 359,
+     "pVerified": 0.01
+    },
+    {
+     "id": "gnu-bash",
+     "verdict": "stopped",
+     "ok": null,
+     "navMs": 608
+    },
+    {
+     "id": "gnu-bash-f",
+     "verdict": "stopped",
+     "ok": null,
+     "navMs": 482
+    },
+    {
+     "id": "rust-home",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 225,
+     "navMs": 1803,
+     "pVerified": 0.99
+    },
+    {
+     "id": "rust-home-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 171,
+     "navMs": 1939,
+     "pVerified": 0
+    },
+    {
+     "id": "kernel",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 166,
+     "navMs": 1028,
+     "pVerified": 1
+    },
+    {
+     "id": "kernel-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 146,
+     "navMs": 1297,
+     "pVerified": 0
+    },
+    {
+     "id": "httpbin-html",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 169,
+     "navMs": 266,
+     "pVerified": 0.91
+    },
+    {
+     "id": "httpbin-html-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 165,
+     "navMs": 657,
+     "pVerified": 0
+    },
+    {
+     "id": "debian",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 164,
+     "navMs": 2633,
+     "pVerified": 1
+    },
+    {
+     "id": "debian-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 2324,
+     "pVerified": 0.01
+    },
+    {
+     "id": "httpbin-form-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 197,
+     "navMs": 301,
+     "pVerified": 0
+    },
+    {
+     "id": "httpbin-form",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 188,
+     "navMs": 518,
+     "pVerified": 0.98
+    },
+    {
+     "id": "wiki-search",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 160,
+     "navMs": 1188,
+     "pVerified": 0.98
+    },
+    {
+     "id": "wiki-search-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 145,
+     "navMs": 1237,
+     "pVerified": 0
+    },
+    {
+     "id": "iana",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 203,
+     "navMs": 1375,
+     "pVerified": 1
+    },
+    {
+     "id": "example",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 205,
+     "navMs": 511,
+     "pVerified": 1
+    },
+    {
+     "id": "example-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 181,
+     "navMs": 378,
+     "pVerified": 0
+    },
+    {
+     "id": "iana-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 209,
+     "navMs": 862,
+     "pVerified": 0
+    },
+    {
+     "id": "ietf-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 183,
+     "navMs": 1328,
+     "pVerified": 0
+    },
+    {
+     "id": "ietf",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 160,
+     "navMs": 1370,
+     "pVerified": 0.97
+    },
+    {
+     "id": "apache",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 171,
+     "navMs": 2149,
+     "pVerified": 1
+    },
+    {
+     "id": "quotes",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 165,
+     "navMs": 1459,
+     "pVerified": 1
+    },
+    {
+     "id": "apache-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 164,
+     "navMs": 1658,
+     "pVerified": 0
+    },
+    {
+     "id": "quotes-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 155,
+     "navMs": 1282,
+     "pVerified": 0
+    },
+    {
+     "id": "books",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 200,
+     "navMs": 2476,
+     "pVerified": 1
+    },
+    {
+     "id": "books-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 183,
+     "navMs": 2727,
+     "pVerified": 0
+    },
+    {
+     "id": "bbc",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 167,
+     "navMs": 3683,
+     "pVerified": 0.98
+    },
+    {
+     "id": "weather",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 169,
+     "navMs": 4237,
+     "pVerified": 1
+    },
+    {
+     "id": "weather-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 164,
+     "navMs": 3113,
+     "pVerified": 0
+    },
+    {
+     "id": "bbc-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 156,
+     "navMs": 6991,
+     "pVerified": 0
+    }
+   ],
+   "settled": 74,
+   "decided": 73,
+   "right": 73,
+   "escalates": 1,
+   "jevMsMedian": 178,
+   "jevMsP10": 151,
+   "jevMsP90": 232
+  },
+  {
+   "run": "corpus-2",
+   "date": "2026-09-29",
+   "file": "jev-tape results/raw/corpus-rec-2026-09-29.rows.json",
+   "note": "3 parallel sessions, a recording zip per row",
+   "wallMs": 142781,
+   "rows": [
+    {
+     "id": "wiki-lisp-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 330,
+     "navMs": 20670,
+     "pVerified": 0.01
+    },
+    {
+     "id": "wiki-lisp",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 141,
+     "navMs": 20899,
+     "pVerified": 1
+    },
+    {
+     "id": "wiki-noether",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 162,
+     "navMs": 21261,
+     "pVerified": 1
+    },
+    {
+     "id": "wiki-noether-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 136,
+     "navMs": 1966,
+     "pVerified": 0
+    },
+    {
+     "id": "wiki-turing-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 150,
+     "navMs": 1831,
+     "pVerified": 0
+    },
+    {
+     "id": "wiki-turing",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 246,
+     "navMs": 2415,
+     "pVerified": 0.96
+    },
+    {
+     "id": "wiki-rust",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 140,
+     "navMs": 2332,
+     "pVerified": 0.98
+    },
+    {
+     "id": "wiki-periodic",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 2292,
+     "pVerified": 0.98
+    },
+    {
+     "id": "wiki-periodic-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 178,
+     "navMs": 2833,
+     "pVerified": 0.01
+    },
+    {
+     "id": "wiki-rust-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 1445,
+     "pVerified": 0
+    },
+    {
+     "id": "mdn-fetch",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 145,
+     "navMs": 3177,
+     "pVerified": 1
+    },
+    {
+     "id": "mdn-fetch-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 141,
+     "navMs": 2969,
+     "pVerified": 0
+    },
+    {
+     "id": "mdn-map",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 136,
+     "navMs": 4518,
+     "pVerified": 1
+    },
+    {
+     "id": "mdn-flex",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 174,
+     "navMs": 3501,
+     "pVerified": 0.99
+    },
+    {
+     "id": "mdn-map-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 194,
+     "navMs": 4072,
+     "pVerified": 0
+    },
+    {
+     "id": "mdn-flex-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 150,
+     "navMs": 2801,
+     "pVerified": 0
+    },
+    {
+     "id": "rfc2324",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 177,
+     "navMs": 2044,
+     "pVerified": 0.99
+    },
+    {
+     "id": "rfc2324-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 130,
+     "navMs": 2584,
+     "pVerified": 0
+    },
+    {
+     "id": "rfc791",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 163,
+     "navMs": 1773,
+     "pVerified": 0.96
+    },
+    {
+     "id": "rfc791-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 162,
+     "navMs": 1998,
+     "pVerified": 0.01
+    },
+    {
+     "id": "rfc9110",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 219,
+     "navMs": 4795,
+     "pVerified": 0.99
+    },
+    {
+     "id": "rfc9110-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 214,
+     "navMs": 5276,
+     "pVerified": 0
+    },
+    {
+     "id": "gh-linux",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 162,
+     "navMs": 5344,
+     "pVerified": 1
+    },
+    {
+     "id": "gh-linux-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 220,
+     "navMs": 5402,
+     "pVerified": 0.01
+    },
+    {
+     "id": "gh-vscode-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 129,
+     "navMs": 6653,
+     "pVerified": 0
+    },
+    {
+     "id": "gh-vscode",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 184,
+     "navMs": 7111,
+     "pVerified": 1
+    },
+    {
+     "id": "hn-front",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 156,
+     "navMs": 1880,
+     "pVerified": 1
+    },
+    {
+     "id": "gh-go",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 238,
+     "navMs": 5689,
+     "pVerified": 0.99
+    },
+    {
+     "id": "hn-front-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 150,
+     "navMs": 1963,
+     "pVerified": 0.01
+    },
+    {
+     "id": "gh-go-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 158,
+     "navMs": 5519,
+     "pVerified": 0.01
+    },
+    {
+     "id": "hn-newest",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 130,
+     "navMs": 1422,
+     "pVerified": 0.99
+    },
+    {
+     "id": "hn-newest-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 157,
+     "navMs": 1758,
+     "pVerified": 0
+    },
+    {
+     "id": "arxiv-list",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 146,
+     "navMs": 1735,
+     "pVerified": 0.98
+    },
+    {
+     "id": "arxiv-list-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 172,
+     "navMs": 1393,
+     "pVerified": 0
+    },
+    {
+     "id": "arxiv-dots",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 128,
+     "navMs": 1737,
+     "pVerified": 1
+    },
+    {
+     "id": "arxiv-dots-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 174,
+     "navMs": 1834,
+     "pVerified": 0.02
+    },
+    {
+     "id": "pypi-requests",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 1632,
+     "pVerified": 1
+    },
+    {
+     "id": "pypi-requests-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 138,
+     "navMs": 1755,
+     "pVerified": 0.01
+    },
+    {
+     "id": "pypi-httpx",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 171,
+     "navMs": 1298,
+     "pVerified": 1
+    },
+    {
+     "id": "pypi-httpx-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 239,
+     "navMs": 1518,
+     "pVerified": 0
+    },
+    {
+     "id": "w3-wcag",
+     "verdict": "escalate",
+     "ok": null,
+     "jevMs": 162,
+     "navMs": 1497,
+     "pVerified": 0.33
+    },
+    {
+     "id": "w3-wcag-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 173,
+     "navMs": 1560,
+     "pVerified": 0
+    },
+    {
+     "id": "python-home",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 157,
+     "navMs": 2112,
+     "pVerified": 1
+    },
+    {
+     "id": "python-asyncio",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 155,
+     "navMs": 1469,
+     "pVerified": 1
+    },
+    {
+     "id": "python-asyncio-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 163,
+     "navMs": 1413,
+     "pVerified": 0
+    },
+    {
+     "id": "python-home-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 141,
+     "navMs": 4758,
+     "pVerified": 0.01
+    },
+    {
+     "id": "go-doc",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 142,
+     "navMs": 2401,
+     "pVerified": 0.97
+    },
+    {
+     "id": "go-doc-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 131,
+     "navMs": 1881,
+     "pVerified": 0.01
+    },
+    {
+     "id": "node-home-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 131,
+     "navMs": 1956,
+     "pVerified": 0
+    },
+    {
+     "id": "rust-home",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 135,
+     "navMs": 2440,
+     "pVerified": 0.99
+    },
+    {
+     "id": "node-home",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 213,
+     "navMs": 9260,
+     "pVerified": 1
+    },
+    {
+     "id": "gnu-bash",
+     "verdict": "escalate",
+     "ok": null,
+     "jevMs": 135,
+     "navMs": 5656,
+     "pVerified": 0.21
+    },
+    {
+     "id": "kernel",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 1257,
+     "pVerified": 0.99
+    },
+    {
+     "id": "kernel-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 162,
+     "navMs": 1102,
+     "pVerified": 0
+    },
+    {
+     "id": "rust-home-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 159,
+     "navMs": 11375,
+     "pVerified": 0
+    },
+    {
+     "id": "gnu-bash-f",
+     "verdict": "escalate",
+     "ok": null,
+     "jevMs": 165,
+     "navMs": 5632,
+     "pVerified": 0
+    },
+    {
+     "id": "httpbin-html",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 133,
+     "navMs": 694,
+     "pVerified": 0.89
+    },
+    {
+     "id": "debian",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 136,
+     "navMs": 3181,
+     "pVerified": 1
+    },
+    {
+     "id": "debian-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 136,
+     "navMs": 2562,
+     "pVerified": 0.01
+    },
+    {
+     "id": "httpbin-html-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 147,
+     "navMs": 614,
+     "pVerified": 0
+    },
+    {
+     "id": "httpbin-form",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 134,
+     "navMs": 506,
+     "pVerified": 0.98
+    },
+    {
+     "id": "httpbin-form-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 155,
+     "navMs": 596,
+     "pVerified": 0
+    },
+    {
+     "id": "wiki-search",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 135,
+     "navMs": 1602,
+     "pVerified": 0.99
+    },
+    {
+     "id": "wiki-search-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 185,
+     "navMs": 1423,
+     "pVerified": 0
+    },
+    {
+     "id": "iana",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 134,
+     "navMs": 1527,
+     "pVerified": 1
+    },
+    {
+     "id": "example",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 125,
+     "navMs": 628,
+     "pVerified": 1
+    },
+    {
+     "id": "iana-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 133,
+     "navMs": 1199,
+     "pVerified": 0
+    },
+    {
+     "id": "example-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 162,
+     "navMs": 669,
+     "pVerified": 0
+    },
+    {
+     "id": "ietf",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 210,
+     "navMs": 1883,
+     "pVerified": 0.98
+    },
+    {
+     "id": "ietf-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 194,
+     "navMs": 1606,
+     "pVerified": 0
+    },
+    {
+     "id": "apache",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 130,
+     "navMs": 2695,
+     "pVerified": 1
+    },
+    {
+     "id": "quotes",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 133,
+     "navMs": 1535,
+     "pVerified": 1
+    },
+    {
+     "id": "apache-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 135,
+     "navMs": 1876,
+     "pVerified": 0
+    },
+    {
+     "id": "quotes-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 149,
+     "navMs": 1458,
+     "pVerified": 0
+    },
+    {
+     "id": "books",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 190,
+     "navMs": 2591,
+     "pVerified": 1
+    },
+    {
+     "id": "books-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 223,
+     "navMs": 2479,
+     "pVerified": 0
+    },
+    {
+     "id": "weather",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 241,
+     "navMs": 4023,
+     "pVerified": 1
+    },
+    {
+     "id": "bbc",
+     "verdict": "passed",
+     "ok": true,
+     "jevMs": 163,
+     "navMs": 7794,
+     "pVerified": 0.99
+    },
+    {
+     "id": "weather-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 195,
+     "navMs": 2518,
+     "pVerified": 0
+    },
+    {
+     "id": "bbc-f",
+     "verdict": "failed",
+     "ok": true,
+     "jevMs": 195,
+     "navMs": 15785,
+     "pVerified": 0
+    }
+   ],
+   "settled": 80,
+   "decided": 77,
+   "right": 77,
+   "escalates": 3,
+   "jevMsMedian": 156,
+   "jevMsP10": 133,
+   "jevMsP90": 214
+  }
+ ],
+ "repeat": {
+  "sonnetBlind": {
+   "both": 8,
+   "same": 8,
+   "diffs": []
+  },
+  "jevCorpus": {
+   "both": 74,
+   "same": 74,
+   "diffs": []
+  }
+ },
+ "samples": {
+  "jev": [
+   {
+    "run": "bench-1",
+    "id": "npm-react",
+    "ms": 309
+   },
+   {
+    "run": "bench-1",
+    "id": "rfc2324",
+    "ms": 248
+   },
+   {
+    "run": "bench-1",
+    "id": "wiki-lisp",
+    "ms": 250
+   },
+   {
+    "run": "bench-1",
+    "id": "mdn-flex",
+    "ms": 277
+   },
+   {
+    "run": "bench-1",
+    "id": "wiki-ada-false",
+    "ms": 241
+   },
+   {
+    "run": "bench-1",
+    "id": "gh-linux",
+    "ms": 219
+   },
+   {
+    "run": "bench-1",
+    "id": "wiki-python-false",
+    "ms": 246
+   },
+   {
+    "run": "bench-1",
+    "id": "hn",
+    "ms": 236
+   }
+  ],
+  "jevCorpus": [
+   {
+    "run": "corpus-1",
+    "id": "wiki-lisp-f",
+    "ms": 371
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-lisp",
+    "ms": 179
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-noether",
+    "ms": 256
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-noether-f",
+    "ms": 367
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-turing",
+    "ms": 225
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-turing-f",
+    "ms": 171
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-rust",
+    "ms": 171
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-periodic",
+    "ms": 204
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-periodic-f",
+    "ms": 168
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-rust-f",
+    "ms": 162
+   },
+   {
+    "run": "corpus-1",
+    "id": "mdn-fetch",
+    "ms": 172
+   },
+   {
+    "run": "corpus-1",
+    "id": "mdn-fetch-f",
+    "ms": 208
+   },
+   {
+    "run": "corpus-1",
+    "id": "mdn-map-f",
+    "ms": 150
+   },
+   {
+    "run": "corpus-1",
+    "id": "mdn-flex",
+    "ms": 174
+   },
+   {
+    "run": "corpus-1",
+    "id": "mdn-map",
+    "ms": 151
+   },
+   {
+    "run": "corpus-1",
+    "id": "mdn-flex-f",
+    "ms": 232
+   },
+   {
+    "run": "corpus-1",
+    "id": "rfc2324",
+    "ms": 147
+   },
+   {
+    "run": "corpus-1",
+    "id": "rfc2324-f",
+    "ms": 182
+   },
+   {
+    "run": "corpus-1",
+    "id": "rfc791",
+    "ms": 176
+   },
+   {
+    "run": "corpus-1",
+    "id": "rfc791-f",
+    "ms": 167
+   },
+   {
+    "run": "corpus-1",
+    "id": "rfc9110",
+    "ms": 253
+   },
+   {
+    "run": "corpus-1",
+    "id": "rfc9110-f",
+    "ms": 219
+   },
+   {
+    "run": "corpus-1",
+    "id": "gh-linux",
+    "ms": 262
+   },
+   {
+    "run": "corpus-1",
+    "id": "gh-vscode-f",
+    "ms": 201
+   },
+   {
+    "run": "corpus-1",
+    "id": "gh-go",
+    "ms": 322
+   },
+   {
+    "run": "corpus-1",
+    "id": "gh-linux-f",
+    "ms": 193
+   },
+   {
+    "run": "corpus-1",
+    "id": "gh-go-f",
+    "ms": 196
+   },
+   {
+    "run": "corpus-1",
+    "id": "gh-vscode",
+    "ms": 211
+   },
+   {
+    "run": "corpus-1",
+    "id": "hn-front",
+    "ms": 175
+   },
+   {
+    "run": "corpus-1",
+    "id": "hn-front-f",
+    "ms": 178
+   },
+   {
+    "run": "corpus-1",
+    "id": "hn-newest",
+    "ms": 231
+   },
+   {
+    "run": "corpus-1",
+    "id": "hn-newest-f",
+    "ms": 193
+   },
+   {
+    "run": "corpus-1",
+    "id": "arxiv-list",
+    "ms": 164
+   },
+   {
+    "run": "corpus-1",
+    "id": "arxiv-list-f",
+    "ms": 199
+   },
+   {
+    "run": "corpus-1",
+    "id": "arxiv-dots",
+    "ms": 169
+   },
+   {
+    "run": "corpus-1",
+    "id": "arxiv-dots-f",
+    "ms": 192
+   },
+   {
+    "run": "corpus-1",
+    "id": "w3-wcag-f",
+    "ms": 174
+   },
+   {
+    "run": "corpus-1",
+    "id": "w3-wcag",
+    "ms": 201
+   },
+   {
+    "run": "corpus-1",
+    "id": "python-home",
+    "ms": 150
+   },
+   {
+    "run": "corpus-1",
+    "id": "python-home-f",
+    "ms": 179
+   },
+   {
+    "run": "corpus-1",
+    "id": "python-asyncio",
+    "ms": 165
+   },
+   {
+    "run": "corpus-1",
+    "id": "python-asyncio-f",
+    "ms": 198
+   },
+   {
+    "run": "corpus-1",
+    "id": "node-home",
+    "ms": 144
+   },
+   {
+    "run": "corpus-1",
+    "id": "go-doc-f",
+    "ms": 208
+   },
+   {
+    "run": "corpus-1",
+    "id": "go-doc",
+    "ms": 254
+   },
+   {
+    "run": "corpus-1",
+    "id": "node-home-f",
+    "ms": 176
+   },
+   {
+    "run": "corpus-1",
+    "id": "rust-home",
+    "ms": 225
+   },
+   {
+    "run": "corpus-1",
+    "id": "rust-home-f",
+    "ms": 171
+   },
+   {
+    "run": "corpus-1",
+    "id": "kernel",
+    "ms": 166
+   },
+   {
+    "run": "corpus-1",
+    "id": "kernel-f",
+    "ms": 146
+   },
+   {
+    "run": "corpus-1",
+    "id": "httpbin-html",
+    "ms": 169
+   },
+   {
+    "run": "corpus-1",
+    "id": "httpbin-html-f",
+    "ms": 165
+   },
+   {
+    "run": "corpus-1",
+    "id": "debian",
+    "ms": 164
+   },
+   {
+    "run": "corpus-1",
+    "id": "debian-f",
+    "ms": 147
+   },
+   {
+    "run": "corpus-1",
+    "id": "httpbin-form-f",
+    "ms": 197
+   },
+   {
+    "run": "corpus-1",
+    "id": "httpbin-form",
+    "ms": 188
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-search",
+    "ms": 160
+   },
+   {
+    "run": "corpus-1",
+    "id": "wiki-search-f",
+    "ms": 145
+   },
+   {
+    "run": "corpus-1",
+    "id": "iana",
+    "ms": 203
+   },
+   {
+    "run": "corpus-1",
+    "id": "example",
+    "ms": 205
+   },
+   {
+    "run": "corpus-1",
+    "id": "example-f",
+    "ms": 181
+   },
+   {
+    "run": "corpus-1",
+    "id": "iana-f",
+    "ms": 209
+   },
+   {
+    "run": "corpus-1",
+    "id": "ietf-f",
+    "ms": 183
+   },
+   {
+    "run": "corpus-1",
+    "id": "ietf",
+    "ms": 160
+   },
+   {
+    "run": "corpus-1",
+    "id": "apache",
+    "ms": 171
+   },
+   {
+    "run": "corpus-1",
+    "id": "quotes",
+    "ms": 165
+   },
+   {
+    "run": "corpus-1",
+    "id": "apache-f",
+    "ms": 164
+   },
+   {
+    "run": "corpus-1",
+    "id": "quotes-f",
+    "ms": 155
+   },
+   {
+    "run": "corpus-1",
+    "id": "books",
+    "ms": 200
+   },
+   {
+    "run": "corpus-1",
+    "id": "books-f",
+    "ms": 183
+   },
+   {
+    "run": "corpus-1",
+    "id": "bbc",
+    "ms": 167
+   },
+   {
+    "run": "corpus-1",
+    "id": "weather",
+    "ms": 169
+   },
+   {
+    "run": "corpus-1",
+    "id": "weather-f",
+    "ms": 164
+   },
+   {
+    "run": "corpus-1",
+    "id": "bbc-f",
+    "ms": 156
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-lisp-f",
+    "ms": 330
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-lisp",
+    "ms": 141
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-noether",
+    "ms": 162
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-noether-f",
+    "ms": 136
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-turing-f",
+    "ms": 150
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-turing",
+    "ms": 246
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-rust",
+    "ms": 140
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-periodic",
+    "ms": 147
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-periodic-f",
+    "ms": 178
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-rust-f",
+    "ms": 147
+   },
+   {
+    "run": "corpus-2",
+    "id": "mdn-fetch",
+    "ms": 145
+   },
+   {
+    "run": "corpus-2",
+    "id": "mdn-fetch-f",
+    "ms": 141
+   },
+   {
+    "run": "corpus-2",
+    "id": "mdn-map",
+    "ms": 136
+   },
+   {
+    "run": "corpus-2",
+    "id": "mdn-flex",
+    "ms": 174
+   },
+   {
+    "run": "corpus-2",
+    "id": "mdn-map-f",
+    "ms": 194
+   },
+   {
+    "run": "corpus-2",
+    "id": "mdn-flex-f",
+    "ms": 150
+   },
+   {
+    "run": "corpus-2",
+    "id": "rfc2324",
+    "ms": 177
+   },
+   {
+    "run": "corpus-2",
+    "id": "rfc2324-f",
+    "ms": 130
+   },
+   {
+    "run": "corpus-2",
+    "id": "rfc791",
+    "ms": 163
+   },
+   {
+    "run": "corpus-2",
+    "id": "rfc791-f",
+    "ms": 162
+   },
+   {
+    "run": "corpus-2",
+    "id": "rfc9110",
+    "ms": 219
+   },
+   {
+    "run": "corpus-2",
+    "id": "rfc9110-f",
+    "ms": 214
+   },
+   {
+    "run": "corpus-2",
+    "id": "gh-linux",
+    "ms": 162
+   },
+   {
+    "run": "corpus-2",
+    "id": "gh-linux-f",
+    "ms": 220
+   },
+   {
+    "run": "corpus-2",
+    "id": "gh-vscode-f",
+    "ms": 129
+   },
+   {
+    "run": "corpus-2",
+    "id": "gh-vscode",
+    "ms": 184
+   },
+   {
+    "run": "corpus-2",
+    "id": "hn-front",
+    "ms": 156
+   },
+   {
+    "run": "corpus-2",
+    "id": "gh-go",
+    "ms": 238
+   },
+   {
+    "run": "corpus-2",
+    "id": "hn-front-f",
+    "ms": 150
+   },
+   {
+    "run": "corpus-2",
+    "id": "gh-go-f",
+    "ms": 158
+   },
+   {
+    "run": "corpus-2",
+    "id": "hn-newest",
+    "ms": 130
+   },
+   {
+    "run": "corpus-2",
+    "id": "hn-newest-f",
+    "ms": 157
+   },
+   {
+    "run": "corpus-2",
+    "id": "arxiv-list",
+    "ms": 146
+   },
+   {
+    "run": "corpus-2",
+    "id": "arxiv-list-f",
+    "ms": 172
+   },
+   {
+    "run": "corpus-2",
+    "id": "arxiv-dots",
+    "ms": 128
+   },
+   {
+    "run": "corpus-2",
+    "id": "arxiv-dots-f",
+    "ms": 174
+   },
+   {
+    "run": "corpus-2",
+    "id": "pypi-requests",
+    "ms": 147
+   },
+   {
+    "run": "corpus-2",
+    "id": "pypi-requests-f",
+    "ms": 138
+   },
+   {
+    "run": "corpus-2",
+    "id": "pypi-httpx",
+    "ms": 171
+   },
+   {
+    "run": "corpus-2",
+    "id": "pypi-httpx-f",
+    "ms": 239
+   },
+   {
+    "run": "corpus-2",
+    "id": "w3-wcag",
+    "ms": 162
+   },
+   {
+    "run": "corpus-2",
+    "id": "w3-wcag-f",
+    "ms": 173
+   },
+   {
+    "run": "corpus-2",
+    "id": "python-home",
+    "ms": 157
+   },
+   {
+    "run": "corpus-2",
+    "id": "python-asyncio",
+    "ms": 155
+   },
+   {
+    "run": "corpus-2",
+    "id": "python-asyncio-f",
+    "ms": 163
+   },
+   {
+    "run": "corpus-2",
+    "id": "python-home-f",
+    "ms": 141
+   },
+   {
+    "run": "corpus-2",
+    "id": "go-doc",
+    "ms": 142
+   },
+   {
+    "run": "corpus-2",
+    "id": "go-doc-f",
+    "ms": 131
+   },
+   {
+    "run": "corpus-2",
+    "id": "node-home-f",
+    "ms": 131
+   },
+   {
+    "run": "corpus-2",
+    "id": "rust-home",
+    "ms": 135
+   },
+   {
+    "run": "corpus-2",
+    "id": "node-home",
+    "ms": 213
+   },
+   {
+    "run": "corpus-2",
+    "id": "gnu-bash",
+    "ms": 135
+   },
+   {
+    "run": "corpus-2",
+    "id": "kernel",
+    "ms": 147
+   },
+   {
+    "run": "corpus-2",
+    "id": "kernel-f",
+    "ms": 162
+   },
+   {
+    "run": "corpus-2",
+    "id": "rust-home-f",
+    "ms": 159
+   },
+   {
+    "run": "corpus-2",
+    "id": "gnu-bash-f",
+    "ms": 165
+   },
+   {
+    "run": "corpus-2",
+    "id": "httpbin-html",
+    "ms": 133
+   },
+   {
+    "run": "corpus-2",
+    "id": "debian",
+    "ms": 136
+   },
+   {
+    "run": "corpus-2",
+    "id": "debian-f",
+    "ms": 136
+   },
+   {
+    "run": "corpus-2",
+    "id": "httpbin-html-f",
+    "ms": 147
+   },
+   {
+    "run": "corpus-2",
+    "id": "httpbin-form",
+    "ms": 134
+   },
+   {
+    "run": "corpus-2",
+    "id": "httpbin-form-f",
+    "ms": 155
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-search",
+    "ms": 135
+   },
+   {
+    "run": "corpus-2",
+    "id": "wiki-search-f",
+    "ms": 185
+   },
+   {
+    "run": "corpus-2",
+    "id": "iana",
+    "ms": 134
+   },
+   {
+    "run": "corpus-2",
+    "id": "example",
+    "ms": 125
+   },
+   {
+    "run": "corpus-2",
+    "id": "iana-f",
+    "ms": 133
+   },
+   {
+    "run": "corpus-2",
+    "id": "example-f",
+    "ms": 162
+   },
+   {
+    "run": "corpus-2",
+    "id": "ietf",
+    "ms": 210
+   },
+   {
+    "run": "corpus-2",
+    "id": "ietf-f",
+    "ms": 194
+   },
+   {
+    "run": "corpus-2",
+    "id": "apache",
+    "ms": 130
+   },
+   {
+    "run": "corpus-2",
+    "id": "quotes",
+    "ms": 133
+   },
+   {
+    "run": "corpus-2",
+    "id": "apache-f",
+    "ms": 135
+   },
+   {
+    "run": "corpus-2",
+    "id": "quotes-f",
+    "ms": 149
+   },
+   {
+    "run": "corpus-2",
+    "id": "books",
+    "ms": 190
+   },
+   {
+    "run": "corpus-2",
+    "id": "books-f",
+    "ms": 223
+   },
+   {
+    "run": "corpus-2",
+    "id": "weather",
+    "ms": 241
+   },
+   {
+    "run": "corpus-2",
+    "id": "bbc",
+    "ms": 163
+   },
+   {
+    "run": "corpus-2",
+    "id": "weather-f",
+    "ms": 195
+   },
+   {
+    "run": "corpus-2",
+    "id": "bbc-f",
+    "ms": 195
+   }
+  ],
+  "sonnetSelf": [
+   {
+    "run": "blind-2",
+    "id": "hn",
+    "ms": 4089
+   },
+   {
+    "run": "blind-2",
+    "id": "wiki-ada-false",
+    "ms": 3125
+   },
+   {
+    "run": "blind-2",
+    "id": "mdn-flex",
+    "ms": 2673
+   },
+   {
+    "run": "blind-2",
+    "id": "wiki-lisp",
+    "ms": 2805
+   },
+   {
+    "run": "blind-2",
+    "id": "gh-linux",
+    "ms": 2781
+   },
+   {
+    "run": "blind-2",
+    "id": "wiki-python-false",
+    "ms": 2876
+   },
+   {
+    "run": "blind-2",
+    "id": "npm-react",
+    "ms": 2512
+   },
+   {
+    "run": "blind-2",
+    "id": "rfc2324",
+    "ms": 2148
+   },
+   {
+    "run": "blind-3",
+    "id": "hn",
+    "ms": 3080
+   },
+   {
+    "run": "blind-3",
+    "id": "wiki-ada-false",
+    "ms": 2249
+   },
+   {
+    "run": "blind-3",
+    "id": "mdn-flex",
+    "ms": 1824
+   },
+   {
+    "run": "blind-3",
+    "id": "wiki-lisp",
+    "ms": 1620
+   },
+   {
+    "run": "blind-3",
+    "id": "gh-linux",
+    "ms": 1984
+   },
+   {
+    "run": "blind-3",
+    "id": "wiki-python-false",
+    "ms": 1714
+   },
+   {
+    "run": "blind-3",
+    "id": "npm-react",
+    "ms": 2074
+   },
+   {
+    "run": "blind-3",
+    "id": "rfc2324",
+    "ms": 3737
+   }
+  ],
+  "sonnetWall": [
+   {
+    "run": "blind-2",
+    "id": "hn",
+    "ms": 10863
+   },
+   {
+    "run": "blind-2",
+    "id": "wiki-ada-false",
+    "ms": 9235
+   },
+   {
+    "run": "blind-2",
+    "id": "mdn-flex",
+    "ms": 9631
+   },
+   {
+    "run": "blind-2",
+    "id": "wiki-lisp",
+    "ms": 9217
+   },
+   {
+    "run": "blind-2",
+    "id": "gh-linux",
+    "ms": 8468
+   },
+   {
+    "run": "blind-2",
+    "id": "wiki-python-false",
+    "ms": 9004
+   },
+   {
+    "run": "blind-2",
+    "id": "npm-react",
+    "ms": 8871
+   },
+   {
+    "run": "blind-2",
+    "id": "rfc2324",
+    "ms": 9543
+   },
+   {
+    "run": "blind-3",
+    "id": "hn",
+    "ms": 10796
+   },
+   {
+    "run": "blind-3",
+    "id": "wiki-ada-false",
+    "ms": 8447
+   },
+   {
+    "run": "blind-3",
+    "id": "mdn-flex",
+    "ms": 7589
+   },
+   {
+    "run": "blind-3",
+    "id": "wiki-lisp",
+    "ms": 7601
+   },
+   {
+    "run": "blind-3",
+    "id": "gh-linux",
+    "ms": 8259
+   },
+   {
+    "run": "blind-3",
+    "id": "wiki-python-false",
+    "ms": 8104
+   },
+   {
+    "run": "blind-3",
+    "id": "npm-react",
+    "ms": 7289
+   },
+   {
+    "run": "blind-3",
+    "id": "rfc2324",
+    "ms": 10045
+   }
+  ],
+  "check": [
+   {
+    "run": "bench-1",
+    "id": "npm-react",
+    "ms": 141701
+   },
+   {
+    "run": "bench-1",
+    "id": "rfc2324",
+    "ms": 25198
+   },
+   {
+    "run": "bench-1",
+    "id": "wiki-lisp",
+    "ms": 40976
+   },
+   {
+    "run": "bench-1",
+    "id": "mdn-flex",
+    "ms": 17352
+   },
+   {
+    "run": "bench-1",
+    "id": "wiki-ada-false",
+    "ms": 53328
+   },
+   {
+    "run": "bench-1",
+    "id": "gh-linux",
+    "ms": 15815
+   },
+   {
+    "run": "bench-1",
+    "id": "wiki-python-false",
+    "ms": 45784
+   },
+   {
+    "run": "bench-1",
+    "id": "hn",
+    "ms": 18234
+   }
+  ]
+ },
+ "stats": {
+  "jev": {
+   "n": 8,
+   "median": 248,
+   "p10": 236,
+   "p90": 277,
+   "min": 219,
+   "max": 309
+  },
+  "jevCorpus": {
+   "n": 154,
+   "median": 167,
+   "p10": 135,
+   "p90": 225,
+   "min": 125,
+   "max": 371
+  },
+  "sonnetSelf": {
+   "n": 16,
+   "median": 2673,
+   "p10": 1824,
+   "p90": 3737,
+   "min": 1620,
+   "max": 4089
+  },
+  "sonnetWall": {
+   "n": 16,
+   "median": 9004,
+   "p10": 7601,
+   "p90": 10796,
+   "min": 7289,
+   "max": 10863
+  },
+  "check": {
+   "n": 8,
+   "median": 40976,
+   "p10": 17352,
+   "p90": 53328,
+   "min": 15815,
+   "max": 141701
+  }
+ },
+ "perRun": {
+  "jev": [
+   {
+    "run": "bench-1",
+    "n": 8,
+    "median": 248,
+    "p10": 236,
+    "p90": 277,
+    "min": 219,
+    "max": 309
+   }
+  ],
+  "check": [
+   {
+    "run": "bench-1",
+    "n": 8,
+    "median": 40976,
+    "p10": 17352,
+    "p90": 53328,
+    "min": 15815,
+    "max": 141701
+   }
+  ],
+  "sonnetSelf": [
+   {
+    "run": "nonblind-1",
+    "blind": false,
+    "n": 8,
+    "median": 2611,
+    "p10": 2295,
+    "p90": 2679,
+    "min": 2284,
+    "max": 2851
+   },
+   {
+    "run": "blind-2",
+    "blind": true,
+    "n": 8,
+    "median": 2805,
+    "p10": 2512,
+    "p90": 3125,
+    "min": 2148,
+    "max": 4089
+   },
+   {
+    "run": "blind-3",
+    "blind": true,
+    "n": 8,
+    "median": 2074,
+    "p10": 1714,
+    "p90": 3080,
+    "min": 1620,
+    "max": 3737
+   }
+  ],
+  "sonnetWall": [
+   {
+    "run": "nonblind-1",
+    "blind": false,
+    "n": 8,
+    "median": 9511,
+    "p10": 8834,
+    "p90": 9796,
+    "min": 8818,
+    "max": 10117
+   },
+   {
+    "run": "blind-2",
+    "blind": true,
+    "n": 8,
+    "median": 9235,
+    "p10": 8871,
+    "p90": 9631,
+    "min": 8468,
+    "max": 10863
+   },
+   {
+    "run": "blind-3",
+    "blind": true,
+    "n": 8,
+    "median": 8259,
+    "p10": 7589,
+    "p90": 10045,
+    "min": 7289,
+    "max": 10796
+   }
+  ],
+  "jevCorpus": [
+   {
+    "run": "corpus-1",
+    "n": 74,
+    "median": 178,
+    "p10": 151,
+    "p90": 232
+   },
+   {
+    "run": "corpus-2",
+    "n": 80,
+    "median": 156,
+    "p10": 133,
+    "p90": 214
+   }
+  ]
+ },
+ "right": {
+  "jev": [
+   {
+    "run": "bench-1",
+    "decided": 6,
+    "right": 6,
+    "escalates": 2
+   }
+  ],
+  "check": [
+   {
+    "run": "bench-1",
+    "decided": 8,
+    "right": 7
+   }
+  ],
+  "sonnet": [
+   {
+    "run": "nonblind-1",
+    "blind": false,
+    "decided": 7,
+    "right": 7,
+    "inconclusive": 1
+   },
+   {
+    "run": "blind-2",
+    "blind": true,
+    "decided": 8,
+    "right": 7,
+    "inconclusive": 0
+   },
+   {
+    "run": "blind-3",
+    "blind": true,
+    "decided": 8,
+    "right": 7,
+    "inconclusive": 0
+   }
+  ]
+ },
+ "login": [
+  {
+   "variant": "Jev + operator policy",
+   "judge": "jev",
+   "totalMs": 5000,
+   "stages": [
+    {
+     "name": "page load",
+     "ms": 700
+    },
+    {
+     "name": "gate call",
+     "ms": 330
+    },
+    {
+     "name": "act + settle",
+     "ms": 3470
+    },
+    {
+     "name": "verify call",
+     "ms": 500
+    }
+   ],
+   "outcome": "verified true",
+   "file": "jev-tape spec/SURFACES-VIBIUM.md §8c"
+  },
+  {
+   "variant": "Sonnet pixel operator",
+   "judge": "sonnet",
+   "totalMs": 14174,
+   "wallMs": 23146,
+   "stages": [
+    {
+     "name": "3 screenshots + 3 vision turns",
+     "ms": 13700
+    },
+    {
+     "name": "1 click + 30 key presses",
+     "ms": 474
+    }
+   ],
+   "outcome": "passed; final frame checked by hand",
+   "file": "jev-tape docs/COMPUTER-USE-CROSSCHECK.md"
+  },
+  {
+   "variant": "Model only: vibium run + check",
+   "judge": "check",
+   "totalMs": 32800,
+   "stages": [
+    {
+     "name": "page load",
+     "ms": 600
+    },
+    {
+     "name": "vibium run (plan + act)",
+     "ms": 14200
+    },
+    {
+     "name": "vibium check (verify)",
+     "ms": 17300
+    },
+    {
+     "name": "settle",
+     "ms": 700
+    }
+   ],
+   "outcome": "completed, passed",
+   "file": "jev-tape spec/SURFACES-VIBIUM.md §8c"
+  }
+ ],
+ "judges": {
+  "jev": {
+   "name": "Jev, typed judge",
+   "model": "jev-1.13.0",
+   "sees": "the settled page as text: url, title, a page-text excerpt, up to 60 element-map labels, and the claim, in one typed request",
+   "timed": "one POST round trip, measured in the runner around fetch()",
+   "answers": "outcome (verified / contradicted / unsupported) with probabilities, errorShown, blocked; a rule table turns them into passed, failed or escalate"
+  },
+  "sonnet": {
+   "name": "Sonnet, screenshot proxy",
+   "model": "claude-sonnet (Agent tool, model sonnet)",
+   "sees": "one 780×493 frame of the same settled page, captured by vibium screenshot, and the claim; nothing else",
+   "timed": "self-timed: date +%s%3N before the Read and after the decision; agent wall from spawn to hand-back is kept beside it",
+   "answers": "passed, failed or inconclusive, with a one-line reason"
+  },
+  "check": {
+   "name": "vibium check, model alone",
+   "model": "xai/grok-4.6",
+   "sees": "the live browser and the claim; it drives its own tool loop (map, text, screenshot) until it decides or its budget ends",
+   "timed": "process wall of vibium check, measured in the runner",
+   "answers": "passed or failed with a summary"
+  }
+ }
+}

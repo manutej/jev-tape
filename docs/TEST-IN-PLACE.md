@@ -48,6 +48,7 @@ npm run bench                                   # E5: eight real pages, same cla
 npm run corpus -- --catalog fixtures/vibium/catalog-pages.json --rows 0-19 --workers 1 \
   --record recordings/ --out runs/mine.json --items runs/mine.items.json     # E9 shard with per-row recording zips
 npm run calibrate -- runs/mine.json             # Brier and reliability bins from your own run
+npm run judges                                  # rebuild docs/judges-comparison.html from the committed runs
 npm run pick -- --url https://github.com/microsoft/vscode/issues --goal "search the issues by typing a query" --headless --stop   # E8
 ```
 
