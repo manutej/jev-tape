@@ -78,7 +78,12 @@
   nav.jump { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; padding: .9rem 0; border-bottom: 1px solid var(--ormus-hairline); position: sticky; top: env(safe-area-inset-top, 0px); background: var(--ormus-deep); z-index: 5; }
   nav.jump a { font-family: var(--ormus-font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ormus-ink-muted); border-bottom: 0; }
   nav.jump a::before { content: '/ '; }
+  nav.jump a b { font-weight: 400; color: var(--ormus-gold); margin-right: .35em; }
   nav.jump a:hover { color: var(--ormus-gold); }
+  nav.jump a.ext { margin-left: auto; color: var(--ormus-gold); }
+  .guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem 2rem; padding: 1.25rem 0 .25rem; }
+  .guide p { color: var(--ormus-ink-muted); font-size: .9rem; line-height: 1.55; margin-top: .2rem; }
+  .arc .num { font-family: var(--ormus-font-display); font-weight: 300; font-size: 2.6rem; line-height: 1; color: var(--ormus-gold); }
   @media (scripting: enabled) { .fusion-reveal { clip-path: inset(0 0 100% 0); transform: translateY(56px); opacity: 0; } }
   .fusion-reveal { transition: clip-path 1.1s var(--ormus-ease-reveal), transform 1.1s var(--ormus-ease-reveal), opacity .9s ease; }
   .fusion-reveal.is-revealed { clip-path: inset(0 0 0 0); transform: translateY(0); opacity: 1; }
@@ -198,6 +203,8 @@
   ol.next li::marker { font-family: var(--ormus-font-mono); color: var(--ormus-gold); font-size: .8rem; }
   .counter { border-left: 2px solid var(--ormus-gold); padding: .2rem 0 .2rem 1rem; color: var(--ormus-ink-muted); font-size: .92rem; max-width: var(--measure); }
   .counter b { color: var(--ormus-ink); font-weight: 500; }
+  .takeaway { font-family: var(--ormus-font-display); font-size: 1.6rem; line-height: 1.3; color: var(--ormus-gold); margin-top: 1.25rem; max-width: 22ch; }
+  ul.plain b { font-weight: 500; color: var(--ormus-ink); }
 
   /* Explorer */
   .explorer { display: grid; gap: 1rem; }
@@ -303,12 +310,17 @@
   </header>
 
   <nav class="jump" aria-label="Sections">
-    <a href="#summary">Summary</a><a href="#record">The record</a><a href="#loop">The loop</a><a href="#questions">Questions</a><a href="#observed">Observed</a><a href="#prospects">Prospects</a><a href="#assay">Assay</a><a href="#explore">Explore</a><a href="#files">Files</a>
+    <a href="#summary"><b>1</b>Summary</a><a href="#record"><b>2</b>The record</a><a href="#loop"><b>3</b>The loop</a><a href="#browser"><b>4</b>Browser layer</a><a href="#questions"><b>5</b>Questions</a><a href="#observed"><b>6</b>Observed</a><a href="#prospects"><b>7</b>Prospects</a><a href="#assay"><b>8</b>Assay</a><a href="#explore"><b>9</b>Explore</a><a href="#files"><b>10</b>Files</a><a class="ext" href="https://claude.ai/artifact/X729CDTw8qsbzXUwiJL4Qw">Comparison detail ↗</a>
   </nav>
+  <div class="guide">
+    <div><span class="mono-label mono-label--gold">Three minutes</span><p>1 Summary and 2 The record. The claim, the numbers with their n, what was run.</p></div>
+    <div><span class="mono-label">Fifteen minutes</span><p>Add 3 The loop, 4 Browser layer and 6 Observed. How a step runs, where we touch Vibium, the three-judge comparison.</p></div>
+    <div><span class="mono-label">Everything</span><p>5 to 10, then the explorer. The method and repeat runs behind the comparison have their own page, linked above.</p></div>
+  </div>
 
   <section id="summary">
     <div class="headline">
-      <span class="mono-label">Executive summary</span>
+      <div class="arc"><span class="num">1</span><span class="mono-label">Executive summary</span></div>
       <p class="claim">On literal browser decisions, Jev is 164× faster than the model loop and was wrong {{verifyWrong}} times in {{verifyDecided}} decided verdicts. The rest escalate to the model or a person by design.</p>
       <div class="tiles">
         <article class="fusion-card tile"><span class="mono-label">Per decision</span><div class="num">248<small>ms</small></div><p>Median Jev answer on eight real pages. The same claim through <code>vibium check</code> took 41.0 s.</p></article>
@@ -322,8 +334,8 @@
 
   <section id="record">
     <div class="section-head">
-      <span class="mono-label">The record</span>
-      <h2>What was run, exactly</h2>
+      <div class="arc"><span class="num">2</span><span class="mono-label">The record</span>
+      <h2>What was run, exactly</h2></div>
       <p>{{experiments}} experiments so far: lab runs on recorded pages, live runs against real sites and a local fixture, and computer-use style proxies. Every number on this page comes from one of the files named in the last column; the registry that holds them is <code>results/registry.json</code>, built by <code>npm run registry</code>.</p>
     </div>
     <div class="record" role="list">
@@ -361,8 +373,8 @@
 
   <section id="loop">
     <div class="section-head">
-      <span class="mono-label">How one step runs</span>
-      <h2>Two questions, one tape, four rails</h2>
+      <div class="arc"><span class="num">3</span><span class="mono-label">How one step runs</span>
+      <h2>Two questions, one tape, four rails</h2></div>
       <p>The loop wraps <code>vibium --json</code>. Reads and tab edits never involve Jev. A commit verb pays one gate call before it runs; a step with an expectation pays one verify call after the page settles. Jev's "not sure" goes to a person for the gate and to the model for the verify.</p>
     </div>
     <div class="steps">
@@ -465,10 +477,141 @@
     <p class="counter" style="margin-top:1.25rem"><b>Where this is the wrong tool.</b> An unfamiliar page with no step list still needs the model to plan. A claim that is not literal about one page ("is this a good deal") escalates every time. A site that renders nothing to text (canvas apps, image-only pages) gives Jev nothing to read; the screenshot judge wins there.</p>
   </section>
 
+  <section id="browser">
+    <div class="section-head">
+      <div class="arc"><span class="num">4</span><span class="mono-label">Where we touch Vibium</span><h2>The browser layer, and what plugs into it</h2></div>
+      <p>Vibium keeps the browser. Nothing in jev-tape opens a driver, reads the DOM or holds a WebSocket. Every action and every read is one of your own <code>vibium --json</code> verbs, and every judgement leaves the browser as text before Jev sees it.</p>
+    </div>
+    <figure class="fusion-card">
+      <div class="fig-head"><h3>Three layers, four seams</h3><span class="note">lab · runtime · browser · judge</span></div>
+      <div class="scroll diagram">
+      <svg viewBox="0 0 1100 560" role="img" aria-label="Architecture. Bottom band, the browser layer: Chrome for Testing driven over WebDriver BiDi by the Vibium daemon, which the vibium --json CLI verbs command. Middle band, the runtime: jev-tape's CLI shim spawns those verbs and parses their JSON; the step router classifies verbs, gates commits, acts, settles the page and verifies; the tape replays answers; the pack loader fails closed. To the right, the Jev API receives at most two typed POSTs per step and a person receives parked steps. Top band, the lab: JEV-works writes and lints the question contexts, which are copied into jev-tape as packs; states from runtime corpus runs flow up as items; the kit grades answers against labels and the registry keeps every number.">
+        <rect class="lane" x="0" y="20" width="1100" height="150"/>
+        <rect class="lane lane--jev" x="0" y="190" width="1100" height="180"/>
+        <rect class="lane" x="0" y="390" width="1100" height="150"/>
+        <text class="lanelab" x="12" y="40">LAB · JEV-WORKS · never runs a browser</text>
+        <text class="lanelab lanelab--jev" x="12" y="210">RUNTIME · JEV-TAPE · speaks only the CLI's JSON</text>
+        <text class="lanelab" x="12" y="410">BROWSER · VIBIUM · owns Chrome</text>
+
+        <rect class="box" x="40" y="60" width="200" height="90" rx="3"/>
+        <text class="t-bold" x="140" y="84" text-anchor="middle">contexts</text>
+        <text class="t-mute" x="140" y="102" text-anchor="middle">browser.action-gate · browser.step-verify</text>
+        <text class="t-mute" x="140" y="118" text-anchor="middle">the questions, verbatim</text>
+        <text class="t-mute" x="140" y="136" text-anchor="middle">lint M1–M7 · vet by Jev</text>
+        <line class="fl" x1="240" y1="105" x2="288" y2="105" marker-end="url(#ar)"/>
+        <rect class="box" x="290" y="60" width="200" height="90" rx="3"/>
+        <text class="t-bold" x="390" y="84" text-anchor="middle">items</text>
+        <text class="t-mute" x="390" y="102" text-anchor="middle">states + labels</text>
+        <text class="t-mute" x="390" y="118" text-anchor="middle">43 gate targets · 74 corpus rows</text>
+        <text class="t-mute" x="390" y="136" text-anchor="middle">built from runtime snapshots</text>
+        <line class="fl" x1="490" y1="105" x2="538" y2="105" marker-end="url(#ar)"/>
+        <rect class="box" x="540" y="60" width="200" height="90" rx="3"/>
+        <text class="t-bold" x="640" y="84" text-anchor="middle">kit run</text>
+        <text class="t-mute" x="640" y="102" text-anchor="middle">label-free verdicts</text>
+        <text class="t-mute" x="640" y="118" text-anchor="middle">JEV-SAFE · MARGINAL · MOVE-TO-CODE</text>
+        <text class="t-mute" x="640" y="136" text-anchor="middle">McNemar vs baseline, gates G1–G10</text>
+        <line class="fl" x1="740" y1="105" x2="788" y2="105" marker-end="url(#ar)"/>
+        <rect class="box box--tape" x="790" y="60" width="270" height="90" rx="3"/>
+        <text class="t-gold t-bold" x="925" y="84" text-anchor="middle">registry</text>
+        <text class="t-mute" x="925" y="102" text-anchor="middle">jev-tape results/registry.json</text>
+        <text class="t-mute" x="925" y="118" text-anchor="middle">every experiment and row, computed totals</text>
+        <text class="t-mute" x="925" y="136" text-anchor="middle">this page is built from it</text>
+
+        <path class="fl fl--jev" d="M140 150 L140 230" marker-end="url(#arj)"/>
+        <text class="t-mute" x="150" y="176">packs copied down</text>
+        <text class="t-mute" x="150" y="190">loadPack fails closed on drift</text>
+        <path class="fl" d="M390 230 L390 152" marker-end="url(#ar)"/>
+        <text class="t-mute" x="400" y="176">snapshots flow up</text>
+        <text class="t-mute" x="400" y="190">--corpus states.json</text>
+
+        <rect class="box box--jev" x="40" y="232" width="200" height="118" rx="3"/>
+        <text class="t-gold t-bold" x="140" y="256" text-anchor="middle">pack.ts · tape.ts</text>
+        <text class="t-mute" x="140" y="274" text-anchor="middle">questions in, answers keyed by</text>
+        <text class="t-mute" x="140" y="290" text-anchor="middle">sha256(state + questions)</text>
+        <text class="t-mute" x="140" y="306" text-anchor="middle">same state → recorded answer</text>
+        <text class="t-mute" x="140" y="322" text-anchor="middle">replay makes zero calls</text>
+        <line class="fl fl--jev" x1="240" y1="290" x2="288" y2="290" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="290" y="232" width="260" height="118" rx="3"/>
+        <text class="t-gold t-bold" x="420" y="256" text-anchor="middle">step.ts · the router</text>
+        <text class="t-mute" x="420" y="274" text-anchor="middle">classify verb → read · tab-edit · nav · commit</text>
+        <text class="t-mute" x="420" y="290" text-anchor="middle">commit: park check · host allowlist · gate</text>
+        <text class="t-mute" x="420" y="306" text-anchor="middle">act · settle (wait load, labelDiff, urlChanged)</text>
+        <text class="t-mute" x="420" y="322" text-anchor="middle">verify · fallback Jev → model → person</text>
+        <line class="fl fl--jev" x1="550" y1="290" x2="598" y2="290" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="600" y="232" width="200" height="118" rx="3"/>
+        <text class="t-gold t-bold" x="700" y="256" text-anchor="middle">cli.ts · the shim</text>
+        <text class="t-mute" x="700" y="274" text-anchor="middle">spawns vibium --json --session S</text>
+        <text class="t-mute" x="700" y="290" text-anchor="middle">parses the JSON line back</text>
+        <text class="t-mute" x="700" y="306" text-anchor="middle">resolves @eN refs from map</text>
+        <text class="t-mute" x="700" y="322" text-anchor="middle">redacts typed values in logs</text>
+
+        <path class="fl fl--jev" d="M420 232 L420 210 L860 210 L860 232" marker-end="url(#arj)"/>
+        <rect class="box box--jev" x="830" y="232" width="230" height="52" rx="3"/>
+        <text class="t-gold t-bold" x="945" y="254" text-anchor="middle">Jev · TypeSafe System One</text>
+        <text class="t-mute" x="945" y="272" text-anchor="middle">POST /v1/systemone · jev-1.13.0 · ≤ 2 per step</text>
+        <path class="fl fl--person" d="M420 350 L420 372 L900 372 L900 320" marker-end="url(#ar)"/>
+        <rect class="box box--person" x="830" y="296" width="230" height="52" rx="3"/>
+        <text x="945" y="318" text-anchor="middle">person or operator policy</text>
+        <text class="t-mute" x="945" y="336" text-anchor="middle">pay · send · delete park before any call</text>
+
+        <path class="fl" d="M700 350 L700 430" marker-end="url(#ar)"/>
+        <text class="t-mute" x="710" y="376">verbs out</text>
+        <text class="t-mute" x="710" y="390">JSON back</text>
+        <rect class="box" x="560" y="432" width="280" height="96" rx="3"/>
+        <text class="t-bold" x="700" y="456" text-anchor="middle">vibium --json</text>
+        <text class="t-mute" x="700" y="474" text-anchor="middle">go · map · text · url · title · eval</text>
+        <text class="t-mute" x="700" y="490" text-anchor="middle">fill · click · press · wait load · screenshot</text>
+        <text class="t-mute" x="700" y="506" text-anchor="middle">record start --screenshots · record stop -o zip</text>
+        <text class="t-mute" x="700" y="522" text-anchor="middle">check (the model, on a verify escalate)</text>
+        <line class="fl" x1="560" y1="480" x2="512" y2="480" marker-end="url(#ar)"/>
+        <rect class="box" x="330" y="432" width="180" height="96" rx="3"/>
+        <text class="t-bold" x="420" y="456" text-anchor="middle">vibium daemon</text>
+        <text class="t-mute" x="420" y="474" text-anchor="middle">one per --session</text>
+        <text class="t-mute" x="420" y="490" text-anchor="middle">started once, headless</text>
+        <text class="t-mute" x="420" y="506" text-anchor="middle">refs live here</text>
+        <line class="fl" x1="330" y1="480" x2="282" y2="480" marker-end="url(#ar)"/>
+        <rect class="box" x="100" y="432" width="180" height="96" rx="3"/>
+        <text class="t-bold" x="190" y="456" text-anchor="middle">Chrome for Testing</text>
+        <text class="t-mute" x="190" y="474" text-anchor="middle">WebDriver BiDi</text>
+        <text class="t-mute" x="190" y="490" text-anchor="middle">the page, the DOM, the pixels</text>
+        <text class="t-mute" x="190" y="506" text-anchor="middle">never touched directly by us</text>
+        <rect class="box box--tape" x="860" y="432" width="200" height="96" rx="3"/>
+        <text class="t-gold t-bold" x="960" y="456" text-anchor="middle">recording zip</text>
+        <text class="t-mute" x="960" y="474" text-anchor="middle">actions + screenshots per row</text>
+        <text class="t-mute" x="960" y="490" text-anchor="middle">the proof of the action</text>
+        <text class="t-mute" x="960" y="506" text-anchor="middle">Haiku reads the last frame</text>
+        <line class="fl" x1="840" y1="480" x2="858" y2="480" marker-end="url(#ar)"/>
+      </svg>
+      </div>
+      <figcaption>Four seams, top to bottom: packs down and snapshots up between the lab and the runtime; typed requests out to Jev and parked steps out to a person; verbs down and JSON up between the runtime and Vibium's CLI. Vibium's own seam to Chrome is untouched.</figcaption>
+    </figure>
+    <div class="grid-2" style="margin-top:1.25rem">
+      <div class="fusion-card">
+        <span class="mono-label mono-label--gold">What each part does</span>
+        <ul class="plain" style="margin-top:.6rem">
+          <li><b>Vibium</b> owns the browser: one daemon per session, WebDriver BiDi, the same verbs you ship. We add nothing to it today.</li>
+          <li><b>jev-tape</b> speaks only the CLI's JSON: verbs out, snapshots back. It classifies the verb, asks Jev before a commit and after the page settles, parks what it must, and writes the tape.</li>
+          <li><b>Jev</b> never sees the browser: it gets a text excerpt and element labels in one typed request and answers with probabilities in about a quarter of a second.</li>
+          <li><b>JEV-works</b> never runs a browser: it writes and lints the questions, turns runtime snapshots into labelled items, and grades every answer.</li>
+          <li><b>The record</b> is two files: the tape (same state and questions give the same answer, zero calls) and the recording zip (the proof of what the browser did).</li>
+        </ul>
+      </div>
+      <div class="fusion-card">
+        <span class="mono-label">What would change in Vibium</span>
+        <ul class="plain" style="margin-top:.6rem">
+          <li>Nothing, for bridges 1 to 4: the wrapper, the skill, the recording reader and the MCP tools all sit outside your binary.</li>
+          <li>Bridge 6, the ask: two optional hooks in <code>clicker/internal/verifier/loop.go</code>. <code>--gate CMD</code> before a mutating tool call, expecting <code>auto | park | refuse</code>; <code>--verify CMD</code> after a step, expecting <code>true | false | escalate</code>. jev-tape provides both commands. The model keeps planning.</li>
+          <li>Bridge 7, later: a <code>typesafe</code> verifier provider so <code>check</code> answers literal claims itself in under a second and falls back to the model on an escalate.</li>
+        </ul>
+        <p class="takeaway">Vibium acts. Jev decides. Code keeps the record.</p>
+      </div>
+    </div>
+  </section>
+
   <section id="questions">
     <div class="section-head">
-      <span class="mono-label">The questions Jev is asked</span>
-      <h2>Every question is about one page</h2>
+      <div class="arc"><span class="num">5</span><span class="mono-label">The questions Jev is asked</span>
+      <h2>Every question is about one page</h2></div>
       <p>Anything that needs comparing, counting or remembering is computed in code and handed over as a value. Text is verbatim from the packs in <code>packs/</code>.</p>
     </div>
     <div class="grid-2">
@@ -504,7 +647,8 @@
 
   <section id="observed">
     <div class="section-head">
-      <div class="arc"><span class="roman">II</span><h2>Observed: same page, same claim, three judges</h2></div>
+      <div class="arc"><span class="num">6</span><span class="roman">II</span><h2>Observed: same page, same claim, three judges</h2></div>
+      <p class="note" style="color:var(--ormus-ink-muted);font-size:.9rem">The method, every sample and the repeat runs are on their own page: <a href="https://claude.ai/artifact/X729CDTw8qsbzXUwiJL4Qw">Three judges compared</a>.</p>
       <p>Eight public pages, one claim each, six true and two false. Every judge saw the same settled page. Jev read the page text and element map; the model ran its tool loop; the screenshot proxy read one frame, blind.</p>
     </div>
     <div class="charts">
@@ -557,7 +701,7 @@
 
   <section id="prospects">
     <div class="section-head">
-      <div class="arc"><span class="roman">III</span><h2>Prospects: seven bridges into Vibium, two shipped</h2></div>
+      <div class="arc"><span class="num">7</span><span class="roman">III</span><h2>Prospects: seven bridges into Vibium, two shipped</h2></div>
       <p>Ordered from what exists today to what needs Go changes upstream. Each carries its verdict stamp. The one that changes the cost of <code>vibium run</code> is number six.</p>
     </div>
     <div class="table-wrap">
@@ -579,7 +723,7 @@
 
   <section id="assay">
     <div class="section-head">
-      <div class="arc"><span class="roman">IV</span><h2>Assay: what was struck, what is still a gate</h2></div>
+      <div class="arc"><span class="num">8</span><span class="roman">IV</span><h2>Assay: what was struck, what is still a gate</h2></div>
       <p>The gates below are honest: each names the measurement that would strike it.</p>
     </div>
     <div class="grid-2">
@@ -607,7 +751,7 @@
 
   <section id="explore">
     <div class="section-head">
-      <div class="arc"><span class="roman">V</span><h2>Explore every result</h2></div>
+      <div class="arc"><span class="num">9</span><span class="roman">V</span><h2>Explore every result</h2></div>
       <p>All {{rows}} rows, encoded in this page. Search by task, site, claim or id; filter by experiment, verdict, judge and kind; open a row for its probabilities, note and source file.</p>
     </div>
     <div class="explorer">
@@ -627,8 +771,8 @@
 
   <section id="files">
     <div class="section-head">
-      <span class="mono-label">File index</span>
-      <h2>Where everything is</h2>
+      <div class="arc"><span class="num">10</span><span class="mono-label">File index</span>
+      <h2>Where everything is</h2></div>
       <p>Two repositories on branch <code>claude/nice-fermat-ky9qtz</code>, plus one local branch on the Vibium fork. Nothing has been pushed to HermeticOrmus/vibium.</p>
     </div>
     <div class="files">
