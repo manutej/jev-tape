@@ -1,7 +1,7 @@
 # Handoff for the Vibium team: a typed judge in front of the browser
 
 Date 2026-09-28. Jev pin `jev-1.13.0`. Vibium 26.8.21 built from HermeticOrmus/vibium `feat/linear-tasks`.
-Model runs on xai grok-4.6. **Source of truth: `docs/SOURCE-OF-TRUTH.md` and `results/registry.json`** (every number below traces there; other sessions add results through `results/incoming/`).
+Model runs on xai grok-4.6. Entry point with the annotated file tree: `HANDOFF.md` at the repo root. **Source of truth: `docs/SOURCE-OF-TRUTH.md` and `results/registry.json`** (every number below traces there; other sessions add results through `results/incoming/`).
 Page version of this brief, in the Ormus Fusion chrome: `docs/vibium-team-brief.html`
 (published copy: https://claude.ai/artifact/WbfHE1ZKWmNGeR92iyx2d6).
 

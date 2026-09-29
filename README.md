@@ -1,4 +1,6 @@
 # jev-tape
+> **Vibium surface handoff:** start at [`HANDOFF.md`](HANDOFF.md) (reading order by audience, annotated file tree, how to run).
+
 
 TypeSafe qualifies. Code gates. Temporal records.
 
