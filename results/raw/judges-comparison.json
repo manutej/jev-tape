@@ -245,6 +245,191 @@
      }
     }
    ]
+  },
+  {
+   "run": "bench-2",
+   "date": "2026-09-29",
+   "file": "jev-tape results/raw/bench-repeat-2026-09-29.json",
+   "model": "jev-1.13.0",
+   "checkModel": "xai/grok-4.6",
+   "rows": [
+    {
+     "id": "npm-react",
+     "url": "https://www.npmjs.com/package/react",
+     "claim": "This is the npm registry page for the package named react",
+     "expect": "passed",
+     "navMs": 1972,
+     "snapMs": 55,
+     "jev": {
+      "verdict": "escalate",
+      "ok": null,
+      "ms": 277,
+      "pVerified": 0.02,
+      "blocked": "captcha",
+      "inputTokens": 822
+     },
+     "check": {
+      "verdict": "inconclusive",
+      "ok": false,
+      "ms": 99894,
+      "summary": "The URL is https://www.npmjs.com/package/react, which would be the npm registry page for react, but the browser only shows a Cloudflare “Just a moment…” / “Veri"
+     }
+    },
+    {
+     "id": "rfc2324",
+     "url": "https://www.rfc-editor.org/info/rfc2324/",
+     "claim": "This page is about RFC 2324, the Hyper Text Coffee Pot Control Protocol",
+     "expect": "passed",
+     "navMs": 1689,
+     "snapMs": 60,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 189,
+      "pVerified": 0.99,
+      "blocked": "none",
+      "inputTokens": 1860
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 16405,
+      "summary": "The current page is the RFC Editor document for RFC 2324, titled Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0), matching the claim."
+     }
+    },
+    {
+     "id": "wiki-lisp",
+     "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+     "claim": "This is the Wikipedia article on the Common Lisp programming language",
+     "expect": "passed",
+     "navMs": 1481,
+     "snapMs": 175,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 203,
+      "pVerified": 0.98,
+      "blocked": "none",
+      "inputTokens": 1925
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 25510,
+      "summary": "The current page is the English Wikipedia article on Common Lisp: the URL, heading, and lead text all identify it as that article."
+     }
+    },
+    {
+     "id": "mdn-flex",
+     "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout",
+     "claim": "This MDN page documents CSS flexible box layout",
+     "expect": "passed",
+     "navMs": 2812,
+     "snapMs": 74,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 196,
+      "pVerified": 1,
+      "blocked": "none",
+      "inputTokens": 1666
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 20799,
+      "summary": "The MDN page at the given URL is a documentation page for CSS flexible box layout, with matching title, H1, and content describing the flexbox module and relate"
+     }
+    },
+    {
+     "id": "wiki-ada-false",
+     "url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
+     "claim": "This article says Ada Lovelace invented JavaScript",
+     "expect": "failed",
+     "navMs": 1133,
+     "snapMs": 192,
+     "jev": {
+      "verdict": "escalate",
+      "ok": null,
+      "ms": 227,
+      "pVerified": 0,
+      "blocked": "none",
+      "inputTokens": 1938
+     },
+     "check": {
+      "verdict": "failed",
+      "ok": true,
+      "ms": 62627,
+      "summary": "The Ada Lovelace Wikipedia article does not say she invented JavaScript. It describes her 19th-century work on Babbage’s analytical engine and the first publish"
+     }
+    },
+    {
+     "id": "gh-linux",
+     "url": "https://github.com/torvalds/linux",
+     "claim": "This is the GitHub repository page for torvalds/linux",
+     "expect": "passed",
+     "navMs": 3610,
+     "snapMs": 127,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 195,
+      "pVerified": 1,
+      "blocked": "none",
+      "inputTokens": 2023
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 36360,
+      "summary": "The current page is the public GitHub repository for torvalds/linux (Linux kernel source tree). The URL, owner/repo heading, and About text all match that repos"
+     }
+    },
+    {
+     "id": "wiki-python-false",
+     "url": "https://en.wikipedia.org/wiki/Python_(programming_language)",
+     "claim": "This article says Python was created by Linus Torvalds",
+     "expect": "failed",
+     "navMs": 1154,
+     "snapMs": 291,
+     "jev": {
+      "verdict": "failed",
+      "ok": true,
+      "ms": 245,
+      "pVerified": 0,
+      "blocked": "none",
+      "inputTokens": 1916
+     },
+     "check": {
+      "verdict": "failed",
+      "ok": true,
+      "ms": 46304,
+      "summary": "The Wikipedia article on Python does not say Linus Torvalds created the language. It states Python was designed and conceived by Guido van Rossum, and Linus Tor"
+     }
+    },
+    {
+     "id": "hn",
+     "url": "https://news.ycombinator.com/",
+     "claim": "The Hacker News front page is showing a list of stories with points and comments",
+     "expect": "passed",
+     "navMs": 1229,
+     "snapMs": 70,
+     "jev": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 254,
+      "pVerified": 0.96,
+      "blocked": "none",
+      "inputTokens": 1912
+     },
+     "check": {
+      "verdict": "passed",
+      "ok": true,
+      "ms": 18836,
+      "summary": "The Hacker News front page at https://news.ycombinator.com/ shows a numbered list of stories, and each story includes both a points count and a comments count."
+     }
+    }
+   ]
   }
  ],
  "sonnetRuns": [
@@ -1744,6 +1929,22 @@
   }
  ],
  "repeat": {
+  "jevBench": {
+   "both": 8,
+   "same": 8,
+   "diffs": []
+  },
+  "checkBench": {
+   "both": 8,
+   "same": 7,
+   "diffs": [
+    {
+     "id": "npm-react",
+     "a": "failed",
+     "b": "inconclusive"
+    }
+   ]
+  },
   "sonnetBlind": {
    "both": 8,
    "same": 8,
@@ -1796,6 +1997,46 @@
     "run": "bench-1",
     "id": "hn",
     "ms": 236
+   },
+   {
+    "run": "bench-2",
+    "id": "npm-react",
+    "ms": 277
+   },
+   {
+    "run": "bench-2",
+    "id": "rfc2324",
+    "ms": 189
+   },
+   {
+    "run": "bench-2",
+    "id": "wiki-lisp",
+    "ms": 203
+   },
+   {
+    "run": "bench-2",
+    "id": "mdn-flex",
+    "ms": 196
+   },
+   {
+    "run": "bench-2",
+    "id": "wiki-ada-false",
+    "ms": 227
+   },
+   {
+    "run": "bench-2",
+    "id": "gh-linux",
+    "ms": 195
+   },
+   {
+    "run": "bench-2",
+    "id": "wiki-python-false",
+    "ms": 245
+   },
+   {
+    "run": "bench-2",
+    "id": "hn",
+    "ms": 254
    }
   ],
   "jevCorpus": [
@@ -2774,16 +3015,56 @@
     "run": "bench-1",
     "id": "hn",
     "ms": 18234
+   },
+   {
+    "run": "bench-2",
+    "id": "npm-react",
+    "ms": 99894
+   },
+   {
+    "run": "bench-2",
+    "id": "rfc2324",
+    "ms": 16405
+   },
+   {
+    "run": "bench-2",
+    "id": "wiki-lisp",
+    "ms": 25510
+   },
+   {
+    "run": "bench-2",
+    "id": "mdn-flex",
+    "ms": 20799
+   },
+   {
+    "run": "bench-2",
+    "id": "wiki-ada-false",
+    "ms": 62627
+   },
+   {
+    "run": "bench-2",
+    "id": "gh-linux",
+    "ms": 36360
+   },
+   {
+    "run": "bench-2",
+    "id": "wiki-python-false",
+    "ms": 46304
+   },
+   {
+    "run": "bench-2",
+    "id": "hn",
+    "ms": 18836
    }
   ]
  },
  "stats": {
   "jev": {
-   "n": 8,
-   "median": 248,
-   "p10": 236,
+   "n": 16,
+   "median": 245,
+   "p10": 196,
    "p90": 277,
-   "min": 219,
+   "min": 189,
    "max": 309
   },
   "jevCorpus": {
@@ -2811,10 +3092,10 @@
    "max": 10863
   },
   "check": {
-   "n": 8,
-   "median": 40976,
+   "n": 16,
+   "median": 36360,
    "p10": 17352,
-   "p90": 53328,
+   "p90": 99894,
    "min": 15815,
    "max": 141701
   }
@@ -2829,6 +3110,15 @@
     "p90": 277,
     "min": 219,
     "max": 309
+   },
+   {
+    "run": "bench-2",
+    "n": 8,
+    "median": 227,
+    "p10": 195,
+    "p90": 254,
+    "min": 189,
+    "max": 277
    }
   ],
   "check": [
@@ -2840,6 +3130,15 @@
     "p90": 53328,
     "min": 15815,
     "max": 141701
+   },
+   {
+    "run": "bench-2",
+    "n": 8,
+    "median": 36360,
+    "p10": 18836,
+    "p90": 62627,
+    "min": 16405,
+    "max": 99894
    }
   ],
   "sonnetSelf": [
@@ -2930,11 +3229,22 @@
     "decided": 6,
     "right": 6,
     "escalates": 2
+   },
+   {
+    "run": "bench-2",
+    "decided": 6,
+    "right": 6,
+    "escalates": 2
    }
   ],
   "check": [
    {
     "run": "bench-1",
+    "decided": 8,
+    "right": 7
+   },
+   {
+    "run": "bench-2",
     "decided": 8,
     "right": 7
    }

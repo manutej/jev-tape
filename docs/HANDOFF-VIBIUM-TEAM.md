@@ -43,7 +43,7 @@ commits without an operator policy.
 
 ## The registry
 
-`results/registry.json` holds 12 experiments and 152 rows: 145 Jev calls, 87 verify verdicts decided with 0 wrong and 3 escalates, 138 labelled rows of which 134 right, 50 pages on 28 sites, 3 judges. Rebuild with `npm run brief`. Add results per `results/incoming/README.md`.
+`results/registry.json` holds 15 experiments and 248 rows: 233 Jev calls, 170 verify verdicts decided with 0 wrong and 8 escalates, 221 labelled rows of which 217 right, 50 pages on 28 sites, 3 judges. Rebuild with `npm run brief`. Add results per `results/incoming/README.md` (E13 to E15 came in that way).
 
 | id | experiment | kind | n | stamp |
 | --- | --- | --- | --- | --- |
@@ -59,6 +59,13 @@ commits without an operator policy.
 | E10 | Recording smoke | live | 2 | ✓ accept |
 | E11 | Cross-check: blind screenshot judge | proxy | 8 | ⚖ measured |
 | E12 | Cross-check: pixel operator login | proxy | 1 | ⚖ measured |
+| E13 | Repeat: bench, day 2 | live | 8 | ⚖ measured |
+| E14 | Repeat: blind screenshot judge, day 2 | proxy | 8 | ⚖ measured |
+| E15 | Repeat: corpus with recordings, day 2 | live | 80 | ⚖ measured |
+
+## Repeatability (2026-09-29)
+
+Every comparison was run a second time on another day. Jev: 8/8 bench verdicts and 74/74 corpus verdicts identical; medians 227 ms (bench) and 156 ms (corpus). Blind Sonnet screenshot judge: 8/8 identical. Vibium `check`, model alone: 7/8 identical, 36.4 s median. The page `docs/judges-comparison.html` shows the method, every sample and the run-to-run agreement.
 
 ## Test it in place
 
