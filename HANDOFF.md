@@ -12,7 +12,7 @@ Last measured 2026-09-29. Jev pin `jev-1.13.0`, Vibium 26.8.21, model xai/grok-4
 | The Vibium team | `docs/HANDOFF-VIBIUM-TEAM.md` → the brief, section 4 (the browser layer) and 7 (the bridges) → `docs/TEST-IN-PLACE.md` to reproduce it → `docs/VIBIUM-BRIDGES.md` for the ask |
 | Anyone checking a number | `docs/SOURCE-OF-TRUTH.md` → `results/registry.json` → the raw file the row names |
 | Anyone judging the comparison | `docs/judges-comparison.html` (published: https://claude.ai/artifact/X729CDTw8qsbzXUwiJL4Qw) → `docs/COMPUTER-USE-CROSSCHECK.md` |
-| The next session continuing the work | `docs/HANDOFF-2026-09-28.md` (state, next steps, rails) → `spec/SURFACES-VIBIUM.md` → JEV-works `handoffs/vibium-browser.md` |
+| The next session continuing the work | `docs/HANDOFF-2026-09-29.md` (the delta, and the docs feature plan `docs/PLAN-DOCS-FEATURE.md`) → `docs/HANDOFF-2026-09-28.md` (state, next steps, rails) → `spec/SURFACES-VIBIUM.md` → JEV-works `handoffs/vibium-browser.md` |
 | Adding results from another session | `results/incoming/README.md`, then `npm run brief` |
 
 ## The tree, annotated (Vibium surface only)
@@ -27,6 +27,8 @@ docs/
   HANDOFF-VIBIUM-TEAM.md           executive summary, registry totals, stamped experiment table, file index
   TEST-IN-PLACE.md                 the Vibium team's runbook: fresh clone, own binary, ten checks, then bench and corpus
   SOURCE-OF-TRUTH.md               what is canonical at each layer, registry schema, GROW steps, rules for numbers
+  HANDOFF-2026-09-29.md            compaction point: state delta, what is merged, the next feature
+  PLAN-DOCS-FEATURE.md             the plan for public-facing docs across jev-tape, JEV-works, jev-elder
   HANDOFF-2026-09-28.md            session state, all measurements, next steps in order, rails
   COMPUTER-USE-CROSSCHECK.md       the screenshot-judge and pixel-operator proxies, blinding protocol
   VIBIUM-BRIDGES.md                seven bridges into Vibium; the ask is bridge 6
