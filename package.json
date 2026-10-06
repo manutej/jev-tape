@@ -27,7 +27,8 @@
     "bench": "node --experimental-strip-types scripts/vibium-bench.ts",
     "pick": "node --experimental-strip-types scripts/vibium-pick.ts",
     "corpus": "node --experimental-strip-types scripts/vibium-corpus.ts",
-    "calibrate": "node --experimental-strip-types scripts/calibrate.ts"
+    "calibrate": "node --experimental-strip-types scripts/calibrate.ts",
+    "wiki:build": "node scripts/build-wiki.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.1",
