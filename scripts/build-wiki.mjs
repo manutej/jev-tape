@@ -36,10 +36,16 @@ function parseFrontmatter(raw) {
 
 function loadPages(wikiDir) {
   const dir = path.join(wikiDir, "pages");
+  const root = fs.realpathSync(wikiDir);
+  const rootPrefix = root + path.sep;
   const pages = new Map();
   for (const name of fs.readdirSync(dir).sort()) {
     if (!name.endsWith(".md")) continue;
-    const raw = fs.readFileSync(path.join(dir, name), "utf8");
+    const pagePath = path.join(dir, name);
+    const real = fs.realpathSync(pagePath);
+    // Only pages under the wiki root (blocks symlink escapes).
+    if (real !== root && !real.startsWith(rootPrefix)) continue;
+    const raw = fs.readFileSync(pagePath, "utf8");
     const { meta, body } = parseFrontmatter(raw);
     if (meta.id !== name.slice(0, -3)) {
       throw new Error(`id ${meta.id} !== stem ${name}`);
