@@ -34,23 +34,48 @@ function parseFrontmatter(raw) {
   return { meta, body: m[2] };
 }
 
+function skipReason(pagePath, root, rootPrefix) {
+  let real;
+  try {
+    real = fs.realpathSync(pagePath);
+  } catch (e) {
+    if (e.code === "ENOENT") return "dangling";
+    if (e.code === "ELOOP") return "loop";
+    throw e;
+  }
+  if (real !== root && !real.startsWith(rootPrefix)) return "outside-root";
+  return null;
+}
+
 function loadPages(wikiDir) {
   const dir = path.join(wikiDir, "pages");
   const root = fs.realpathSync(wikiDir);
   const rootPrefix = root + path.sep;
   const pages = new Map();
+  const skipCounts = { dangling: 0, loop: 0, "outside-root": 0 };
   for (const name of fs.readdirSync(dir).sort()) {
     if (!name.endsWith(".md")) continue;
     const pagePath = path.join(dir, name);
-    const real = fs.realpathSync(pagePath);
-    // Only pages under the wiki root (blocks symlink escapes).
-    if (real !== root && !real.startsWith(rootPrefix)) continue;
+    const reason = skipReason(pagePath, root, rootPrefix);
+    if (reason !== null) {
+      const rel = path.relative(wikiDir, pagePath).split(path.sep).join("/");
+      console.error(`build-wiki: skipped ${rel}: ${reason}`);
+      skipCounts[reason] += 1;
+      continue;
+    }
     const raw = fs.readFileSync(pagePath, "utf8");
     const { meta, body } = parseFrontmatter(raw);
     if (meta.id !== name.slice(0, -3)) {
       throw new Error(`id ${meta.id} !== stem ${name}`);
     }
     pages.set(meta.id, { id: meta.id, title: meta.title, body });
+  }
+  const totalSkipped =
+    skipCounts.dangling + skipCounts.loop + skipCounts["outside-root"];
+  if (totalSkipped > 0) {
+    console.error(
+      `build-wiki: skipped ${totalSkipped} path(s) (dangling ${skipCounts.dangling}, loop ${skipCounts.loop}, outside-root ${skipCounts["outside-root"]})`
+    );
   }
   return pages;
 }
