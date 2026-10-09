@@ -442,7 +442,8 @@ async function loadInfo() {
   $("#mcp-note").textContent = i.mcp ? `connector: ${i.mcp.kind} ${i.mcp.target}` : "no connector on this worker (set JEV_MCP_COMMAND or JEV_MCP_URL)";
   $("#run-ingest").disabled = !i.mcp;
   const uiBase = safeHref(i.temporal.ui);
-  $("#ui-link").href = uiBase === "#" ? "#" : `${uiBase}/namespaces/${encodeURIComponent(i.temporal.namespace)}/workflows`;
+  const uiRoot = uiBase === "#" ? "#" : uiBase.replace(/\/+$/, "");
+  $("#ui-link").href = uiRoot === "#" ? "#" : `${uiRoot}/namespaces/${encodeURIComponent(i.temporal.namespace)}/workflows`;
   $("#ui-link").rel = "noopener";
   $("#tape-path").textContent = i.tapePath; $("#lat-note").textContent = i.judge === "live" ? "wall ms per POST to " + i.endpoint : i.judge === "stub" ? "stub answers: ms measures the loop, not Jev" : "no judge: gates fail closed";
   $("#loaded").innerHTML = [["judge", i.judge], ["endpoint", i.endpoint], ["workflows", i.workflows.join(", ")], ["activities", i.activities.join(", ")], ["queue", i.taskQueue], ["tape", i.tapePath]].map(([k, v]) => `<div>${esc(k)}</div><div>${esc(v)}</div>`).join("");
