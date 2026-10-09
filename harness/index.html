@@ -183,6 +183,17 @@
 </main>
 <script>
 const $ = (s) => document.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const safeHref = (u) => {
+  const s = String(u ?? "").trim();
+  if (!s || s === "#") return "#";
+  try {
+    const url = new URL(s);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : "#";
+  } catch {
+    return "#";
+  }
+};
 const DEMO = [
   { name: "Capture", payload: { text: "Book dentist for October" } },
   { name: "Capture", payload: { text: "Reply to Ana about the Oct 2 dry run" } },
@@ -199,12 +210,12 @@ const DEMO = [
 $("#pack").value = JSON.stringify(DEMO, null, 2);
 // A local pack (.jev-tape/pack.json or JEV_PACK) replaces the built-in demo pack when present.
 fetch("/pack").then((r) => r.json()).then((p) => {
-  if (p.error) return feed(`<span class="RED">pack file ${p.path}: ${p.error}</span>`);
+  if (p.error) return feed(`<span class="RED">pack file ${esc(p.path)}: ${esc(p.error)}</span>`);
   if (!Array.isArray(p.commands) || !p.commands.length) return;
   $("#pack").value = JSON.stringify(p.commands, null, 2);
   $("#run-pack").textContent = `Run pack (${p.commands.length} from file)`;
   $("#run-pack").title = p.path;
-  feed(`<span class="sys">loaded ${p.commands.length} commands from ${p.path}</span>`);
+  feed(`<span class="sys">loaded ${p.commands.length} commands from ${esc(p.path)}</span>`);
 }).catch(() => {});
 
 const LOOP = [["assertLegalCommand","code"],["qualifyTask","judge"],["gate","code"],["propose","code"],["qualifyOutput","judge"],["gate","code"],["humanVerdict?","code"],["applyCommand","write"]];
@@ -228,7 +239,7 @@ function renderStats() {
   for (const w of wfs.values()) for (const it of w.items.values()) { if (it.status === "applied") applied++; if (it.status === "residual") residual++; }
   $("#s-applied").textContent = applied; $("#s-residual").textContent = residual;
 }
-const light = (l, waiting) => l ? `<span class="light ${l}">${l}</span>` : waiting ? `<span class="light wait">…</span>` : `<span class="light">—</span>`;
+const light = (l, waiting) => l ? `<span class="light ${esc(l)}">${esc(l)}</span>` : waiting ? `<span class="light wait">…</span>` : `<span class="light">—</span>`;
 function payloadText(cmd) { if (!cmd) return ""; const p = cmd.payload || {}; return p.text ?? p.itemKey ?? p.name ?? p.display_name ?? p.habitId ?? JSON.stringify(p); }
 const LIGHT_ORDER = { RED: 0, AMBER: 1, GREEN: 2 };
 const NOISE = new Set(["newsletter", "notification"]);
@@ -270,9 +281,9 @@ const GROUPS = {
   lane: (r) => r.id, light: (r) => r.light || "pending", status: (r) => r.it.status, category: (r) => r.category || "—", from: (r) => r.from || "—", date: (r) => r.date || "—", none: () => "",
 };
 function groupLabel(r, key) {
-  if (view.group !== "lane") return key;
+  if (view.group !== "lane") return esc(key);
   const w = r.w;
-  return `${w.kind} · <a href="${w.link}" target="_blank">${r.id}</a>${w.status ? ` · run ${w.status.run} · cursor ${w.status.cursor}/${w.status.total}` : ""}${w.done ? " · done" : ""}`;
+  return `${esc(w.kind)} · <a href="${safeHref(w.link)}" target="_blank" rel="noopener">${esc(r.id)}</a>${w.status ? ` · run ${esc(w.status.run)} · cursor ${esc(w.status.cursor)}/${esc(w.status.total)}` : ""}${w.done ? " · done" : ""}`;
 }
 let animateNext = false;
 function renderItems() {
@@ -298,13 +309,13 @@ function renderItems() {
       const { it, idx, id, key } = r;
       shown++;
       const meta = [r.from, r.category, r.date].filter(Boolean).join(" · ");
-      if (it.status === "recorded") { rows.push({ key, cls: "", html: `<td class="mono">${idx}</td><td class="mono">${it.recorded}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("")}</td>` }); continue; }
+      if (it.status === "recorded") { rows.push({ key, cls: "", html: `<td class="mono">${esc(idx)}</td><td class="mono">${esc(it.recorded)}</td><td class="hint">timer event, not a command</td><td><span class="light">—</span></td><td><span class="light">—</span></td><td class="ms">0</td><td><span class="src">code</span></td><td><span class="status applied">recorded</span></td><td>${it.notes.slice(-1).map((n) => `<span class="hint">${esc(n)}</span>`).join("")}</td>` }); continue; }
       const parked = it.status === "parked";
-      const act = parked ? `<button class="sm compose" onclick="verdict('${id}','${key}','compose')">compose</button> <button class="sm escalate" onclick="verdict('${id}','${key}','escalate')">escalate</button> <button class="sm refuse" onclick="verdict('${id}','${key}','refuse')">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${n}</span>`).join("");
+      const act = parked ? `<button type="button" class="sm compose" data-wf="${esc(id)}" data-key="${esc(key)}" data-verdict="compose">compose</button> <button type="button" class="sm escalate" data-wf="${esc(id)}" data-key="${esc(key)}" data-verdict="escalate">escalate</button> <button type="button" class="sm refuse" data-wf="${esc(id)}" data-key="${esc(key)}" data-verdict="refuse">refuse</button>` : it.notes.slice(-1).map((n) => `<span class="hint">${esc(n)}</span>`).join("");
       const ocTask = it.oc?.qualifyTask, ocOut = it.oc?.qualifyOutput;
-      const ocTag = (v) => v === undefined ? "" : v === "ok" ? `<span class="oc" title="composed and collapsed agree">oc</span>` : `<span class="oc bad" title="${v.replace(/"/g, "'")}">oc!</span>`;
-      const kind = it.kind ? `<span class="sub">judge: ${it.kind}${meta ? " · " : ""}${meta}</span>` : meta ? `<span class="sub">${meta}</span>` : "";
-      rows.push({ key, cls: "", html: `<td class="mono" title="${key}">${view.group === "lane" ? idx : id.replace("jev-worklist-", "") + ":" + idx}</td><td class="mono">${r.name}</td><td>${r.text}${kind}</td><td>${light(it.task, it.status === "running")}${ocTag(ocTask)}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}${ocTag(ocOut)}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${it.source || ""}">${it.source || (it.path0 ? "code" : "")}</span></td><td><span class="status ${it.status}">${it.status}</span></td><td>${act}</td>` });
+      const ocTag = (v) => v === undefined ? "" : v === "ok" ? `<span class="oc" title="composed and collapsed agree">oc</span>` : `<span class="oc bad" title="${esc(v)}">oc!</span>`;
+      const kind = it.kind ? `<span class="sub">judge: ${esc(it.kind)}${meta ? " · " : ""}${esc(meta)}</span>` : meta ? `<span class="sub">${esc(meta)}</span>` : "";
+      rows.push({ key, cls: "", html: `<td class="mono" title="${esc(key)}">${esc(view.group === "lane" ? idx : id.replace("jev-worklist-", "") + ":" + idx)}</td><td class="mono">${esc(r.name)}</td><td>${esc(r.text)}${kind}</td><td>${light(it.task, it.status === "running")}${ocTag(ocTask)}</td><td>${light(it.output, it.status === "running" && it.task && it.task !== "RED")}${ocTag(ocOut)}</td><td class="ms">${it.ms.length ? it.ms.map((m) => `<b>${m}</b>`).join("+") : (it.path0 ? "0" : "")}</td><td><span class="src ${esc(it.source || "")}">${esc(it.source || (it.path0 ? "code" : ""))}</span></td><td><span class="status ${esc(it.status)}">${esc(it.status)}</span></td><td>${act}</td>` });
     }
   }
   if (!rows.length) { tb.innerHTML = `<tr><td colspan="9" class="empty">${total ? "No items match this layer / filter." : "Nothing running. Press “Run pack”."}</td></tr>`; return; }
@@ -363,8 +374,8 @@ const hhmm = (iso) => (iso || "").slice(11, 23);
 
 function onMsg(m) {
   switch (m.type) {
-    case "workflow": { const w = wf(m.workflowId); w.kind = m.kind; w.commands = m.commands || []; w.link = m.link; if (m.kind === "JevCorrectnessWorkflow") w.commands.forEach((_, i) => item(w, `${m.workflowId}:${i}`)); if (m.kind === "SurfaceIngestWorkflow") { w.ingest = true; } feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">${m.adopted ? "lane" : "started"} ${m.kind} ${m.workflowId}</span>`); break; }
-    case "path0": { const w = wf(m.workflowId); const it = item(w, m.key); it.status = "residual"; it.path0 = true; it.task = "RED"; it.notes.push(m.reasons.join("; ")); path0++; loopCounts.assertLegalCommand = (loopCounts.assertLegalCommand || 0) + 1; feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span><span class="RED">path 0 · RED</span> ${m.command}: ${m.reasons.join("; ")}`); break; }
+    case "workflow": { const w = wf(m.workflowId); w.kind = m.kind; w.commands = m.commands || []; w.link = m.link; if (m.kind === "JevCorrectnessWorkflow") w.commands.forEach((_, i) => item(w, `${m.workflowId}:${i}`)); if (m.kind === "SurfaceIngestWorkflow") { w.ingest = true; } feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="sys">${esc(m.adopted ? "lane" : "started")} ${esc(m.kind)} ${esc(m.workflowId)}</span>`); break; }
+    case "path0": { const w = wf(m.workflowId); const it = item(w, m.key); it.status = "residual"; it.path0 = true; it.task = "RED"; it.notes.push(m.reasons.join("; ")); path0++; loopCounts.assertLegalCommand = (loopCounts.assertLegalCommand || 0) + 1; feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="k">${esc(m.key.split(":").pop())}</span><span class="RED">path 0 · RED</span> ${esc(m.command)}: ${esc(m.reasons.join("; "))}`); break; }
     case "step": {
       const w = wf(m.workflowId); const it = item(w, m.key);
       if (m.command) it.command = m.command;
@@ -380,19 +391,19 @@ function onMsg(m) {
         if (typeof m.ms === "number") { it.ms.push(m.ms); lat.push(m.ms); posts++; }
         if (m.light === "RED") it.status = "residual"; else if (m.light === "AMBER") { it.status = "parked"; loopCounts["humanVerdict?"] = (loopCounts["humanVerdict?"] || 0) + (m.kind === "qualifyOutput" ? 1 : 0); }
         else if (m.kind === "qualifyOutput" && it.task !== "AMBER") it.status = "running";
-        feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span>${m.kind} <span class="${m.light}">${m.light}</span> <b>${m.ms ?? "–"}ms</b> ${m.source} · ${(m.reasons || []).join("; ")}`);
-      } else if (m.kind === "applyCommand") { it.status = "applied"; it.notes.push(m.duplicate ? "idempotent: already on tape" : `${m.event} written`); feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span><span class="GREEN">applyCommand</span> ${m.event}${m.duplicate ? " (duplicate, skipped)" : ""}`); loadTape(); }
-      else if (m.kind === "pullSurface") { feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key}</span>pullSurface <b>${m.ms ?? "–"}ms</b> mcp · ${(m.reasons || []).join("; ")}`); }
-      else if (m.kind === "recordEvent") { it.status = "recorded"; it.recorded = m.event; it.source = "code"; it.notes.push(`${m.event}${m.duplicate ? " (duplicate, skipped)" : " written"}`); feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").slice(1).join(":")}</span>${m.event}`); loadTape(); }
+        feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="k">${esc(m.key.split(":").pop())}</span>${esc(m.kind)} <span class="${esc(m.light)}">${esc(m.light)}</span> <b>${esc(m.ms ?? "–")}ms</b> ${esc(m.source)} · ${esc((m.reasons || []).join("; "))}`);
+      } else if (m.kind === "applyCommand") { it.status = "applied"; it.notes.push(m.duplicate ? "idempotent: already on tape" : `${m.event} written`); feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="k">${esc(m.key.split(":").pop())}</span><span class="GREEN">applyCommand</span> ${esc(m.event)}${m.duplicate ? " (duplicate, skipped)" : ""}`); loadTape(); }
+      else if (m.kind === "pullSurface") { feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="k">${esc(m.key)}</span>pullSurface <b>${esc(m.ms ?? "–")}ms</b> mcp · ${esc((m.reasons || []).join("; "))}`); }
+      else if (m.kind === "recordEvent") { it.status = "recorded"; it.recorded = m.event; it.source = "code"; it.notes.push(`${m.event}${m.duplicate ? " (duplicate, skipped)" : " written"}`); feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="k">${esc(m.key.split(":").slice(1).join(":"))}</span>${esc(m.event)}`); loadTape(); }
       break;
     }
     case "status": { const w = wf(m.workflowId); w.status = m; for (const k of m.parked) { const it = item(w, k); if (it.status !== "applied") it.status = "parked"; } for (const k of m.applied) item(w, k).status = "applied"; for (const k of m.residual) { const it = item(w, k); it.status = "residual"; } break; }
-    case "human": { const w = wf(m.workflowId); const it = item(w, m.key); it.notes.push(`human: ${m.verdict}`); if (m.verdict !== "compose") it.status = "residual"; else it.status = "running"; feed(`<span class="t">${hhmm(m.at)}</span><span class="k">${m.key.split(":").pop()}</span>humanVerdict → <b>${m.verdict}</b>`); break; }
-    case "batch": feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">batch: ${m.total} commands in ${m.workflowIds.length} lane(s) of ≤${m.laneSize}${m.parkTimeoutMs ? `, parks escalate after ${m.parkTimeoutMs / 1000}s` : ", parks wait"}</span>`); break;
-    case "resolve": feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">resolve signal → ${m.workflowId}</span>`); break;
-    case "done": { const w = wf(m.workflowId); w.done = true; const r = m.result || {}; for (const o of r.outcomes || []) { const it = item(w, o.idempotencyKey); it.status = o.status; for (const s of o.steps) { if (s.kind === "qualifyTask") { it.task = s.light; it.source = it.source || s.source; } if (s.kind === "qualifyOutput") it.output = s.light; } } feed(`<span class="t">${hhmm(m.at)}</span><span class="sys">done ${m.kind} ${m.workflowId} ${r.runs ? `· ${r.runs} run(s)` : ""} ${r.applied ? `· applied ${r.applied.length} residual ${r.residual.length}` : ""}${r.nudges !== undefined ? `· nudges ${r.nudges}` : ""}${r.minted !== undefined ? `· minted ${r.minted}` : ""}</span>`); loadTape(); break; }
-    case "failed": feed(`<span class="t">${hhmm(m.at)}</span><span class="RED">failed ${m.workflowId}: ${m.message}</span>`); break;
-    case "error": feed(`<span class="RED">${m.message}</span>`); break;
+    case "human": { const w = wf(m.workflowId); const it = item(w, m.key); it.notes.push(`human: ${m.verdict}`); if (m.verdict !== "compose") it.status = "residual"; else it.status = "running"; feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="k">${esc(m.key.split(":").pop())}</span>humanVerdict → <b>${esc(m.verdict)}</b>`); break; }
+    case "batch": feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="sys">batch: ${esc(m.total)} commands in ${esc(m.workflowIds.length)} lane(s) of ≤${esc(m.laneSize)}${m.parkTimeoutMs ? `, parks escalate after ${esc(m.parkTimeoutMs / 1000)}s` : ", parks wait"}</span>`); break;
+    case "resolve": feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="sys">resolve signal → ${esc(m.workflowId)}</span>`); break;
+    case "done": { const w = wf(m.workflowId); w.done = true; const r = m.result || {}; for (const o of r.outcomes || []) { const it = item(w, o.idempotencyKey); it.status = o.status; for (const s of o.steps) { if (s.kind === "qualifyTask") { it.task = s.light; it.source = it.source || s.source; } if (s.kind === "qualifyOutput") it.output = s.light; } } feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="sys">done ${esc(m.kind)} ${esc(m.workflowId)} ${r.runs ? `· ${esc(r.runs)} run(s)` : ""} ${r.applied ? `· applied ${esc(r.applied.length)} residual ${esc(r.residual.length)}` : ""}${r.nudges !== undefined ? `· nudges ${esc(r.nudges)}` : ""}${r.minted !== undefined ? `· minted ${esc(r.minted)}` : ""}</span>`); loadTape(); break; }
+    case "failed": feed(`<span class="t">${esc(hhmm(m.at))}</span><span class="RED">failed ${esc(m.workflowId)}: ${esc(m.message)}</span>`); break;
+    case "error": feed(`<span class="RED">${esc(m.message)}</span>`); break;
     case "hello": break;
   }
   scheduleRender();
@@ -405,24 +416,36 @@ function scheduleRender() {
 }
 
 async function api(path, body) { const r = await fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body || {}) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; }
-window.verdict = (workflowId, key, verdict) => api("/verdict", { workflowId, key, verdict }).catch((e) => feed(`<span class="RED">${e.message}</span>`));
-$("#run-pack").onclick = () => { let commands; try { commands = JSON.parse($("#pack").value); } catch (e) { return feed(`<span class="RED">pack JSON: ${e.message}</span>`); } const laneSize = Number($("#lane").value) || commands.length; const park = Number($("#park").value); api("/start", { commands, laneSize, parkTimeoutMs: park > 0 ? park * 1000 : undefined }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
-const runOne = () => { const text = $("#one").value.trim(); if (!text) return; $("#one").value = ""; api("/start", { commands: [{ name: "Capture", payload: { text } }] }).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
+$("#items").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-verdict]");
+  if (!btn) return;
+  api("/verdict", { workflowId: btn.dataset.wf, key: btn.dataset.key, verdict: btn.dataset.verdict }).catch((err) => feed(`<span class="RED">${esc(err.message)}</span>`));
+});
+$("#feed").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-resolve]");
+  if (!btn) return;
+  api("/resolve", { workflowId: btn.dataset.resolve, note: btn.dataset.note || "" }).catch((err) => feed(`<span class="RED">${esc(err.message)}</span>`));
+});
+$("#run-pack").onclick = () => { let commands; try { commands = JSON.parse($("#pack").value); } catch (e) { return feed(`<span class="RED">pack JSON: ${esc(e.message)}</span>`); } const laneSize = Number($("#lane").value) || commands.length; const park = Number($("#park").value); api("/start", { commands, laneSize, parkTimeoutMs: park > 0 ? park * 1000 : undefined }).catch((e) => feed(`<span class="RED">${esc(e.message)}</span>`)); };
+const runOne = () => { const text = $("#one").value.trim(); if (!text) return; $("#one").value = ""; api("/start", { commands: [{ name: "Capture", payload: { text } }] }).catch((e) => feed(`<span class="RED">${esc(e.message)}</span>`)); };
 $("#run-one").onclick = runOne; $("#one").addEventListener("keydown", (e) => { if (e.key === "Enter") runOne(); });
-$("#run-waiting").onclick = () => api("/waiting", { display_name: "Ana", what: "confirm the Oct 2 dry run", nudgeEveryMs: 3000, maxNudges: 3 }).then((r) => feed(`<span class="sys">Waiting ${r.workflowId}: send resolve with <button class="sm" onclick="api('/resolve',{workflowId:'${r.workflowId}',note:'confirmed'})">resolve</button></span>`));
+$("#run-waiting").onclick = () => api("/waiting", { display_name: "Ana", what: "confirm the Oct 2 dry run", nudgeEveryMs: 3000, maxNudges: 3 }).then((r) => feed(`<span class="sys">Waiting ${esc(r.workflowId)}: send resolve with <button type="button" class="sm" data-resolve="${esc(r.workflowId)}" data-note="confirmed">resolve</button></span>`));
 $("#run-habit").onclick = () => api("/habit", { habitId: "stretch", everyMs: 1000, maxInstances: 3 });
-$("#run-ingest").onclick = () => { const laneSize = Number($("#lane").value) || 25; const park = Number($("#park").value); api("/ingest", { query: $("#ingest-q").value, maxItems: Number($("#ingest-max").value) || undefined, laneSize, parkTimeoutMs: park > 0 ? park * 1000 : undefined }).then((r) => feed(`<span class="sys">ingest ${r.workflowId} started</span>`)).catch((e) => feed(`<span class="RED">${e.message}</span>`)); };
+$("#run-ingest").onclick = () => { const laneSize = Number($("#lane").value) || 25; const park = Number($("#park").value); api("/ingest", { query: $("#ingest-q").value, maxItems: Number($("#ingest-max").value) || undefined, laneSize, parkTimeoutMs: park > 0 ? park * 1000 : undefined }).then((r) => feed(`<span class="sys">ingest ${esc(r.workflowId)} started</span>`)).catch((e) => feed(`<span class="RED">${esc(e.message)}</span>`)); };
 
-async function loadTape() { try { const rows = await (await fetch("/tape")).json(); $("#tape").innerHTML = rows.slice().reverse().slice(0, 60).map((r) => `<tr><td class="mono">${r.key}</td><td class="mono">${r.event}</td><td class="mono">${r.command}</td><td class="mono">${hhmm(r.at)}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">tape is empty</td></tr>`; } catch {} }
+async function loadTape() { try { const rows = await (await fetch("/tape")).json(); $("#tape").innerHTML = rows.slice().reverse().slice(0, 60).map((r) => `<tr><td class="mono">${esc(r.key)}</td><td class="mono">${esc(r.event)}</td><td class="mono">${esc(r.command)}</td><td class="mono">${esc(hhmm(r.at))}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">tape is empty</td></tr>`; } catch {} }
 async function loadInfo() {
   const i = await (await fetch("/info")).json();
-  const bj = $("#b-judge"); bj.className = `badge ${i.judge}`; bj.innerHTML = `<span class="dot ${i.judge === "live" ? "on" : ""}"></span>judge <b>${i.judge === "live" ? "LIVE " + i.pin : i.judge === "stub" ? "STUB (not a verdict)" : "CLOSED (no key)"}</b>`;
-  $("#b-pin").innerHTML = `pin <b>${i.pin}</b>`; $("#b-temporal").innerHTML = `temporal <b>${i.temporal.address}</b> ${i.temporal.namespace}`; $("#b-queue").innerHTML = `queue <b>${i.taskQueue}</b>`;
-  $("#b-worker").innerHTML = `<span class="dot ${i.worker.inProcess ? "on" : ""}"></span>worker <b>${i.worker.inProcess ? i.worker.identity : "external"}</b>`;
+  const bj = $("#b-judge"); bj.className = `badge ${esc(i.judge)}`; bj.innerHTML = `<span class="dot ${i.judge === "live" ? "on" : ""}"></span>judge <b>${esc(i.judge === "live" ? "LIVE " + i.pin : i.judge === "stub" ? "STUB (not a verdict)" : "CLOSED (no key)")}</b>`;
+  $("#b-pin").innerHTML = `pin <b>${esc(i.pin)}</b>`; $("#b-temporal").innerHTML = `temporal <b>${esc(i.temporal.address)}</b> ${esc(i.temporal.namespace)}`; $("#b-queue").innerHTML = `queue <b>${esc(i.taskQueue)}</b>`;
+  $("#b-worker").innerHTML = `<span class="dot ${i.worker.inProcess ? "on" : ""}"></span>worker <b>${esc(i.worker.inProcess ? i.worker.identity : "external")}</b>`;
   $("#mcp-note").textContent = i.mcp ? `connector: ${i.mcp.kind} ${i.mcp.target}` : "no connector on this worker (set JEV_MCP_COMMAND or JEV_MCP_URL)";
   $("#run-ingest").disabled = !i.mcp;
-  $("#ui-link").href = i.temporal.ui + "/namespaces/" + i.temporal.namespace + "/workflows"; $("#tape-path").textContent = i.tapePath; $("#lat-note").textContent = i.judge === "live" ? "wall ms per POST to " + i.endpoint : i.judge === "stub" ? "stub answers: ms measures the loop, not Jev" : "no judge: gates fail closed";
-  $("#loaded").innerHTML = [["judge", i.judge], ["endpoint", i.endpoint], ["workflows", i.workflows.join(", ")], ["activities", i.activities.join(", ")], ["queue", i.taskQueue], ["tape", i.tapePath]].map(([k, v]) => `<div>${k}</div><div>${v}</div>`).join("");
+  const uiBase = safeHref(i.temporal.ui);
+  $("#ui-link").href = uiBase === "#" ? "#" : `${uiBase}/namespaces/${encodeURIComponent(i.temporal.namespace)}/workflows`;
+  $("#ui-link").rel = "noopener";
+  $("#tape-path").textContent = i.tapePath; $("#lat-note").textContent = i.judge === "live" ? "wall ms per POST to " + i.endpoint : i.judge === "stub" ? "stub answers: ms measures the loop, not Jev" : "no judge: gates fail closed";
+  $("#loaded").innerHTML = [["judge", i.judge], ["endpoint", i.endpoint], ["workflows", i.workflows.join(", ")], ["activities", i.activities.join(", ")], ["queue", i.taskQueue], ["tape", i.tapePath]].map(([k, v]) => `<div>${esc(k)}</div><div>${esc(v)}</div>`).join("");
 }
 function connect() {
   const es = new EventSource("/events");
